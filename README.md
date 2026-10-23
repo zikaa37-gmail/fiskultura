@@ -17,5 +17,8 @@ Kopiraj `deploy/env.example` u `deploy/.env` (van gita), upiši FTP podatke, pa
 `python deploy/deploy.py`. Šalje samo fajlove naslovne u `DEPLOY_WEB_DIR` (document root glavnog
 domena, na cPanel-u `public_html`) i ne dira poddomene.
 
-`.htaccess` (HTTPS preusmeravanje, keš) se **ne** šalje automatski — u `public_html` već postoji
-cPanel-ov `.htaccess`; pravila iz ovog fajla dodati ručno na vrh postojećeg.
+`.htaccess` (HTTPS preusmeravanje bez `/.well-known/` zbog SSL-a, keš) se šalje zajedno sa naslovnom —
+u `public_html` ranije nije postojao. Poddomeni imaju svoje foldere van `public_html` i ne dira ih.
+
+Prvi deploy: 23.10.2026. Prethodna naslovna sa servera je sačuvana u `staro/index-server-2023.html`
+(stari folderi `assets/` i `test/` su ostali na serveru).

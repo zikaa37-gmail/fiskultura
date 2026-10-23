@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ENV_FILE = ROOT / 'deploy' / '.env'
-PUBLISHED = ['index.html', 'style.css', 'main.js', 'favicon.svg', 'robots.txt']
+PUBLISHED = ['index.html', 'style.css', 'main.js', 'favicon.svg', '.htaccess', 'robots.txt']
 
 
 def read_env(path: Path) -> dict:
