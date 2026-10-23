@@ -470,6 +470,16 @@ p {
   gap: 8px;
 }
 
+.footer-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+}
+
 @media (min-width: 640px) {
   .topnav {
     display: flex;
