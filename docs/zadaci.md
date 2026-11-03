@@ -100,6 +100,26 @@ U prikazu: čip organizacije (link na `/udruzenja/:slug`), „Preuzeto sa: ...",
 Filteri na `/vesti`: organizacija, „SSPFVS i članice", okrug. Obaveštenja mejlom mogu da se prate
 po organizaciji.
 
+### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
+Gde ZUOV objavljuje Katalog programa stalnog stručnog usavršavanja i liste odobrenih stručnih skupova,
+u kom formatu (pretraga, PDF, Excel), koliko često se menjaju; izdvojiti sve programe za FV i školski
+sport za tekuću i prethodnu školsku godinu u `docs/izvori/seminari.json`. Dopuniti iz sajtova
+realizatora (SSPFVS, UPFK, fakulteti).
+
+### #15f Seminari — backend (faza-1)
+Tabele `fk_school_years`, `fk_seminars` (naziv, kataloški broj / rešenje, realizator →
+organizacija, oblik, bodovi, trajanje, kompetencija, prioritet, ciljna grupa, cena, link, izvor) i
+`fk_seminar_sessions` (datum, mesto, okrug, onlajn, link za prijavu); pivot seminar ↔ školska godina.
+`POST /api/seminars/list` sa filterima, seed iz `docs/izvori/seminari.json`. Testovi.
+
+### #15g Seminari — javni prikaz i admin (faza-1)
+`/seminari` sa izborom školske godine, filterima i „uskoro", stranica seminara sa terminima;
+`/admin/seminari` (unos, uvoz liste iz ZUOV-a, novi termin). Nov program / termin automatski predlaže
+vest kategorije „Seminari" i ide u obaveštenja po okrugu i realizatoru.
+
+### #15h Sačuvani seminari i podsetnik (faza-2)
+Nastavnik čuva seminar, mejl podsetnik 7 dana i 1 dan pred termin; kasnije lična evidencija bodova.
+
 ### #16 Admin: korisnici i šifarnici (faza-1)
 Lista korisnika, promena uloge, blokiranje; kategorije vesti, oznake, okruzi.
 
@@ -175,6 +195,37 @@ tog sajta, uz dozvolu).
 ### #29 Blog / stručni tekstovi (faza-4)
 Tabela tekstova sa autorom, temom, oznakama; autor piše, urednik odobrava; `/strucno`, `/strucno/:slug`,
 profil autora.
+
+### #29a Pozivi i profil kolumniste (faza-4)
+Urednik šalje poziv (mejl, ime, predložena tema, rok) → tabela `fk_invitations` (token, hash u bazi,
+važi 14 dana) → pozvani pravi nalog sa ulogom `author` ili je dobija postojeći korisnik. Profil
+autora: zvanje, mesto, biografija, fotografija, linkovi; javno `/autori/:slug` sa svim tekstovima.
+Rubrike (serijali) sa ritmom i podsetnikom autoru mejlom pred rok.
+
+### #29b Kolumne — tok uređivanja (faza-4)
+Tekst tipa `column` (pored `article`): nacrt → poslato → napomene urednika (interne) → odobreno →
+objavljeno / zakazano; rich text editor, naslovna slika, oznake, napomena o stavovima autora.
+`/kolumne` (lista po rubrici i autoru), `/kolumne/:slug`. Admin: red tekstova za pregled.
+
+### #29c Reakcije (faza-4)
+`fk_reactions` (korisnik, sadržaj — polimorfno: vest, kolumna, polemika, komentar — vrsta),
+jedinstveno po korisniku i vrsti; `POST/DELETE /api/reactions`; brojači u listama bez N+1.
+
+### #29d Komentari i moderacija (faza-4)
+`fk_comments` (sadržaj, korisnik, roditelj — jedan nivo, tekst, status: objavljen / na odobrenju /
+sakriven, izmenjen), prvi komentar novog korisnika na odobrenje, izmena 15 min, prijava komentara
+(`fk_comment_reports`), urednik sakriva / zaključava diskusiju, pravila diskusije prihvaćena uz
+datum. Ograničenje broja komentara po minutu. Mejl kad neko odgovori na moj komentar.
+
+### #29e Polemike (faza-4)
+`fk_debates` (naslov, pitanje, uvod, rok, status otvorena / zatvorena, zaključak), stavovi (kolumne
+vezane za polemiku sa oznakom „za" / „protiv" / „drugi ugao"), glasanje čitalaca (jedan glas po
+korisniku, rezultat posle glasanja), komentari, replike čitalaca na odobrenje. `/polemike`,
+`/polemike/:slug`; zatvaranje na rok, zaključak urednika i PDF za udruženja.
+
+### #29f Replike i povezani tekstovi (faza-4)
+Tekst može biti „odgovor na" drugi tekst; prikaz niza replika ispod originala i na stranici
+polemike.
 
 ### #30 Administracija nastavnika — vodiči (faza-4, sadrzaj)
 ES dnevnik, ocenjivanje (formativno / sumativno, opisno), oslobađanje od nastave, planiranje,

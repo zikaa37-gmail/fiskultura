@@ -15,6 +15,8 @@ export interface Organization {
   description: string;
   status: string;
   lastActivity: string | null;
+  parent: string | null;
+  memberSource: string | null;
 }
 
 export const ORGANIZATION_TYPE_LABELS: Record<OrganizationType, string> = {

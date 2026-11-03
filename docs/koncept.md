@@ -81,6 +81,22 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
 - Početni podaci: `docs/izvori/udruzenja.json` i `docs/izvori/objave.json` (seed za bazu).
 - Udruženje može da dobije nalog urednika za svoje objave (kasnije).
 
+### 2a. Stručni seminari i usavršavanje
+- Pregled **odobrenih programa stalnog stručnog usavršavanja** u vezi sa fizičkim vaspitanjem i
+  školskim sportom **za konkretnu školsku godinu**: programi iz Kataloga ZUOV-a (akreditovani
+  seminari, katalog važi više godina) i odobreni stručni skupovi (konferencije, simpozijumi, letnje i
+  zimske škole, okrugli stolovi) koje ZUOV objavljuje po školskoj godini.
+- Program: naziv, kataloški broj / broj rešenja, realizator (organizacija sa portala), autori, oblik
+  (seminar / stručni skup / letnja škola / onlajn), trajanje i broj bodova, kompetencija i prioritet,
+  ciljna grupa (razredna nastava, predmetna, SŠ), važi za školsku godinu, cena, termini i mesta
+  realizacije, link na zvaničnu stranicu i prijavu.
+- Javno: `/seminari` sa izborom školske godine (podrazumevano tekuća), filteri po obliku, okrugu,
+  realizatoru, onlajn / uživo, „uskoro" (termini u narednih 30 dana); kalendar termina.
+- Svaki novi odobren program ili termin postaje vest kategorije „Seminari" sa oznakom izvora, i ide
+  pretplatnicima obaveštenja (po okrugu i realizatoru).
+- Nastavnik može da sačuva seminar i dobije podsetnik pred termin; kasnije lična evidencija
+  bodova stručnog usavršavanja.
+
 ### 3. Stručna pomoć
 - **Blog / stručni tekstovi** — autori (nastavnici, profesori fakulteta), teme: metodika, inkluzija,
   zdravlje, ocenjivanje, sportske igre, rad sa talentovanima, ...
@@ -91,6 +107,30 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
   „važi na dan", i napomenu da nije pravni savet.
 - **Predlozi za unapređenje nastave** — nastavnici šalju predlog, urednik objavljuje; glasanje.
 - Propisi: biblioteka linkova na zvanične tekstove (Službeni glasnik, Ministarstvo, ZUOV).
+
+### 3a. Kolumne, reakcije i polemike
+- **Kolumne po pozivu** — urednik poziva ljude od struke (nastavnici, profesori fakulteta, treneri,
+  predstavnici udruženja, roditelji, učenici) da pišu na zadatu ili slobodnu temu. Poziv stiže mejlom
+  sa linkom; pozvani pravi nalog sa ulogom **kolumnista** (`author`) i profilom (ime, zvanje, mesto,
+  kratka biografija, fotografija, linkovi). Kolumnista može imati stalnu rubriku (serijal) sa
+  ritmom (npr. jednom mesečno).
+- Tok teksta: nacrt → slanje uredniku → uredničke napomene (interno, ne vide čitaoci) → odobreno →
+  objavljeno / zakazano. Kolumna nosi napomenu „Stavovi autora ne moraju da odražavaju stavove
+  portala".
+- **Reakcije** (samo prijavljeni korisnici, jedna po vrsti): „Slažem se", „Ne slažem se",
+  „Korisno", „Podržavam"; broj reakcija vidljiv svima.
+- **Komentari** (samo prijavljeni, pod imenom i prezimenom): odgovor na komentar (jedan nivo),
+  izmena 15 minuta posle objave, prijava neprimerenog komentara, urednik sakriva / zaključava;
+  prvi komentar novog korisnika ide na odobrenje. Pravila diskusije (bez uvreda, bez ličnih podataka
+  dece, bez reklama) prihvataju se pri prvom komentaru.
+- **Polemike** — urednik otvara temu za raspravu (npr. „Treba li fizičko vaspitanje svaki dan?"):
+  uvodni tekst + pitanje, poziva dva ili više autora sa različitim stavovima, čitaoci glasaju
+  (za / protiv / neodlučan, rezultat se vidi posle glasanja), komentarišu i šalju svoju repliku
+  (ide uredniku). Tema ima rok; na kraju urednik objavljuje zaključak i šalje ga udruženjima /
+  SSPFVS-u kao glas struke.
+- **Replika** — kolumnista ili korisnik može napisati odgovor na tekst; prikazuje se kao povezan
+  niz („Odgovor na: ...").
+- Obaveštenja: novi tekst kolumniste koga pratim, nova polemika, odgovor na moj komentar.
 
 ### 4. Sportovi i pravila
 - Sportovi: košarka, odbojka, rukomet, mali fudbal (sportske igre); atletika; gimnastika;
