@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard, guestGuard } from './core/auth/auth.guards';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,40 @@ export const routes: Routes = [
     path: 'aplikacije',
     title: 'Aplikacije za nastavnike — Fiskultura',
     loadComponent: () => import('./features/apps/apps').then((m) => m.Apps),
+  },
+  {
+    path: 'prijava',
+    title: 'Prijava — Fiskultura',
+    canActivate: [guestGuard],
+    loadComponent: () => import('./features/auth/login').then((m) => m.Login),
+  },
+  {
+    path: 'registracija',
+    title: 'Napravi nalog — Fiskultura',
+    canActivate: [guestGuard],
+    loadComponent: () => import('./features/auth/register').then((m) => m.Register),
+  },
+  {
+    path: 'potvrda-naloga',
+    title: 'Potvrda naloga — Fiskultura',
+    loadComponent: () => import('./features/auth/verify-email').then((m) => m.VerifyEmail),
+  },
+  {
+    path: 'zaboravljena-lozinka',
+    title: 'Zaboravljena lozinka — Fiskultura',
+    canActivate: [guestGuard],
+    loadComponent: () => import('./features/auth/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
+    path: 'nova-lozinka',
+    title: 'Nova lozinka — Fiskultura',
+    loadComponent: () => import('./features/auth/reset-password').then((m) => m.ResetPassword),
+  },
+  {
+    path: 'profil',
+    title: 'Moj profil — Fiskultura',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/auth/profile').then((m) => m.Profile),
   },
   {
     path: '**',

@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { AuthService } from '../core/auth/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Icon } from '../shared/icon/icon';
@@ -11,6 +12,7 @@ import { APP_LINKS } from '../content/portal-content';
   templateUrl: './site-header.html',
 })
 export class SiteHeader {
+  protected readonly auth = inject(AuthService);
   protected readonly ePripremeUrl = APP_LINKS.ePripreme;
   protected readonly menuOpen = signal(false);
   protected readonly navItems = [
