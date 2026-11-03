@@ -1,37 +1,53 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Organization, OrganizationLevel, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS } from './organization.model';
+import { Organization, OrganizationType } from './organization.model';
+import { OrganizationCard } from './organization-card';
 
-type LevelFilter = OrganizationLevel | 'all';
+const UMBRELLA_SLUG = 'sspfvs';
+
+const SECTION_ORDER: OrganizationType[] = ['strukovno-udruzenje', 'skolski-sport', 'institucija', 'fakultet', 'sindikat', 'ostalo'];
+
+const SECTION_TITLES: Record<OrganizationType, string> = {
+  'strukovno-udruzenje': 'Ostala strukovna udruženja',
+  'skolski-sport': 'Školski sport',
+  institucija: 'Institucije',
+  fakultet: 'Fakulteti',
+  sindikat: 'Sindikati prosvete',
+  ostalo: 'Ostale organizacije',
+};
 
 @Component({
   selector: 'app-organizations',
-  imports: [MatButtonToggleModule, MatProgressBarModule],
+  imports: [MatButtonModule, MatProgressBarModule, OrganizationCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './organizations.html',
 })
 export class Organizations {
   private readonly resource = httpResource<Organization[]>(() => '/data/udruzenja.json');
 
-  protected readonly typeLabels = ORGANIZATION_TYPE_LABELS;
-  protected readonly levelLabels = ORGANIZATION_LEVEL_LABELS;
-  protected readonly levels = Object.keys(ORGANIZATION_LEVEL_LABELS) as OrganizationLevel[];
-  protected readonly level = signal<LevelFilter>('all');
   protected readonly isLoading = this.resource.isLoading;
   protected readonly hasError = computed(() => !!this.resource.error());
 
   private readonly organizations = computed(() => (this.resource.hasValue() ? this.resource.value() : []));
 
-  protected readonly filtered = computed(() => {
-    const level = this.level();
-    return this.organizations()
-      .filter((organization) => level === 'all' || organization.level === level)
-      .sort((a, b) => this.levels.indexOf(a.level) - this.levels.indexOf(b.level) || a.name.localeCompare(b.name, 'sr'));
+  protected readonly umbrella = computed(() => this.organizations().find((organization) => organization.slug === UMBRELLA_SLUG) ?? null);
+
+  protected readonly members = computed(() =>
+    this.organizations()
+      .filter((organization) => organization.parent === UMBRELLA_SLUG)
+      .sort((a, b) => (a.city ?? '').localeCompare(b.city ?? '', 'sr')),
+  );
+
+  protected readonly sections = computed(() => {
+    const rest = this.organizations().filter((organization) => organization.slug !== UMBRELLA_SLUG && organization.parent !== UMBRELLA_SLUG);
+    return SECTION_ORDER.map((type) => ({
+      type,
+      title: SECTION_TITLES[type],
+      organizations: rest.filter((organization) => organization.type === type).sort((a, b) => a.name.localeCompare(b.name, 'sr')),
+    })).filter((section) => section.organizations.length > 0);
   });
 
-  protected setLevel(level: LevelFilter): void {
-    this.level.set(level);
-  }
+  protected readonly umbrellaEmail = computed(() => this.umbrella()?.email ?? null);
 }

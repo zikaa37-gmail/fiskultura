@@ -726,3 +726,34 @@ h1 {
   font-weight: 600;
   color: var(--color-primary);
 }
+
+.umbrella {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.umbrella .module {
+  border-left: 6px solid var(--color-violet);
+}
+
+.org-section {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.org-section h2 {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.org-section .module-grid {
+  margin-top: 8px;
+}
+
+.found-cta {
+  margin-bottom: 40px;
+  border-style: solid;
+  background: var(--color-surface-alt);
+}
