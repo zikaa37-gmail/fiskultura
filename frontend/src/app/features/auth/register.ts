@@ -26,7 +26,7 @@ import { DISTRICTS } from '../../content/districts';
         } @else {
           <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
             <h1>Napravi nalog</h1>
-            <p class="muted">Besplatno, za nastavnike fizičkog vaspitanja i sve koji rade u školskom sportu.</p>
+            <p class="muted">Besplatno, za nastavnike fizičkog, učitelje, trenere, roditelje i sve koje zanima fizičko vaspitanje i školski sport.</p>
             <mat-form-field appearance="outline">
               <mat-label>Ime i prezime</mat-label>
               <input matInput formControlName="name" autocomplete="name" />

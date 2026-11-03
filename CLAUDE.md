@@ -16,9 +16,9 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
 - `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), lokalno SQLite, na serveru MySQL.
   Mejl: SMTP `obavestenja@fiskultura.rs` (lozinka samo u `backend/.env` i na serveru; lokalno
   `MAIL_MAILER=log`, za probu slanja `smtp`). Auth: JWT access (60 min) + refresh sa rotacijom kao u
-  evidencija-fv, uloge `teacher` / `author` / `editor` / `admin`, middleware `jwt` i `role:...`,
+  evidencija-fv, uloge `user` / `author` / `editor` / `admin`, middleware `jwt` i `role:...`,
   potvrda mejla i nova lozinka preko `UserTokenService` (u bazi samo hash). Rute: `docs/api-rute.md`.
-  Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `nastavnik@fiskultura.test`, lozinka `lozinka123`.
+  Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `korisnik@fiskultura.test`, lozinka `lozinka123`.
 
 Isti obrasci kao `D:\Playground\Angular\evidencija-fv` (auth, kontroleri, deploy) i
 `D:\Playground\Angular\kosarkaska-evidencija` (`features/rules` — igraonica pravila, kviz, SVG

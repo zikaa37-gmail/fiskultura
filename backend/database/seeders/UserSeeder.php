@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
             ['name' => 'Administrator', 'email' => 'admin@fiskultura.test', 'role' => User::ADMIN],
             ['name' => 'Urednik', 'email' => 'urednik@fiskultura.test', 'role' => User::EDITOR],
             ['name' => 'Autor', 'email' => 'autor@fiskultura.test', 'role' => User::AUTHOR],
-            ['name' => 'Nastavnik', 'email' => 'nastavnik@fiskultura.test', 'role' => User::TEACHER, 'school' => 'OŠ „Vuk Karadžić"', 'municipality' => 'Zemun', 'district' => 'Grad Beograd'],
+            ['name' => 'Korisnik', 'email' => 'korisnik@fiskultura.test', 'role' => User::USER, 'school' => 'OŠ „Vuk Karadžić"', 'municipality' => 'Zemun', 'district' => 'Grad Beograd'],
         ];
 
         foreach ($accounts as $account) {

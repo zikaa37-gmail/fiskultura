@@ -1,4 +1,4 @@
-export type UserRole = 'teacher' | 'author' | 'editor' | 'admin';
+export type UserRole = 'user' | 'author' | 'editor' | 'admin';
 
 export interface User {
   id: number;
@@ -34,7 +34,7 @@ export interface RegisterPayload extends ProfilePayload {
 }
 
 export const ROLE_LABELS: Record<UserRole, string> = {
-  teacher: 'Nastavnik',
+  user: 'Korisnik',
   author: 'Autor',
   editor: 'Urednik',
   admin: 'Administrator',

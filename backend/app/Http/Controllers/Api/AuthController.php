@@ -36,7 +36,7 @@ class AuthController extends Controller
             'district' => ['nullable', 'string', 'max:120'],
         ]);
 
-        $user = User::create([...$data, 'email' => Str::lower($data['email']), 'role' => User::TEACHER]);
+        $user = User::create([...$data, 'email' => Str::lower($data['email']), 'role' => User::USER]);
 
         $this->sendVerification($user);
 

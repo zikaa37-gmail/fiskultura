@@ -6,7 +6,7 @@ Osnova: `/api`. Odgovori su JSON, ključevi `snake_case`. Greške validacije: `4
 
 | Metod | Ruta | Pristup | Opis |
 |---|---|---|---|
-| POST | `/auth/register` | javno, 10/min | ime, mejl, lozinka (+ `password_confirmation`), škola, opština, okrug → uloga `teacher`, šalje mejl za potvrdu (48 h) |
+| POST | `/auth/register` | javno, 10/min | ime, mejl, lozinka (+ `password_confirmation`), škola, opština, okrug → uloga `user`, šalje mejl za potvrdu (48 h) |
 | POST | `/auth/verify-email` | javno, 10/min | `token` iz mejla → potvrđuje nalog i vraća tokene (automatska prijava) |
 | POST | `/auth/resend-verification` | javno, 10/min | `email` → novi link ako nalog nije potvrđen (uvek isti odgovor) |
 | POST | `/auth/login` | javno, 10/min | `email`, `password` → `access_token`, `refresh_token`, `user`; odbija nepotvrđen i blokiran nalog |
@@ -18,6 +18,6 @@ Osnova: `/api`. Odgovori su JSON, ključevi `snake_case`. Greške validacije: `4
 | PATCH | `/auth/me` | `jwt` | ime, škola, opština, okrug |
 | POST | `/auth/change-password` | `jwt` | `current_password`, `password` (+ potvrda), poništava sve sesije |
 
-Korisnik u odgovoru: `id`, `name`, `email`, `role` (`teacher` | `author` | `editor` | `admin`), `school`, `municipality`, `district`.
+Korisnik u odgovoru: `id`, `name`, `email`, `role` (`user` | `author` | `editor` | `admin`), `school`, `municipality`, `district`.
 
 Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (lista dozvoljenih uloga).

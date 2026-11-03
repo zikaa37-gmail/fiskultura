@@ -52,8 +52,8 @@ Kartice za e-pripreme, Evidenciju FV, Jadžent i Zdravitas (naziv, opis, link, s
 Linkovi i u top baru / footeru.
 
 ### #10 Nalozi i uloge (faza-1)
-Registracija nastavnika (mejl + potvrda), prijava, zaboravljena lozinka, profil (škola, opština,
-okrug). Uloge `teacher`, `author`, `editor`, `admin`. Guard-ovi na frontendu, middleware na backendu.
+Registracija korisnika (mejl + potvrda), prijava, zaboravljena lozinka, profil (škola, opština,
+okrug). Uloge `user` (korisnik: nastavnici FV, učitelji i svi zainteresovani), `author`, `editor`, `admin`. Guard-ovi na frontendu, middleware na backendu.
 
 ### #11 Vesti — backend (faza-1)
 Tabele `fk_news`, `fk_news_categories`, `fk_tags`, pivot; CRUD za urednika, javne rute

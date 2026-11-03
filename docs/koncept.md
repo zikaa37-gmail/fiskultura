@@ -40,7 +40,7 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
 | Uloga | Šta radi | Nalog |
 |---|---|---|
 | Posetilac (nastavnik, učenik, roditelj) | čita vesti, udruženja, pravila, stručne tekstove, preuzima PDF | ne |
-| Nastavnik | čuva vesti/tekstove, prati udruženja i teme, šalje vest ili pitanje, komentariše | da (besplatan) |
+| Korisnik (nastavnik FV, učitelj, trener, roditelj, student...) | čuva vesti/tekstove, prati udruženja i teme, šalje vest ili pitanje, komentariše | da (besplatan) |
 | Autor | piše stručne tekstove (blog), ide na odobrenje | da |
 | Urednik | vesti, objave udruženja, pravila, PDF uputstva, odobravanje priloga | da |
 | Admin | korisnici i uloge, šifarnici, podešavanja | da |

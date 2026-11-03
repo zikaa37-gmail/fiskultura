@@ -17,7 +17,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    public const TEACHER = 'teacher';
+    public const USER = 'user';
 
     public const AUTHOR = 'author';
 
@@ -25,7 +25,7 @@ class User extends Authenticatable
 
     public const ADMIN = 'admin';
 
-    public const ROLES = [self::TEACHER, self::AUTHOR, self::EDITOR, self::ADMIN];
+    public const ROLES = [self::USER, self::AUTHOR, self::EDITOR, self::ADMIN];
 
     protected function casts(): array
     {

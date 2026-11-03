@@ -53,7 +53,7 @@ class AuthTest extends TestCase
         ])->assertCreated();
 
         $user = User::where('email', 'nova@skola.rs')->firstOrFail();
-        $this->assertSame(User::TEACHER, $user->role);
+        $this->assertSame(User::USER, $user->role);
         $this->assertNull($user->email_verified_at);
 
         $this->postJson('/api/auth/login', ['email' => 'nova@skola.rs', 'password' => 'tajna-lozinka'])
@@ -91,14 +91,14 @@ class AuthTest extends TestCase
             'role' => 'admin',
         ])->assertCreated();
 
-        $this->assertSame(User::TEACHER, User::where('email', 'neko@skola.rs')->value('role'));
+        $this->assertSame(User::USER, User::where('email', 'neko@skola.rs')->value('role'));
     }
 
     public function test_registration_rejects_existing_email(): void
     {
         $this->postJson('/api/auth/register', [
             'name' => 'Duplikat',
-            'email' => 'nastavnik@fiskultura.test',
+            'email' => 'korisnik@fiskultura.test',
             'password' => 'tajna-lozinka',
             'password_confirmation' => 'tajna-lozinka',
         ])->assertUnprocessable()->assertJsonValidationErrors('email');
@@ -108,7 +108,7 @@ class AuthTest extends TestCase
     {
         Mail::fake();
 
-        $this->postJson('/api/auth/forgot-password', ['email' => 'nastavnik@fiskultura.test'])->assertOk();
+        $this->postJson('/api/auth/forgot-password', ['email' => 'korisnik@fiskultura.test'])->assertOk();
         $this->postJson('/api/auth/forgot-password', ['email' => 'ne-postoji@fiskultura.test'])->assertOk();
 
         $token = null;
@@ -122,14 +122,14 @@ class AuthTest extends TestCase
 
         $this->postJson('/api/auth/reset-password', ['token' => $token, 'password' => 'nova-lozinka', 'password_confirmation' => 'nova-lozinka'])->assertOk();
 
-        $this->postJson('/api/auth/login', ['email' => 'nastavnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->assertUnprocessable();
-        $this->postJson('/api/auth/login', ['email' => 'nastavnik@fiskultura.test', 'password' => 'nova-lozinka'])->assertOk();
+        $this->postJson('/api/auth/login', ['email' => 'korisnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->assertUnprocessable();
+        $this->postJson('/api/auth/login', ['email' => 'korisnik@fiskultura.test', 'password' => 'nova-lozinka'])->assertOk();
         $this->postJson('/api/auth/reset-password', ['token' => $token, 'password' => 'treca-lozinka', 'password_confirmation' => 'treca-lozinka'])->assertUnprocessable();
     }
 
     public function test_refresh_rotates_tokens(): void
     {
-        $login = $this->postJson('/api/auth/login', ['email' => 'nastavnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->json();
+        $login = $this->postJson('/api/auth/login', ['email' => 'korisnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->json();
 
         $refreshed = $this->postJson('/api/auth/refresh', ['refresh_token' => $login['refresh_token']])->assertOk()->json();
 
@@ -139,33 +139,33 @@ class AuthTest extends TestCase
 
     public function test_profile_can_be_read_and_updated(): void
     {
-        $user = User::where('email', 'nastavnik@fiskultura.test')->firstOrFail();
+        $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
 
         $this->getJson('/api/auth/me')->assertUnauthorized();
 
-        $this->withJwt($user)->patchJson('/api/auth/me', ['name' => 'Nastavnik FV', 'school' => 'OŠ „Sveti Sava"', 'municipality' => 'Niš', 'district' => 'Nišavski'])
+        $this->withJwt($user)->patchJson('/api/auth/me', ['name' => 'Korisnik Portala', 'school' => 'OŠ „Sveti Sava"', 'municipality' => 'Niš', 'district' => 'Nišavski'])
             ->assertOk()
             ->assertJsonPath('municipality', 'Niš')
-            ->assertJsonPath('role', 'teacher');
+            ->assertJsonPath('role', 'user');
     }
 
     public function test_blocked_user_cannot_use_token_or_log_in(): void
     {
-        $user = User::where('email', 'nastavnik@fiskultura.test')->firstOrFail();
+        $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
         $user->forceFill(['blocked_at' => now()])->save();
 
         $this->withJwt($user)->getJson('/api/auth/me')->assertUnauthorized();
-        $this->postJson('/api/auth/login', ['email' => 'nastavnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->assertUnprocessable();
+        $this->postJson('/api/auth/login', ['email' => 'korisnik@fiskultura.test', 'password' => UserSeeder::DEV_PASSWORD])->assertUnprocessable();
     }
 
     public function test_role_middleware_allows_only_listed_roles(): void
     {
         Route::middleware(['api', 'jwt', 'role:editor,admin'])->get('/api/test-editor', fn () => ['ok' => true]);
 
-        $teacher = User::where('email', 'nastavnik@fiskultura.test')->firstOrFail();
+        $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
         $editor = User::where('email', 'urednik@fiskultura.test')->firstOrFail();
 
-        $this->withJwt($teacher)->getJson('/api/test-editor')->assertForbidden();
+        $this->withJwt($user)->getJson('/api/test-editor')->assertForbidden();
         $this->withJwt($editor)->getJson('/api/test-editor')->assertOk();
     }
 }
