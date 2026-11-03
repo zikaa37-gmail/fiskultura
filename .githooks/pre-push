@@ -1,0 +1,11 @@
+#!/bin/sh
+protected_branch='main'
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    if [ "$remote_ref" = "refs/heads/$protected_branch" ]; then
+        echo "Direktan push na '$protected_branch' je blokiran — napravi granu (feat-<broj taska>) i otvori pull request." >&2
+        exit 1
+    fi
+done
+
+exit 0
