@@ -100,6 +100,26 @@ U prikazu: čip organizacije (link na `/udruzenja/:slug`), „Preuzeto sa: ...",
 Filteri na `/vesti`: organizacija, „SSPFVS i članice", okrug. Obaveštenja mejlom mogu da se prate
 po organizaciji.
 
+### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
+Gde ZUOV objavljuje Katalog programa stalnog stručnog usavršavanja i liste odobrenih stručnih skupova,
+u kom formatu (pretraga, PDF, Excel), koliko često se menjaju; izdvojiti sve programe za FV i školski
+sport za tekuću i prethodnu školsku godinu u `docs/izvori/seminari.json`. Dopuniti iz sajtova
+realizatora (SSPFVS, UPFK, fakulteti).
+
+### #15f Seminari — backend (faza-1)
+Tabele `fk_school_years`, `fk_seminars` (naziv, kataloški broj / rešenje, realizator →
+organizacija, oblik, bodovi, trajanje, kompetencija, prioritet, ciljna grupa, cena, link, izvor) i
+`fk_seminar_sessions` (datum, mesto, okrug, onlajn, link za prijavu); pivot seminar ↔ školska godina.
+`POST /api/seminars/list` sa filterima, seed iz `docs/izvori/seminari.json`. Testovi.
+
+### #15g Seminari — javni prikaz i admin (faza-1)
+`/seminari` sa izborom školske godine, filterima i „uskoro", stranica seminara sa terminima;
+`/admin/seminari` (unos, uvoz liste iz ZUOV-a, novi termin). Nov program / termin automatski predlaže
+vest kategorije „Seminari" i ide u obaveštenja po okrugu i realizatoru.
+
+### #15h Sačuvani seminari i podsetnik (faza-2)
+Nastavnik čuva seminar, mejl podsetnik 7 dana i 1 dan pred termin; kasnije lična evidencija bodova.
+
 ### #16 Admin: korisnici i šifarnici (faza-1)
 Lista korisnika, promena uloge, blokiranje; kategorije vesti, oznake, okruzi.
 

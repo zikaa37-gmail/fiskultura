@@ -64,7 +64,7 @@ export const PORTAL_MODULES: PortalModule[] = [
   {
     id: 'sports',
     title: 'Sportovi i pravila',
-    description: 'Pravila za košarku, odbojku, rukomet, mali fudbal, atletiku, gimnastiku, elementarne igre i plesove — za čas, ne za ligu.',
+    description: 'Pravila za košarku, odbojku, rukomet, mali fudbal, atletiku, gimnastiku, elementarne igre i plesove, sa slikovitim PDF uputstvima.',
     icon: 'globe',
     accent: 'sky',
     status: 'first',
@@ -72,14 +72,13 @@ export const PORTAL_MODULES: PortalModule[] = [
     route: '/sportovi',
   },
   {
-    id: 'guides',
-    title: 'Slikovita PDF uputstva',
-    description: 'Uputstvo za igru po sportu na nekoliko strana A4, sa crtežima — za štampu, oglasnu tablu ili učenike.',
-    icon: 'pdf',
+    id: 'seminars',
+    title: 'Stručni seminari',
+    description: 'Odobreni seminari i stručni skupovi za fizičko vaspitanje u tekućoj školskoj godini, sa terminima, bodovima i prijavom.',
+    icon: 'book',
     accent: 'orange',
     status: 'soon',
     statusLabel: 'Uskoro',
-    route: '/sportovi',
   },
   {
     id: 'help',
