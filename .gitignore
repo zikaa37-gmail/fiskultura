@@ -1,1 +1,5 @@
 deploy/.env
+
+/deploy/*.zip
+/backend-production-build/
+/deploy/.env.*

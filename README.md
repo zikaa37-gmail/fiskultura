@@ -20,8 +20,10 @@ portal (Angular + Laravel) se pravi po fazama iz `docs/koncept.md`, zadaci su u 
 
 ## Deploy
 
+Portal: `docs/DEPLOY.md` (`python deploy/deploy.py`). Statična naslovna (dok portal ne zameni):
+
 Kopiraj `deploy/env.example` u `deploy/.env` (van gita), upiši FTP podatke, pa
-`python deploy/deploy.py`. Šalje samo fajlove naslovne u `DEPLOY_WEB_DIR` (document root glavnog
+`python deploy/deploy-staticna.py`. Šalje samo fajlove naslovne u `DEPLOY_WEB_DIR` (document root glavnog
 domena, na cPanel-u `public_html`) i ne dira poddomene.
 
 `.htaccess` (HTTPS preusmeravanje bez `/.well-known/` zbog SSL-a, keš) se šalje zajedno sa naslovnom —
