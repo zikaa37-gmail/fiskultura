@@ -81,6 +81,22 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
 - Početni podaci: `docs/izvori/udruzenja.json` i `docs/izvori/objave.json` (seed za bazu).
 - Udruženje može da dobije nalog urednika za svoje objave (kasnije).
 
+### 2a. Stručni seminari i usavršavanje
+- Pregled **odobrenih programa stalnog stručnog usavršavanja** u vezi sa fizičkim vaspitanjem i
+  školskim sportom **za konkretnu školsku godinu**: programi iz Kataloga ZUOV-a (akreditovani
+  seminari, katalog važi više godina) i odobreni stručni skupovi (konferencije, simpozijumi, letnje i
+  zimske škole, okrugli stolovi) koje ZUOV objavljuje po školskoj godini.
+- Program: naziv, kataloški broj / broj rešenja, realizator (organizacija sa portala), autori, oblik
+  (seminar / stručni skup / letnja škola / onlajn), trajanje i broj bodova, kompetencija i prioritet,
+  ciljna grupa (razredna nastava, predmetna, SŠ), važi za školsku godinu, cena, termini i mesta
+  realizacije, link na zvaničnu stranicu i prijavu.
+- Javno: `/seminari` sa izborom školske godine (podrazumevano tekuća), filteri po obliku, okrugu,
+  realizatoru, onlajn / uživo, „uskoro" (termini u narednih 30 dana); kalendar termina.
+- Svaki novi odobren program ili termin postaje vest kategorije „Seminari" sa oznakom izvora, i ide
+  pretplatnicima obaveštenja (po okrugu i realizatoru).
+- Nastavnik može da sačuva seminar i dobije podsetnik pred termin; kasnije lična evidencija
+  bodova stručnog usavršavanja.
+
 ### 3. Stručna pomoć
 - **Blog / stručni tekstovi** — autori (nastavnici, profesori fakulteta), teme: metodika, inkluzija,
   zdravlje, ocenjivanje, sportske igre, rad sa talentovanima, ...
