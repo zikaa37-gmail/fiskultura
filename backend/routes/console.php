@@ -7,8 +7,8 @@ use Illuminate\Support\Str;
 Artisan::command('app:admin {email} {--password=} {--name=Administrator}', function (string $email) {
     $password = (string) $this->option('password');
 
-    if (strlen($password) < 12) {
-        $this->error('Lozinka admina mora imati bar 12 znakova.');
+    if (strlen($password) < 8) {
+        $this->error('Lozinka admina mora imati bar 8 znakova.');
 
         return 1;
     }

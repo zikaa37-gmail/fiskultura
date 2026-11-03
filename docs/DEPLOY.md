@@ -26,7 +26,7 @@ Baza: deljena `fiskultu_porucivanje` (kao evidencija i košarkaška), razdvojena
 
 `deploy/.env` (van gita, šablon `deploy/env.example`): FTP nalog, `DEPLOY_APP_DIR=fiskultura_app`,
 `DEPLOY_WEB_DIR=public_html`, `DEPLOY_SECRET`, prvi admin (`DEPLOY_ADMIN_EMAIL`,
-`DEPLOY_ADMIN_PASSWORD`, bar 12 znakova), i produkcioni backend `.env` (`APP_KEY`, `JWT_SECRET`,
+`DEPLOY_ADMIN_PASSWORD`, bar 8 znakova), i produkcioni backend `.env` (`APP_KEY`, `JWT_SECRET`,
 baza, SMTP `obavestenja@fiskultura.rs`). Redovi `FTP_*` i `DEPLOY_*` ne idu na server.
 
 ## Komande
