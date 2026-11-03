@@ -10,6 +10,11 @@
         <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label | translate }}</a>
       }
       <a class="topnav-app" [href]="ePripremeUrl" target="_blank" rel="noopener">e-pripreme</a>
+      @if (auth.currentUser(); as user) {
+        <a class="topnav-account" routerLink="/profil" routerLinkActive="topnav-active" (click)="closeMenu()">{{ user.name }}</a>
+      } @else {
+        <a class="topnav-account" routerLink="/prijava" routerLinkActive="topnav-active" (click)="closeMenu()">{{ 'nav.login' | translate }}</a>
+      }
     </nav>
 
     <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" [attr.aria-label]="'nav.menu' | translate" [title]="'nav.menu' | translate">
