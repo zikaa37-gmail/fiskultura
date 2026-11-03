@@ -25,7 +25,7 @@ class AdminCommandTest extends TestCase
     {
         User::factory()->create(['email' => 'kolega@skola.rs', 'role' => User::USER]);
 
-        $this->artisan('app:admin', ['email' => 'kolega@skola.rs', '--password' => 'kratka'])->assertFailed();
+        $this->artisan('app:admin', ['email' => 'kolega@skola.rs', '--password' => 'kratko'])->assertFailed();
         $this->assertSame(User::USER, User::where('email', 'kolega@skola.rs')->value('role'));
 
         $this->artisan('app:admin', ['email' => 'kolega@skola.rs', '--password' => 'dugacka-lozinka-123'])->assertSuccessful();
