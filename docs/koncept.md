@@ -92,6 +92,30 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
 - **Predlozi za unapređenje nastave** — nastavnici šalju predlog, urednik objavljuje; glasanje.
 - Propisi: biblioteka linkova na zvanične tekstove (Službeni glasnik, Ministarstvo, ZUOV).
 
+### 3a. Kolumne, reakcije i polemike
+- **Kolumne po pozivu** — urednik poziva ljude od struke (nastavnici, profesori fakulteta, treneri,
+  predstavnici udruženja, roditelji, učenici) da pišu na zadatu ili slobodnu temu. Poziv stiže mejlom
+  sa linkom; pozvani pravi nalog sa ulogom **kolumnista** (`author`) i profilom (ime, zvanje, mesto,
+  kratka biografija, fotografija, linkovi). Kolumnista može imati stalnu rubriku (serijal) sa
+  ritmom (npr. jednom mesečno).
+- Tok teksta: nacrt → slanje uredniku → uredničke napomene (interno, ne vide čitaoci) → odobreno →
+  objavljeno / zakazano. Kolumna nosi napomenu „Stavovi autora ne moraju da odražavaju stavove
+  portala".
+- **Reakcije** (samo prijavljeni korisnici, jedna po vrsti): „Slažem se", „Ne slažem se",
+  „Korisno", „Podržavam"; broj reakcija vidljiv svima.
+- **Komentari** (samo prijavljeni, pod imenom i prezimenom): odgovor na komentar (jedan nivo),
+  izmena 15 minuta posle objave, prijava neprimerenog komentara, urednik sakriva / zaključava;
+  prvi komentar novog korisnika ide na odobrenje. Pravila diskusije (bez uvreda, bez ličnih podataka
+  dece, bez reklama) prihvataju se pri prvom komentaru.
+- **Polemike** — urednik otvara temu za raspravu (npr. „Treba li fizičko vaspitanje svaki dan?"):
+  uvodni tekst + pitanje, poziva dva ili više autora sa različitim stavovima, čitaoci glasaju
+  (za / protiv / neodlučan, rezultat se vidi posle glasanja), komentarišu i šalju svoju repliku
+  (ide uredniku). Tema ima rok; na kraju urednik objavljuje zaključak i šalje ga udruženjima /
+  SSPFVS-u kao glas struke.
+- **Replika** — kolumnista ili korisnik može napisati odgovor na tekst; prikazuje se kao povezan
+  niz („Odgovor na: ...").
+- Obaveštenja: novi tekst kolumniste koga pratim, nova polemika, odgovor na moj komentar.
+
 ### 4. Sportovi i pravila
 - Sportovi: košarka, odbojka, rukomet, mali fudbal (sportske igre); atletika; gimnastika;
   elementarne igre; plesovi (narodni i društveni); jadžent; kasnije badminton, stoni tenis.
