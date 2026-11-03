@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "main": "Glavna navigacija",
+    "menu": "Meni",
+    "news": "Vesti",
+    "organizations": "Udruženja",
+    "sports": "Sportovi i pravila",
+    "apps": "Aplikacije"
+  },
+  "footer": {
+    "tagline": "Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi",
+    "apps": "Aplikacije",
+    "portal": "Portal",
+    "madeBy": "Izrada:"
+  }
+}

@@ -1,0 +1,114 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="pill">Portal je u izradi</span>
+      <h1>Fizičko vaspitanje u Srbiji <span class="accent">na jednom mestu</span></h1>
+      <p class="lead">
+        Vesti iz školskog sporta, objave strukovnih udruženja, pravila sportova za čas, slikovita uputstva
+        i pomoć oko administracije i propisa — mesto na koje nastavnici fizičkog dolaze po obaveštenja.
+      </p>
+      <div class="hero-actions">
+        <a mat-flat-button routerLink="/vesti">Pogledaj vesti</a>
+        <a mat-stroked-button [href]="ePripremeUrl" target="_blank" rel="noopener">Otvori e-pripreme</a>
+      </div>
+    </div>
+    <div class="hero-card" aria-hidden="true">
+      <div class="hero-card-row"><span class="dot dot-blue"></span>Školski sport · kalendar takmičenja</div>
+      <div class="hero-card-row"><span class="dot dot-lime"></span>Seminar društva pedagoga · prijave</div>
+      <div class="hero-card-row"><span class="dot dot-orange"></span>Pravila · rukomet za 6. razred</div>
+      <div class="hero-card-row"><span class="dot dot-gray"></span>Propis · izmena pravilnika o ocenjivanju</div>
+      <div class="hero-card-foot">Obaveštenja za difovce · svake nedelje</div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="container band-inner">
+    <div class="band-item"><strong>60 min</strong><span>dnevno umerene do intenzivne aktivnosti preporučuje Svetska zdravstvena organizacija deci od 5 do 17 godina</span></div>
+    <div class="band-item"><strong>3×</strong><span>nedeljno vežbe za jačanje mišića i kostiju, po istoj preporuci</span></div>
+    <div class="band-item"><strong>1 mesto</strong><span>za vesti, udruženja, pravila i aplikacije — umesto deset sajtova i Viber grupa</span></div>
+  </div>
+</section>
+
+<section id="moduli" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Šta pripremamo</p>
+      <h2>Delovi portala</h2>
+      <p class="muted">Pokrećemo ih jedan po jedan. Prve stižu vesti, udruženja i pravila sportova.</p>
+    </div>
+    <div class="module-grid">
+      @for (module of modules; track module.id) {
+        <app-module-card
+          [title]="module.title"
+          [description]="module.description"
+          [icon]="module.icon"
+          [accent]="module.accent"
+          [status]="module.status"
+          [statusLabel]="module.statusLabel"
+          [route]="module.route"
+          [href]="module.href"
+        />
+      }
+    </div>
+  </div>
+</section>
+
+<section id="za-koga" class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Za koga</p>
+      <h2>Jedan portal, tri pogleda</h2>
+    </div>
+    <div class="audience-grid">
+      <div class="audience">
+        <h3>Nastavnici</h3>
+        <ul>
+          <li>Vesti, seminari i propisi na jednom mestu</li>
+          <li>Pomoć oko administracije i pravnih pitanja</li>
+          <li>Pravila i PDF uputstva za čas</li>
+          <li>Pripreme i evidencija kroz naše aplikacije</li>
+        </ul>
+      </div>
+      <div class="audience">
+        <h3>Učenici</h3>
+        <ul>
+          <li>Kako se pravilno radi vežba</li>
+          <li>Pravila igre pre takmičenja</li>
+          <li>Izazovi i lični napredak</li>
+        </ul>
+      </div>
+      <div class="audience">
+        <h3>Udruženja i škole</h3>
+        <ul>
+          <li>Objave stižu do svih kolega u Srbiji</li>
+          <li>Kalendar takmičenja i seminara</li>
+          <li>Predlozi za unapređenje nastave</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vezba-dana" class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Probaj odmah</p>
+      <h2>Vežba dana</h2>
+    </div>
+    @let current = exercise();
+    <div class="exercise">
+      <div class="exercise-head">
+        <span class="exercise-meta">{{ current.meta }}</span>
+        <h3>{{ current.name }}</h3>
+      </div>
+      <p>{{ current.description }}</p>
+      <ol class="exercise-steps">
+        @for (step of current.steps; track step) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+      <button type="button" mat-stroked-button (click)="nextExercise()">Druga vežba</button>
+    </div>
+  </div>
+</section>

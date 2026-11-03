@@ -1,0 +1,53 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Strukovna udruženja</p>
+      <h1>Udruženja i savezi u Srbiji</h1>
+      <p class="muted">Društva pedagoga fizičke kulture, savezi za školski sport i institucije važne za nastavnike fizičkog.</p>
+    </div>
+
+    <mat-button-toggle-group class="level-filter" [value]="level()" (change)="setLevel($event.value)" aria-label="Nivo organizacije">
+      <mat-button-toggle value="all">Svi</mat-button-toggle>
+      @for (option of levels; track option) {
+        <mat-button-toggle [value]="option">{{ levelLabels[option] }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
+    @if (isLoading()) {
+      <mat-progress-bar mode="indeterminate" />
+    } @else if (hasError()) {
+      <div class="empty-state">
+        <h3>Spisak udruženja još nije objavljen</h3>
+        <p class="muted">Prikupljamo podatke o udruženjima iz cele Srbije.</p>
+      </div>
+    } @else {
+      <div class="module-grid">
+        @for (organization of filtered(); track organization.slug) {
+          <article class="module accent-violet">
+            <span class="status">{{ typeLabels[organization.type] }} · {{ levelLabels[organization.level] }}</span>
+            <h3>{{ organization.name }}@if (organization.shortName) { <span class="muted"> ({{ organization.shortName }})</span> }</h3>
+            @if (organization.city) {
+              <span class="muted small">{{ organization.city }}</span>
+            }
+            <p>{{ organization.description }}</p>
+            <div class="link-row">
+              @if (organization.website) {
+                <a class="inline-link" [href]="organization.website" target="_blank" rel="noopener">Sajt →</a>
+              }
+              @if (organization.social?.facebook; as facebook) {
+                <a class="inline-link" [href]="facebook" target="_blank" rel="noopener">Facebook →</a>
+              }
+              @if (organization.email) {
+                <a class="inline-link" [href]="'mailto:' + organization.email">{{ organization.email }}</a>
+              }
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <h3>Nema udruženja za izabrani nivo</h3>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

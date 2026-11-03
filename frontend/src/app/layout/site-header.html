@@ -1,0 +1,19 @@
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
+      <svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="19" cy="6" r="3" /><path d="M8 13l6-3 5 4-3 6 5 5M14 10l-2 8-6 5M16 20l-5 1" /></svg>
+      <span>Fiskultura</span>
+    </a>
+
+    <nav class="topnav" [class.topnav-open]="menuOpen()" [attr.aria-label]="'nav.main' | translate">
+      @for (item of navItems; track item.route) {
+        <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label | translate }}</a>
+      }
+      <a class="topnav-app" [href]="ePripremeUrl" target="_blank" rel="noopener">e-pripreme</a>
+    </nav>
+
+    <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" [attr.aria-label]="'nav.menu' | translate" [title]="'nav.menu' | translate">
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+    </button>
+  </div>
+</header>

@@ -1,0 +1,42 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Vesti i objave</p>
+      <h1>Šta je novo u fizičkom vaspitanju</h1>
+      <p class="muted">Objave strukovnih udruženja, saveza za školski sport i institucija — ukratko, sa linkom na izvor.</p>
+    </div>
+
+    <mat-button-toggle-group class="level-filter" [value]="category()" (change)="setCategory($event.value)" aria-label="Kategorija objave">
+      <mat-button-toggle value="all">Sve</mat-button-toggle>
+      @for (option of categories; track option) {
+        <mat-button-toggle [value]="option">{{ categoryLabels[option] }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
+    @if (isLoading()) {
+      <mat-progress-bar mode="indeterminate" />
+    } @else if (hasError()) {
+      <div class="empty-state">
+        <h3>Objave trenutno nisu dostupne</h3>
+        <p class="muted">Pokušaj ponovo za nekoliko minuta.</p>
+      </div>
+    } @else {
+      <div class="post-list">
+        @for (post of posts(); track post.url + post.title) {
+          <article class="post">
+            <span class="post-meta">
+              {{ post.displayDate }}@if (post.displayDate) { · }{{ post.organizationName }} · {{ categoryLabels[post.category] }}
+            </span>
+            <h3>{{ post.title }}</h3>
+            <p class="muted">{{ post.summary }}</p>
+            <a class="inline-link" [href]="post.url" target="_blank" rel="noopener">Izvor →</a>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <h3>Nema objava u ovoj kategoriji</h3>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

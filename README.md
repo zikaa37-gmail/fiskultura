@@ -7,7 +7,14 @@ portal (Angular + Laravel) se pravi po fazama iz `docs/koncept.md`, zadaci su u 
   `main.js`).
 - `staro/index-2023.html` — prethodna naslovna sa linkovima na aplikacije (ne objavljuje se).
 
-## Lokalno
+## Portal (u izradi)
+
+- `frontend/` — Angular 22 + Angular Material (port 5190)
+- `backend/` — Laravel 13 API (port 8190, prefiks tabela `fk_`)
+
+`node dev.mjs` iz korena diže oba. Konvencije: `CLAUDE.md`.
+
+## Lokalno (statička naslovna)
 
 `python -m http.server 8080` iz ovog foldera, pa `http://localhost:8080`.
 
