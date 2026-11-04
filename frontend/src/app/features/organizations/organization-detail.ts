@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input } f
 import { httpResource } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
+import { OrgLinks } from '../../shared/org-links/org-links';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
@@ -10,7 +11,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
 
 @Component({
   selector: 'app-organization-detail',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule, NewsCard],
+  imports: [RouterLink, MatButtonModule, MatProgressBarModule, NewsCard, OrgLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -41,23 +42,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
             @if (item.parent; as parent) {
               <p>Član krovnog udruženja <a class="inline-link" [routerLink]="['/udruzenja', parent.slug]">{{ parent.name }}</a></p>
             }
-            <div class="link-row">
-              @if (item.website) {
-                <a class="inline-link" [href]="item.website" target="_blank" rel="noopener">Sajt →</a>
-              }
-              @if (item.social.facebook; as facebook) {
-                <a class="inline-link" [href]="facebook" target="_blank" rel="noopener">Facebook →</a>
-              }
-              @if (item.social.instagram; as instagram) {
-                <a class="inline-link" [href]="instagram" target="_blank" rel="noopener">Instagram →</a>
-              }
-              @if (item.social.youtube; as youtube) {
-                <a class="inline-link" [href]="youtube" target="_blank" rel="noopener">YouTube →</a>
-              }
-              @if (item.email) {
-                <a class="inline-link" [href]="'mailto:' + item.email">{{ item.email }}</a>
-              }
-            </div>
+            <app-org-links [organization]="item" [showNews]="false" />
             @if (lastActivity()) {
               <p class="muted small">Poslednja uočena aktivnost: {{ lastActivity() }}</p>
             }

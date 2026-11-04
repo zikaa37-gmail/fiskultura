@@ -35,6 +35,7 @@ python deploy/deploy.py --htaccess --seed   # PRVI deploy portala (zamenjuje .ht
 python deploy/deploy.py                     # svaki sledeći: testovi + build + upload + migracije + provera
 python deploy/deploy.py --skip-tests
 python deploy/deploy.py --skip-build        # samo upload postojećih paketa
+python deploy/deploy.py --check-links       # i provera linkova udruženja (organizations:check-links)
 python deploy/deploy-staticna.py            # stara statična naslovna (samo za povratak, vidi dole)
 ```
 
@@ -62,5 +63,9 @@ Ako nešto ne radi: `python deploy/deploy-staticna.py` vraća `index.html`, `sty
 - MySQL na serveru dozvoljava indeks do 1000 bajtova: `Schema::defaultStringLength(191)` u
   `AppServiceProvider`.
 - Mejl: proveriti SPF / DKIM za fiskultura.rs u cPanel-u (Email Deliverability) pre prvih pravih mejlova.
-- Cron (kasnije, za red mejlova i obaveštenja):
+- Linkovi udruženja (sajt, mreže, izvor članstva) se proveravaju komandom `organizations:check-links`
+  (raspored: ponedeljkom u 4h — radi tek kad postoji cron ispod; do tada uz deploy `--check-links`).
+  Link se isključuje na sajtu samo kad sigurno ne radi (nema domena / veze, 404, 410, 5xx); blokade botova
+  (Facebook 400, 403) se vode kao „nije moguće proveriti“ i link ostaje aktivan.
+- Cron (za proveru linkova, kasnije i red mejlova i obaveštenja):
   `* * * * * /usr/local/bin/php /home/fiskultu/fiskultura_app/artisan schedule:run >> /dev/null 2>&1`

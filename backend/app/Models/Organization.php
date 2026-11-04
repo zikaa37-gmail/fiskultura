@@ -20,6 +20,7 @@ class Organization extends Model
     {
         return [
             'social' => 'array',
+            'link_checks' => 'array',
             'last_activity' => 'date',
         ];
     }

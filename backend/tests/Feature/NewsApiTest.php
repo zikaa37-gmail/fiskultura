@@ -31,6 +31,25 @@ class NewsApiTest extends TestCase
         $this->assertSame(39, Organization::count());
     }
 
+    public function test_reimport_fixes_untouched_summaries_but_keeps_editor_changes(): void
+    {
+        $untouched = News::orderBy('id')->first();
+        $edited = News::orderBy('id')->skip(1)->first();
+        $original = $untouched->summary;
+
+        $untouched->timestamps = false;
+        $untouched->forceFill(['summary' => 'Stari sažetak sa internom napomenom.'])->saveQuietly();
+        $this->travel(1)->minutes();
+        $edited->update(['summary' => 'Urednik je prepravio sažetak.']);
+
+        $this->seed(ContentSeeder::class);
+
+        $this->assertSame($original, $untouched->fresh()->summary);
+        $this->assertTrue($untouched->fresh()->created_at->equalTo($untouched->fresh()->updated_at));
+        $this->assertSame('Urednik je prepravio sažetak.', $edited->fresh()->summary);
+        $this->assertSame(65, News::count());
+    }
+
     public function test_list_is_paginated_newest_first_with_source_and_organization(): void
     {
         $response = $this->postJson('/api/news/list', ['per_page' => 5])

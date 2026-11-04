@@ -5,6 +5,7 @@
     python deploy/deploy.py --skip-build    # samo upload postojećih paketa
     python deploy/deploy.py --seed          # i db:seed (u produkciji samo osnovni podaci, bez probnih naloga)
     python deploy/deploy.py --htaccess      # zameni .htaccess na serveru (PRVI deploy — tamo je onaj od statične naslovne)
+    python deploy/deploy.py --check-links   # i provera linkova udruženja (organizations:check-links, 1–3 min)
 
 Prvi admin: DEPLOY_ADMIN_EMAIL i DEPLOY_ADMIN_PASSWORD u deploy/.env — nalog se pravi ili ažurira pri svakom
 deploy-u ako su popunjeni (lozinka ne ide u .env na serveru). Posle prvog deploy-a obriši lozinku iz deploy/.env.
@@ -153,6 +154,7 @@ def main() -> int:
         'seed': '1' if '--seed' in args else '0',
         'admin_email': env.get('DEPLOY_ADMIN_EMAIL', ''),
         'admin_password': env.get('DEPLOY_ADMIN_PASSWORD', ''),
+        'check_links': '1' if '--check-links' in args else '0',
     }
     request = urllib.request.Request(f'{base}/{unpacker_name}', data=urllib.parse.urlencode(payload).encode(), headers=HEADERS, method='POST')
     try:

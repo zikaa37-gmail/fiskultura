@@ -62,12 +62,19 @@ class ContentImporter
     private function importNews(array $rows): array
     {
         $created = 0;
+        $updated = 0;
         $organizations = Organization::all()->keyBy('slug');
 
         foreach ($rows as $row) {
             $organization = $organizations[$row['organization']] ?? null;
-            $exists = News::where('source_url', $row['url'])->where('title', $row['title'])->exists();
-            if ($exists) {
+            $existing = News::where('source_url', $row['url'])->where('title', $row['title'])->first();
+            if ($existing) {
+                if ($this->untouched($existing) && $existing->summary !== $row['summary']) {
+                    $existing->timestamps = false;
+                    $existing->forceFill(['summary' => $row['summary']])->saveQuietly();
+                    $updated++;
+                }
+
                 continue;
             }
 
@@ -88,7 +95,12 @@ class ContentImporter
             $created++;
         }
 
-        return ['created' => $created, 'skipped' => count($rows) - $created];
+        return ['created' => $created, 'updated' => $updated, 'skipped' => count($rows) - $created - $updated];
+    }
+
+    private function untouched(News $news): bool
+    {
+        return $news->author_id === null && $news->created_at?->equalTo($news->updated_at);
     }
 
     private function parseDate(?string $value): ?Carbon

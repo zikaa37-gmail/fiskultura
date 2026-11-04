@@ -16,7 +16,12 @@ export type IconName =
   | 'pdf'
   | 'external'
   | 'menu'
-  | 'close';
+  | 'close'
+  | 'web'
+  | 'facebook'
+  | 'instagram'
+  | 'youtube'
+  | 'link';
 
 const ICON_PATHS: Record<IconName, string[]> = {
   dumbbell: ['M6.5 6.5l11 11', 'M3 10l7-7', 'M14 21l7-7', 'M5 12l7-7', 'M12 19l7-7'],
@@ -35,6 +40,11 @@ const ICON_PATHS: Record<IconName, string[]> = {
   external: ['M14 4h6v6', 'M20 4l-9 9', 'M18 14v6H4V6h6'],
   menu: ['M4 7h16', 'M4 12h16', 'M4 17h16'],
   close: ['M6 6l12 12', 'M18 6L6 18'],
+  web: ['M3 5h18v14H3z', 'M3 9h18', 'M6 7h.01', 'M8.5 7h.01', 'M8 13h8', 'M8 16h5'],
+  facebook: ['M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V9H7v3h2v9h3v-9h2.5l.5-3h-3V7a1 1 0 0 1 1-1h2z'],
+  instagram: ['M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z', 'M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z', 'M17.5 6.5h.01'],
+  youtube: ['M3 8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z', 'M10 9l5 3-5 3z'],
+  link: ['M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1', 'M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1'],
 };
 
 @Component({
