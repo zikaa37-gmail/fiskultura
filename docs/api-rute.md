@@ -38,3 +38,20 @@ Vest: `slug`, `title`, `summary`, `category`, `featured`, `cover_image`, `publis
 
 Podaci za uvoz: `backend/database/data/organizations.json` i `news.json`, `ContentSeeder` (idempotentno —
 postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
+
+## Admin (`jwt` + uloga)
+
+| Metod | Ruta | Uloga | Opis |
+|---|---|---|---|
+| POST | `/admin/news/list` | editor, admin | `status` (draft / published / scheduled), `category`, `organization_id`, `search`, `page`, `per_page`; nacrti prvi |
+| GET | `/admin/news/{id}` | editor, admin | vest sa svim poljima (`status`, `is_visible`, `author`) |
+| POST | `/admin/news` | editor, admin | nova vest; `slug` iz naslova ako nije zadat; `published_at` prazno + objavljeno = sada, budućnost = zakazano; autor = prijavljeni |
+| PATCH | `/admin/news/{id}` | editor, admin | izmena |
+| DELETE | `/admin/news/{id}` | editor, admin | brisanje |
+| GET | `/admin/organizations` | editor, admin | sve organizacije sa `news_count` i `parent_id` |
+| GET | `/admin/organizations/{id}` | editor, admin | jedna organizacija |
+| POST | `/admin/organizations` | editor, admin | nova; `slug` iz skraćenice ili naziva |
+| PATCH | `/admin/organizations/{id}` | editor, admin | izmena (ne može biti sama sebi krovna) |
+| DELETE | `/admin/organizations/{id}` | admin | brisanje; vesti ostaju bez organizacije |
+| POST | `/admin/users/list` | admin | `role`, `search` (ime, mejl, škola, opština), `page` |
+| PATCH | `/admin/users/{id}` | admin | `role`, `blocked` (blokiranje poništava sesije); svoj nalog ne može |

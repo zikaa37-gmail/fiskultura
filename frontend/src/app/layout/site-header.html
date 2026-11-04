@@ -10,6 +10,9 @@
         <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label | translate }}</a>
       }
       <a class="topnav-app" [href]="ePripremeUrl" target="_blank" rel="noopener">e-pripreme</a>
+      @if (auth.isEditor()) {
+        <a routerLink="/admin" routerLinkActive="topnav-active" (click)="closeMenu()">Admin</a>
+      }
       @if (auth.currentUser(); as user) {
         <a class="topnav-account" routerLink="/profil" routerLinkActive="topnav-active" (click)="closeMenu()">{{ user.name }}</a>
       } @else {

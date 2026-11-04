@@ -10,8 +10,8 @@ Lozinke se ne upisuju ovde. Produkcijske su samo u lokalnom `deploy/.env` (admin
 
 ## Nalozi za testiranje (dodavati po potrebi)
 
-Prave se registracijom na sajtu (potvrda stiže mejlom), pa admin menja ulogu. Dok ne postoji admin
-stranica za korisnike (zadatak #16), uloga se menja komandom `app:admin` samo za admina, ostalo ručno.
+Prave se registracijom na sajtu (potvrda stiže mejlom), pa admin menja ulogu na
+`/admin/korisnici` (tu se korisnik i blokira). Novi admin: komanda `app:admin` ili promena uloge.
 
 | Mejl | Uloga | Ko testira / šta | Napravljen |
 |---|---|---|---|

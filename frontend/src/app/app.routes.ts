@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './core/auth/auth.guards';
+import { adminGuard, authGuard, editorGuard, guestGuard } from './core/auth/auth.guards';
 
 export const routes: Routes = [
   {
@@ -70,6 +70,22 @@ export const routes: Routes = [
     title: 'Moj profil — Fiskultura',
     canActivate: [authGuard],
     loadComponent: () => import('./features/auth/profile').then((m) => m.Profile),
+  },
+  {
+    path: 'admin',
+    title: 'Admin — Fiskultura',
+    canActivate: [authGuard, editorGuard],
+    loadComponent: () => import('./features/admin/admin-shell').then((m) => m.AdminShell),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'vesti' },
+      { path: 'vesti', title: 'Admin: vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-list').then((m) => m.AdminNewsList) },
+      { path: 'vesti/nova', title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: 'vesti/:id', title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: 'udruzenja', title: 'Admin: udruženja — Fiskultura', loadComponent: () => import('./features/admin/admin-organizations').then((m) => m.AdminOrganizations) },
+      { path: 'udruzenja/nova', title: 'Nova organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
+      { path: 'udruzenja/:id', title: 'Izmena organizacije — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
+      { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
+    ],
   },
   {
     path: '**',

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminNewsController;
+use App\Http\Controllers\Api\Admin\AdminOrganizationController;
+use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
@@ -26,4 +29,23 @@ Route::middleware('jwt')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
     Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
+
+    Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
+        Route::post('/news/list', [AdminNewsController::class, 'list']);
+        Route::get('/news/{news}', [AdminNewsController::class, 'show']);
+        Route::post('/news', [AdminNewsController::class, 'store']);
+        Route::patch('/news/{news}', [AdminNewsController::class, 'update']);
+        Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
+
+        Route::get('/organizations', [AdminOrganizationController::class, 'index']);
+        Route::get('/organizations/{organization}', [AdminOrganizationController::class, 'show']);
+        Route::post('/organizations', [AdminOrganizationController::class, 'store']);
+        Route::patch('/organizations/{organization}', [AdminOrganizationController::class, 'update']);
+    });
+
+    Route::prefix('admin')->middleware('role:admin')->group(function () {
+        Route::delete('/organizations/{organization}', [AdminOrganizationController::class, 'destroy']);
+        Route::post('/users/list', [AdminUserController::class, 'list']);
+        Route::patch('/users/{user}', [AdminUserController::class, 'update']);
+    });
 });
