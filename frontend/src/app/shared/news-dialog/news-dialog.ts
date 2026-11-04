@@ -6,29 +6,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsDetail, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
-import { Icon } from '../icon/icon';
+import { DialogShell } from '../dialog-shell/dialog-shell';
 
 @Component({
   selector: 'app-news-dialog',
-  imports: [RouterLink, MatDialogModule, MatButtonModule, MatProgressBarModule, Icon],
+  imports: [RouterLink, MatDialogModule, MatButtonModule, MatProgressBarModule, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'news-dialog' },
   template: `
-    <button type="button" class="dialog-close" mat-dialog-close aria-label="Zatvori" title="Zatvori"><app-icon name="close" /></button>
-    <mat-dialog-content>
+    <app-dialog-shell [title]="news()?.title ?? (resource.error() ? 'Vest nije pronađena' : 'Učitavanje…')">
+      @if (news(); as item) {
+        <span class="post-meta" dialogMeta>
+          @if (date()) {
+            <span>{{ date() }}</span>
+          }
+          <span class="post-category">{{ categoryLabels[item.category] }}</span>
+        </span>
+      }
+
       @if (resource.isLoading()) {
         <mat-progress-bar mode="indeterminate" />
-      } @else if (resource.error()) {
-        <p class="form-error">Vest nije pronađena.</p>
       } @else if (news(); as item) {
-        <article class="article-body dialog-article">
-          <span class="post-meta">
-            @if (date()) {
-              <span>{{ date() }}</span>
-            }
-            <span class="post-category">{{ categoryLabels[item.category] }}</span>
-          </span>
-          <h2 class="dialog-title">{{ item.title }}</h2>
+        <div class="dialog-article">
           <p class="lead">{{ item.summary }}</p>
           @if (item.body) {
             <div class="article-text">{{ item.body }}</div>
@@ -56,15 +54,16 @@ import { Icon } from '../icon/icon';
               }
             </div>
           }
-        </article>
+        </div>
       }
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      @if (news(); as item) {
-        <a mat-button [routerLink]="['/vesti', item.slug]" mat-dialog-close>Stalni link</a>
-      }
-      <button type="button" mat-flat-button mat-dialog-close>Zatvori</button>
-    </mat-dialog-actions>
+
+      <ng-container dialogActions>
+        @if (news(); as item) {
+          <a mat-button [routerLink]="['/vesti', item.slug]" mat-dialog-close>Stalni link</a>
+        }
+        <button type="button" mat-flat-button mat-dialog-close>Zatvori</button>
+      </ng-container>
+    </app-dialog-shell>
   `,
 })
 export class NewsDialog {
@@ -85,8 +84,7 @@ export class NewsDialogService {
       data: { slug },
       width: '760px',
       maxWidth: '100vw',
-      maxHeight: '100dvh',
-      panelClass: 'news-dialog-panel',
+      panelClass: ['app-dialog-panel', 'news-dialog-panel'],
       autoFocus: false,
     });
   }
