@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Organization, OrganizationType } from './organization.model';
+import { API_URL } from '../../core/http/api';
+import { Organization, OrganizationType } from '../../core/content/content.model';
 import { OrganizationCard } from './organization-card';
 
 const UMBRELLA_SLUG = 'sspfvs';
@@ -25,7 +26,7 @@ const SECTION_TITLES: Record<OrganizationType, string> = {
   templateUrl: './organizations.html',
 })
 export class Organizations {
-  private readonly resource = httpResource<Organization[]>(() => '/data/udruzenja.json');
+  private readonly resource = httpResource<Organization[]>(() => `${API_URL}/organizations`);
 
   protected readonly isLoading = this.resource.isLoading;
   protected readonly hasError = computed(() => !!this.resource.error());
@@ -36,12 +37,12 @@ export class Organizations {
 
   protected readonly members = computed(() =>
     this.organizations()
-      .filter((organization) => organization.parent === UMBRELLA_SLUG)
+      .filter((organization) => organization.parent?.slug === UMBRELLA_SLUG)
       .sort((a, b) => (a.city ?? '').localeCompare(b.city ?? '', 'sr')),
   );
 
   protected readonly sections = computed(() => {
-    const rest = this.organizations().filter((organization) => organization.slug !== UMBRELLA_SLUG && organization.parent !== UMBRELLA_SLUG);
+    const rest = this.organizations().filter((organization) => organization.slug !== UMBRELLA_SLUG && organization.parent?.slug !== UMBRELLA_SLUG);
     return SECTION_ORDER.map((type) => ({
       type,
       title: SECTION_TITLES[type],

@@ -3,40 +3,77 @@
     <div class="section-head">
       <p class="eyebrow">Vesti i objave</p>
       <h1>Šta je novo u fizičkom vaspitanju</h1>
-      <p class="muted">Objave strukovnih udruženja, saveza za školski sport i institucija — ukratko, sa linkom na izvor.</p>
+      <p class="muted">Objave strukovnih udruženja, saveza za školski sport i institucija — ukratko, uz oznaku odakle je informacija i link na izvor.</p>
     </div>
 
-    <mat-button-toggle-group class="level-filter" [value]="category()" (change)="setCategory($event.value)" aria-label="Kategorija objave">
-      <mat-button-toggle value="all">Sve</mat-button-toggle>
-      @for (option of categories; track option) {
-        <mat-button-toggle [value]="option">{{ categoryLabels[option] }}</mat-button-toggle>
+    <div class="filters">
+      <mat-button-toggle-group class="level-filter" [value]="category()" (change)="setFilter('kategorija', $event.value)" aria-label="Kategorija objave">
+        <mat-button-toggle value="all">Sve</mat-button-toggle>
+        @for (option of categories; track option) {
+          <mat-button-toggle [value]="option">{{ categoryLabels[option] }}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+
+      <div class="filter-row">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Izvor</mat-label>
+          <mat-select [value]="organization()" (selectionChange)="setFilter('udruzenje', $event.value)">
+            <mat-option value="">Svi izvori</mat-option>
+            <mat-option [value]="umbrellaFilter">SSPFVS i članice</mat-option>
+            @for (item of organizations(); track item.slug) {
+              <mat-option [value]="item.slug">{{ label(item) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Godina</mat-label>
+          <mat-select [value]="year()" (selectionChange)="setFilter('godina', $event.value)">
+            <mat-option value="">Sve godine</mat-option>
+            @for (item of years(); track item) {
+              <mat-option [value]="'' + item">{{ item }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <form class="search-form" (ngSubmit)="search()">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Pretraga</mat-label>
+            <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+          </mat-form-field>
+          <button type="submit" mat-stroked-button>Traži</button>
+        </form>
+      </div>
+      @if (hasFilters()) {
+        <button type="button" mat-button class="clear-filters" (click)="clearFilters()">Poništi filtere</button>
       }
-    </mat-button-toggle-group>
+    </div>
 
     @if (isLoading()) {
       <mat-progress-bar mode="indeterminate" />
-    } @else if (hasError()) {
+    }
+    @if (hasError()) {
       <div class="empty-state">
         <h3>Objave trenutno nisu dostupne</h3>
         <p class="muted">Pokušaj ponovo za nekoliko minuta.</p>
       </div>
-    } @else {
+    } @else if (meta(); as info) {
+      <p class="muted small result-count">Pronađeno objava: {{ info.total }}</p>
       <div class="post-list">
-        @for (post of posts(); track post.url + post.title) {
-          <article class="post">
-            <span class="post-meta">
-              {{ post.displayDate }}@if (post.displayDate) { · }{{ post.organizationName }} · {{ categoryLabels[post.category] }}
-            </span>
-            <h3>{{ post.title }}</h3>
-            <p class="muted">{{ post.summary }}</p>
-            <a class="inline-link" [href]="post.url" target="_blank" rel="noopener">Izvor →</a>
-          </article>
+        @for (item of items(); track item.id) {
+          <app-news-card [news]="item" />
         } @empty {
           <div class="empty-state">
-            <h3>Nema objava u ovoj kategoriji</h3>
+            <h3>Nema objava za izabrane filtere</h3>
+            <button type="button" mat-stroked-button (click)="clearFilters()">Poništi filtere</button>
           </div>
         }
       </div>
+      @if (info.last_page > 1) {
+        <nav class="pager" aria-label="Stranice">
+          <button type="button" mat-stroked-button [disabled]="info.page <= 1" (click)="goToPage(info.page - 1)">← Novije</button>
+          <span class="muted">Strana {{ info.page }} od {{ info.last_page }}</span>
+          <button type="button" mat-stroked-button [disabled]="info.page >= info.last_page" (click)="goToPage(info.page + 1)">Starije →</button>
+        </nav>
+      }
     }
   </div>
 </section>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\OrganizationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:10,1')->group(function () {
@@ -11,6 +13,12 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
 });
+Route::post('/news/list', [NewsController::class, 'list']);
+Route::get('/news/years', [NewsController::class, 'years']);
+Route::get('/news/{slug}', [NewsController::class, 'show']);
+Route::get('/organizations', [OrganizationController::class, 'index']);
+Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
+
 Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
