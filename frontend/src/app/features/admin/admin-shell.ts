@@ -33,6 +33,7 @@ export class AdminShell {
   protected readonly tabs = [
     { route: 'vesti', label: 'Vesti', adminOnly: false },
     { route: 'udruzenja', label: 'Udruženja', adminOnly: false },
+    { route: 'propisi', label: 'Propisi', adminOnly: false },
     { route: 'korisnici', label: 'Korisnici', adminOnly: true },
   ];
 }

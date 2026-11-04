@@ -1,8 +1,10 @@
-export type NewsCategory = 'vest' | 'seminar' | 'takmicenje' | 'propis' | 'konkurs' | 'saopstenje' | 'ostalo';
+export type NewsCategory =
+  'vest' | 'seminar' | 'takmicenje' | 'propis' | 'konkurs' | 'saopstenje' | 'ostalo';
 
 export type SourceType = 'sajt' | 'facebook' | 'instagram' | 'youtube' | 'mediji' | 'ostalo';
 
-export type OrganizationType = 'strukovno-udruzenje' | 'skolski-sport' | 'institucija' | 'fakultet' | 'sindikat' | 'ostalo';
+export type OrganizationType =
+  'strukovno-udruzenje' | 'skolski-sport' | 'institucija' | 'fakultet' | 'sindikat' | 'ostalo';
 
 export type OrganizationLevel = 'republički' | 'pokrajinski' | 'okružni' | 'gradski' | 'opštinski';
 
@@ -72,7 +74,7 @@ export const NEWS_CATEGORY_LABELS: Record<NewsCategory, string> = {
 };
 
 export const SOURCE_TYPE_LABELS: Record<SourceType, string> = {
-  sajt: 'sajt organizacije',
+  sajt: 'Sajt organizacije',
   facebook: 'Facebook',
   instagram: 'Instagram',
   youtube: 'YouTube',

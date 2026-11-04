@@ -82,12 +82,13 @@ export const PORTAL_MODULES: PortalModule[] = [
   },
   {
     id: 'help',
-    title: 'Stručna pomoć',
-    description: 'Stručni tekstovi, administracija (dnevnik, ocenjivanje, planovi), pravna pitanja i predlozi za bolju nastavu.',
+    title: 'Propisi i literatura',
+    description: 'Zakoni, pravilnici i programi nastave sa kratkim „šta je bitno za FV“, linkom na tekst i istorijom izmena.',
     icon: 'book',
     accent: 'rose',
-    status: 'soon',
-    statusLabel: 'Uskoro',
+    status: 'first',
+    statusLabel: 'Prvo izdanje',
+    route: '/propisi',
   },
   {
     id: 'notifications',

@@ -4,23 +4,66 @@ namespace App\Services;
 
 use App\Models\News;
 use App\Models\Organization;
-use App\Services\LinkChecker;
+use App\Models\Regulation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ContentImporter
 {
-    public function import(string $organizationsPath, string $newsPath): array
+    public function import(string $organizationsPath, string $newsPath, ?string $regulationsPath = null): array
     {
         $organizations = json_decode((string) file_get_contents($organizationsPath), true, flags: JSON_THROW_ON_ERROR);
         $news = json_decode((string) file_get_contents($newsPath), true, flags: JSON_THROW_ON_ERROR);
+        $regulations = $regulationsPath ? json_decode((string) file_get_contents($regulationsPath), true, flags: JSON_THROW_ON_ERROR) : [];
 
-        return DB::transaction(function () use ($organizations, $news) {
-            $organizationResult = $this->importOrganizations($organizations);
-            $newsResult = $this->importNews($news);
-
-            return ['organizations' => $organizationResult, 'news' => $newsResult];
+        return DB::transaction(function () use ($organizations, $news, $regulations) {
+            return [
+                'organizations' => $this->importOrganizations($organizations),
+                'news' => $this->importNews($news),
+                'regulations' => $this->importRegulations($regulations),
+            ];
         });
+    }
+
+    private function importRegulations(array $rows): array
+    {
+        $created = 0;
+        $updated = 0;
+
+        foreach ($rows as $index => $row) {
+            $attributes = [
+                'title' => $row['title'],
+                'kind' => $row['kind'],
+                'areas' => $row['areas'],
+                'gazette' => $row['gazette'] ?? null,
+                'url' => $row['url'] ?? null,
+                'valid_from' => $row['validFrom'] ?? null,
+                'valid_to' => $row['validTo'] ?? null,
+                'summary' => $row['summary'],
+                'verification' => $row['verification'] ?? 'unverified',
+                'verification_note' => $row['verificationNote'] ?? null,
+                'sort' => $index,
+            ];
+
+            $regulation = Regulation::where('key', $row['key'])->first();
+            if (! $regulation) {
+                Regulation::create(['key' => $row['key'], ...$attributes]);
+                $created++;
+
+                continue;
+            }
+
+            if ($regulation->isUntouched()) {
+                $regulation->fill($attributes);
+                if ($regulation->isDirty()) {
+                    $regulation->timestamps = false;
+                    $regulation->save();
+                    $updated++;
+                }
+            }
+        }
+
+        return ['created' => $created, 'updated' => $updated, 'skipped' => count($rows) - $created - $updated];
     }
 
     private function importOrganizations(array $rows): array

@@ -1,0 +1,101 @@
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Propisi i literatura</p>
+      <h1>Propisi za nastavu fizičkog</h1>
+      <p class="muted">
+        Zakoni, pravilnici, programi nastave i drugi dokumenti — sa kratkim „šta je bitno za FV“ i linkom na tekst.
+        Sažeci su pomoć u snalaženju, ne zamena za zvanični tekst ni pravni savet.
+      </p>
+    </div>
+
+    <div class="filters">
+      <div class="chip-row" role="group" aria-label="Oblast">
+        <button type="button" class="filter-chip" [class.filter-chip-on]="!area()" (click)="setArea(null)">Sve oblasti</button>
+        @for (option of areas; track option) {
+          <button type="button" class="filter-chip" [class.filter-chip-on]="area() === option" [attr.aria-pressed]="area() === option" (click)="setArea(option)">
+            {{ areaLabels[option] }}
+          </button>
+        }
+      </div>
+      <div class="filter-row filter-row-two">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Vrsta</mat-label>
+          <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
+            <mat-option [value]="null">Sve vrste</mat-option>
+            @for (option of kinds; track option) {
+              <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <form class="search-form" (ngSubmit)="search()">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Pretraga (naziv, glasnik, sadržaj)</mat-label>
+            <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+          </mat-form-field>
+          <button type="submit" mat-stroked-button>Traži</button>
+        </form>
+      </div>
+      @if (hasFilters()) {
+        <button type="button" mat-button class="clear-filters" (click)="clearFilters()">Poništi filtere</button>
+      }
+    </div>
+
+    @if (isLoading()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+    @if (hasError()) {
+      <div class="empty-state"><h3>Propisi trenutno nisu dostupni</h3></div>
+    } @else {
+      <p class="muted small result-count">Pronađeno: {{ items().length }}</p>
+      <div class="regulation-list">
+        @for (item of items(); track item.id) {
+          <article class="regulation">
+            <div class="regulation-head">
+              <span class="state-chip state-muted">{{ kindLabels[item.kind] }}</span>
+              <span class="verification" [class]="'verification-' + item.verification" [title]="item.verification_note ?? ''">{{ verificationLabels[item.verification] }}</span>
+            </div>
+            <h3>{{ item.title }}</h3>
+            @if (item.gazette) {
+              <p class="muted small">{{ item.gazette }}</p>
+            }
+            @if (item.valid_from || item.valid_to) {
+              <p class="small">
+                @if (item.valid_from) {
+                  Važi od {{ date(item.valid_from) }}
+                }
+                @if (item.valid_to) {
+                  · važi do {{ date(item.valid_to) }}
+                }
+              </p>
+            }
+            <div class="area-tags">
+              @for (tag of item.areas; track tag) {
+                <button type="button" class="area-tag" (click)="setArea(tag)">{{ areaLabels[tag] }}</button>
+              }
+            </div>
+            <details class="regulation-summary">
+              <summary>Šta je bitno za nastavu FV</summary>
+              <div class="markdown" [innerHTML]="item.summary | simpleMarkdown"></div>
+            </details>
+            <div class="regulation-actions">
+              @if (item.url) {
+                <a mat-flat-button [href]="item.url" target="_blank" rel="noopener">Otvori tekst <app-icon name="external" [size]="18" /></a>
+              }
+              @if (item.versions_count) {
+                <button type="button" mat-button (click)="showHistory(item)">Istorija izmena ({{ item.versions_count }})</button>
+              }
+            </div>
+          </article>
+        } @empty {
+          @if (!isLoading()) {
+            <div class="empty-state">
+              <h3>Nema propisa za izabrane filtere</h3>
+              <button type="button" mat-stroked-button (click)="clearFilters()">Poništi filtere</button>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</section>
