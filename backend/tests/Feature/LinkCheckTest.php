@@ -82,6 +82,21 @@ class LinkCheckTest extends TestCase
             ->assertJsonPath('link_status.website', 'ok');
     }
 
+    public function test_facebook_and_instagram_are_never_confirmed_automatically(): void
+    {
+        $organization = $this->organization();
+        LinkChecker::markBroken($organization, ['facebook']);
+
+        Http::fake(['*' => Http::response('ok')]);
+        $this->artisan('organizations:check-links')->assertSuccessful();
+
+        $this->getJson('/api/organizations/upfk-test')
+            ->assertJsonPath('link_status.website', 'ok')
+            ->assertJsonPath('link_status.facebook', 'broken')
+            ->assertJsonPath('link_status.instagram', 'unknown')
+            ->assertJsonPath('link_status.youtube', 'ok');
+    }
+
     public function test_editor_marks_and_unmarks_broken_links(): void
     {
         $this->seed(UserSeeder::class);
