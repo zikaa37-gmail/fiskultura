@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Injectable } from '@angular
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Observable } from 'rxjs';
+import { DialogShell } from '../dialog-shell/dialog-shell';
 
 export interface ConfirmDialogData {
   title: string;
@@ -11,15 +12,16 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [MatDialogModule, MatButtonModule, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <mat-dialog-content>{{ data.message }}</mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button type="button" mat-button [mat-dialog-close]="false">Otkaži</button>
-      <button type="button" mat-flat-button class="danger-button" [mat-dialog-close]="true">{{ data.confirmLabel }}</button>
-    </mat-dialog-actions>
+    <app-dialog-shell [title]="data.title">
+      <p>{{ data.message }}</p>
+      <ng-container dialogActions>
+        <button type="button" mat-button [mat-dialog-close]="false">Otkaži</button>
+        <button type="button" mat-flat-button class="danger-button" [mat-dialog-close]="true">{{ data.confirmLabel }}</button>
+      </ng-container>
+    </app-dialog-shell>
   `,
 })
 export class ConfirmDialog {
@@ -31,6 +33,8 @@ export class ConfirmService {
   readonly #dialog = inject(MatDialog);
 
   confirm(data: ConfirmDialogData): Observable<boolean | undefined> {
-    return this.#dialog.open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, { data, width: '420px' }).afterClosed();
+    return this.#dialog
+      .open<ConfirmDialog, ConfirmDialogData, boolean>(ConfirmDialog, { data, width: '440px', maxWidth: 'calc(100vw - 32px)', panelClass: 'app-dialog-panel' })
+      .afterClosed();
   }
 }

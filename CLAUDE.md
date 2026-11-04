@@ -39,6 +39,8 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   ekrane dodaje `@media (min-width: ...)`; nikad obrnuto. Dodirne površine bar 44 px, bez horizontalnog
   skrola, modali na telefonu preko celog ekrana, filteri i forme u jednoj koloni. Svaka nova stranica se
   proverava na 360 px (svetla i tamna tema) pre PR-a.
+- Svaki modal koristi `app-dialog-shell` (`shared/dialog-shell`): zaglavlje sa naslovom i X, telo (jedino se
+  skroluje) i podnožje sa dugmadima (`dialogActions`); panel klasa `app-dialog-panel`, ne `mat-dialog-content`.
 - Liste vesti otvaraju vest u modalu (`NewsDialogService`); `/vesti/:slug` ostaje stalni link (deljenje, SEO).
   „Objave“ kod udruženja vode na `/vesti?udruzenje=<slug>`, ne na stranicu udruženja.
 - Linkovi udruženja su kartice sa ikonicom (`app-org-links`); link koji `organizations:check-links` označi
