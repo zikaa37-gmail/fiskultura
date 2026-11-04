@@ -8,6 +8,9 @@ export const authGuard: CanActivateFn = (_route, state) =>
 
 export const editorGuard: CanActivateFn = () => inject(AuthService).isEditor() || inject(Router).createUrlTree(['/']);
 
-export const adminGuard: CanActivateFn = () => inject(AuthService).isAdmin() || inject(Router).createUrlTree(['/']);
+export const adminGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  return auth.isAdmin() || inject(Router).createUrlTree([auth.isEditor() ? '/admin' : '/']);
+};
 
 export const guestGuard: CanActivateFn = () => !inject(AuthService).isAuthenticated() || inject(Router).createUrlTree(['/profil']);

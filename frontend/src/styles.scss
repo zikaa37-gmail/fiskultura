@@ -958,3 +958,159 @@ a.post-title:hover {
     align-items: center;
   }
 }
+
+.admin-tabs {
+  margin-bottom: 20px;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.admin-toolbar > mat-form-field {
+  flex: 1 1 170px;
+  max-width: 240px;
+}
+
+.admin-toolbar .search-form {
+  flex: 3 1 240px;
+}
+
+.admin-form mat-form-field {
+  margin-bottom: 6px;
+}
+
+.admin-rows {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-row {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.admin-row-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.state-chip {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+}
+
+.state-ok {
+  background: var(--color-lime);
+  border-color: transparent;
+  color: #1a2e05;
+}
+
+.state-warn {
+  background: color-mix(in srgb, var(--color-orange) 18%, var(--color-surface));
+  color: var(--color-orange);
+}
+
+.state-muted {
+  background: var(--color-surface-alt);
+  color: var(--color-muted);
+}
+
+.danger-text {
+  color: var(--mat-sys-error) !important;
+}
+
+.danger-button {
+  --mat-button-filled-container-color: var(--mat-sys-error);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-error);
+}
+
+.warn-text {
+  color: var(--color-orange);
+}
+
+.role-select {
+  width: 160px;
+}
+
+.admin-form {
+  display: grid;
+  gap: 6px;
+  max-width: 820px;
+  margin-top: 12px;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.admin-form-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.admin-form-head h2 {
+  font-size: 24px;
+}
+
+.admin-fieldset {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 12px 16px 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.admin-fieldset legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.admin-fieldset mat-checkbox {
+  margin-bottom: 12px;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (min-width: 900px) {
+  .admin-row {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
