@@ -154,10 +154,14 @@ Početni podaci: preuzeti iz kataloga „Literatura" u e-pripremama (`api/databa
 `RegulationCatalogSeeder`), bez dupliranja. Pretraga i filteri, admin za urednika.
 - [x] Isti format kao katalog „Literatura“ u e-pripremama (vrste, oblasti, proverenost, istorija verzija)
 
-### #39 E-pripreme čitaju propise sa portala (faza-1b, repo e-pripreme-fv)
+### #39 E-pripreme čitaju propise sa portala (faza-1b, repo e-pripreme-fv) — urađeno (e-pripreme-fv PR #87)
 Javni API portala `GET /api/regulations` (sa `updated_since`); e-pripreme zadržavaju svoj modul
 „Literatura", ali ga pune sa portala (komanda za sinhronizaciju + nedeljni raspored), lokalne
 izmene super admina se ne gaze. Kasnije isto i za druge aplikacije (Evidencija FV).
+- [x] `regulations:sync` u e-pripremama (`--dry-run`, `--full`), ponedeljkom u 5:30, `edited_locally`
+- [ ] #38 pušten na fiskultura.rs (sada `/api/regulations` vraća 404), pa prvo preuzimanje
+  `deploy.py --regulations` u e-pripremama
+- [ ] Cron `schedule:run` za e-pripreme u cPanelu (`e-pripreme-fv/docs/DEPLOY.md`)
 
 ### #40 Pitanja i odgovori — administracija i pravna pitanja (faza-1b)
 Proširenje #31: kategorije (norma i fond časova, ocenjivanje, oslobađanje od nastave, odgovornost i
