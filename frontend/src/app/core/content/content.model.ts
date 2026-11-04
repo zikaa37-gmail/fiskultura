@@ -48,8 +48,13 @@ export interface Organization extends OrganizationRef {
   last_activity: string | null;
   parent: OrganizationRef | null;
   member_source: string | null;
+  link_status: Partial<Record<LinkField, LinkStatus>>;
   news_count: number | null;
 }
+
+export type LinkField = 'website' | 'facebook' | 'instagram' | 'youtube' | 'member_source';
+
+export type LinkStatus = 'ok' | 'broken' | 'unknown';
 
 export interface OrganizationDetail extends Organization {
   members: (OrganizationRef & { city: string | null })[];

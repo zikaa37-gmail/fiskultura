@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\Organization;
+use App\Services\LinkChecker;
 
 class OrganizationController extends Controller
 {
@@ -57,6 +58,10 @@ class OrganizationController extends Controller
             'last_activity' => $organization->last_activity?->toDateString(),
             'parent' => $organization->parent ? ['slug' => $organization->parent->slug, 'name' => $organization->parent->name, 'short_name' => $organization->parent->short_name] : null,
             'member_source' => $organization->member_source,
+            'link_status' => (object) collect(['website', 'facebook', 'instagram', 'youtube', 'member_source'])
+                ->mapWithKeys(fn (string $field) => [$field => LinkChecker::statusFor($organization, $field)])
+                ->filter()
+                ->all(),
             'news_count' => $organization->news_count ?? null,
         ];
     }

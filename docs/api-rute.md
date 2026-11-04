@@ -55,3 +55,8 @@ postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
 | DELETE | `/admin/organizations/{id}` | admin | brisanje; vesti ostaju bez organizacije |
 | POST | `/admin/users/list` | admin | `role`, `search` (ime, mejl, škola, opština), `page` |
 | PATCH | `/admin/users/{id}` | admin | `role`, `blocked` (blokiranje poništava sesije); svoj nalog ne može |
+
+Organizacija ima i `link_status: { website?, facebook?, instagram?, youtube?, member_source? }` sa vrednostima
+`ok` | `broken` | `unknown` (samo za linkove koji postoje). Proverava ih `php artisan organizations:check-links`
+(ponedeljkom u 4h preko schedule-a, ili `deploy.py --check-links`); `broken` samo kad nema domena / veze, 404, 410
+ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.

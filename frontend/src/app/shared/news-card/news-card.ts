@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { NewsDialogService } from '../news-dialog/news-dialog';
 import { RouterLink } from '@angular/router';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsItem, organizationLabel, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
 
@@ -15,7 +16,7 @@ import { formatDate, NEWS_CATEGORY_LABELS, NewsItem, organizationLabel, SOURCE_T
       }
       <span class="post-category">{{ categoryLabels[item.category] }}</span>
     </span>
-    <h3><a class="post-title" [routerLink]="['/vesti', item.slug]">{{ item.title }}</a></h3>
+    <h3><a class="post-title" [attr.href]="'/vesti/' + item.slug" (click)="open($event)">{{ item.title }}</a></h3>
     <p class="muted">{{ item.summary }}</p>
     <div class="source-row">
       @if (item.organization; as organization) {
@@ -36,4 +37,14 @@ export class NewsCard {
   protected readonly sourceLabels = SOURCE_TYPE_LABELS;
   protected readonly label = organizationLabel;
   protected readonly date = computed(() => formatDate(this.news().source.published_at));
+
+  readonly #dialog = inject(NewsDialogService);
+
+  protected open(event: MouseEvent): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
+    this.#dialog.open(this.news().slug);
+  }
 }

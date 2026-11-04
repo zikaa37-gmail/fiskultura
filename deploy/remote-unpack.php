@@ -84,6 +84,11 @@ try {
             $result['seed'] = trim($console->output()) ?: 'ok';
         }
 
+        if (($_POST['check_links'] ?? '') === '1') {
+            $console->call('organizations:check-links');
+            $result['links'] = trim($console->output()) ?: 'ok';
+        }
+
         if (($_POST['admin_email'] ?? '') !== '' && ($_POST['admin_password'] ?? '') !== '') {
             $console->call('app:admin', ['email' => $_POST['admin_email'], '--password' => $_POST['admin_password']]);
             $result['admin'] = trim($console->output()) ?: 'ok';

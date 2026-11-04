@@ -35,6 +35,14 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   preko `httpResource`.
 - Material dugmad: `mat-flat-button` glavna akcija, `mat-stroked-button` sporedna; boje preko
   `--mat-sys-*` i tokena iz `styles.scss` (`--color-primary`, `.accent-*`), ne `color="primary"`.
+- **Mobile first**: većina posetilaca dolazi sa telefona. Osnovni stilovi su za telefon (od 360 px), šire
+  ekrane dodaje `@media (min-width: ...)`; nikad obrnuto. Dodirne površine bar 44 px, bez horizontalnog
+  skrola, modali na telefonu preko celog ekrana, filteri i forme u jednoj koloni. Svaka nova stranica se
+  proverava na 360 px (svetla i tamna tema) pre PR-a.
+- Liste vesti otvaraju vest u modalu (`NewsDialogService`); `/vesti/:slug` ostaje stalni link (deljenje, SEO).
+  „Objave“ kod udruženja vode na `/vesti?udruzenje=<slug>`, ne na stranicu udruženja.
+- Linkovi udruženja su kartice sa ikonicom (`app-org-links`); link koji `organizations:check-links` označi
+  kao `broken` je onemogućen. Blokade botova (Facebook 400, 403) su `unknown` i link ostaje aktivan.
 - Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`, putanje iz statičke naslovne).
 - Prenete objave udruženja: sažetak svojim rečima + link na izvor, nikad kopiran tekst.
 - Ne dodavati tajne u repozitorijum.
