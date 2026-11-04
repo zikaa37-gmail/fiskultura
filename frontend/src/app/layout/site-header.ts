@@ -16,6 +16,7 @@ export class SiteHeader {
   protected readonly navItems = [
     { route: '/vesti', label: 'nav.news' },
     { route: '/udruzenja', label: 'nav.organizations' },
+    { route: '/propisi', label: 'nav.regulations' },
     { route: '/sportovi', label: 'nav.sports' },
     { route: '/aplikacije', label: 'nav.apps' },
   ];

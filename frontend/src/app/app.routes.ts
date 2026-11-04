@@ -33,6 +33,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/sports/sports').then((m) => m.Sports),
   },
   {
+    path: 'propisi',
+    title: 'Propisi i literatura — Fiskultura',
+    loadComponent: () => import('./features/regulations/regulations').then((m) => m.Regulations),
+  },
+  {
     path: 'aplikacije',
     title: 'Aplikacije za nastavnike — Fiskultura',
     loadComponent: () => import('./features/apps/apps').then((m) => m.Apps),
@@ -84,6 +89,9 @@ export const routes: Routes = [
       { path: 'udruzenja', title: 'Admin: udruženja — Fiskultura', loadComponent: () => import('./features/admin/admin-organizations').then((m) => m.AdminOrganizations) },
       { path: 'udruzenja/nova', title: 'Nova organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
       { path: 'udruzenja/:id', title: 'Izmena organizacije — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
+      { path: 'propisi', title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
+      { path: 'propisi/novi', title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
+      { path: 'propisi/:key', title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],
   },

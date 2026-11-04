@@ -60,3 +60,16 @@ Organizacija ima i `link_status: { website?, facebook?, instagram?, youtube?, me
 `ok` | `broken` | `unknown` (samo za linkove koji postoje). Proverava ih `php artisan organizations:check-links`
 (ponedeljkom u 4h preko schedule-a, ili `deploy.py --check-links`); `broken` samo kad nema domena / veze, 404, 410
 ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
+
+## Propisi i literatura
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/regulations` | javno | `kind`, `area`, `q`, `updated_since` (za sinhronizaciju e-priprema, #39); poređano po `sort` |
+| GET | `/regulations/{key}` | javno | propis sa `history` (ranije verzije: `version`, `replaced_at`, `replaced_by`, `note`, `data`) |
+| POST | `/admin/regulations` | editor, admin | novi propis |
+| PATCH | `/admin/regulations/{id}` | editor, admin | izmena; ako se menja sadržaj, staro stanje ide u istoriju sa `change_note`, `version` + 1 |
+| DELETE | `/admin/regulations/{id}` | admin | brisanje sa istorijom |
+
+Početni podaci: `backend/database/data/regulations.json` (katalog „Literatura“ iz e-priprema); uvoz dodaje nove
+ključeve i ažurira samo propise koje niko nije menjao (verzija 1).

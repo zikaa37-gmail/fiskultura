@@ -145,14 +145,14 @@ WhatsApp / Viber / push bez promene logike. Admin vidi broj poslatih i odjava.
 Cilj: fiskultura.rs je mesto na koje nastavnici FV iz cele Srbije dolaze po informaciju i pomoć.
 Redosled: #38 → #39 → #16b/#16c (obaveštenja) → #40 → #41 → ostalo.
 
-### #38 Propisi i literatura na portalu — jedan izvor (faza-1b)
+### #38 Propisi i literatura na portalu — jedan izvor (faza-1b) — urađeno (prvo izdanje)
 Biblioteka na `/propisi`: zakoni, pravilnici (plan i program po razredu, ocenjivanje, norma, kalendar,
 zaštita učenika), stručna literatura i korisni linkovi (Službeni glasnik, Ministarstvo, ZUOV, Zdravitas).
 Zapis: naziv, vrsta, oblast, razredi / nivo, broj i datum glasila, važi od / do, link na zvaničan tekst,
 kratko „šta je bitno za FV", istorija izmena (stara verzija ostaje vidljiva kao nevažeća).
 Početni podaci: preuzeti iz kataloga „Literatura" u e-pripremama (`api/database/seeders/data`,
 `RegulationCatalogSeeder`), bez dupliranja. Pretraga i filteri, admin za urednika.
-- [ ] Pregledati kako je katalog građen u e-pripremama i dogovoriti zajednički format
+- [x] Isti format kao katalog „Literatura“ u e-pripremama (vrste, oblasti, proverenost, istorija verzija)
 
 ### #39 E-pripreme čitaju propise sa portala (faza-1b, repo e-pripreme-fv)
 Javni API portala `GET /api/regulations` (sa `updated_since`); e-pripreme zadržavaju svoj modul

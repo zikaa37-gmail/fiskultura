@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
+use App\Http\Controllers\Api\Admin\AdminRegulationController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\RegulationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:10,1')->group(function () {
@@ -19,6 +21,8 @@ Route::middleware('throttle:10,1')->group(function () {
 Route::post('/news/list', [NewsController::class, 'list']);
 Route::get('/news/years', [NewsController::class, 'years']);
 Route::get('/news/{slug}', [NewsController::class, 'show']);
+Route::get('/regulations', [RegulationController::class, 'index']);
+Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
 
@@ -41,10 +45,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/organizations/{organization}', [AdminOrganizationController::class, 'show']);
         Route::post('/organizations', [AdminOrganizationController::class, 'store']);
         Route::patch('/organizations/{organization}', [AdminOrganizationController::class, 'update']);
+
+        Route::post('/regulations', [AdminRegulationController::class, 'store']);
+        Route::patch('/regulations/{regulation}', [AdminRegulationController::class, 'update']);
     });
 
     Route::prefix('admin')->middleware('role:admin')->group(function () {
         Route::delete('/organizations/{organization}', [AdminOrganizationController::class, 'destroy']);
+        Route::delete('/regulations/{regulation}', [AdminRegulationController::class, 'destroy']);
         Route::post('/users/list', [AdminUserController::class, 'list']);
         Route::patch('/users/{user}', [AdminUserController::class, 'update']);
     });

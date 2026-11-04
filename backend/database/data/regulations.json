@@ -1,0 +1,468 @@
+[
+  {
+    "key": "zosov",
+    "title": "Zakon o osnovama sistema obrazovanja i vaspitanja (ZOSOV)",
+    "kind": "zakon",
+    "areas": [
+      "norma",
+      "usavrsavanje",
+      "bezbednost",
+      "podaci",
+      "evidencija"
+    ],
+    "gazette": "„Sl. glasnik RS\" 88/2017, …, 92/2023, 19/2025",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_osnovama_sistema_obrazovanja_i_vaspitanja.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "- **Radno vreme (čl. 159–160):** 40 sati nedeljno; norma je 24 časa neposrednog rada, od čega 20 časova nastave. Strukturu obaveza utvrđuje godišnji plan rada škole.\n- **Stručno usavršavanje (čl. 151):** obavezno.\n- **Bezbednost (čl. 108–112):** škola donosi akt o merama bezbednosti. Nesprovođenje mera je teža povreda radne obaveze (čl. 164).\n- **Podaci o učenicima (čl. 175–184):** registar u JISP-u sadrži i podatke o telesnom i motoričkom statusu iz nastave FZV (čl. 177 st. 1 tač. 3a); za analize se koriste tako da se lice ne može otkriti (čl. 184).\n- **Evidencija (čl. 15):** vodi se u štampanom i/ili elektronskom obliku."
+  },
+  {
+    "key": "zosov-nacrt-2026",
+    "title": "Nacrt zakona o izmenama i dopunama ZOSOV (avgust 2026)",
+    "kind": "nacrt",
+    "areas": [
+      "usavrsavanje"
+    ],
+    "gazette": "nacrt, javna rasprava 3–23. 8. 2026.",
+    "url": "https://prosveta.gov.rs/wp-content/uploads/2026/08/NACRT-ZAKONA-O-IZMENAMA-I-DOPUNAMA-ZAKONA-O-OSNOVAMA-SISTEMA-OBRAZOVANJA-I-VASPITANJA-avgust-2026.pdf",
+    "validFrom": null,
+    "verification": "verified",
+    "verificationNote": "ceo tekst pročitan (#12); usvajanje nije potvrđeno",
+    "summary": "Ne menja fond časova FZV ni obaveze planiranja. Uređuje upis (podaci o zdravlju deteta), disciplinu učenika, mobilne telefone, savet roditelja, licence i preuzimanje zaposlenih.\n\n- Portfolio profesionalnog razvoja postaje dobrovoljan (čl. 41 nacrta, čl. 151 st. 6 ZOSOV)."
+  },
+  {
+    "key": "zoov",
+    "title": "Zakon o osnovnom obrazovanju i vaspitanju (ZOOV)",
+    "kind": "zakon",
+    "areas": [
+      "oslobadjanje",
+      "skolski-sport",
+      "planiranje"
+    ],
+    "gazette": "„Sl. glasnik RS\" 55/2013, …, 19/2025",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_osnovnom_obrazovanju_i_vaspitanju.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "- **Oslobađanje od praktičnog dela FZV (čl. 65):** privremeno ili za jednu godinu, delimično ili potpuno. Odluku donosi **direktor** na predlog izabranog lekara. Učenik se **ocenjuje iz teorijskih znanja**.\n- **Školski sport (čl. 40):** obuhvata sve učenike; „nedelja školskog sporta\" najmanje jednom u polugodištu.\n- **Sportske sekcije (čl. 42):** besplatno, u okviru kapaciteta škole.\n- **Godišnji plan rada škole (čl. 29):** donosi se do **15. septembra**; planovi nastavnika su njegov deo."
+  },
+  {
+    "key": "zsov",
+    "title": "Zakon o srednjem obrazovanju i vaspitanju (ZSOV)",
+    "kind": "zakon",
+    "areas": [
+      "oslobadjanje",
+      "skolski-sport"
+    ],
+    "gazette": "„Sl. glasnik RS\" 55/2013, …, 19/2025",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_srednjem_obrazovanju_i_vaspitanju.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "- **Oslobađanje od praktičnog dela FZV (čl. 50):** isto kao u osnovnoj školi.\n- Školski sport (čl. 18) i slobodne aktivnosti (čl. 14)."
+  },
+  {
+    "key": "zakon-o-sportu",
+    "title": "Zakon o sportu",
+    "kind": "zakon",
+    "areas": [
+      "skolski-sport",
+      "bezbednost"
+    ],
+    "gazette": "„Sl. glasnik RS\" 10/2016",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_sportu.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "**Čl. 143:**\n\n- školski sport obuhvata nastavne i vannastavne aktivnosti i takmičenja;\n- učešće se ne naplaćuje učenicima;\n- školske aktivnosti imaju prioritet u korišćenju sale;\n- učenik ne sme na vannastavne sportske aktivnosti i takmičenja bez utvrđene zdravstvene sposobnosti."
+  },
+  {
+    "key": "zzpl",
+    "title": "Zakon o zaštiti podataka o ličnosti (ZZPL)",
+    "kind": "zakon",
+    "areas": [
+      "podaci"
+    ],
+    "gazette": "„Sl. glasnik RS\" 87/2018",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_zastiti_podataka_o_licnosti.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "Aplikacija ne čuva podatke o učenicima: merenja se unose u Zdravitas, ocene u eDnevnik. Čuvaju se samo podaci o nastavnicima (nalog, ime, email, članstvo u školi) i nastavni sadržaj.\n\n- Pripreme i planovi ne sadrže imena učenika.\n- Za oslobođene učenike priprema ima samo opšti zadatak, bez imena i zdravstvenih podataka."
+  },
+  {
+    "key": "poverenik-zdravitas-2024",
+    "title": "Poverenik: nadzor nad obradom podataka u Zdravitasu (oktobar 2024)",
+    "kind": "ostalo",
+    "areas": [
+      "podaci"
+    ],
+    "gazette": null,
+    "url": "https://www.pravniportal.com/?p=40685",
+    "validFrom": "2024-10-01",
+    "verification": "secondary",
+    "verificationNote": "prikaz na pravniportal.com",
+    "summary": "- Obrada je zakonita i pristanak nije potreban; pravni osnov za školu je zakonska obaveza (ZOSOV čl. 177).\n- Podaci o zdravlju se ne obrađuju.\n- Pristup imaju direktor, ovlašćeni zaposleni, odeljenjski starešina, učitelj i **nastavnik FZV samo za svoje učenike**; nastavnik ne vidi JMBG."
+  },
+  {
+    "key": "program-5-6-2018",
+    "title": "Pravilnik o planu nastave i učenja za 5. i 6. razred i programu nastave i učenja za 5. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 15/2018",
+    "url": "https://www.eupropisi.com/dokumenti/plan5_6_prs_15_18.docx",
+    "validFrom": "2018-09-01",
+    "verification": "secondary",
+    "verificationNote": "kopija na eupropisi.com (docx); original PG nije otvoren",
+    "summary": "Plan nastave za drugi ciklus (5. i 6. razred) i program FZV za 5. razred. Sadržaj (teme, ishodi) je u katalogu programa (#14).\n\n- Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi i 54 časa obaveznih fizičkih aktivnosti (OFA), koje aplikacija ne planira."
+  },
+  {
+    "key": "program-5-6-izmene-2026",
+    "title": "Pravilnik o izmenama Pravilnika o planu i programu nastave i učenja za 5. i 6. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/2026",
+    "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603007/pg-2026-1-6-os5",
+    "validFrom": "2027-09-01",
+    "verification": "secondary",
+    "verificationNote": "ZUOV, vest od 2. 3. 2026; datum primene po razredima proveriti u tekstu",
+    "summary": "Nov program za 5. razred i izmene plana nastave. Program od 2027/28 navodi 3 časa nedeljno bez OFA; aplikacija planira 2 časa FZV nedeljno (odluka korisnika, docs/02)."
+  },
+  {
+    "key": "program-6-2019",
+    "title": "Program nastave i učenja za 6. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 3/2019",
+    "url": "https://www.fsfv.ni.ac.rs/files/documents/oas/cetvrta_godina/metodika_fiz_vaspitanja/skolska_20_21/VI_razred.pdf",
+    "validFrom": "2019-09-01",
+    "verification": "secondary",
+    "verificationNote": "Pravilnik o dopunama Pravilnika o planu nastave i učenja za 5. i 6. razred i programu za 5. razred (PG 3/2019, primena od 2019/20), prema spisku propisa ZUOV-a; tekst programa pročitan sa kopije FSFV Niš, original PG nije otvoren (#14)",
+    "summary": "Program FZV za 6. razred. Fond FZV: **2 časa nedeljno** (72 godišnje); program navodi i OFA, koje aplikacija ne planira."
+  },
+  {
+    "key": "program-7-2019",
+    "title": "Pravilnik o programu nastave i učenja za 7. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2019",
+    "url": "https://www.eupropisi.com/dokumenti/sedmi_osnovno_5_2019.pdf",
+    "validFrom": "2020-09-01",
+    "verification": "secondary",
+    "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
+    "summary": "Program FZV za 7. razred. Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi godišnji fond od 108 časova; aplikacija planira 2 časa FZV nedeljno."
+  },
+  {
+    "key": "program-8-2019",
+    "title": "Program nastave i učenja za 8. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 11/2019",
+    "url": "https://www.eupropisi.com/dokumenti/osmiPRS11_19.pdf",
+    "validFrom": "2021-09-01",
+    "verification": "secondary",
+    "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
+    "summary": "Program FZV za 8. razred. Fond FZV: **2 časa nedeljno** (68 godišnje, 34 nastavne nedelje). Program navodi godišnji fond od 102 časa."
+  },
+  {
+    "key": "plan-7-8-izmena-2026",
+    "title": "Pravilnik o izmeni Pravilnika o planu nastave i učenja za 7. i 8. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/2026",
+    "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603005/pg-2026-1-7-os7-8",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "ZUOV, vest od 2. 3. 2026; sadržaj izmene nije pročitan",
+    "summary": "Izmena plana nastave za 7. i 8. razred. Da li menja fond FZV treba pročitati u tekstu."
+  },
+  {
+    "key": "sna-vezbanjem-do-zdravlja",
+    "title": "Slobodna nastavna aktivnost „Vežbanjem do zdravlja\"",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2022",
+    "url": "https://zuov.gov.rs/programi-slobodnih-nastavnih-aktivnosti-za-5-6-7-i-8-razred-razred-osnovnog-obrazovanja-i-vaspitanja/",
+    "validFrom": null,
+    "verification": "unverified",
+    "verificationNote": "broj glasnika nije potvrđen; link vodi na stranicu ZUOV-a o programima SNA",
+    "summary": "Izborni program slobodne nastavne aktivnosti za 5. i 6. razred, 1 čas nedeljno. Van opsega planiranja FZV u aplikaciji (bez sekcija i SNA), ostaje kao literatura."
+  },
+  {
+    "key": "gimnazija-2020",
+    "title": "Pravilnik o planu i programu nastave i učenja za gimnaziju",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 4/2020",
+    "url": "https://zuov.gov.rs/wp-content/uploads/2020/08/pravilnik-gimnazija.pdf",
+    "validFrom": "2020-09-01",
+    "verification": "verified",
+    "verificationNote": "plan nastave, red 17, pročitan u originalu (#12)",
+    "summary": "Fond FZV u svim tipovima i smerovima gimnazije: I, II i III razred 2 časa nedeljno (74 godišnje), IV razred 2 časa (66 godišnje). Plan za IV razred se primenjuje od 2021/22."
+  },
+  {
+    "key": "gimnazija-izmena-2026",
+    "title": "Pravilnik o izmeni Pravilnika o planu i programu nastave i učenja za gimnaziju",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/2026",
+    "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603009/pg-2026-1-1-gimnazija",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "ZUOV, vest od 2. 3. 2026 (nov program za I razred gimnazije)",
+    "summary": "Nov program nastave i učenja za I razred gimnazije. Datum primene proveriti u tekstu."
+  },
+  {
+    "key": "strucne-skole-opsteobrazovni",
+    "title": "Programi opšteobrazovnih predmeta u srednjim stručnim školama",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": null,
+    "url": "https://zuov.gov.rs/zakoni-i-pravilnici/",
+    "validFrom": null,
+    "verification": "unverified",
+    "verificationNote": "plan se donosi po obrazovnom profilu; fond nije potvrđen (#12)",
+    "summary": "Fond FZV zavisi od obrazovnog profila (nezvanično 2 časa nedeljno, 70 godišnje, u završnom razredu manje). Nastavnik upisuje fond odeljenja."
+  },
+  {
+    "key": "ocenjivanje-os-2024",
+    "title": "Pravilnik o ocenjivanju učenika u osnovnom obrazovanju i vaspitanju",
+    "kind": "pravilnik",
+    "areas": [
+      "ocenjivanje"
+    ],
+    "gazette": "„Sl. glasnik RS\" 10/2024",
+    "url": "https://www.paragraf.rs/propisi/pravilnik-o-ocenjivanju-ucenika-u-osnovnom-obrazovanju-i-vaspitanju.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "- **FZV se ocenjuje (čl. 5)** na osnovu sposobnosti, spretnosti i umešnosti; kod učenika bez posebnih sposobnosti uvažava se napredak i angažovanje.\n- **Broj ocena:** najmanje 4 u polugodištu (2 za predmet sa jednim časom nedeljno).\n- **Inicijalno procenjivanje (čl. 10):** do kraja 3. nedelje; ne ocenjuje se, beleži se u pedagoškoj dokumentaciji.\n- **Formativne ocene** su u pedagoškoj dokumentaciji nastavnika, **sumativne** u dnevniku."
+  },
+  {
+    "key": "ocenjivanje-ss-2024",
+    "title": "Pravilnik o ocenjivanju učenika u srednjem obrazovanju i vaspitanju",
+    "kind": "pravilnik",
+    "areas": [
+      "ocenjivanje"
+    ],
+    "gazette": "„Sl. glasnik RS\" 10/2024",
+    "url": "https://www.pravniportal.com/?p=37890",
+    "validFrom": "2024-02-10",
+    "verification": "secondary",
+    "verificationNote": "pravniportal.com: primenjuje se od 10. 2. 2024.",
+    "summary": "- Ocenjuje se uz uvažavanje sposobnosti, spretnosti i umešnosti (čl. 12).\n- Najmanje 3 ocene u polugodištu, 2 ako predmet ima manje od 2 časa nedeljno (čl. 17); bez minimalnog broja ocena ne može se zaključiti ocena.\n- Učenik može biti ocenjen samo jednom na jednom času."
+  },
+  {
+    "key": "kalendar-os-2026-27",
+    "title": "Pravilnik o kalendaru obrazovno-vaspitnog rada osnovne škole za 2026/27.",
+    "kind": "kalendar",
+    "areas": [
+      "kalendar",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 3/2026",
+    "url": "https://prosveta.gov.rs/wp-content/uploads/2026/06/Kalendar-OS-2026-2027.-godina.pdf",
+    "validFrom": "2026-09-01",
+    "validTo": "2027-08-31",
+    "verification": "secondary",
+    "verificationNote": "Vojvodina ima poseban kalendar",
+    "summary": "- **36 nastavnih nedelja** (8. razred 34).\n- I polugodište: 1. 9 – 30. 12. 2026; II polugodište: 18. 1 – 11. 6. 2027 (8. razred do 28. 5).\n- Raspusti: jesenji 11–13. 11. 2026; zimski 31. 12. 2026 – 15. 1. 2027; sretenjski 15–19. 2. 2027; prolećni 30. 4 – 4. 5. 2027."
+  },
+  {
+    "key": "kalendar-ss-2026-27",
+    "title": "Pravilnik o kalendaru obrazovno-vaspitnog rada srednjih škola za 2026/27.",
+    "kind": "kalendar",
+    "areas": [
+      "kalendar",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 3/2026",
+    "url": "https://prosveta.gov.rs/wp-content/uploads/2026/06/KALENDAR-SREDNJE-PRAVILNIK-2026-2027.pdf",
+    "validFrom": "2026-09-01",
+    "validTo": "2027-08-31",
+    "verification": "secondary",
+    "verificationNote": "Vojvodina ima poseban kalendar",
+    "summary": "- Gimnazija: **37 nastavnih nedelja** (IV razred 33); stručna škola: 37 (završni razred 34).\n- I polugodište: 1. 9 – 31. 12. 2026; II polugodište: 18. 1 – 18. 6. 2027 (IV razred gimnazije do 21. 5, završni razred stručne do 28. 5).\n- Raspusti: jesenji 11–13. 11. 2026; zimski 4–15. 1. 2027; sretenjski 15–19. 2. 2027; prolećni 30. 4 – 4. 5. 2027."
+  },
+  {
+    "key": "norma-os",
+    "title": "Pravilnik o normi časova neposrednog rada nastavnika u osnovnoj školi",
+    "kind": "pravilnik",
+    "areas": [
+      "norma",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 2/92, 2/2000",
+    "url": "https://unijasprs.org.rs/wp-content/uploads/2020/03/PRAVILNIK-O-NORMI-CASOVA-U-OSNOVNOJ-SKOLI.pdf",
+    "validFrom": null,
+    "verification": "unverified",
+    "verificationNote": "novije izmene nisu proverene",
+    "summary": "- 24 časa neposrednog rada nedeljno.\n- Sportske aktivnosti od 4. do 7. razreda: 1 čas nedeljno (36 godišnje); priprema za takmičenja; korektivni rad 1–2 časa nedeljno.\n- **10 časova nedeljno za pripremanje i planiranje.** Propisi predviđaju vreme za pripremu, ali ne i pisanu formu: obrazac pripreme uređuje škola."
+  },
+  {
+    "key": "norma-ss",
+    "title": "Pravilnik o pedagoškoj normi svih oblika obrazovno-vaspitnog rada nastavnika u srednjoj školi",
+    "kind": "pravilnik",
+    "areas": [
+      "norma",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/92, …, 15/2019",
+    "url": "https://etstesla.ni.ac.rs/dokumenti/skola/Pravilnik-o-pedagoskoj-normi-svih-oblika-obrazovno-vaspitnog-rada.pdf",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "kopija na sajtu škole",
+    "summary": "- Sekcije i sportske aktivnosti: 1 čas nedeljno; priprema za takmičenja: 1 čas nedeljno.\n- 10 časova nedeljno za pripremanje, uključujući **„pismene pripreme za svaki nastavni čas\"** (čl. 12): u srednjoj školi postoji normativni osnov za pisane pripreme."
+  },
+  {
+    "key": "strucno-usavrsavanje-2021",
+    "title": "Pravilnik o stalnom stručnom usavršavanju i napredovanju u zvanja nastavnika, vaspitača i stručnih saradnika",
+    "kind": "pravilnik",
+    "areas": [
+      "usavrsavanje"
+    ],
+    "gazette": "„Sl. glasnik RS\" 109/2021",
+    "url": "https://www.paragraf.rs/propisi/pravilnik-strucnom-usavrsavanju-napredovanju-zvanja-nastavnika-vaspitaca-strucnih.html",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prečišćen tekst (paragraf.rs)",
+    "summary": "- Godišnje: najmanje 44 sata usavršavanja u ustanovi, 1 program iz Kataloga i 1 stručni skup.\n- Nastavnik vodi portfolio i lični plan profesionalnog razvoja (po nacrtu izmena ZOSOV iz avgusta 2026 portfolio bi bio dobrovoljan)."
+  },
+  {
+    "key": "standardi-kompetencija",
+    "title": "Pravilnik o standardima kompetencija za profesiju nastavnika i njihovog profesionalnog razvoja",
+    "kind": "pravilnik",
+    "areas": [
+      "usavrsavanje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2011 (nepotvrđeno)",
+    "url": "https://zuov.gov.rs/zakoni-i-pravilnici/",
+    "validFrom": null,
+    "verification": "unverified",
+    "verificationNote": "četiri oblasti potvrđene u ranijoj kopiji (više nije dostupna); broj glasnika nije potvrđen (#12); link vodi na spisak propisa ZUOV-a",
+    "summary": "Četiri oblasti kompetencija: predmet i metodika; poučavanje i učenje; podrška razvoju ličnosti; komunikacija i saradnja."
+  },
+  {
+    "key": "evidencija-os-2022",
+    "title": "Pravilnik o sadržaju i načinu vođenja evidencije i izdavanju javnih isprava u osnovnoj školi",
+    "kind": "pravilnik",
+    "areas": [
+      "evidencija"
+    ],
+    "gazette": "„Sl. glasnik RS\" 102/2022",
+    "url": "https://www.pravniportal.com/?p=33423",
+    "validFrom": "2022-09-07",
+    "verification": "secondary",
+    "verificationNote": "pravniportal.com: primenjuje se od 7. 9. 2022.",
+    "summary": "Dnevnik (eDnevnik) ostaje zvanična evidencija. Aplikacija vodi deo **pedagoške dokumentacije nastavnika** (godišnji i operativni plan, pripreme) i ne zamenjuje dnevnik."
+  },
+  {
+    "key": "evidencija-ss-2022",
+    "title": "Pravilnik o evidenciji u srednjoj školi",
+    "kind": "pravilnik",
+    "areas": [
+      "evidencija"
+    ],
+    "gazette": "„Sl. glasnik RS\" 102/2022",
+    "url": "https://www.pravniportal.com/?p=33423",
+    "validFrom": "2022-09-08",
+    "verification": "secondary",
+    "verificationNote": "pravniportal.com: primenjuje se od 8. 9. 2022.",
+    "summary": "Isto kao u osnovnoj školi: dnevnik je zvanična evidencija, a planovi i pripreme su pedagoška dokumentacija nastavnika."
+  },
+  {
+    "key": "normativ-os-2019",
+    "title": "Pravilnik o bližim uslovima za osnivanje, početak rada i obavljanje delatnosti osnovne škole",
+    "kind": "pravilnik",
+    "areas": [
+      "prostor-oprema"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2019",
+    "url": "https://www.pravniportal.com/?p=22751",
+    "validFrom": "2019-06-04",
+    "verification": "unverified",
+    "verificationNote": "tabele prostora i sprava nisu pročitane (#12)",
+    "summary": "Normativi prostora i opreme, uključujući vežbalište, su minimum koji osnivač mora da obezbedi. Razlika između normativa i stvarne opreme škole može da bude osnov zahteva direktoru ili osnivaču."
+  },
+  {
+    "key": "protokol-nasilje-2024",
+    "title": "Pravilnik o protokolu postupanja u ustanovi u odgovoru na nasilje, zlostavljanje i zanemarivanje",
+    "kind": "protokol",
+    "areas": [
+      "bezbednost"
+    ],
+    "gazette": "„Sl. glasnik RS\" 11/2024",
+    "url": "https://www.pravniportal.com/?p=37961",
+    "validFrom": null,
+    "verification": "secondary",
+    "verificationNote": "prikaz na pravniportal.com",
+    "summary": "Postupanje škole i zaposlenih kad postoji sumnja na nasilje, zlostavljanje ili zanemarivanje, i na časovima FZV."
+  },
+  {
+    "key": "uputstvo-bezbednost-2022",
+    "title": "Uputstvo za izradu akta kojim ustanove propisuju mere, način i postupak zaštite i bezbednosti dece i učenika",
+    "kind": "uputstvo",
+    "areas": [
+      "bezbednost"
+    ],
+    "gazette": "„Sl. glasnik RS\" 67/2022",
+    "url": "https://www.pravniportal.com/?p=32756",
+    "validFrom": "2022-06-25",
+    "verification": "secondary",
+    "verificationNote": "pravniportal.com: objavljeno 17. 6. 2022, primenjuje se od 25. 6. 2022.",
+    "summary": "Na osnovu uputstva škola donosi akt o merama bezbednosti (ZOSOV čl. 108), koji uređuje i bezbednost na časovima. Za nesprovođenje mera postoji disciplinska odgovornost (ZOSOV čl. 164).\n\n- U biblioteci aktivnosti svaka aktivnost ima napomene o bezbednosti i čuvanju (pomoć nastavnika)."
+  },
+  {
+    "key": "zoo",
+    "title": "Zakon o obligacionim odnosima (ZOO)",
+    "kind": "zakon",
+    "areas": [
+      "bezbednost"
+    ],
+    "gazette": "„Sl. list SFRJ\" 29/78, …",
+    "url": "https://www.paragraf.rs/propisi/zakon_o_obligacionim_odnosima.html",
+    "validFrom": null,
+    "verification": "unverified",
+    "verificationNote": "primena čl. 165 na školu nije proverena",
+    "summary": "Odštetnu odgovornost za štetu koju učenik pretrpi ili prouzrokuje dok je pod nadzorom škole po pravilu snosi škola (čl. 165)."
+  },
+  {
+    "key": "strategija-sporta-2026-2035",
+    "title": "Strategija razvoja sporta u Republici Srbiji 2026–2035",
+    "kind": "strategija",
+    "areas": [
+      "skolski-sport"
+    ],
+    "gazette": null,
+    "url": "https://www.mos.gov.rs/storage/2024/09/predlog-strategije-razvoja-sporta-u-republici-srbiji-2026-2035-08022026.pdf",
+    "validFrom": "2026-06-01",
+    "verification": "unverified",
+    "verificationNote": "link je predlog iz februara 2026; konačni tekst nije pročitan",
+    "summary": "Mera 1.1.6: nacionalni sistem periodičnog testiranja fizičkih sposobnosti, sa digitalnom platformom i jedinstvenom bazom (cilj ≥ 90% dece godišnje do 2035, platforma do kraja 2028).\n\nTestiranje vodi država kroz Zdravitas; aplikacija samo planira i priprema časove testiranja."
+  }
+]
