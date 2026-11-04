@@ -26,7 +26,9 @@ class LinkChecker
                 ->withOptions(['allow_redirects' => ['max' => 6]])
                 ->get($url);
 
-            return ['status' => $this->classify($response->status()), 'code' => $response->status()];
+            $status = $this->classify($response->status());
+
+            return ['status' => self::unverifiable($url) && $status === self::OK ? self::UNKNOWN : $status, 'code' => $response->status()];
         } catch (ConnectionException) {
             return ['status' => self::BROKEN, 'code' => null];
         } catch (Throwable) {
@@ -99,6 +101,13 @@ class LinkChecker
         $check = $organization->link_checks[$field] ?? null;
 
         return $check && ($check['url'] ?? null) === $url ? $check['status'] : self::UNKNOWN;
+    }
+
+    public static function unverifiable(string $url): bool
+    {
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+
+        return (bool) preg_match('/(^|\.)(facebook\.com|fb\.com|instagram\.com)$/', $host);
     }
 
     private function classify(int $code): string
