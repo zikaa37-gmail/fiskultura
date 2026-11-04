@@ -13,6 +13,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/news/news').then((m) => m.News),
   },
   {
+    path: 'vesti/:slug',
+    title: 'Vest — Fiskultura',
+    loadComponent: () => import('./features/news/news-detail').then((m) => m.NewsDetail),
+  },
+  {
+    path: 'udruzenja/:slug',
+    title: 'Udruženje — Fiskultura',
+    loadComponent: () => import('./features/organizations/organization-detail').then((m) => m.OrganizationDetail),
+  },
+  {
     path: 'udruzenja',
     title: 'Strukovna udruženja — Fiskultura',
     loadComponent: () => import('./features/organizations/organizations').then((m) => m.Organizations),

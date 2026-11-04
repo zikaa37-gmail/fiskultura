@@ -69,8 +69,8 @@ naslovna slika (upload, WebP). Testovi.
 zakazano objavljivanje, pregled pre objave.
 
 ### #14 Udruženja — backend i seed (faza-1)
-Tabele `fk_organizations`, veza vest → organizacija; seed iz `docs/izvori/udruzenja.json` i
-`docs/izvori/objave.json` (objave se uvoze kao vesti kategorije „udruženja", sa izvorom).
+Tabele `fk_organizations`, veza vest → organizacija; seed iz `backend/database/data/organizations.json` i
+`news.json` (objave se uvoze kao vesti kategorije „udruženja", sa izvorom).
 
 ### #15 Udruženja — javni prikaz i admin (faza-1)
 `/udruzenja` (filteri po tipu, nivou, okrugu), `/udruzenja/:slug` (podaci + objave), `/admin/udruzenja`.
@@ -103,14 +103,14 @@ po organizaciji.
 ### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
 Gde ZUOV objavljuje Katalog programa stalnog stručnog usavršavanja i liste odobrenih stručnih skupova,
 u kom formatu (pretraga, PDF, Excel), koliko često se menjaju; izdvojiti sve programe za FV i školski
-sport za tekuću i prethodnu školsku godinu u `docs/izvori/seminari.json`. Dopuniti iz sajtova
+sport za tekuću i prethodnu školsku godinu u `backend/database/data/seminars.json`. Dopuniti iz sajtova
 realizatora (SSPFVS, UPFK, fakulteti).
 
 ### #15f Seminari — backend (faza-1)
 Tabele `fk_school_years`, `fk_seminars` (naziv, kataloški broj / rešenje, realizator →
 organizacija, oblik, bodovi, trajanje, kompetencija, prioritet, ciljna grupa, cena, link, izvor) i
 `fk_seminar_sessions` (datum, mesto, okrug, onlajn, link za prijavu); pivot seminar ↔ školska godina.
-`POST /api/seminars/list` sa filterima, seed iz `docs/izvori/seminari.json`. Testovi.
+`POST /api/seminars/list` sa filterima, seed iz `backend/database/data/seminars.json`. Testovi.
 
 ### #15g Seminari — javni prikaz i admin (faza-1)
 `/seminari` sa izborom školske godine, filterima i „uskoro", stranica seminara sa terminima;

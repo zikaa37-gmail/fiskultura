@@ -169,12 +169,13 @@ def main() -> int:
         'naslovna (200)': status(f'{base}/'),
         'prijava (200)': status(f'{base}/prijava'),
         'udruženja (200)': status(f'{base}/udruzenja'),
-        'podaci (200)': status(f'{base}/data/udruzenja.json'),
+        'vesti (200)': status(f'{base}/vesti'),
+        'api udruženja (200)': status(f'{base}/api/organizations'),
         'portfolio (200)': status(f'{base}/portfolio/'),
         'api bez tokena (401)': status(f'{base}/api/auth/me'),
     }
     print('  ', checks)
-    if list(checks.values()) != [200, 200, 200, 200, 200, 401]:
+    if list(checks.values()) != [200, 200, 200, 200, 200, 200, 401]:
         return 1
 
     print('Deploy je završen.')

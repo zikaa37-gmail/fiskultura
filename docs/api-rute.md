@@ -21,3 +21,20 @@ Osnova: `/api`. Odgovori su JSON, ključevi `snake_case`. Greške validacije: `4
 Korisnik u odgovoru: `id`, `name`, `email`, `role` (`user` | `author` | `editor` | `admin`), `school`, `municipality`, `district`.
 
 Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (lista dozvoljenih uloga).
+
+## Vesti i organizacije (javno)
+
+| Metod | Ruta | Opis |
+|---|---|---|
+| POST | `/news/list` | `category`, `organization` (slug), `umbrella` (slug krovne — ona i članice), `year`, `search`, `featured`, `page`, `per_page` (≤ 50) → `{ data, meta: { page, per_page, total, last_page } }`; samo objavljene, najnovije prve |
+| GET | `/news/years` | godine za koje postoje objave |
+| GET | `/news/{slug}` | vest sa `body` i `related` (3 iz iste organizacije ili kategorije) |
+| GET | `/organizations` | sve organizacije sa `parent` i `news_count` |
+| GET | `/organizations/{slug}` | organizacija sa `members` i poslednjih 20 objava |
+
+Vest: `slug`, `title`, `summary`, `category`, `featured`, `cover_image`, `published_at`,
+`source: { url, type (sajt | facebook | instagram | youtube | mediji | ostalo), published_at }`,
+`organization: { slug, name, short_name }`.
+
+Podaci za uvoz: `backend/database/data/organizations.json` i `news.json`, `ContentSeeder` (idempotentno —
+postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).

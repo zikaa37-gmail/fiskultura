@@ -23,7 +23,7 @@
     "title": "Opštinsko i okružno takmičenje u plivanju (Slana Bara)",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/plivanje/",
-    "summary": "Najava i propozicije opštinskog i okružnog školskog takmičenja u plivanju za osnovne i srednje škole. Link vodi na stranicu sekcije plivanja, ne na pojedinačni članak.",
+    "summary": "Najava i propozicije opštinskog i okružnog školskog takmičenja u plivanju za osnovne i srednje škole.",
     "verified": true
   },
   {
@@ -50,7 +50,7 @@
     "title": "Opštinsko i okružno prvenstvo u atletici",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/atletika/",
-    "summary": "Raspis opštinskog i okružnog školskog prvenstva u atletici za osnovne i srednje škole Novog Sada. Link vodi na sekciju atletike.",
+    "summary": "Raspis opštinskog i okružnog školskog prvenstva u atletici za osnovne i srednje škole Novog Sada.",
     "verified": true
   },
   {
@@ -284,7 +284,7 @@
     "title": "Prvenstvo Srbije u školskom orijentiringu (Topola)",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/orijentiring/",
-    "summary": "Obaveštenje o republičkom školskom prvenstvu u orijentiringu u Topoli. Link vodi na sekciju orijentiringa.",
+    "summary": "Obaveštenje o republičkom školskom prvenstvu u orijentiringu u Topoli.",
     "verified": true
   },
   {
@@ -347,7 +347,7 @@
     "title": "Upitnik o nastavnom planu i programu FZV u OŠ i sistemu praćenja fizičkog razvoja učenika",
     "category": "ostalo",
     "url": "https://sspfvs.wixsite.com/sspfvs/blog",
-    "summary": "Savez je pozvao nastavnike da popune anketu o programu FZV u osnovnoj školi i o sistemu praćenja motoričkih sposobnosti (Zdravitas). Link vodi na listu vesti jer je adresa pojedinačne objave predugačka.",
+    "summary": "Savez je pozvao nastavnike da popune anketu o programu FZV u osnovnoj školi i o sistemu praćenja motoričkih sposobnosti (Zdravitas).",
     "verified": true
   },
   {
@@ -356,7 +356,7 @@
     "title": "Opštinsko i okružno takmičenje u plivanju (SPENS)",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/plivanje/",
-    "summary": "Raspis opštinskog i okružnog školskog takmičenja u plivanju na bazenu SPENS-a. Link vodi na sekciju plivanja.",
+    "summary": "Raspis opštinskog i okružnog školskog takmičenja u plivanju na bazenu SPENS-a.",
     "verified": true
   },
   {
@@ -410,7 +410,7 @@
     "title": "Male olimpijske igre 2026 – opštinsko i okružno takmičenje",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/male-olimpijske-igre/",
-    "summary": "Raspis takmičenja Malih olimpijskih igara (zabavni poligoni) za mlađe razrede osnovne škole. Link vodi na sekciju MOI.",
+    "summary": "Raspis takmičenja Malih olimpijskih igara (zabavni poligoni) za mlađe razrede osnovne škole.",
     "verified": true
   },
   {
@@ -518,16 +518,7 @@
     "title": "Opštinsko i okružno prvenstvo u atletici za osnovne i srednje škole",
     "category": "takmicenje",
     "url": "https://www.skolski-sportns.org.rs/atletika/",
-    "summary": "Raspis jesenjeg školskog atletskog prvenstva u Novom Sadu. Link vodi na sekciju atletike.",
-    "verified": true
-  },
-  {
-    "organization": "usprs",
-    "date": "2026-10-30",
-    "title": "Javni poziv za departizaciju i depolitizaciju obrazovanja",
-    "category": "saopstenje",
-    "url": "https://www.unijasprs.org.rs/",
-    "summary": "Sindikat je uputio javni poziv da se obrazovni sistem oslobodi partijskog uticaja. Nije specifično za FV; link vodi na naslovnu stranu sindikata.",
+    "summary": "Raspis jesenjeg školskog atletskog prvenstva u Novom Sadu.",
     "verified": true
   },
   {
@@ -545,7 +536,7 @@
     "title": "XXIII međunarodna naučna konferencija „Fizička aktivnost i zdravlje – zalog za ceo život“",
     "category": "seminar",
     "url": "https://conference.fsfv.bg.ac.rs/",
-    "summary": "Najava dvodnevne konferencije (11–12. decembar 2026) na FSFV u Beogradu, sa osam tematskih oblasti i radionicama u sportskoj sali drugog dana. Datum je datum održavanja, ne objave.",
+    "summary": "Najava dvodnevne konferencije (11–12. decembar 2026) na FSFV u Beogradu, sa osam tematskih oblasti i radionicama u sportskoj sali drugog dana.",
     "verified": true
   },
   {
@@ -554,7 +545,7 @@
     "title": "Novi pravilnici: kalendar obrazovno-vaspitnog rada za 2026/2027. i Pravilnik o planu udžbenika",
     "category": "propis",
     "url": "https://zuov.gov.rs/novi-pravilnici-kalendar-obrazovno-vaspitnog-rada-za-skolsku-2026-2027-godinu-pravilnik-o-planu-udzbenika/",
-    "summary": "ZUOV je objavio nove pravilnike o školskom kalendaru i planu udžbenika za narednu godinu. Važno za planiranje takmičenja i godišnjeg plana FZV, mada nije specifično za predmet.",
+    "summary": "ZUOV je objavio nove pravilnike o školskom kalendaru i planu udžbenika za narednu godinu. Važno za planiranje takmičenja i godišnjeg plana FZV.",
     "verified": true
   },
   {

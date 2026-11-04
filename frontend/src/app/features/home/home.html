@@ -30,6 +30,24 @@
   </div>
 </section>
 
+@if (latestNews().length) {
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Vesti</p>
+        <h2>Najnovije objave</h2>
+        <p class="muted">Iz strukovnih udruženja, školskog sporta i institucija — sa oznakom izvora.</p>
+      </div>
+      <div class="post-list">
+        @for (item of latestNews(); track item.id) {
+          <app-news-card [news]="item" />
+        }
+      </div>
+      <a mat-stroked-button class="more-link" routerLink="/vesti">Sve vesti</a>
+    </div>
+  </section>
+}
+
 <section id="moduli" class="section">
   <div class="container">
     <div class="section-head">

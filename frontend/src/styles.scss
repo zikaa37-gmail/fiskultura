@@ -820,3 +820,141 @@ h1 {
   border-style: solid;
   background: var(--color-surface-alt);
 }
+
+.filters {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filters .level-filter {
+  margin-bottom: 0;
+}
+
+.filter-row {
+  display: grid;
+  gap: 12px;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-form mat-form-field {
+  flex: 1;
+}
+
+.clear-filters {
+  justify-self: start;
+}
+
+.result-count {
+  margin-bottom: 8px;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.post-category {
+  color: var(--color-muted);
+}
+
+a.post-title {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+a.post-title:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.source-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 4px;
+}
+
+.source-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-violet);
+  background: color-mix(in srgb, var(--color-violet) 12%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-violet) 30%, transparent);
+}
+
+.source-chip:hover {
+  text-decoration: underline;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.more-link {
+  margin-top: 20px;
+}
+
+.article {
+  display: grid;
+  gap: 16px;
+  max-width: 820px;
+}
+
+.article-body {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  padding: 28px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
+}
+
+.article-text {
+  white-space: pre-line;
+}
+
+.source-box {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+  border-left: 4px solid var(--color-violet);
+}
+
+.related {
+  margin-top: 16px;
+}
+
+.member-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+@media (min-width: 640px) {
+  .filter-row {
+    grid-template-columns: 1fr 160px 1.4fr;
+    align-items: center;
+  }
+}

@@ -8,7 +8,6 @@ preko FTP-a, a jednokratni PHP fajl na serveru ih raspakuje i pokrene migracije,
 ```
 ~/public_html/            <- document root glavnog domena (javno)
   index.html, *.js, *.css    <- Angular build (zamenjuje statičnu naslovnu)
-  data/*.json                <- udruženja i objave (iz docs/izvori)
   index.php                  <- iz deploy/index.php, prosleđuje /api na Laravel
   .htaccess                  <- iz deploy/htaccess-production (HTTPS, SPA rute, /api)
   portfolio/, assets/, test/ <- ne diraju se (raspakivanje briše samo stare *.js/*.css u korenu)
@@ -40,14 +39,14 @@ python deploy/deploy-staticna.py            # stara statična naslovna (samo za 
 ```
 
 1. `deploy/build-release.sh`: backend testovi, `backend-production-build/` (composer `--no-dev`, bez
-   `.env`, testova i `.exe`), `npm run build -- --configuration production` (pre build-a se
-   `docs/izvori/*.json` kopira u `public/data`), zipovi `deploy/fiskultura-app.zip` i `-web.zip`.
+   `.env`, testova i `.exe`), `npm run build -- --configuration production`, zipovi `deploy/fiskultura-app.zip` i `-web.zip`.
 2. FTP: zipovi, produkcioni `.env`, `index.php`, `.htaccess` (samo uz `--htaccess` ili ako ga nema) i
    `_deploy-<nasumično>.php`.
 3. HTTPS poziv tog fajla (zaštićen `DEPLOY_SECRET`-om): raspakivanje, brisanje starih JS/CSS i keša,
    `migrate --force`, `db:seed --force` uz `--seed` (u produkciji bez probnih naloga), `app:admin`
-   ako je admin popunjen; fajl briše sam sebe.
-4. Provera: `/`, `/prijava`, `/udruzenja`, `/data/udruzenja.json`, `/portfolio/` → 200, `/api/auth/me` → 401.
+   ako je admin popunjen; fajl briše sam sebe. Organizacije i vesti iz `backend/database/data/*.json`
+   uvozi `--seed` (`ContentSeeder`); ponovni uvoz preskače ono što već postoji.
+4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/api/organizations`, `/portfolio/` → 200, `/api/auth/me` → 401.
 
 Admin se pravi komandom `php artisan app:admin <mejl> --password=...` (pri deploy-u automatski). Posle
 prvog deploy-a obriši `DEPLOY_ADMIN_PASSWORD` iz `deploy/.env`.

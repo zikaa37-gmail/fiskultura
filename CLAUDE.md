@@ -5,7 +5,8 @@
 Portal za nastavnike fizičkog vaspitanja u Srbiji (`fiskultura.rs`): vesti i objave, strukovna
 udruženja, sportovi i pravila sa PDF uputstvima, stručna pomoć, obaveštenja mejlom, linkovi ka
 aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/koncept.md`, zadaci:
-`docs/zadaci.md`, istraživanje udruženja: `docs/izvori/`.
+`docs/zadaci.md`, istraživanje udruženja: `docs/izvori/udruzenja.md`; podaci za uvoz u bazu:
+`backend/database/data/*.json` (`ContentSeeder` / `ContentImporter`, uvoz je idempotentan).
 
 - Koren repoa: **statička naslovna** koja je sada na `fiskultura.rs` (`index.html`, `style.css`,
   `main.js`, `deploy/deploy.py`). Ostaje dok portal ne zameni naslovnu (zadatak #5).

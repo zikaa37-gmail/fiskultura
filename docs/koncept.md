@@ -78,7 +78,7 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
   krovna organizacija i izvor podatka o članstvu.
 - Javno: `/udruzenja` (lista + filteri po nivou i okrugu, kasnije mapa), `/udruzenja/:slug` sa
   objavama te organizacije.
-- Početni podaci: `docs/izvori/udruzenja.json` i `docs/izvori/objave.json` (seed za bazu).
+- Početni podaci: `backend/database/data/organizations.json` i `news.json` (seed za bazu, pregled u `docs/izvori/udruzenja.md`).
 - Udruženje može da dobije nalog urednika za svoje objave (kasnije).
 
 ### 2a. Stručni seminari i usavršavanje
