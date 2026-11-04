@@ -29,7 +29,7 @@ const SOCIAL: { field: LinkField; label: string; icon: IconName }[] = [
   template: `
     @for (tile of tiles(); track tile.key) {
       @if (tile.broken) {
-        <span class="org-link org-link-disabled" aria-disabled="true" title="Link trenutno ne radi">
+        <span class="org-link org-link-disabled" aria-disabled="true" [title]="tile.title">
           <app-icon [name]="tile.icon" [size]="22" />
           <span>{{ tile.label }}</span>
         </span>
@@ -67,7 +67,10 @@ export class OrgLinks {
     for (const social of SOCIAL) {
       const url = links[social.field];
       if (url) {
-        tiles.push({ key: social.field, label: social.label, icon: social.icon, href: url, title: url, broken: item.link_status[social.field] === 'broken' });
+        const broken = item.link_status[social.field] === 'broken';
+        tiles.push({ key: social.field, label: social.label, icon: social.icon, href: url, title: broken ? 'Link trenutno ne radi' : url, broken });
+      } else if (social.field === 'instagram') {
+        tiles.push({ key: social.field, label: social.label, icon: social.icon, title: 'Nema Instagram naloga', broken: true });
       }
     }
     if (item.email) {

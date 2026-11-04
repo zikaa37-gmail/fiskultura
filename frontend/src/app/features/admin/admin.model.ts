@@ -1,5 +1,5 @@
 import { UserRole } from '../../core/auth/user.model';
-import { NewsCategory, Organization, OrganizationRef, SourceType } from '../../core/content/content.model';
+import { LinkField, NewsCategory, Organization, OrganizationRef, SourceType } from '../../core/content/content.model';
 
 export type NewsStatus = 'draft' | 'published';
 
@@ -40,6 +40,7 @@ export interface AdminNewsPayload {
 
 export interface AdminOrganization extends Organization {
   parent_id: number | null;
+  broken_links: LinkField[];
 }
 
 export interface AdminUser {

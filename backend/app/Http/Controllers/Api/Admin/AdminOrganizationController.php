@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
+use App\Services\LinkChecker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,10 @@ class AdminOrganizationController extends Controller
         $data = $this->validated($request);
         $data['slug'] = $data['slug'] ?? $this->uniqueSlug($data['short_name'] ?? $data['name']);
 
+        $brokenLinks = $data['broken_links'] ?? [];
+        unset($data['broken_links']);
         $organization = Organization::create($data);
+        LinkChecker::markBroken($organization, $brokenLinks);
 
         return response()->json($this->present($organization->load('parent')->loadCount('news')), 201);
     }
@@ -41,7 +45,12 @@ class AdminOrganizationController extends Controller
             return response()->json(['message' => 'Organizacija ne može biti sama sebi krovna.', 'errors' => ['parent_id' => ['Organizacija ne može biti sama sebi krovna.']]], 422);
         }
 
+        $brokenLinks = $data['broken_links'] ?? null;
+        unset($data['broken_links']);
         $organization->update([...$data, 'slug' => $data['slug'] ?? $organization->slug]);
+        if ($brokenLinks !== null) {
+            LinkChecker::markBroken($organization->fresh(), $brokenLinks);
+        }
 
         return response()->json($this->present($organization->fresh('parent')->loadCount('news')));
     }
@@ -73,6 +82,8 @@ class AdminOrganizationController extends Controller
             'last_activity' => ['nullable', 'date'],
             'parent_id' => ['nullable', 'integer', 'exists:organizations,id'],
             'member_source' => ['nullable', 'url', 'max:255'],
+            'broken_links' => ['nullable', 'array'],
+            'broken_links.*' => [Rule::in(['website', 'facebook', 'instagram', 'youtube', 'member_source'])],
         ], [
             'slug.regex' => 'Adresa sme da sadrži samo mala slova bez kvačica, brojeve i crtice.',
         ]);
@@ -103,6 +114,7 @@ class AdminOrganizationController extends Controller
         return [
             ...OrganizationController::present($organization),
             'parent_id' => $organization->parent_id,
+            'broken_links' => LinkChecker::manuallyBroken($organization),
         ];
     }
 }

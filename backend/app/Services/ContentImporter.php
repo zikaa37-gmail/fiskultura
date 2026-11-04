@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\News;
 use App\Models\Organization;
+use App\Services\LinkChecker;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -47,6 +48,18 @@ class ContentImporter
                 'member_source' => $row['memberSource'] ?? null,
             ])->save();
             $created++;
+        }
+
+        foreach ($rows as $row) {
+            $wanted = $row['brokenLinks'] ?? [];
+            if ($wanted === []) {
+                continue;
+            }
+            $organization = Organization::where('slug', $row['slug'])->first();
+            $current = LinkChecker::manuallyBroken($organization);
+            if (array_diff($wanted, $current) !== []) {
+                LinkChecker::markBroken($organization, array_values(array_unique([...$current, ...$wanted])));
+            }
         }
 
         $slugToId = Organization::pluck('id', 'slug');

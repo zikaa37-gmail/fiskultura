@@ -1251,3 +1251,9 @@ a.org-link:hover {
     display: none;
   }
 }
+
+.broken-links {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+}
