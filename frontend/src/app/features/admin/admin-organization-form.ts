@@ -3,20 +3,21 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
-import { ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationLevel, OrganizationType, organizationLabel } from '../../core/content/content.model';
+import { LinkField, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationLevel, OrganizationType, organizationLabel } from '../../core/content/content.model';
 import { AdminOrganization } from './admin.model';
 
 type OrganizationStatus = AdminOrganization['status'];
 
 @Component({
   selector: 'app-admin-organization-form',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="inline-link small" routerLink="/admin/udruzenja">← Sva udruženja</a>
@@ -113,6 +114,18 @@ type OrganizationStatus = AdminOrganization['status'];
             <input matInput formControlName="youtube" type="url" />
           </mat-form-field>
         </div>
+        <div class="broken-links">
+          <strong>Link ne radi (na sajtu će biti posivljen)</strong>
+          @for (field of linkFields; track field.key) {
+            <mat-checkbox [formControlName]="'broken_' + field.key">
+              {{ field.label }}
+              @if (statusLabel(field.key); as status) {
+                <span class="muted small">· provera: {{ status }}</span>
+              }
+            </mat-checkbox>
+          }
+          <span class="muted small">Facebook i Instagram server ne može sam da proveri — označite ručno ako stranica ne postoji.</span>
+        </div>
       </fieldset>
 
       <fieldset class="admin-fieldset">
@@ -156,6 +169,12 @@ export class AdminOrganizationForm {
   protected readonly levelLabels = ORGANIZATION_LEVEL_LABELS;
   protected readonly levels = Object.keys(ORGANIZATION_LEVEL_LABELS) as OrganizationLevel[];
   protected readonly label = organizationLabel;
+  protected readonly linkFields: { key: Exclude<LinkField, 'member_source'>; label: string }[] = [
+    { key: 'website', label: 'Sajt' },
+    { key: 'facebook', label: 'Facebook' },
+    { key: 'instagram', label: 'Instagram' },
+    { key: 'youtube', label: 'YouTube' },
+  ];
 
   protected readonly isEdit = computed(() => !!this.id());
   protected readonly resource = httpResource<AdminOrganization>(() => (this.id() ? `${API_URL}/admin/organizations/${this.id()}` : undefined));
@@ -187,7 +206,20 @@ export class AdminOrganizationForm {
     last_activity: [''],
     member_source: [''],
     slug: [''],
+    broken_website: [false],
+    broken_facebook: [false],
+    broken_instagram: [false],
+    broken_youtube: [false],
   });
+
+  protected statusLabel(field: LinkField): string | null {
+    const item = this.loaded();
+    const status = item?.link_status[field];
+    if (!item || !status || item.broken_links.includes(field)) {
+      return null;
+    }
+    return { ok: 'radi', broken: 'ne radi', unknown: 'nije moguće proveriti' }[status];
+  }
 
   constructor() {
     effect(() => {
@@ -210,6 +242,10 @@ export class AdminOrganizationForm {
           last_activity: item.last_activity ?? '',
           member_source: item.member_source ?? '',
           slug: item.slug,
+          broken_website: item.broken_links.includes('website'),
+          broken_facebook: item.broken_links.includes('facebook'),
+          broken_instagram: item.broken_links.includes('instagram'),
+          broken_youtube: item.broken_links.includes('youtube'),
         });
       }
     });
@@ -237,6 +273,7 @@ export class AdminOrganizationForm {
       last_activity: nullable(value.last_activity),
       member_source: nullable(value.member_source),
       slug: nullable(value.slug),
+      broken_links: this.linkFields.filter((field) => value[`broken_${field.key}`]).map((field) => field.key),
     };
     const request = this.id()
       ? this.#http.patch<AdminOrganization>(`${API_URL}/admin/organizations/${this.id()}`, payload)

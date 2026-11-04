@@ -36,14 +36,46 @@ class LinkChecker
 
     public function checkOrganization(Organization $organization): array
     {
+        $previous = $organization->link_checks ?? [];
         $checks = [];
         foreach (self::links($organization) as $field => $url) {
-            $checks[$field] = [...$this->check($url), 'url' => $url, 'checked_at' => now()->toIso8601String()];
+            $result = [...$this->check($url), 'url' => $url, 'checked_at' => now()->toIso8601String()];
+            $manual = $previous[$field] ?? null;
+            $keepManual = $manual && ($manual['manual'] ?? false) && ($manual['url'] ?? null) === $url && $result['status'] === self::UNKNOWN;
+            $checks[$field] = $keepManual ? [...$manual, 'checked_at' => $result['checked_at'], 'code' => $result['code']] : $result;
         }
 
         $organization->forceFill(['link_checks' => $checks ?: null])->saveQuietly();
 
         return $checks;
+    }
+
+    public static function markBroken(Organization $organization, array $fields): void
+    {
+        $links = self::links($organization);
+        $checks = $organization->link_checks ?? [];
+
+        foreach ($links as $field => $url) {
+            $isManual = ($checks[$field]['manual'] ?? false) && ($checks[$field]['url'] ?? null) === $url;
+            if (in_array($field, $fields, true)) {
+                $checks[$field] = ['status' => self::BROKEN, 'code' => null, 'url' => $url, 'checked_at' => now()->toIso8601String(), 'manual' => true];
+            } elseif ($isManual) {
+                unset($checks[$field]);
+            }
+        }
+
+        $organization->forceFill(['link_checks' => array_intersect_key($checks, $links) ?: null])->saveQuietly();
+    }
+
+    public static function manuallyBroken(Organization $organization): array
+    {
+        $links = self::links($organization);
+
+        return array_values(array_keys(array_filter(
+            $organization->link_checks ?? [],
+            fn (array $check, string $field) => ($check['manual'] ?? false) && ($check['url'] ?? null) === ($links[$field] ?? false),
+            ARRAY_FILTER_USE_BOTH,
+        )));
     }
 
     public static function links(Organization $organization): array

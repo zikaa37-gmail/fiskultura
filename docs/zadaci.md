@@ -140,6 +140,59 @@ Na objavu istaknute vesti → `instant` pretplatnicima koji prate tu kategoriju/
 pregled ponedeljkom u 7h. Kanal kroz interfejs (`NotificationChannel`), da se kasnije dodaju
 WhatsApp / Viber / push bez promene logike. Admin vidi broj poslatih i odjava.
 
+## Faza 1b — centar informisanja i pomoći kolegama
+
+Cilj: fiskultura.rs je mesto na koje nastavnici FV iz cele Srbije dolaze po informaciju i pomoć.
+Redosled: #38 → #39 → #16b/#16c (obaveštenja) → #40 → #41 → ostalo.
+
+### #38 Propisi i literatura na portalu — jedan izvor (faza-1b)
+Biblioteka na `/propisi`: zakoni, pravilnici (plan i program po razredu, ocenjivanje, norma, kalendar,
+zaštita učenika), stručna literatura i korisni linkovi (Službeni glasnik, Ministarstvo, ZUOV, Zdravitas).
+Zapis: naziv, vrsta, oblast, razredi / nivo, broj i datum glasila, važi od / do, link na zvaničan tekst,
+kratko „šta je bitno za FV", istorija izmena (stara verzija ostaje vidljiva kao nevažeća).
+Početni podaci: preuzeti iz kataloga „Literatura" u e-pripremama (`api/database/seeders/data`,
+`RegulationCatalogSeeder`), bez dupliranja. Pretraga i filteri, admin za urednika.
+- [ ] Pregledati kako je katalog građen u e-pripremama i dogovoriti zajednički format
+
+### #39 E-pripreme čitaju propise sa portala (faza-1b, repo e-pripreme-fv)
+Javni API portala `GET /api/regulations` (sa `updated_since`); e-pripreme zadržavaju svoj modul
+„Literatura", ali ga pune sa portala (komanda za sinhronizaciju + nedeljni raspored), lokalne
+izmene super admina se ne gaze. Kasnije isto i za druge aplikacije (Evidencija FV).
+
+### #40 Pitanja i odgovori — administracija i pravna pitanja (faza-1b)
+Proširenje #31: kategorije (norma i fond časova, ocenjivanje, oslobađanje od nastave, odgovornost i
+bezbednost na času, takmičenja, Zdravitas, ES dnevnik). Odgovor ima poziv na propis iz #38 i datum
+„važi na dan". „Postavi pitanje" (prijavljeni korisnik) → urednik odgovara i objavljuje anonimno; mejl
+pitaocu. Napomena da odgovor nije pravni savet.
+
+### #41 Kalendar sa podsetnicima (faza-1b)
+`/kalendar`: školski kalendar (iz pravilnika za tekuću godinu), takmičenja (#33), seminari (#15f),
+rokovi (unos u Zdravitas, izveštaji, prijave za takmičenja). Filter po okrugu i vrsti; pretplata na
+podsetnik mejlom (7 dana i 1 dan pre); izvoz u Google / Outlook kalendar (iCal).
+
+### #42 Oglasi: konkursi škola i zamene (faza-1b)
+Škola ili kolega objavljuje oglas (radno mesto nastavnika FV, zamena, honorarni rad u sekciji);
+urednik odobrava; rok važenja, okrug, link na zvanični konkurs; obaveštenje mejlom po okrugu.
+
+### #43 Šabloni dokumenata (faza-1b, sadrzaj)
+Preuzimanje šablona: operativni plan, izveštaj sekcije, saglasnost roditelja za takmičenje,
+zapisnik testiranja, molba za oslobađanje, plan rada aktiva. Word / PDF, oznaka verzije i propisa.
+
+### #44 Glas struke: ankete i inicijative (faza-1b)
+Urednik pokreće anketu (npr. „broj časova FZV nedeljno"); glasaju prijavljeni nastavnici (jedan glas,
+okrug i nivo škole za analizu); rezultati javni po zatvaranju i šalju se SSPFVS-u i udruženjima.
+Inicijative sa potpisima kolega (ime, škola, opština; javno samo broj).
+
+### #45 Saradnja škola (faza-1b, kasnije)
+Oglasna tabla po opštini: prijateljske utakmice, zajednički turniri, pozajmica opreme, zajednički
+prevoz na takmičenja.
+
+### #46 Linkovi udruženja: ručna potvrda (faza-1b) — urađeno
+Automatska provera (`organizations:check-links`) za sajtove i YouTube; Facebook i Instagram server ne
+može da proveri, pa urednik ručno označava link koji ne radi (admin, kvačica „ne radi"), a podaci
+mogu da nose `brokenLinks`. Ručna oznaka se ne gubi dok automatska provera ne potvrdi da link radi.
+Instagram kartica je uvek prikazana, posivljena dok udruženje nema nalog.
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
