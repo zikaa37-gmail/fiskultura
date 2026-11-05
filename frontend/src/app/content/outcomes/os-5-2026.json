@@ -1,0 +1,186 @@
+{
+ "key": "os-5-2026",
+ "level": "os",
+ "grade": 5,
+ "gazette": "„Prosvetni glasnik” 1/2026",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/15/2/reg",
+ "validFrom": "2027/28",
+ "validTo": null,
+ "goal": "Cilj nastave i učenja fizičkog i zdravstvenog vaspitanja je da učenik kontinuirano razvija fizičku pismenost unapređujući fizičke sposobnosti, motoričke veštine i znanja iz oblasti fizičke i zdravstvene kulture, radi očuvanja zdravlja i primene pravilnog i redovnog fizičkog vežbanja u savremenim uslovima života i rada",
+ "outcomes": [
+  "primeni jednostavne komplekse prostih i opštepripremnih vežbi",
+  "izvede vežbe (raznovrsna prirodna i izvedena kretanja) i koristi ih u sportu, rekreaciji i različitim životnim situacijama",
+  "kombinuje i koristi dostignuti nivo usvojene tehnike kretanja u sportu i svakodnevnim životnim situacijama",
+  "uporedi rezultate testiranja sa vrednostima za svoj uzrast i sagleda sopstveni motorički napredak",
+  "dovodi u vezu razvoj fizičkih sposobnosti sa atletskim disciplinama",
+  "održava ravnotežu u različitim položajima i kretanjima",
+  "koristi gimnastičke vežbe za razvoj motoričkih sposobnosti",
+  "koristi elemente tehnike u igri",
+  "primeni osnovna pravila mini rukometa/rukometa i futsala u igri",
+  "učestvuje na unutarodeljenskim takmičenjima",
+  "izvede kretanja, vežbe i kratke sastave uz muzičku pratnju",
+  "igra narodno kolo",
+  "izvede kretanja u različitom ritmu",
+  "izvede osnovne korake plesa iz narodne tradicije drugih kultura",
+  "kontroliše i održava telo u vodi",
+  "prepliva 25 m slobodnom tehnikom",
+  "skoči u vodu na noge",
+  "primeni mere bezbednosti i poštuje pravila ponašanja u vodenoj sredini i oko nje",
+  "poštuje pravila ponašanja u prostorima za vežbanje u školi i van nje, kao i na sportskim manifestacijama",
+  "primeni mere bezbednosti tokom vežbanja",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima u prostorima za vežbanje",
+  "poštuje pravila timske i sportske igre u skladu sa etičkim normama",
+  "sarađuje tokom fizičkog vežbanja i igre",
+  "na socijalno prihvatljiv način reaguje u konfliktnim situacijama",
+  "koristi različite izvore informacija za upoznavanje sa raznovrsnim oblicima fizičkih i sportsko-rekreativnih aktivnosti",
+  "prihvati sopstvenu pobedu i poraz u skladu sa „fer-plejom”",
+  "primeni naučeno u fizičkom i zdravstvenom vaspitanju u vanrednim situacijama",
+  "uvrsti jednostavna vežbanja u svoj raspored dnevnih aktivnosti",
+  "navede osnove prve pomoći",
+  "navede primere uticaja fizičkog vežbanja na zdravlje",
+  "razlikuje zdrave i nezdrave namirnice i njihovu energetsku vrednost",
+  "napravi nedeljni jelovnik uravnotežene ishrane uz pomoć nastavnika i izračuna troškove",
+  "primeni zdravstveno-higijenske mere pre, u toku i nakon vežbanja",
+  "čuva životnu sredinu tokom vežbanja",
+  "koristi različite i pouzdane izvore informacija koje se odnose na očuvanje zdravlja i zdravih životnih navika",
+  "zastupa mišljenje da prekomerna upotreba digitalnih uređaja nije zdrava"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Fizičke sposobnosti",
+     "contents": [
+      "Razvoj snage, aerobne izdržljivosti, pokretljivosti, koordinacije, brzine"
+     ],
+     "hours": "kontinuirano u uvodnoj, pripremnoj i osnovnoj fazi časa; bez posebnog broja časova"
+    },
+    {
+     "name": "Testiranje i merenje",
+     "contents": [
+      "Testiranje i praćenje fizičkog razvoja i motoričkih sposobnosti"
+     ],
+     "hours": "8"
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine, sportovi i sportske discipline",
+   "topics": [
+    {
+     "name": "Atletika",
+     "contents": [
+      "Hodanja, trčanja, skakanja, bacanja, troboj",
+      "Poligon"
+     ],
+     "hours": "20"
+    },
+    {
+     "name": "Sportska gimnastika",
+     "contents": [
+      "Vežbe na tlu",
+      "Preskoci i skokovi",
+      "Vežbe na gredi, na vratilu, na razbojima, na krugovima",
+      "Penjanja"
+     ],
+     "hours": "u tabeli časova: „Gimnastika”"
+    },
+    {
+     "name": "Futsal",
+     "contents": [
+      "Vođenje i kontrola lopte",
+      "Primanje i dodavanje lopte",
+      "Šutiranje na gol",
+      "Osnove igre u napadu (otkrivanje)",
+      "Oduzimanje lopte",
+      "Osnove igre u odbrani (pokrivanje)",
+      "Vežbe sa dva i tri igrača",
+      "Igra",
+      "Pravila"
+     ],
+     "hours": "Osnove timskih i sportskih igara; u uputstvu „3.1. Mali fudbal”"
+    },
+    {
+     "name": "Mini rukomet / rukomet",
+     "contents": [
+      "Vođenje lopte",
+      "Hvatanja i dodavanja lopte",
+      "Šutiranja na gol",
+      "Principi individualne odbrane",
+      "Principi kolektivne odbrane",
+      "Pravila igre",
+      "Poligon"
+     ],
+     "hours": "Osnove timskih i sportskih igara; u tabeli časova „Mini rukomet”"
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Pokreti uz ritam i uz muzičku pratnju",
+      "Ritmičke vežbe sa i bez rekvizita",
+      "Skokovi kroz vijaču",
+      "Narodno kolo"
+     ],
+     "hours": "u tabeli časova: „Ritmika i ples”"
+    },
+    {
+     "name": "Plivanje",
+     "contents": [
+      "Obuka neplivača, tehnike plivanja, igre u vodi, samopomoć u vodi"
+     ],
+     "hours": "ako nema uslova, časovi se raspoređuju na druge teme"
+    },
+    {
+     "name": "Program po izboru",
+     "contents": [
+      "Skijanje, klizanje, badminton, stoni tenis, orijentiring, jadžent, borenja"
+     ],
+     "hours": "određuje Stručno veće"
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Fizičko vežbanje i sport",
+     "contents": [
+      "Svrha fizičke aktivnosti i vežbanja",
+      "Značaj razvoja fizičkih sposobnosti za zdravlje",
+      "Pravilno ponašanje prema učesnicima u igri",
+      "Čuvanje i održavanje prostora i sredstava za vežbanje",
+      "Postavljanje i sklanjanje sprava i rekvizita neophodnih za vežbanje",
+      "Prepoznavanje nasilja u fizičkom vaspitanju i sportu",
+      "„Fer-plej”, navijanje, pobeda, poraz, rešavanje konfliktnih situacija",
+      "Fizičko vežbanje i estetika",
+      "Pouzdani izvori informacija iz oblasti vežbanja, fizičkog i zdravstvenog vaspitanja i sporta",
+      "Planiranje dnevnih aktivnosti",
+      "Značaj razvoja fizičkih sposobnosti za snalaženje u vanrednim situacijama"
+     ]
+    },
+    {
+     "name": "Zdravstveno vaspitanje",
+     "contents": [
+      "Fizička aktivnost, vežbanje i zdravlje",
+      "Osnovni principi vežbanja",
+      "Uticaj različitih vrsta fizičke aktivnosti na organizam",
+      "Pridržavanje zdravstveno-higijenskih mera pre, u toku i posle vežbanja",
+      "Osnove prve pomoći",
+      "Uticaj pravilne ishrane na zdravlje i razvoj",
+      "Vežbanje i ishrana",
+      "Značaj vežbanja i igranja na čistom vazduhu. Vežbanje i čuvanje životne sredine",
+      "Pouzdani izvori informacija iz oblasti očuvanja zdravlja i zdravih životnih navika",
+      "Uticaj prekomerne upotrebe digitalnih uređaja na zdravlje"
+     ]
+    },
+    {
+     "name": "Teorijska nastava",
+     "contents": [],
+     "hours": "oblik nastave „teorijska nastava (do 4 časa)”; sadržaji tema Fizičko vežbanje i sport i Zdravstveno vaspitanje"
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

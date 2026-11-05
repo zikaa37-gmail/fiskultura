@@ -1,0 +1,111 @@
+{
+ "key": "os-3-2019",
+ "level": "os",
+ "grade": 3,
+ "gazette": "„Prosvetni glasnik” 5/2019",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/5/3/reg",
+ "validFrom": "2020/21",
+ "validTo": null,
+ "goal": "Cilj učenja Fizičkog i zdravstvenog vaspitanja je da učenik unapređuje fizičke sposobnosti, motoričke veštine i znanja iz oblasti fizičke i zdravstvene kulture, radi očuvanja zdravlja i primene pravilnog i redovnog fizičkog vežbanja u savremenim uslovima života i rada.",
+ "outcomes": [
+  "primeni jednostavne, dvostavne opštepripremne vežbe (vežbe oblikovanja)",
+  "pravilno izvodi vežbe, raznovrsna prirodna i izvedena kretanja",
+  "kombinuje usvojene motoričke veštine u igri i svakodnevnom životu",
+  "održava ravnotežu u različitim kretanjima",
+  "koriguje sopstveno držanja tela na osnovu saveta nastavnika",
+  "pravilno drži telo",
+  "pravilno podiže, nosi i spušta teret",
+  "izvede kretanja, vežbe i sastave uz muzičku pratnju",
+  "izvede dečji i narodni ples",
+  "koristi terminologiju vežbanja",
+  "poštuje pravila ponašanja na vežbalištima",
+  "poštuje mere bezbednosti tokom vežbanja",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima",
+  "primeni pravila igre",
+  "navija i bodri učesnike u igri na način kojim nikoga ne vređa",
+  "prihvati pobedu i poraz kao sastavni deo igre i takmičenja",
+  "uredno odlaže svoje stvari pre i nakon vežbanja i u drugim situacijama",
+  "pravilno izvodi i kontroliše pokrete u različitim kretanjima",
+  "prati promene u težini i visini kod sebe i drugih",
+  "prepozna zdravstveno stanje kada ne treba da vežba",
+  "primenjuje higijenske mere pre, u toku i nakon vežbanja i drugim životnim situacijama",
+  "uredno održava prostor u kome živi i boravi",
+  "koristi zdrave namirnice u ishrani",
+  "povezuje različita vežbanja sa njihovim uticajem na zdravlje",
+  "prepozna lepotu pokreta u vežbanju",
+  "se pridržava pravila vežbanja",
+  "vrednuje sopstvena i tuđa postignuća u vežbanju"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Fizičke sposobnosti",
+     "contents": [
+      "Osnovni sadržaji Vežbe za razvoj snage sa i bez rekvizita. Vežbe za razvoj pokretljivosti sa i bez rekvizita. Vežbe za razvoj aerobne izdržljivosti. Vežbe za razvoj brzine i eksplozivne snage. Vežbe za razvoj koordinacije. Primena nacionalne baterije testova za praćenje fizičkog razvoja i motoričkih sposobnosti."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine, sport i sportske discipline",
+   "topics": [
+    {
+     "name": "Atletika",
+     "contents": [
+      "Tehnika trčanja. Istrajno trčanje. Skok udalj zgrčnom tehnikom. Bacanje loptice iz zaleta. Skok uvis prekoračnom tehnikom."
+     ]
+    },
+    {
+     "name": "Sportska gimnastika",
+     "contents": [
+      "Vežbe na tlu: vežbe i kombinacije. Preskoci i skokovi. Vežbe u visu, vežbe u uporu i vežbe i vežbe promenama visova i upora. Vežbe ravnoteže na švedskoj klupi i niskoj gredi."
+     ]
+    },
+    {
+     "name": "Osnove timskih, sportskih i elementarnih igara",
+     "contents": [
+      "Između četiri vatre Mini-rukomet. Futsal – „mali fudbal”."
+     ]
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Vežbe sa vijačom. Vežbe sa loptom. Narodno kolo „Savila se bela loza vinova”. Narodno kolo iz kraja u kojem se škola nalazi."
+     ]
+    },
+    {
+     "name": "Plivanje",
+     "contents": [
+      "Prilagođavanje na vodenu sredinu i osnovna obuka plivanja."
+     ]
+    },
+    {
+     "name": "Poligoni",
+     "contents": [
+      "Poligon u skladu sa realizovanim motoričkim sadržajima."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Kultura vežbanja i igranja",
+     "contents": [
+      "Osnovna pravila: Između četiri vatre, Mini-rukometa i Futsala. Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe). Čuvanje i održavanje materijalnih dobara. Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje. „Ferplej” (navijanje, pobeda, poraz). Porodica i vežbanje. Vežbanje kao deo dnevnih aktivnosti."
+     ]
+    },
+    {
+     "name": "Zdravstveno vaspitanje",
+     "contents": [
+      "Moje srce – puls. Disanje i vežbanje. Higijena prostora za vežbanje. Značaj voća i povrća u ishrani. Značaj vode za organizam i vežbanje. Postupanje u slučaju povrede."
+     ]
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

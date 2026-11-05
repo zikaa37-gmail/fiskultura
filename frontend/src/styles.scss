@@ -1624,3 +1624,153 @@ a.org-link:hover {
     flex: none;
   }
 }
+
+.outcomes-group-title {
+  margin: 24px 0 12px;
+  font-size: 20px;
+}
+
+.outcomes-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.outcomes-card {
+  display: grid;
+  gap: 4px;
+  min-height: 44px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.outcomes-card:hover {
+  border-color: var(--color-primary);
+}
+
+.outcomes-card strong {
+  font-size: 18px;
+}
+
+.outcomes-note {
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.outcomes-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.outcomes-facts {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.outcomes-facts dt {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.outcomes-facts dd {
+  margin: 2px 0 0;
+}
+
+.outcomes-facts .inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.outcomes-goal {
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-style: italic;
+}
+
+.outcomes-warning {
+  padding: 10px 14px;
+  border-left: 4px solid var(--mat-sys-error);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.outcomes-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 24px;
+  padding-left: 24px;
+}
+
+.outcomes-area {
+  margin-bottom: 20px;
+}
+
+.outcomes-area h3 {
+  margin: 16px 0 8px;
+  color: var(--color-primary);
+  font-size: 18px;
+}
+
+.outcomes-topic {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.outcomes-topic h4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.outcomes-topic p {
+  margin: 4px 0;
+}
+
+.outcomes-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.outcomes-pager .inline-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+@media (min-width: 640px) {
+  .outcomes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .outcomes-facts {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+@media (min-width: 960px) {
+  .outcomes-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  .outcomes-back,
+  .outcomes-pager {
+    display: none !important;
+  }
+}

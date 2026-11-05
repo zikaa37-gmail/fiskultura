@@ -209,6 +209,39 @@ može da proveri, pa urednik ručno označava link koji ne radi (admin, kvačica
 mogu da nose `brokenLinks`. Ručna oznaka se ne gubi dok automatska provera ne potvrdi da link radi.
 Instagram kartica je uvek prikazana, posivljena dok udruženje nema nalog.
 
+### #47 ZUOV i praćenje zvaničnih izvora (faza-1b, sadrzaj)
+ZUOV je jedno od centralnih mesta za informisanje nastavnika. Radi se na posebnoj grani, posle
+ishoda po razredima.
+
+Istraživanje:
+- sve što ZUOV objavljuje u vezi sa nastavom fizičkog i zdravstvenog vaspitanja (programi, priručnici,
+  standardi, obuke, planovi realizacije);
+- katalog stalnog stručnog usavršavanja, oblast 17
+  (<https://zuov-katalog.rs/index.php?action=page/catalog/all&oblast=17>): svih 25 seminara sa
+  linkom na stranicu programa u katalogu (naziv, autori, trajanje, bodovi, kompetencija, prioritet);
+  prikaz na portalu uz seminare iz vesti.
+
+Stranice ZUOV-a koje pratimo:
+- <https://zuov.gov.rs/download-category/zdravstveno-vaspitanje/>
+- <https://zuov.gov.rs/category/vesti/>
+- <https://zuov.gov.rs/konkursi-za-prosvetne-radnike-i-skole/>
+- <https://zuov.gov.rs/novi-pravilnici-vesti-i-obavestenja/>
+
+Periodični pregled izvora:
+- zapisan spisak mesta koja se proveravaju (zakoni i pravilnici u PIS-u, Prosvetni glasnik, ZUOV,
+  Ministarstvo, konkursi, katalog seminara, udruženja), sa redosledom i učestalošću provere;
+- PIS ima javni API: ELI adresa (`https://slgl.pravno-informacioni-sistem.rs/api/prins/eli/rep/pg/...`)
+  daje GUID propisa, `https://reg.pravno-informacioni-sistem.rs/api/GetLawActViewByLawAdActGuid`
+  daje naslov sa spiskom svih izmena (npr. „5/2019-6, 1/2020-1, …”) i HTML svake izmene. Nova
+  izmena = novi broj glasnika u naslovu;
+- komanda/zakazani posao beleži stanje svakog izvora (poslednja izmena, poslednja objava) i javlja
+  uredniku šta je novo; ništa se ne objavljuje samo, urednik pregleda i odobri;
+- kad se promeni propis: ažurirati propise, pitanja i odgovore, ishode i planove koji ga navode
+  (polje „važi od”) i objaviti kratku vest sa linkom na zvanični tekst.
+- [ ] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
+- [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
+- [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)

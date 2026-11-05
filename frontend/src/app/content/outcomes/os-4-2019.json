@@ -1,0 +1,113 @@
+{
+ "key": "os-4-2019",
+ "level": "os",
+ "grade": 4,
+ "gazette": "„Prosvetni glasnik” 11/2019",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/11/1/reg",
+ "validFrom": "2021/22",
+ "validTo": null,
+ "goal": "Cilj učenja Fizičkog i zdravstvenog vaspitanja je da učenik unapređuje fizičke sposobnosti, motoričke veštine i znanja iz oblasti fizičke i zdravstvene kulture, radi očuvanja zdravlja i primene pravilnog i redovnog fizičkog vežbanja u savremenim uslovima života i rada.",
+ "outcomes": [
+  "primeni opštepripremne vežbe (vežbe oblikovanja)",
+  "pravilno izvodi vežbe, raznovrsna prirodna i izvedena kretanja",
+  "kombinuje usvojene motoričke veštine u igri i svakodnevnom životu",
+  "održava ravnotežu u različitim kretanjima",
+  "pravilno drži telo",
+  "samostalno koriguje nepravilno držanje",
+  "pravilno podiže, nosi i spušta teret",
+  "izvede kretanja, vežbe i sastave uz muzičku pratnju",
+  "izvede dečji i narodni ples",
+  "koristi terminologiju vežbanja",
+  "poštuje pravila ponašanja na vežbalištima",
+  "poštuje mere bezbednosti tokom vežbanja",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima",
+  "poštuje i primeni pravila igre",
+  "navija i bodri učesnike u igri na način kojim nikoga ne vređa",
+  "prihvati pobedu i poraz kao sastavni deo igre i takmičenja",
+  "uredno odlaže svoje stvari pre i nakon vežbanja",
+  "prati promene u sopstvenoj težini i visini",
+  "sagleda rezultate fizičkih sposobnosti",
+  "prepozna zdravstveno stanje kada ne treba da vežba",
+  "primenjuje higijenske mere pre, u toku i nakon vežbanja, kao i u drugim situacijama",
+  "uredno održava prostor u kome živi i boravi",
+  "uvidi značaj pravilne ishrane za vežbanje",
+  "poveže različita vežbanja sa njihovim uticajem na zdravlje",
+  "prepozna lepotu pokreta i kretanja",
+  "koristi naučena vežbanja u rekreaciji porodice",
+  "pravilno reaguje u slučaju povrede u školi",
+  "vrednuje sopstvena i tuđa postignuća u vežbanju",
+  "učestvuje u predlaganju sadržaja i načina rada"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Fizičke sposobnosti",
+     "contents": [
+      "Vežbe za razvoj snage sa rekvizitima i bez rekvizita. Vežbe za razvoj pokretljivosti sa rekvizitima i bez rekvizita. Vežbe za razvoj aerobne izdržljivosti. Vežbe za razvoj brzine i eksplozivne snage. Vežbe za razvoj koordinacije. Nacionalna baterija testova za praćenje fizičkog razvoja i motoričkih sposobnosti. Motoričke veštine i igre u razvoju motoričih sposobnosti"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine, sport i sportske discipline",
+   "topics": [
+    {
+     "name": "Atletika",
+     "contents": [
+      "Tehnike trčanja. Istrajno trčanje. Skok udalj zgrčnom tehnikom. Bacanje loptice iz zaleta. Skok uvis prekoračnom tehnikom. Troboj."
+     ]
+    },
+    {
+     "name": "Sportska gimnastika",
+     "contents": [
+      "Osnovni sadržaji Vežbe na tlu: vežbe i kombinacije. Preskoci i skokovi (preskok raznoška). Vežbe u visu, vežbe u uporu i vežbe sa promenama visova i upora. Vežbe ravnoteže na švedskoj klupi i niskoj gredi. Prošireni sadržaji Vežbe na tlu: – leteći kolut iz mesta. – sastav."
+     ]
+    },
+    {
+     "name": "Osnove timskih, sportskih i elementarnih igara",
+     "contents": [
+      "Mini–rukomet. Futsal – „mali fudbal”. Osnovni elementi košarke i mini-košarka. Osnovni elementi odbojke. Jadžent."
+     ]
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Vežbe sa vijačom. Vežbe sa loptom. Vežbe sa obručem. Narodno kolo „Moravac”. Narodno kolo iz kraja u kojem se škola nalazi."
+     ]
+    },
+    {
+     "name": "Plivanje",
+     "contents": [
+      "Osnovna obuka plivanja. Skok na noge."
+     ]
+    },
+    {
+     "name": "Poligoni",
+     "contents": [
+      "Poligon u skladu sa realizovanim motoričkim sadržajima."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Kultura vežbanja i igranja",
+     "contents": [
+      "Osnovna pravila vežbanja. Osnovna pravila mini- – rukometa, futsala, košarke, mini-košarke i odbojke. Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe). Čuvanje i održavanje materijalnih dobara. Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje. „Ferplej” (navijanje, pobeda, poraz, tolerancija). Značaj vežbanja u porodici. Vežbanje u slobodno vreme."
+     ]
+    },
+    {
+     "name": "Zdravstveno vaspitanje",
+     "contents": [
+      "Pravilno držanje tela i zdravlje. Značaj vežbanja za pravilan rad srca i pluća. Mišići i zglobovi tela. Higijena prostora za vežbanje. Ishrana i vežbanje. Značaj lekarskih pregleda za vežbanje. Postupanje u slučaju povrede (obavestiti nastavnika i dr.)."
+     ]
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

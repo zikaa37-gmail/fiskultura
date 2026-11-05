@@ -118,7 +118,7 @@
     "validFrom": "2018-09-01",
     "verification": "secondary",
     "verificationNote": "kopija na eupropisi.com (docx); original PG nije otvoren",
-    "summary": "Plan nastave za drugi ciklus (5. i 6. razred) i program FZV za 5. razred. Sadržaj (teme, ishodi) je u katalogu programa (#14).\n\n- Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi i 54 časa obaveznih fizičkih aktivnosti (OFA), koje aplikacija ne planira."
+    "summary": "Plan nastave za drugi ciklus (5. i 6. razred) i program FZV za 5. razred. Sadržaj (teme, ishodi) je na stranici Ishodi po razredima.\n\n- Fond u 5. i 6. razredu do 2026/27: **2 časa nedeljno (72 godišnje)** i **obavezne fizičke aktivnosti 1,5 čas nedeljno (54 godišnje)**, koje se ostvaruju u okviru predmeta.\n- Od 2027/28 važi novi plan iz „Prosvetnog glasnika” 1/2026: 3 časa nedeljno."
   },
   {
     "key": "program-5-6-izmene-2026",
@@ -133,7 +133,7 @@
     "validFrom": "2027-09-01",
     "verification": "secondary",
     "verificationNote": "ZUOV, vest od 2. 3. 2026; datum primene po razredima proveriti u tekstu",
-    "summary": "Nov program za 5. razred i izmene plana nastave. Program od 2027/28 navodi 3 časa nedeljno bez OFA; aplikacija planira 2 časa FZV nedeljno (odluka korisnika, docs/02)."
+    "summary": "Novi plan za 5. i 6. razred i nov program FZV za 5. razred, **od školske 2027/28**.\n\n- Fond FZV u 5. i 6. razredu: **3 časa nedeljno, 108 godišnje**; obavezne fizičke aktivnosti više nisu u planu.\n- Program za 6. razred ostaje isti."
   },
   {
     "key": "program-6-2019",
@@ -147,7 +147,7 @@
     "validFrom": "2019-09-01",
     "verification": "secondary",
     "verificationNote": "Pravilnik o dopunama Pravilnika o planu nastave i učenja za 5. i 6. razred i programu za 5. razred (PG 3/2019, primena od 2019/20), prema spisku propisa ZUOV-a; tekst programa pročitan sa kopije FSFV Niš, original PG nije otvoren (#14)",
-    "summary": "Program FZV za 6. razred. Fond FZV: **2 časa nedeljno** (72 godišnje); program navodi i OFA, koje aplikacija ne planira."
+    "summary": "Program FZV za 6. razred. Fond do 2026/27: **2 časa nedeljno (72)** i obavezne fizičke aktivnosti 1,5 čas nedeljno (54); od 2027/28: **3 časa nedeljno (108)**."
   },
   {
     "key": "program-7-2019",
@@ -161,7 +161,7 @@
     "validFrom": "2020-09-01",
     "verification": "secondary",
     "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
-    "summary": "Program FZV za 7. razred. Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi godišnji fond od 108 časova; aplikacija planira 2 časa FZV nedeljno."
+    "summary": "Program FZV za 7. razred. Fond FZV: **3 časa nedeljno, 108 godišnje** (plan za 7. i 8. razred, „Prosvetni glasnik” 18/2018)."
   },
   {
     "key": "program-8-2019",
@@ -175,7 +175,7 @@
     "validFrom": "2021-09-01",
     "verification": "secondary",
     "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
-    "summary": "Program FZV za 8. razred. Fond FZV: **2 časa nedeljno** (68 godišnje, 34 nastavne nedelje). Program navodi godišnji fond od 102 časa."
+    "summary": "Program FZV za 8. razred. Fond FZV: **3 časa nedeljno, 102 godišnje** (34 nastavne nedelje; plan za 7. i 8. razred, „Prosvetni glasnik” 18/2018)."
   },
   {
     "key": "plan-7-8-izmena-2026",
@@ -187,10 +187,10 @@
     ],
     "gazette": "„Prosvetni glasnik\" 1/2026",
     "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603005/pg-2026-1-7-os7-8",
-    "validFrom": null,
+    "validFrom": "2027-09-01",
     "verification": "secondary",
-    "verificationNote": "ZUOV, vest od 2. 3. 2026; sadržaj izmene nije pročitan",
-    "summary": "Izmena plana nastave za 7. i 8. razred. Da li menja fond FZV treba pročitati u tekstu."
+    "verificationNote": "ZUOV i PIS (ELI 2018/18/3): red FZV 3 | 108 | 3 | 102 u planu iz 2018, 2023. i 2026; član 2: primena od 2027/28",
+    "summary": "Nov plan za 7. i 8. razred od školske 2027/28. **Fond FZV se ne menja**: 3 časa nedeljno, 108 godišnje u 7. i 102 u 8. razredu."
   },
   {
     "key": "sna-vezbanjem-do-zdravlja",

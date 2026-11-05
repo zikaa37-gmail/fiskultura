@@ -1,5 +1,6 @@
 import { PrerenderFallback, RenderMode, ServerRoute } from '@angular/ssr';
 import { SERVER_USER_AGENT } from './core/http/api-origin.interceptor';
+import { OUTCOME_GRADES } from './content/outcomes/outcomes';
 
 interface SeoRoutes {
   news: { slug: string }[];
@@ -50,6 +51,8 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'sportovi/vezbe-sa-rekvizitima', renderMode: RenderMode.Prerender },
   { path: 'sportovi/plesovi', renderMode: RenderMode.Prerender },
   { path: 'literatura', renderMode: RenderMode.Prerender },
+  { path: 'ishodi', renderMode: RenderMode.Prerender },
+  { path: 'ishodi/:razred', renderMode: RenderMode.Prerender, getPrerenderParams: async () => OUTCOME_GRADES.map((grade) => ({ razred: grade.slug })) },
   { path: 'aplikacije', renderMode: RenderMode.Prerender },
   { path: '**', renderMode: RenderMode.Client },
 ];

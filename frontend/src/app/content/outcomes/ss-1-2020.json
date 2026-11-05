@@ -1,0 +1,148 @@
+{
+ "key": "ss-1-2020",
+ "level": "ss",
+ "grade": 1,
+ "gazette": "„Prosvetni glasnik” 4/2020",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2020/4/1/reg",
+ "validFrom": "2020/21",
+ "validTo": "2026/27",
+ "goal": "Cilj učenja fizičkog i zdravstvenog vaspitanja je da učenik kontinuirano razvija znanja, fizičke sposobnosti i motoričke veštine u skladu sa vrednostima fizičkog vežbanja, potrebama za očuvanje i unapređivanje zdravlja i daljeg profesionalnog razvoja",
+ "outcomes": [
+  "uporedi i analizira rezultate testiranja sa vrednostima za svoj uzrast i sagleda sopstveni motorički napredak",
+  "svrsishodno primenjuje vežbe, raznovrsna prirodna i izvedena kretanja",
+  "primenjuje odgovarajuće vežbe u skladu sa sopstvenim mogućnostima i potrebama",
+  "prepozna nivo opterećenja tokom vežbanja",
+  "koristi mogućnosti za svakodnevnu fizičku aktivnost u okruženju i redovno vežba u skladu sa svojim potrebama",
+  "koriguje posledice dugotrajne sedentarne aktivnosti, položaje, pokrete i kretanja koji imaju negativan uticaj na zdravlje primenom fizičkog vežbanja",
+  "planira i primenjuje usvojene motoričke veštine u svakodnevnom životu",
+  "uoči greške u izvođenju pokreta i kretanja",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima u prostorima za vežbanje",
+  "primenjuje i poštuje osnove principe vežbanog procesa i pravila timskih i sportskih igara",
+  "navija fer",
+  "razlikuje različite tipove fizičke aktivnosti",
+  "učestvuje na odeljenskom, razrednom i drugim takmičenjima i/ili sportsko-rekreativnim manifestacijama za koje se škola opredeli",
+  "pomaže organizaciji školskih sportskih manifestacija",
+  "u grupnim aktivnostima radi na ostvarivanju zajedničkih ciljeva",
+  "rešava konflikte na socijalno prihvatljiv način",
+  "igra jedan narodni i jedan društveni ples",
+  "pri vežbanju i kretanju uoči i neguje estetske vrednosti",
+  "primenjuje pravila bezbednosti u različitim fizičkim aktivnostima u školi i van škole",
+  "primeni principe zdrave ishrane",
+  "poštuje zdravstveno-higijenska i ekološka pravila u vežbanju",
+  "redovno kontroliše svoje zdravlje",
+  "povezuje štetan uticaj koje psihoaktivne supstance imaju na zdravlje"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Testiranje i merenje",
+     "contents": [
+      "Testiranje učenika"
+     ],
+     "hours": "„Za ove aktivnosti planirati do 6 časova u toku školske godine” (testiranje na početku i kraju školske godine)"
+    },
+    {
+     "name": "Kondiciona priprema",
+     "contents": [
+      "Vežbe za razvoj snage",
+      "Vežbe za razvoj pokretljivosti",
+      "Vežbe za razvoj izdržljivosti",
+      "Vežbe za razvoj brzine",
+      "Vežbe za razvoj koordinacije"
+     ],
+     "hours": "planira se na svakom času, u skladu sa nastavnom temom glavnog dela časa; nastavnik može planirati i određen broj časova isključivo za kondicionu pripremu"
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine, sport i sportske discipline",
+   "topics": [
+    {
+     "name": "Atletika",
+     "contents": [
+      "Usavršavanje tehnike trčanja na kratkim stazama",
+      "Usavršavanje tehnike trčanja na srednjim stazama",
+      "Usavršavanje tehnike skok udalj",
+      "Usavršavanje tehnike skok uvis",
+      "Bacanje kugle"
+     ]
+    },
+    {
+     "name": "Sportska gimnastika",
+     "contents": [
+      "Vežbe na tlu",
+      "Preskok (zgrčka, raznoška)",
+      "Krugovi (dohvatni)",
+      "Razboj (paralelni; za učenice dvovisinski razboj ili jedna pritka vratila)",
+      "Vratilo – dohvatno",
+      "Greda (za učenice)",
+      "Konj sa hvataljkama (za učenike, prošireni sadržaj)"
+     ],
+     "hours": "osnovni i prošireni sadržaji"
+    },
+    {
+     "name": "Fizička aktivnost po izboru",
+     "contents": [
+      "Ponavljanje i utvrđivanje ranije obučavanih elemenata tehnike",
+      "Proširivanje i produbljavanje tehničko-taktičkih sposobnosti učenika",
+      "Učestvovanje na takmičenjima na nivou odeljenja"
+     ],
+     "hours": "u listi tema za planiranje časova: „Sport ili fizička aktivnost po izboru”"
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Narodno kolo „Moravac”",
+      "Engleski valcer",
+      "Narodna kola i plesovi po izboru (prošireni)",
+      "Ritmički elementi i vežbe po izboru (prošireni)"
+     ],
+     "hours": "osnovni i prošireni sadržaji"
+    },
+    {
+     "name": "Poligoni",
+     "contents": [
+      "Kombinovani poligon u skladu sa realizovanim motoričkim sadržajima"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Teorijska nastava",
+     "contents": [
+      "Sadržaji tema Fizičko obrazovanje i Zdravstvena kultura, uz mogući praktičan rad"
+     ],
+     "hours": "teorijska nastava (do 4 časa); maksimalan broj časova bez praktičnog rada ne bi trebalo da bude veći od četiri (4) u toku školske godine"
+    },
+    {
+     "name": "Fizičko obrazovanje",
+     "contents": [
+      "Osnovna pravila i principi vežbanja: zagrevanje, razgibavanje, disanje, doziranje vežbanja, smirivanje organizma",
+      "Osnovne motoričke sposobnosti",
+      "Pravila sportskih igara i disciplina",
+      "Bezbednost u vežbanju"
+     ],
+     "hours": "realizuje se kroz sve organizacione oblike rada, nastavne oblasti i teme uz praktičan rad"
+    },
+    {
+     "name": "Zdravstvena kultura",
+     "contents": [
+      "Pojam zdravlja",
+      "Fizičko vežbanje u funkciji unapređivanja zdravlja i prevencije bolesti",
+      "Bolesti koje nastaju usled nepravilnog održavanja lične higijene i neredovne fizičke aktivnosti",
+      "Značaj redovnih lekarskih pregleda",
+      "Uravnotežena i zdrava ishrana",
+      "Psihoaktivne supstance i nedozvoljena sredstva"
+     ],
+     "hours": "realizuje se kroz sve organizacione oblike rada, nastavne oblasti i teme uz praktičan rad"
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

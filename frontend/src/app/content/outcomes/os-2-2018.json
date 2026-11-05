@@ -1,0 +1,131 @@
+{
+ "key": "os-2-2018",
+ "level": "os",
+ "grade": 2,
+ "gazette": "„Prosvetni glasnik” 16/2018",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/16/3/reg",
+ "validFrom": "2019/20",
+ "validTo": null,
+ "goal": "Cilj nastave i učenja Fizičkog i zdravstvenog vaspitanja je da učenik unapređuje fizičke sposobnosti, motoričke veštine i znanja iz oblasti fizičke i zdravstvene kulture, radi očuvanja zdravlja i primene pravilnog i redovnog fizičkog vežbanja u savremenim uslovima života i rada.",
+ "outcomes": [
+  "primeni jednostavne, dvostavne opštepripremne vežbe (vežbe oblikovanja)",
+  "pravilno izvodi vežbe, raznovrsna prirodna i izvedena kretanja",
+  "kombinuje usvojene motoričke veštine u igri i svakodnevnom životu",
+  "održava ravnotežu u različitim kretanjima",
+  "razlikuje pravilno od nepravilnog držanja tela",
+  "uspostavi pravilno držanje tela",
+  "pravilno diše tokom vežbanja",
+  "izvede kretanja, vežbe i kratke sastave uz muzičku pratnju",
+  "izvede dečji i narodni ples",
+  "koristi osnovnu terminologiju vežbanja",
+  "poštuje pravila ponašanja u i na prostorima za vežbanje",
+  "poštuje mere bezbednosti tokom vežbanja",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima u prostorima za vežbanje",
+  "poštuje pravila igre",
+  "navija i bodri učesnike u igri na način kojim nikoga ne vređa",
+  "prihvati pobedu i poraz kao sastavni deo igre i takmičenja",
+  "uredno odlaže svoje stvari pre i nakon vežbanja",
+  "uočava ulogu delova tela u vežbanju",
+  "uoči promene u rastu kod sebe i drugih",
+  "prepozna sopstveno bolesno stanje i ne vežba kada je bolestan",
+  "primenjuje zdravstveno-higijenske mere pre, u toku i nakon vežbanja",
+  "održava ličnu higijenu",
+  "učestvuje u održavanju prostora u kome živi i boravi",
+  "navede vrste namirnica u ishrani",
+  "prepoznaje vezu vežbanja i unosa vode",
+  "poveže hodanje i trčanje sa pozitivnim uticajem na zdravlje",
+  "prepozna lepotu pokreta u vežbanju",
+  "se pridržava pravila vežbanja",
+  "vrednuje uspeh u vežbanju"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Fizičke sposobnosti",
+     "contents": [
+      "Vežbe za razvoj snage. Vežbe za razvoj pokretljivosti. Vežbe za razvoj izdržljivosti. Vežbe za razvoj brzine. Vežbe za razvoj koordinacije."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine",
+   "topics": [
+    {
+     "name": "Hodanje i trčanje",
+     "contents": [
+      "Hodanje: – kratkim koracima, – dugim koracima, – u različitom ritmu, – hodanje opružanjem stajne noge, – hodanje sa rekvizitom, – hodanje sa promenom pravca i smera, – hodanje kombinovano sa različitim pokretima, – hodanje preko niskih prepreka, – elementarne igre sa hodanjem. Tehnika trčanja: – trčanje preko prepreka, – trčanje sa promenom ritma, – trčanje sa promenom pravca i smera, – brzo trčanje startom iz različitih početnih položaja, – trčanje 30 m – elementarne igre sa trčanjem."
+     ]
+    },
+    {
+     "name": "Skakanja i preskakanja",
+     "contents": [
+      "Preskakanje vijača, palica i drugih rekvizita poređanih na tlu jednonožnim i sunožnim odskokom. Kombinacije skokova, Skok udalj i uvis iz mesta i zaleta. Skok sa povišene površine. Pripremne vežbe za preskok: igre uz korišćenje različitih oblika skakanja i preskakanja."
+     ]
+    },
+    {
+     "name": "Bacanja i hvatanja",
+     "contents": [
+      "Hodanje i trčanje sa kotrljanjem lopte. Bacanje loptice iz mesta u daljinu i u cilj. Bacanje loptice iz kretanja. Bacanje lopte uvis bez i sa okreom za 3600. Vođenje lopte jednom i drugom rukom u mestu i kretanju. Dodavanje lopte jednom i drugom rukom. Vođenje lopte u hodanju i trčanju. Gađanje loptom u improvizovani koš, niski koš i gol. Elementarne igre sa vođenjem, dodavanjem i gađanjem loptom u cilj. Štafetne igre i druge elementarne igre loptom (vođenje, hvatanje, dodavanje)."
+     ]
+    },
+    {
+     "name": "Puzanja, višenja, upori i penjanja",
+     "contents": [
+      "Pomicanje na dohvatnom vratilu sa pogrčenim nogama u visu prednjem. Pomicanje u visu prednjem okretanjem za 1800, sa ukrštenim hvatom. Njihanje uz pomoć. Prošireni sadržaji Uzmak koracima uz kosu površinu. Bočno penjanje uz lestve sa naizmeničnim prehvatanjem i opiranjem istovremeno obema nogama."
+     ]
+    },
+    {
+     "name": "Vežbe na tlu",
+     "contents": [
+      "Osnovni sadržaji Dva povezana koluta napred. Kolut napred i skok pruženim telom. Kolut nazad iz čučnja u čučanj, niz kosu površinu. Kolut nazad. Sastav od naučenih elemenata. Igre usvojenih vežbi. Prošireni sadržaji Kolut napred iz upora stojećeg opruženih nogu. Kolut preko lopte. Odeljenjsko takmičenje sa zadatom kombinacijom vežbi."
+     ]
+    },
+    {
+     "name": "Vežbe ravnoteže",
+     "contents": [
+      "Osnovni sadržaji Mala vaga na tlu, klupi i niskoj gredi. Hodanje privlačenjem na celom stopalu i uspon. Hodanje opružanjem stajne i prednoženjem zamajne noge. Hodanje unazad na gredi. Sastav iz prvog razreda dopuniti naučenim vežbama. Prošireni sadržaji Naskok korakom na gredu. Čučanj i okret u čučnju za 900 i 1800. Sastav iz prvog razreda dopuniti vežbama hodanjem unazad i okretom u čučnju za 1800. Odeljensko takmičenje."
+     ]
+    },
+    {
+     "name": "Vežbe sa rekvizitima",
+     "contents": [
+      "Vežbe oblikovanja sarekvizitima. Trčanja, poskoci i skokovi uz korišćenje rekvizita. Preskakanje vijače na različite načine. Dizanje i nošenje predmeta i rekvizita na različite načine. Elementarne igre sa rekvizitima. Igre sa lastišom. Poligon i elementarne igre uz korišćenje rekvizita"
+     ]
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Osnovni sadržaji Narodno kolo i dečiji ples po izboru. Povezivanje elemenata iz prvog razreda u kompoziciju – sastav. Osnovni ritmički pokreti sa rekvizitima. Prošireni sadržaji Preskakanje vijače unazad. Kombinovano preskakanje vijače napred-nazad. Hodanje i trčanje sa bacanjem i hvatanjem lopte i obruča. Vežba sa vijačom"
+     ]
+    },
+    {
+     "name": "Poligoni",
+     "contents": [
+      "Kobinovani poligon od usvojenih veština (vežbi)."
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Kultura vežbanja i igranja",
+     "contents": [
+      "Osnovni termini u vežbanju. Vežbam bezbedno. Čuvam svoje i tuđe stvari. Pravila elementarnih igara. Nekad izgubim, a nekada pobedim. Navijam pristojno."
+     ]
+    },
+    {
+     "name": "Zdravstveno vaspitanje",
+     "contents": [
+      "Moje zdravlje i vežbanje. Mišići, zglobovi i kosti moga tela. Telesni razvoj.. Lična higijena. Higijena prostora za vežbanje. „Šareni-raznovrsni obrok” ‒ pravilna ishrana. Značaj vode za organizam i vežbanje."
+     ]
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

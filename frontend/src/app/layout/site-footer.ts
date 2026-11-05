@@ -27,6 +27,7 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/propisi">{{ 'nav.regulations' | translate }}</a>
           <a class="footer-link" routerLink="/pitanja">{{ 'nav.questionsLong' | translate }}</a>
           <a class="footer-link" routerLink="/sportovi">{{ 'nav.sports' | translate }}</a>
+          <a class="footer-link" routerLink="/ishodi">{{ 'nav.outcomes' | translate }}</a>
           <a class="footer-link" routerLink="/literatura">{{ 'nav.literature' | translate }}</a>
           <a class="footer-link" routerLink="/obavestenja">{{ 'nav.notifications' | translate }}</a>
         </nav>
