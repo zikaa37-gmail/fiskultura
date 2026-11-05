@@ -1,4 +1,5 @@
 DirectoryIndex index.html index.php
+DirectorySlash Off
 
 RewriteEngine On
 RewriteCond %{HTTPS} off
