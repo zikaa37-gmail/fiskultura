@@ -17,6 +17,7 @@ export class SiteHeader {
     { route: '/vesti', label: 'nav.news' },
     { route: '/udruzenja', label: 'nav.organizations' },
     { route: '/propisi', label: 'nav.regulations' },
+    { route: '/pitanja', label: 'nav.questions' },
     { route: '/sportovi', label: 'nav.sports' },
     { route: '/aplikacije', label: 'nav.apps' },
   ];

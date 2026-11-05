@@ -74,6 +74,23 @@ ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
 Početni podaci: `backend/database/data/regulations.json` (katalog „Literatura“ iz e-priprema); uvoz dodaje nove
 ključeve i ažurira samo propise koje niko nije menjao (verzija 1).
 
+## Pitanja i odgovori (#40)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/questions` | javno | objavljena pitanja; `category`, `q`; bez teksta odgovora (`excerpt`) |
+| GET | `/questions/{slug}` | javno | pitanje, odgovor (markdown), `valid_on` („važi na dan“), `regulations` (`key`, `title`, `gazette`, `url`) |
+| POST | `/questions` | prijavljen (5/min) | `category`, `title`, `body`; status `pending`, najviše 5 na čekanju po korisniku |
+| GET | `/me/questions` | prijavljen | moja pitanja sa statusom; `slug` tek kad je objavljeno |
+| POST | `/admin/questions/list` | editor, admin | `status`, `search`; prvo ona na čekanju, `pending` = broj na čekanju |
+| GET / PATCH | `/admin/questions/{id}` | editor, admin | i `original` (tekst pitaoca, samo za urednika) i `asker`; za `published` su obavezni `answer` i `valid_on` |
+| POST | `/admin/questions` | editor, admin | urednik sam piše pitanje i odgovor |
+| DELETE | `/admin/questions/{id}` | admin | brisanje |
+
+Javni tekst pitanja urednik prepravlja bez imena i škole; pitalac nikad nije javan. Kad se pitanje prvi put objavi,
+pitalac dobija mejl sa linkom (`asker_notified_at`). `regulation_keys` su ključevi iz `/regulations`. Početni
+odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja samo zapise koje urednik nije dirao).
+
 ## Obaveštenja mejlom (#16b, #16c)
 
 | Metod | Ruta | Pristup | Opis |

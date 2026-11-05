@@ -38,6 +38,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/regulations/regulations').then((m) => m.Regulations),
   },
   {
+    path: 'pitanja',
+    title: 'Pitanja i odgovori — Fiskultura',
+    loadComponent: () => import('./features/questions/questions').then((m) => m.Questions),
+  },
+  {
+    path: 'pitanja/postavi',
+    title: 'Postavi pitanje — Fiskultura',
+    loadComponent: () => import('./features/questions/ask-question').then((m) => m.AskQuestion),
+  },
+  {
+    path: 'pitanja/:slug',
+    title: 'Pitanje — Fiskultura',
+    loadComponent: () => import('./features/questions/question-detail').then((m) => m.QuestionDetail),
+  },
+  {
     path: 'obavestenja',
     title: 'Obaveštenja mejlom — Fiskultura',
     loadComponent: () => import('./features/notifications/notifications').then((m) => m.NotificationsPage),
@@ -103,6 +118,9 @@ export const routes: Routes = [
       { path: 'vesti', title: 'Admin: vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-list').then((m) => m.AdminNewsList) },
       { path: 'vesti/nova', title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
       { path: 'vesti/:id', title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: 'pitanja', title: 'Admin: pitanja — Fiskultura', loadComponent: () => import('./features/admin/admin-questions').then((m) => m.AdminQuestions) },
+      { path: 'pitanja/novo', title: 'Novo pitanje — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
+      { path: 'pitanja/:id', title: 'Pitanje i odgovor — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
       { path: 'udruzenja', title: 'Admin: udruženja — Fiskultura', loadComponent: () => import('./features/admin/admin-organizations').then((m) => m.AdminOrganizations) },
       { path: 'udruzenja/nova', title: 'Nova organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
       { path: 'udruzenja/:id', title: 'Izmena organizacije — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },

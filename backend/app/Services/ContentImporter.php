@@ -4,25 +4,65 @@ namespace App\Services;
 
 use App\Models\News;
 use App\Models\Organization;
+use App\Models\Question;
 use App\Models\Regulation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ContentImporter
 {
-    public function import(string $organizationsPath, string $newsPath, ?string $regulationsPath = null): array
+    public function import(string $organizationsPath, string $newsPath, ?string $regulationsPath = null, ?string $questionsPath = null): array
     {
         $organizations = json_decode((string) file_get_contents($organizationsPath), true, flags: JSON_THROW_ON_ERROR);
         $news = json_decode((string) file_get_contents($newsPath), true, flags: JSON_THROW_ON_ERROR);
         $regulations = $regulationsPath ? json_decode((string) file_get_contents($regulationsPath), true, flags: JSON_THROW_ON_ERROR) : [];
+        $questions = $questionsPath ? json_decode((string) file_get_contents($questionsPath), true, flags: JSON_THROW_ON_ERROR) : [];
 
-        return DB::transaction(function () use ($organizations, $news, $regulations) {
+        return DB::transaction(function () use ($organizations, $news, $regulations, $questions) {
             return [
                 'organizations' => $this->importOrganizations($organizations),
                 'news' => $this->importNews($news),
                 'regulations' => $this->importRegulations($regulations),
+                'questions' => $this->importQuestions($questions),
             ];
         });
+    }
+
+    private function importQuestions(array $rows): array
+    {
+        $created = 0;
+        $updated = 0;
+
+        foreach ($rows as $row) {
+            $attributes = [
+                'category' => $row['category'],
+                'title' => $row['title'],
+                'body' => $row['body'] ?? null,
+                'answer' => $row['answer'],
+                'regulation_keys' => $row['regulations'] ?? [],
+                'valid_on' => $row['validOn'],
+                'status' => Question::PUBLISHED,
+            ];
+
+            $question = Question::where('slug', $row['slug'])->first();
+            if (! $question) {
+                Question::create(['slug' => $row['slug'], ...$attributes, 'published_at' => Carbon::parse($row['publishedAt'] ?? $row['validOn'])]);
+                $created++;
+
+                continue;
+            }
+
+            if ($question->isUntouched()) {
+                $question->fill($attributes);
+                if ($question->isDirty()) {
+                    $question->timestamps = false;
+                    $question->save();
+                    $updated++;
+                }
+            }
+        }
+
+        return ['created' => $created, 'updated' => $updated, 'skipped' => count($rows) - $created - $updated];
     }
 
     private function importRegulations(array $rows): array
