@@ -34,5 +34,356 @@
     "answer": "Ukratko, za štetu koju učenik pretrpi ili prouzrokuje dok je pod nadzorom škole **po pravilu odgovara škola** (Zakon o obligacionim odnosima, čl. 165). Od nastavnika se očekuje da sprovodi propisane mere bezbednosti.\n\n- Škola donosi **akt o merama bezbednosti** (Zakon o osnovama sistema obrazovanja i vaspitanja, čl. 108–112, i Uputstvo iz 2022), koji uređuje i bezbednost na časovima.\n- **Nesprovođenje mera bezbednosti je teža povreda radne obaveze** (ZOSOV, čl. 164): disciplinski može da odgovara zaposleni koji mere nije sproveo.\n\nPraktično: upoznajte se sa aktom vaše škole, proveravajte sprave i teren pre časa, obezbedite čuvanje i pomoć pri vežbama na spravama i zapišite povredu i preduzete mere odmah posle događaja.",
     "regulations": ["zoo", "zosov", "uputstvo-bezbednost-2022"],
     "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-moram-da-pisem-pripremu-za-svaki-cas",
+    "category": "planiranje",
+    "title": "Da li moram da pišem pripremu za svaki čas fizičkog?",
+    "body": "Direktor traži pisane pripreme za svaki čas. Da li je to propisano?",
+    "answer": "Zavisi od toga da li radite u osnovnoj ili srednjoj školi.\n\n- **Osnovna škola:** Pravilnik o normi časova predviđa **10 časova nedeljno za pripremanje i planiranje**, ali ne propisuje pisanu formu pripreme. Obrazac i obim pripreme uređuje **škola** (godišnji plan rada, odluka stručnog veća ili direktora).\n- **Srednja škola:** Pravilnik o pedagoškoj normi izričito navodi **„pismene pripreme za svaki nastavni čas“** (čl. 12), pa tu postoji normativni osnov za zahtev direktora.\n\nPraktično: u osnovnoj školi pitajte koji je obrazac usvojen u vašoj školi i dogovorite se u stručnom veću oko kraćeg formata za ponovljene tipove časova. Pripreme i planovi su deo pedagoške dokumentacije nastavnika.",
+    "regulations": ["norma-os", "norma-ss", "evidencija-os-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-ulazi-u-40-sati-rada-nastavnika-fizickog",
+    "category": "norma",
+    "title": "Šta ulazi u 40 sati nedeljno i koliko od toga mora da bude nastava?",
+    "body": null,
+    "answer": "Prema ZOSOV (čl. 159–160) radno vreme je **40 sati nedeljno**, a norma je **24 časa neposrednog rada**, od čega **20 časova nastave**.\n\nU neposredan rad, pored redovne nastave, za nastavnika fizičkog u osnovnoj školi ulaze i:\n\n- **sportske aktivnosti** od 4. do 7. razreda, 1 čas nedeljno (36 godišnje);\n- **priprema učenika za takmičenja**;\n- **korektivni rad**, 1–2 časa nedeljno.\n\nOstatak do 40 sati čini, između ostalog, **10 časova nedeljno za pripremanje i planiranje**. Tačnu strukturu vaših obaveza utvrđuje **godišnji plan rada škole**, pa tamo proverite raspodelu. U srednjoj školi sekcije i sportske aktivnosti nose po 1 čas nedeljno, a priprema za takmičenja takođe 1 čas.",
+    "regulations": ["zosov", "norma-os", "norma-ss"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "moze-li-ucenik-da-dobije-jedinicu-jer-nema-opremu",
+    "category": "ocenjivanje",
+    "title": "Može li učenik da dobije jedinicu zato što stalno ne donosi opremu?",
+    "body": "Imam učenike koji skoro nikad nemaju patike i trenerku. Mogu li to da ocenim?",
+    "answer": "Oprema sama po sebi nije element ocene. Prema Pravilniku o ocenjivanju u osnovnoj školi (čl. 5), FZV se ocenjuje na osnovu **sposobnosti, spretnosti i umešnosti**, a kod učenika bez posebnih sposobnosti uvažavaju se **napredak i angažovanje**. Slično važi i u srednjoj školi (čl. 12).\n\nŠta možete da uradite:\n\n- beležite izostanke iz aktivnosti i angažovanje u svojoj pedagoškoj dokumentaciji, jer učenik koji ne vežba ne može da pokaže napredak;\n- obavestite **odeljenjskog starešinu** i roditelje kad se nedonošenje opreme ponavlja;\n- proverite da li iza toga stoji materijalni problem, pa škola može da pomogne.\n\nTako ocena ostaje zasnovana na onome što pravilnik propisuje, a problem se rešava tamo gde mu je mesto.",
+    "regulations": ["ocenjivanje-os-2024", "ocenjivanje-ss-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "kako-oceniti-ucenika-koji-se-trudi-ali-je-slabiji",
+    "category": "ocenjivanje",
+    "title": "Kako da ocenim učenika koji se trudi, ali je fizički slabiji od ostalih?",
+    "body": null,
+    "answer": "Pravilnik to izričito predviđa: kod učenika **koji nema posebne sposobnosti** za FZV uvažavaju se **napredak i angažovanje** (Pravilnik o ocenjivanju u osnovnoj školi, čl. 5).\n\nPraktično:\n\n- **inicijalno procenjivanje** (do kraja treće nedelje, ne ocenjuje se) daje vam polaznu tačku za svakog učenika;\n- ocenjujte **pomak u odnosu na njegov početni nivo**, a ne samo poređenje sa najboljima u odeljenju;\n- angažovanje (redovno vežbanje, trud, poštovanje pravila igre) beležite kroz **formativno praćenje** u pedagoškoj dokumentaciji.\n\nTako učenik koji se trudi i napreduje može da dobije dobru ocenu, iako ne postiže rezultate najspretnijih.",
+    "regulations": ["ocenjivanje-os-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "broj-ocena-iz-fizickog-u-srednjoj-skoli",
+    "category": "ocenjivanje",
+    "title": "Koliko ocena iz fizičkog treba u srednjoj školi i smem li da dam dve ocene na istom času?",
+    "body": null,
+    "answer": "Prema Pravilniku o ocenjivanju u srednjem obrazovanju i vaspitanju:\n\n- učenik dobija **najmanje 3 ocene u polugodištu**, odnosno 2 ako predmet ima manje od 2 časa nedeljno (čl. 17);\n- **bez minimalnog broja ocena ne može se zaključiti ocena**;\n- učenik može biti ocenjen **samo jednom na jednom času**.\n\nZato ocenjivanje rasporedite kroz polugodište, na primer posle svake celine, a ne sve na poslednjim časovima.",
+    "regulations": ["ocenjivanje-ss-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-ide-u-ednevnik-a-sta-u-pedagosku-dokumentaciju",
+    "category": "es-dnevnik",
+    "title": "Šta upisujem u eDnevnik, a šta vodim u svojoj pedagoškoj dokumentaciji?",
+    "body": null,
+    "answer": "- **eDnevnik** je zvanična evidencija škole: u njega idu **sumativne ocene**, izostanci i realizovani časovi (Pravilnik o evidenciji u osnovnoj školi i Pravilnik o evidenciji u srednjoj školi, 2022).\n- **Pedagoška dokumentacija nastavnika** sadrži godišnji i operativni plan, pripreme, **formativno praćenje** i rezultate **inicijalnog procenjivanja**, koje se ne ocenjuje (Pravilnik o ocenjivanju u osnovnoj školi, čl. 10).\n\nPedagošku dokumentaciju možete da vodite na papiru ili elektronski. Ona ne zamenjuje dnevnik, ali je osnov za ocene koje u njega upisujete, pa je čuvajte do kraja školske godine.",
+    "regulations": ["evidencija-os-2022", "evidencija-ss-2022", "ocenjivanje-os-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-za-zdravitas-treba-saglasnost-roditelja",
+    "category": "zdravitas",
+    "title": "Da li za merenja u Zdravitasu treba saglasnost roditelja i ko vidi podatke?",
+    "body": "Roditelji pitaju zašto merimo decu i ko sve vidi rezultate.",
+    "answer": "Saglasnost nije potrebna. Poverenik za informacije od javnog značaja i zaštitu podataka o ličnosti je u nadzoru (oktobar 2024) utvrdio:\n\n- obrada je **zakonita** i pravni osnov je **zakonska obaveza** škole (ZOSOV, čl. 177), pa **pristanak nije potreban**;\n- **podaci o zdravlju se ne obrađuju**, već podaci o telesnom i motoričkom statusu iz nastave FZV;\n- pristup imaju direktor, ovlašćeni zaposleni, odeljenjski starešina, učitelj i **nastavnik FZV samo za svoje učenike**, a nastavnik ne vidi JMBG.\n\nZa analize se podaci koriste tako da se **lice ne može otkriti** (ZOSOV, čl. 184). Roditeljima možete da kažete i to da rezultate niko ne koristi za ocenu.",
+    "regulations": ["poverenik-zdravitas-2024", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "zasto-se-ucenici-testiraju-i-sta-se-desava-sa-rezultatima",
+    "category": "zdravitas",
+    "title": "Zašto se učenici testiraju i šta se dešava sa rezultatima?",
+    "body": null,
+    "answer": "Podaci o telesnom i motoričkom statusu iz nastave FZV deo su registra učenika u **JISP-u** (ZOSOV, čl. 177 st. 1 tač. 3a). Za analize se koriste samo tako da se **pojedinac ne može prepoznati** (čl. 184).\n\nStrategija razvoja sporta 2026–2035 (mera 1.1.6) predviđa **nacionalni sistem periodičnog testiranja** fizičkih sposobnosti, sa jedinstvenom digitalnom platformom do kraja 2028. i ciljem da se do 2035. godišnje testira **najmanje 90% dece**.\n\nZa nastavnika to znači: testiranje planirate kao redovne časove, rezultate unosite u Zdravitas, a za sopstveno praćenje napretka učenika koristite inicijalno i završno procenjivanje.",
+    "regulations": ["zosov", "strategija-sporta-2026-2035", "poverenik-zdravitas-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sme-li-ucenik-na-takmicenje-bez-lekarskog-pregleda",
+    "category": "takmicenja",
+    "title": "Sme li učenik na školsko takmičenje bez lekarskog pregleda i sme li da se naplaćuje učešće?",
+    "body": null,
+    "answer": "Ne i ne. Zakon o sportu (čl. 143) propisuje:\n\n- učenik **ne sme** na vannastavne sportske aktivnosti i takmičenja **bez utvrđene zdravstvene sposobnosti**;\n- učešće u školskom sportu **ne naplaćuje se** učenicima.\n\nPraktično: pre prijave ekipe proverite da svaki učenik ima važeće lekarsko uverenje i sačuvajte kopije ili spisak uz prijavu. Bez toga ne vodite učenika, ni kao rezervu.",
+    "regulations": ["zakon-o-sportu"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "klub-koristi-salu-u-vreme-skolskih-aktivnosti",
+    "category": "takmicenja",
+    "title": "Klub koristi salu u terminu kad mi treba za sekciju ili pripremu ekipe. Ko ima prednost?",
+    "body": null,
+    "answer": "Škola. Zakon o sportu (čl. 143) propisuje da **školske aktivnosti imaju prioritet u korišćenju sale**, a školski sport obuhvata i **vannastavne aktivnosti i takmičenja**, ne samo redovne časove.\n\nI Zakon o osnovnom obrazovanju i vaspitanju predviđa školski sport za sve učenike: sportske sekcije su **besplatne** (čl. 42), a **nedelja školskog sporta** organizuje se **najmanje jednom u polugodištu** (čl. 40).\n\nPraktično: termine sekcija i priprema za takmičenja upišite u godišnji plan rada škole i u raspored sale. Kad je raspored usvojen, direktor lakše usklađuje termine sa klubom koji zakupljuje salu.",
+    "regulations": ["zakon-o-sportu", "zoov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "skola-nema-dovoljno-opreme-sta-mogu-da-trazim",
+    "category": "ostalo",
+    "title": "Škola nema dovoljno opreme i rekvizita. Na šta mogu da se pozovem?",
+    "body": "Imamo dve lopte za košarku i oštećene strunjače.",
+    "answer": "Na **Pravilnik o bližim uslovima za osnivanje, početak rada i obavljanje delatnosti osnovne škole** (2019). On propisuje **normative prostora i opreme**, uključujući vežbalište, kao **minimum koji osnivač mora da obezbedi**.\n\nKako da tražite:\n\n1. Uporedite normativ sa stvarnim stanjem i napravite spisak onoga što nedostaje ili je neispravno.\n2. Pismeno ga predajte **direktoru**, preko stručnog veća, uz pozivanje na pravilnik.\n3. Oštećenu opremu (strunjače, sprave) **izdvojite i ne koristite**: to je i pitanje bezbednosti, koje uređuje akt škole o merama bezbednosti.\n\nPismeni zahtev je važan i zbog odgovornosti, jer pokazuje da ste problem prijavili.",
+    "regulations": ["normativ-os-2019", "uputstvo-bezbednost-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "do-kada-se-predaje-godisnji-plan-za-fizicko",
+    "category": "planiranje",
+    "title": "Do kada moram da predam godišnji plan rada za fizičko?",
+    "body": null,
+    "answer": "Godišnji plan rada škole donosi se **do 15. septembra** (Zakon o osnovnom obrazovanju i vaspitanju, čl. 29), a **planovi nastavnika su njegov deo**. Zato škole obično traže globalne (godišnje) planove nastavnika početkom septembra, pre tog roka.\n\nOperativne (mesečne) planove škola najčešće traži tokom godine, po svom internom rasporedu. Tačan rok proverite kod pedagoga ili direktora.\n\nZa plan vam trebaju **fond časova** iz programa za razred i **broj nastavnih nedelja** iz kalendara za tekuću godinu.",
+    "regulations": ["zoov", "kalendar-os-2026-27"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "koliko-casova-fizickog-planirati-2026-27",
+    "category": "planiranje",
+    "title": "Koliko časova fizičkog planiram u 2026/27. i šta je sa tri časa nedeljno?",
+    "body": null,
+    "answer": "**Osnovna škola, 2026/27:**\n\n- **36 nastavnih nedelja**, a 8. razred **34**;\n- fond FZV je **2 časa nedeljno**: **72 časa** od 5. do 7. razreda i **68** u 8. razredu.\n\nProgrami za 5. i 6. razred navode i **obavezne fizičke aktivnosti (OFA)**, a programi za 7. i 8. razred veći godišnji fond (108, odnosno 102 časa). Proverite kako ih vaša škola raspoređuje u godišnjem planu.\n\n**Tri časa nedeljno:** izmenjeni program za 5. razred („Prosvetni glasnik“ 1/2026) od **2027/28** navodi **3 časa nedeljno bez OFA**. Za tekuću godinu se ništa ne menja.\n\n**Srednja škola:** gimnazija ima 37 nastavnih nedelja (IV razred 33), a fond FZV je 2 časa nedeljno (74, odnosno 66 godišnje).",
+    "regulations": ["kalendar-os-2026-27", "kalendar-ss-2026-27", "program-5-6-2018", "program-5-6-izmene-2026", "program-7-2019", "program-8-2019", "gimnazija-2020"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "koliko-sati-strucnog-usavrsavanja-godisnje",
+    "category": "ostalo",
+    "title": "Koliko sati stručnog usavršavanja moram da imam godišnje i da li je portfolio obavezan?",
+    "body": null,
+    "answer": "Stručno usavršavanje je **obavezno** (ZOSOV, čl. 151). Prema Pravilniku o stalnom stručnom usavršavanju (2021), godišnje treba da imate najmanje:\n\n- **44 sata usavršavanja u ustanovi** (ugledni i ogledni časovi, prikazi, rad u stručnim većima i slično);\n- **1 program iz Kataloga** programa stalnog stručnog usavršavanja;\n- **1 stručni skup**.\n\n**Portfolio** i lični plan profesionalnog razvoja sada su obavezni. **Nacrt izmena ZOSOV** iz avgusta 2026. predviđa da portfolio postane **dobrovoljan**, ali to važi tek kad zakon bude usvojen. Do tada ga vodite.\n\nStručne skupove za nastavnike fizičkog redovno objavljujemo u vestima, a možete i da se pretplatite na obaveštenja.",
+    "regulations": ["zosov", "strucno-usavrsavanje-2021", "zosov-nacrt-2026"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-ako-primetim-znake-nasilja-ili-zanemarivanja",
+    "category": "bezbednost",
+    "title": "Šta da radim ako na času ili u svlačionici primetim znake nasilja ili zanemarivanja?",
+    "body": "Primetila sam modrice kod učenika, a deca u svlačionici zadirkuju jednog dečaka.",
+    "answer": "Kao nastavnik ste **dužni da postupite** i nije na vama da sami utvrđujete šta se desilo. Postupak uređuje **Pravilnik o protokolu postupanja u ustanovi u odgovoru na nasilje, zlostavljanje i zanemarivanje** (2024), koji važi i za časove FZV.\n\n1. **Prekinite** nasilje ako se dešava pred vama i zaštitite učenika.\n2. **Odmah obavestite** odeljenjskog starešinu, a po proceni i **tim za zaštitu** od nasilja, zlostavljanja i zanemarivanja i direktora.\n3. **Zapišite** šta ste videli i čuli, kada i ko je bio prisutan, bez tumačenja.\n4. Ne ispitujte učenika „unakrsno“ i ne obećavajte mu da nikome nećete reći.\n\nSvlačionice su mesta gde se vršnjačko nasilje često dešava, pa dežurstvo i nadzor u njima planirajte kao deo mera bezbednosti škole.",
+    "regulations": ["protokol-nasilje-2024", "uputstvo-bezbednost-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-oslobodjeni-ucenik-mora-da-bude-na-casu",
+    "category": "oslobadjanje",
+    "title": "Da li oslobođeni učenik mora da bude prisutan na času fizičkog?",
+    "body": "Roditelji misle da oslobođenje znači da dete može da ode kući ili sedi u biblioteci.",
+    "answer": "Zakon govori o oslobađanju od **praktičnog dela** nastave, a ne od predmeta (ZOOV, čl. 65; za srednju školu ZSOV, čl. 50). Učenik se i dalje **ocenjuje iz teorijskih znanja**, pa predmet ostaje deo njegove obaveze.\n\nKako škole to najčešće rešavaju:\n\n- učenik je na času i dobija **zadatak primeren svom stanju**: beleži rezultate, meri vreme, sudi, priprema kratak prikaz teme;\n- gde boravi učenik koji ne može da bude u sali (na primer zbog prašine ili hladnoće) **određuje škola**, jer je u tom vremenu pod njenim nadzorom.\n\nAko vaša škola nema pisano pravilo, predložite ga stručnom veću, da bi svi nastavnici postupali isto.",
+    "regulations": ["zoov", "zsov", "zoo"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "kako-oceniti-oslobodjenog-ucenika",
+    "category": "oslobadjanje",
+    "title": "Kako da ocenim učenika koji je oslobođen praktičnog dela?",
+    "body": null,
+    "answer": "Oslobođeni učenik se **ocenjuje iz teorijskih znanja** (ZOOV, čl. 65). Teorijski deo programa čine pravila igara, zdravstveno vaspitanje, značaj vežbanja i bezbednost.\n\nNačini koji se pokazuju u praksi:\n\n- **kratki usmeni odgovori** ili pisani zadaci iz pravila i tehnike;\n- **prikaz** teme (na primer pravila sporta koji odeljenje igra);\n- **zaduženja na času**: zapisnik, merenje, suđenje, koja pokazuju razumevanje pravila.\n\nU pripremi za čas zadatak za oslobođene učenike napišite **opšte, bez imena i zdravstvenih podataka**. Rešenje o oslobađanju i lekarsku dokumentaciju čuva škola, ne vaša sveska.",
+    "regulations": ["zoov", "ocenjivanje-os-2024", "zzpl"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "roditeljsko-opravdanje-nije-oslobadjanje",
+    "category": "oslobadjanje",
+    "title": "Roditelj je napisao da dete danas ne vežba. Da li je to oslobađanje?",
+    "body": null,
+    "answer": "Nije. Poruka roditelja ili kratko lekarsko opravdanje **nisu rešenje o oslobađanju**.\n\n- **Oslobađanje** od praktičnog dela, privremeno ili za celu godinu, delimično ili potpuno, određuje **direktor na predlog izabranog lekara** (ZOOV, čl. 65; ZSOV, čl. 50).\n- Kratkotrajna nemogućnost vežbanja (prehlada, manja povreda) rešava se kao **izostanak iz praktičnog dela tog časa**: učenik je na času i dobija zadatak koji može da uradi.\n\nAko se poruke ponavljaju nedeljama, obavestite **odeljenjskog starešinu** i predložite roditeljima da se obrate lekaru, koji onda može da predloži privremeno oslobađanje.",
+    "regulations": ["zoov", "zsov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "smem-li-da-zapisem-dijagnozu-ucenika",
+    "category": "oslobadjanje",
+    "title": "Smem li da zapišem dijagnozu oslobođenog učenika u svoju svesku ili pripremu?",
+    "body": null,
+    "answer": "Ne bi trebalo. Podaci o zdravlju su **posebna vrsta podataka o ličnosti** (Zakon o zaštiti podataka o ličnosti), a vama za rad nisu potrebni.\n\n- Dovoljno je da znate **da je učenik oslobođen** i za koji deo nastave. Rešenje i lekarsku dokumentaciju čuva **škola**.\n- U pripremi navedite samo **opšti zadatak za oslobođene učenike**, bez imena i dijagnoze.\n- Ni Zdravitas ne obrađuje podatke o zdravlju, već samo telesni i motorički status.\n\nAko vam je za bezbednost važno ograničenje (na primer „bez skokova“), zapišite **ograničenje**, ne dijagnozu.",
+    "regulations": ["zzpl", "poverenik-zdravitas-2024", "zoov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-odmah-kad-se-ucenik-povredi-na-casu",
+    "category": "bezbednost",
+    "title": "Učenik se povredio na času. Šta radim odmah, a šta posle?",
+    "body": null,
+    "answer": "Postupak propisuje **akt o merama bezbednosti vaše škole** (ZOSOV, čl. 108, i Uputstvo iz 2022). Uobičajeni redosled je:\n\n1. **Prekinite aktivnost** i obezbedite ostatak odeljenja, koje ne sme da ostane bez nadzora.\n2. Pružite **prvu pomoć** u okviru onoga što znate i, ako je potrebno, pozovite **194**.\n3. Obavestite **direktora ili dežurnog** i **roditelje**.\n4. Odmah posle događaja **zapišite** kada, gde i kako se povreda desila, ko je bio prisutan i šta ste preduzeli.\n\nZapis je važan i zbog odgovornosti. Za štetu po pravilu odgovara škola (ZOO, čl. 165), a dokumentovano postupanje pokazuje da su mere bezbednosti sprovedene.",
+    "regulations": ["uputstvo-bezbednost-2022", "zosov", "zoo"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "smem-li-da-odbijem-rad-na-neispravnim-spravama",
+    "category": "bezbednost",
+    "title": "Smem li da odbijem rad na neispravnoj spravi, iako je to u planu?",
+    "body": null,
+    "answer": "Ne samo da smete, nego to i treba da uradite. **Nesprovođenje mera bezbednosti** je **teža povreda radne obaveze** (ZOSOV, čl. 164), a rad na neispravnoj spravi je upravo to.\n\n- Neispravnu spravu **izdvojite** i jasno označite da se ne koristi.\n- **Pismeno obavestite direktora**, uz pozivanje na normative opreme (Pravilnik o bližim uslovima za osnovnu školu, 2019) i na akt o bezbednosti.\n- Čas izvedite **sa drugim sadržajem** i zabeležite odstupanje od plana u svojoj pedagoškoj dokumentaciji.\n\nPlan se može promeniti, a povreda na neispravnoj spravi ne može da se opravda time što je čas bio planiran.",
+    "regulations": ["zosov", "uputstvo-bezbednost-2022", "normativ-os-2019"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "smem-li-da-ostavim-odeljenje-bez-nadzora",
+    "category": "bezbednost",
+    "title": "Smem li da ostavim odeljenje na nekoliko minuta, na primer da odem po rekvizite?",
+    "body": null,
+    "answer": "Ne bi trebalo. Za štetu koju učenik pretrpi ili prouzrokuje dok je **pod nadzorom škole** po pravilu odgovara škola (ZOO, čl. 165), a nadzor na času sprovodite vi. Ako se nešto desi dok vas nema, teško je pokazati da su mere bezbednosti sprovedene (ZOSOV, čl. 108 i 164).\n\nPraktično:\n\n- rekvizite **pripremite pre časa**;\n- ako morate da izađete, **zamolite kolegu ili dežurnog** da pričuva odeljenje;\n- učenike ne šaljite same po opremu u spremište;\n- **svlačionice** su deo prostora pod nadzorom: dogovorite u školi ko ih nadgleda pre i posle časa.",
+    "regulations": ["zoo", "zosov", "uputstvo-bezbednost-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-je-korektivni-rad-i-ulazi-li-u-normu",
+    "category": "norma",
+    "title": "Šta je korektivni rad i da li mi ulazi u normu?",
+    "body": null,
+    "answer": "Ulazi. Pravilnik o normi časova neposrednog rada nastavnika u osnovnoj školi predviđa **korektivni rad od 1 do 2 časa nedeljno** kao deo neposrednog rada nastavnika fizičkog.\n\nTo je rad sa učenicima kojima je potrebna **posebna pažnja zbog telesnog statusa**, na primer zbog lošeg držanja ili slabije razvijenih motoričkih sposobnosti. Takvi učenici se obično prepoznaju kroz **inicijalno procenjivanje**.\n\nKorektivni rad treba da bude u **godišnjem planu rada škole** i u vašem rasporedu, da bi se računao u normu.",
+    "regulations": ["norma-os", "ocenjivanje-os-2024", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-se-sportske-sekcije-racunaju-u-normu",
+    "category": "norma",
+    "title": "Da li se sportske aktivnosti i sekcije računaju u normu?",
+    "body": null,
+    "answer": "Da, u okviru onoga što predviđa pravilnik o normi.\n\n- **Osnovna škola:** **sportske aktivnosti** od 4. do 7. razreda, 1 čas nedeljno (36 godišnje), i **priprema za takmičenja** deo su neposrednog rada (Pravilnik o normi časova u osnovnoj školi).\n- **Srednja škola:** **sekcije i sportske aktivnosti** po 1 čas nedeljno, a **priprema za takmičenja** 1 čas nedeljno (Pravilnik o pedagoškoj normi u srednjoj školi).\n- Za učenike su sportske sekcije **besplatne**, u okviru kapaciteta škole (ZOOV, čl. 42).\n\nDa bi se ovi časovi priznali, moraju da budu u **godišnjem planu rada škole** i u vašem rešenju o strukturi radnog vremena.",
+    "regulations": ["norma-os", "norma-ss", "zoov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-se-vodjenje-ekipe-na-takmicenje-racuna-u-radno-vreme",
+    "category": "norma",
+    "title": "Vodim ekipu na takmičenje van radnog vremena. Da li se to računa?",
+    "body": "Takmičenja su često subotom ili posle podne, a putujemo i u drugi grad.",
+    "answer": "Propisi o normi predviđaju **pripremu za takmičenja** kao deo neposrednog rada (osnovna škola: Pravilnik o normi; srednja: 1 čas nedeljno). Sama **pratnja učenika na takmičenju** nije posebno normirana, pa se uređuje u školi.\n\nŠta da tražite:\n\n- da takmičenja na kojima škola učestvuje budu u **godišnjem planu rada**;\n- **pisani nalog ili odluku direktora** za svako vođenje ekipe, jer ste tada odgovorni za učenike u ime škole;\n- da se vreme provedeno na takmičenju **uračuna u strukturu 40-časovne radne nedelje** (ZOSOV, čl. 159–160) ili da se dogovori kako se nadoknađuje.\n\nBez pisanog naloga ne vodite učenike, ni kad je takmičenje blizu.",
+    "regulations": ["norma-os", "norma-ss", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "norma-nastavnika-fizickog-u-srednjoj-skoli",
+    "category": "norma",
+    "title": "Po čemu se norma nastavnika fizičkog u srednjoj školi razlikuje od osnovne?",
+    "body": null,
+    "answer": "Osnovna pravila su ista: **40 sati nedeljno**, od čega **24 časa neposrednog rada** i **20 časova nastave** (ZOSOV, čl. 159–160). Razlike su u Pravilniku o pedagoškoj normi u srednjoj školi:\n\n- **sekcije i sportske aktivnosti**: 1 čas nedeljno;\n- **priprema za takmičenja**: 1 čas nedeljno;\n- **10 časova nedeljno za pripremanje**, uključujući **„pismene pripreme za svaki nastavni čas“** (čl. 12).\n\nU osnovnoj školi pisana forma pripreme nije propisana, pa je uređuje škola. U srednjoj školi postoji izričit osnov za pisane pripreme.",
+    "regulations": ["norma-ss", "norma-os", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "kako-planirati-oko-raspusta-2026-27",
+    "category": "planiranje",
+    "title": "Kada su raspusti u 2026/27. i kako da planiram celine oko njih?",
+    "body": null,
+    "answer": "**Osnovna škola**, prema Pravilniku o kalendaru za 2026/27:\n\n- I polugodište: **1. 9 – 30. 12. 2026**; II polugodište: **18. 1 – 11. 6. 2027** (8. razred do 28. 5);\n- **jesenji** raspust 11–13. 11. 2026, **zimski** 31. 12. 2026 – 15. 1. 2027, **sretenjski** 15–19. 2. 2027, **prolećni** 30. 4 – 4. 5. 2027.\n\n**Srednja škola** ima isti jesenji, sretenjski i prolećni raspust, a zimski 4–15. 1. 2027. I polugodište traje do 31. 12, a II od 18. 1. do 18. 6. 2027.\n\nSavet za plan: celinu (na primer obuku jedne igre) ne prekidajte raspustom. Posle raspusta planirajte **čas ponavljanja**, a testiranja i ocenjivanje ne stavljajte na prvi čas posle pauze.",
+    "regulations": ["kalendar-os-2026-27", "kalendar-ss-2026-27"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-je-vezbanjem-do-zdravlja",
+    "category": "planiranje",
+    "title": "Šta je „Vežbanjem do zdravlja“ i da li je to deo fizičkog?",
+    "body": null,
+    "answer": "„Vežbanjem do zdravlja“ je **slobodna nastavna aktivnost** („Prosvetni glasnik“ 5/2022): izborni program za **5. i 6. razred**, **1 čas nedeljno**.\n\n- To **nije redovna nastava FZV** i ne ulazi u fond od 2 časa nedeljno.\n- Učenici je biraju kao jednu od slobodnih nastavnih aktivnosti koje škola nudi.\n- Za nju se pravi **poseban plan**, odvojen od plana FZV.\n\nAko je vodite, sadržaje možete da povežete sa FZV (kondicija, zdrave navike), ali ih planirajte kao zaseban program.",
+    "regulations": ["sna-vezbanjem-do-zdravlja", "program-5-6-2018"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-moram-da-vodim-i-papirni-dnevnik",
+    "category": "es-dnevnik",
+    "title": "Da li pored eDnevnika moram da vodim i papirni dnevnik?",
+    "body": null,
+    "answer": "Ne, ako škola vodi elektronski dnevnik. Prema ZOSOV (čl. 15), evidencija se vodi u **štampanom i/ili elektronskom obliku**, a **eDnevnik je zvanična evidencija** (Pravilnici o evidenciji u osnovnoj i srednjoj školi, 2022).\n\nOdvojeno od dnevnika vodite **pedagošku dokumentaciju nastavnika**: planove, pripreme, formativno praćenje i rezultate inicijalnog procenjivanja. Ona može da bude na papiru ili elektronska, ali **ne zamenjuje dnevnik**, niti dnevnik zamenjuje nju.",
+    "regulations": ["zosov", "evidencija-os-2022", "evidencija-ss-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-se-rezultati-testiranja-upisuju-u-ednevnik",
+    "category": "es-dnevnik",
+    "title": "Da li rezultate inicijalnog testiranja i merenja upisujem u eDnevnik?",
+    "body": null,
+    "answer": "Ne.\n\n- **Inicijalno procenjivanje** se ne ocenjuje, a rezultati se beleže u **pedagoškoj dokumentaciji** nastavnika (Pravilnik o ocenjivanju u osnovnoj školi, čl. 10).\n- **Merenja telesnog i motoričkog statusa** unose se u **Zdravitas**, a ne u dnevnik. Ti podaci su deo registra u JISP-u (ZOSOV, čl. 177).\n\nU eDnevnik upisujete **realizovan čas** (na primer „Inicijalno procenjivanje motoričkih sposobnosti“), ali ne i rezultate pojedinačnih učenika.",
+    "regulations": ["ocenjivanje-os-2024", "zosov", "poverenik-zdravitas-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "plusevi-i-aktivnost-u-ednevniku",
+    "category": "es-dnevnik",
+    "title": "Da li pluseve, minuse i aktivnost na času upisujem u eDnevnik?",
+    "body": null,
+    "answer": "Po pravilu ne. Pravilnik o ocenjivanju u osnovnoj školi razlikuje dve vrste ocena:\n\n- **formativne**, odnosno praćenje napretka, aktivnosti i angažovanja, koje vodite u **svojoj pedagoškoj dokumentaciji**;\n- **sumativne**, odnosno brojčane ocene na kraju celine ili provere, koje se **upisuju u dnevnik**.\n\nPlusevi, minusi i beleške o aktivnosti su formativno praćenje. Nisu za dnevnik, ali su **osnov za sumativnu ocenu**: kad roditelj pita kako je ocena nastala, iz njih se vidi napredak i angažovanje (čl. 5).",
+    "regulations": ["ocenjivanje-os-2024", "evidencija-os-2022"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "ne-mogu-da-zakljucim-ocenu-nema-dovoljno-ocena",
+    "category": "es-dnevnik",
+    "title": "Ne mogu da zaključim ocenu jer učenik nema dovoljno ocena. Šta sada?",
+    "body": null,
+    "answer": "Minimalni broj ocena je uslov za zaključivanje:\n\n- **osnovna škola**: najmanje **4 ocene u polugodištu**, odnosno 2 za predmet sa jednim časom nedeljno (Pravilnik o ocenjivanju u osnovnom obrazovanju);\n- **srednja škola**: najmanje **3 ocene**, odnosno 2 za predmet sa manje od 2 časa nedeljno, i **bez minimalnog broja ocena ne može se zaključiti ocena** (Pravilnik o ocenjivanju u srednjem obrazovanju, čl. 17).\n\nŠta da uradite:\n\n- ako ima vremena, **ocenite učenika na narednim časovima**, ali samo jednom po času (srednja škola);\n- ako je učenik mnogo izostajao, o daljem postupku odlučuje škola, pa se obratite **odeljenjskom starešini i pedagogu**.\n\nDa se ovo ne bi dešavalo, ocene rasporedite kroz celo polugodište.",
+    "regulations": ["ocenjivanje-os-2024", "ocenjivanje-ss-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "smem-li-da-cuvam-rezultate-merenja-na-svom-racunaru",
+    "category": "zdravitas",
+    "title": "Smem li da čuvam rezultate merenja sa imenima učenika u svojoj tabeli ili telefonu?",
+    "body": null,
+    "answer": "Bolje ne. Rezultati merenja sa imenima su **podaci o ličnosti** učenika, a njihovo mesto je **Zdravitas**, gde pristup imaju samo ovlašćena lica i nastavnik FZV **samo za svoje učenike** (nadzor Poverenika, oktobar 2024).\n\nAko vam je za rad potrebna radna lista:\n\n- koristite je **samo dok ne unesete podatke**, a zatim je obrišite ili uništite;\n- ne šaljite je preko privatnih aplikacija za poruke i ne delite je u grupama;\n- za praćenje napretka odeljenja koristite **zbirne podatke**, bez imena.\n\nTo je u skladu sa Zakonom o zaštiti podataka o ličnosti: podaci se čuvaju samo koliko je potrebno i samo tamo gde su zaštićeni.",
+    "regulations": ["zzpl", "poverenik-zdravitas-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "roditelj-trazi-rezultate-merenja-svog-deteta",
+    "category": "zdravitas",
+    "title": "Roditelj traži rezultate merenja svog deteta. Smem li da mu ih dam?",
+    "body": null,
+    "answer": "Roditelj ima pravo da zna podatke o svom detetu, ali zahtev ide **preko škole**, koja je odgovorna za obradu podataka (Zakon o zaštiti podataka o ličnosti; ZOSOV, čl. 177).\n\nPraktično:\n\n- rezultate možete da objasnite roditelju **na individualnom razgovoru**, tako da vide samo podatke svog deteta;\n- **ne pokazujte** tabelu sa rezultatima celog odeljenja i ne šaljite podatke mejlom ili porukom bez dogovora sa školom;\n- za pisani zahtev uputite roditelja **sekretaru ili direktoru**.\n\nNaglasite i da rezultati **ne služe za ocenu**, već za praćenje razvoja deteta.",
+    "regulations": ["zzpl", "poverenik-zdravitas-2024", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "ko-placa-prevoz-i-kotizaciju-za-takmicenje",
+    "category": "takmicenja",
+    "title": "Ko plaća prevoz i kotizaciju za školsko takmičenje? Mogu li da tražim od roditelja?",
+    "body": null,
+    "answer": "Zakon o sportu (čl. 143) propisuje da se učešće u školskom sportu, u koji spadaju i takmičenja, **ne naplaćuje učenicima**.\n\nZato:\n\n- troškove prijave, prevoza i opreme za takmičenje treba da obezbedi **škola**, preko svog budžeta, osnivača, sponzora ili organizatora takmičenja;\n- ne skupljajte novac od učenika za učešće;\n- troškove takmičenja na kojima škola redovno učestvuje predložite unapred, uz **godišnji plan rada**, da bi direktor mogao da ih planira.\n\nTakmičenja organizuju savezi za školski sport, od gradskih do republičkog. Kontakte i najnovije objave saveza naći ćete u odeljku Udruženja na portalu.",
+    "regulations": ["zakon-o-sportu", "zoov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-je-nedelja-skolskog-sporta",
+    "category": "takmicenja",
+    "title": "Šta je „nedelja školskog sporta“ i koliko puta godišnje se organizuje?",
+    "body": null,
+    "answer": "Prema Zakonu o osnovnom obrazovanju i vaspitanju (čl. 40), školski sport **obuhvata sve učenike**, a škola organizuje **„nedelju školskog sporta“ najmanje jednom u polugodištu**.\n\nTo je prilika za:\n\n- **unutarškolska takmičenja** među odeljenjima (turniri, krosevi, štafete);\n- aktivnosti za učenike koji ne treniraju i nisu u sekcijama;\n- uključivanje roditelja i lokalnih klubova.\n\nTermin uđe u **godišnji plan rada škole**, pa ga predložite stručnom veću već u avgustu. Smislene termine nudi i kalendar: na primer pre jesenjeg ili prolećnog raspusta.",
+    "regulations": ["zoov", "zakon-o-sportu", "kalendar-os-2026-27"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-ucenik-mora-da-ide-na-takmicenje",
+    "category": "takmicenja",
+    "title": "Da li učenik mora da ide na takmičenje ako ga nastavnik izabere?",
+    "body": null,
+    "answer": "Ne mora. Takmičenja su **vannastavne aktivnosti** školskog sporta (Zakon o sportu, čl. 143), a ne deo obavezne nastave.\n\n- Učešće je **dobrovoljno** i za njega je potrebna **saglasnost roditelja**, naročito kad se putuje.\n- Učenik ne sme da učestvuje **bez utvrđene zdravstvene sposobnosti** (čl. 143).\n- Učešće ili odbijanje učešća **ne utiče na ocenu** iz FZV, koja se daje na osnovu sposobnosti, napretka i angažovanja na nastavi.\n\nZa ekipu birajte učenike koji žele da igraju, a ostale uključite kroz nedelju školskog sporta i unutarškolska takmičenja.",
+    "regulations": ["zakon-o-sportu", "ocenjivanje-os-2024", "zoov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-menja-nacrt-zosov-2026-za-nastavnike-fizickog",
+    "category": "ostalo",
+    "title": "Šta nacrt izmena zakona iz avgusta 2026. menja za nastavnike fizičkog?",
+    "body": null,
+    "answer": "Za sam predmet, malo. Nacrt izmena i dopuna ZOSOV (javna rasprava 3–23. 8. 2026):\n\n- **ne menja fond časova FZV** ni obaveze planiranja;\n- uređuje upis (uključujući podatke o zdravlju deteta), **disciplinu učenika**, **mobilne telefone**, savet roditelja, licence i preuzimanje zaposlenih;\n- **portfolio profesionalnog razvoja** postaje **dobrovoljan** (čl. 41 nacrta).\n\nTo je **nacrt**, ne važeći zakon. Do usvajanja važe postojeća pravila, a kad zakon bude usvojen, objavićemo šta se tačno promenilo.",
+    "regulations": ["zosov-nacrt-2026", "zosov"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "sta-su-standardi-kompetencija-nastavnika",
+    "category": "ostalo",
+    "title": "Šta su standardi kompetencija nastavnika i zašto su mi važni?",
+    "body": null,
+    "answer": "Pravilnik o standardima kompetencija za profesiju nastavnika određuje **četiri oblasti** u kojima se očekuje profesionalni razvoj:\n\n- **predmet i metodika**: znanje iz fizičkog vaspitanja i kako se ono prenosi;\n- **poučavanje i učenje**: planiranje, vođenje časa, praćenje napretka;\n- **podrška razvoju ličnosti** učenika;\n- **komunikacija i saradnja** sa učenicima, roditeljima i kolegama.\n\nPrema njima birate **stručno usavršavanje** i pišete **lični plan profesionalnog razvoja** (Pravilnik o stalnom stručnom usavršavanju, 2021). Na njih se pozivaju i spoljašnje vrednovanje i napredovanje u zvanja.",
+    "regulations": ["standardi-kompetencija", "strucno-usavrsavanje-2021"],
+    "validOn": "2026-11-05"
   }
 ]
