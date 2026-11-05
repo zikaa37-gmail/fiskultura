@@ -503,3 +503,5 @@ export const OLD_BATTERY: BatteryGuide = {
 export const BATTERIES: BatteryGuide[] = [ZDRAVITAS_BATTERY, OLD_BATTERY];
 
 export const REFERENCE_TABLES: ReferenceTable[] = [ZDRAVITAS_SECONDARY_REFERENCE];
+
+export const TESTING_SOURCES: TestSource[] = [ZUOV_HANDBOOK, MILANOVIC, GRUJIC, TEACHER_BLOG, RAFAILOVIC];

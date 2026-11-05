@@ -49,6 +49,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'sportovi/elementarne-igre', renderMode: RenderMode.Prerender },
   { path: 'sportovi/vezbe-sa-rekvizitima', renderMode: RenderMode.Prerender },
   { path: 'sportovi/plesovi', renderMode: RenderMode.Prerender },
+  { path: 'literatura', renderMode: RenderMode.Prerender },
   { path: 'aplikacije', renderMode: RenderMode.Prerender },
   { path: '**', renderMode: RenderMode.Client },
 ];

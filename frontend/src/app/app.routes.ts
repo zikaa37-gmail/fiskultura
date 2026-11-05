@@ -112,6 +112,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/sports/dances/dances-rules').then((m) => m.DancesRules),
   },
   {
+    path: 'literatura',
+    title: 'Literatura i izvori — Fiskultura',
+    data: { seo: { description: 'Svi izvori sadržaja portala Fiskultura: propisi, zvanična pravila sportova, priručnici, udžbenici, stručni radovi i fotografije, sa linkovima na originale i autore.' } },
+    loadComponent: () => import('./features/literature/literature').then((m) => m.Literature),
+  },
+  {
     path: 'propisi',
     title: 'Propisi i literatura — Fiskultura',
     data: { seo: { description: 'Zakoni, pravilnici i programi nastave fizičkog i zdravstvenog vaspitanja: šta je bitno za nastavnika, glasnik, datum važenja i link na zvanični tekst.' } },
