@@ -130,15 +130,19 @@ ograničenje po satu (limit hostinga), tabela `fk_mail_log`. Sistemski mejlovi: 
 zaboravljena lozinka. SPF/DKIM/DMARC za domen proveriti u cPanel-u.
 - [ ] Probni mejl stiže na Gmail i ne ide u spam
 
-### #16b Pretplata na obaveštenja (faza-1)
+### #16b Pretplata na obaveštenja (faza-1) — urađeno
 Tabela `fk_subscriptions` (mejl, korisnik opciono, šta prati: kategorije / udruženja / okrug / sportovi,
 učestalost `instant` | `weekly`, kanal `mail`, potvrđeno, token za odjavu). Prijava bez naloga uz
 dvostruki opt-in, odjava jednim klikom, stranica „Moja obaveštenja" za ulogovane.
 
-### #16c Slanje obaveštenja o vestima (faza-1)
+### #16c Slanje obaveštenja o vestima (faza-1) — urađeno
 Na objavu istaknute vesti → `instant` pretplatnicima koji prate tu kategoriju/organizaciju; nedeljni
 pregled ponedeljkom u 7h. Kanal kroz interfejs (`NotificationChannel`), da se kasnije dodaju
 WhatsApp / Viber / push bez promene logike. Admin vidi broj poslatih i odjava.
+- [x] `/obavestenja` (prijava, podešavanja preko linka, „Moja obaveštenja“), potvrda i odjava jednim klikom
+- [x] `notifications:send` na 10 minuta, limit po satu, `fk_notification_log`, admin kartica „Obaveštenja“
+- [ ] Okrug i sportovi kao filteri kada vesti dobiju okrug / sport
+- [ ] Cron `schedule:run` na serveru (bez njega se ništa ne šalje) i probni mejl na Gmail (#16a)
 
 ## Faza 1b — centar informisanja i pomoći kolegama
 

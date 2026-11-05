@@ -26,6 +26,7 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/udruzenja">{{ 'nav.organizations' | translate }}</a>
           <a class="footer-link" routerLink="/propisi">{{ 'nav.regulations' | translate }}</a>
           <a class="footer-link" routerLink="/sportovi">{{ 'nav.sports' | translate }}</a>
+          <a class="footer-link" routerLink="/obavestenja">{{ 'nav.notifications' | translate }}</a>
         </nav>
       </div>
       <div class="container footer-bottom">

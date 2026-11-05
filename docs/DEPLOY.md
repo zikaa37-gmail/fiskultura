@@ -67,5 +67,5 @@ Ako nešto ne radi: `python deploy/deploy-staticna.py` vraća `index.html`, `sty
   (raspored: ponedeljkom u 4h — radi tek kad postoji cron ispod; do tada uz deploy `--check-links`).
   Link se isključuje na sajtu samo kad sigurno ne radi (nema domena / veze, 404, 410, 5xx); blokade botova
   (Facebook 400, 403) se vode kao „nije moguće proveriti“ i link ostaje aktivan.
-- Cron (za proveru linkova, kasnije i red mejlova i obaveštenja):
+- Cron (provera linkova i obaveštenja o vestima `notifications:send` na 10 minuta; bez njega obaveštenja ne stižu):
   `* * * * * /usr/local/bin/php /home/fiskultu/fiskultura_app/artisan schedule:run >> /dev/null 2>&1`
