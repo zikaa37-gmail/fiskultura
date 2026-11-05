@@ -7,28 +7,29 @@
       <p class="muted">Protokol svakog testa, oprema, organizacija časa i šta se kaže učenicima — za nacionalnu bateriju (Zdravitas) i za staru bateriju testova.</p>
     </div>
 
-    <div class="testing-toolbar">
-      @if (batteries.length > 1) {
-        <mat-button-toggle-group class="level-filter" [value]="batteryId()" (change)="selectBattery($event.value)" aria-label="Baterija testova">
-          @for (item of batteries; track item.id) {
-            <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
-          }
-        </mat-button-toggle-group>
-      }
-      <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+    @let current = battery();
+    <div class="page-sticky">
+      <div class="testing-toolbar">
+        @if (batteries.length > 1) {
+          <mat-button-toggle-group class="level-filter" [value]="batteryId()" (change)="selectBattery($event.value)" aria-label="Baterija testova">
+            @for (item of batteries; track item.id) {
+              <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        }
+        <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+      </div>
+      <nav class="testing-index" aria-label="Testovi">
+        @for (test of current.tests; track test.id; let index = $index) {
+          <a class="testing-index-link" routerLink="." [fragment]="'test-' + test.id">{{ index + 1 }}. {{ test.name }}</a>
+        }
+      </nav>
     </div>
 
-    @let current = battery();
     <h2 class="testing-title">{{ current.title }}</h2>
     @for (paragraph of current.intro; track $index) {
       <p class="testing-intro">{{ paragraph }}</p>
     }
-
-    <nav class="testing-index" aria-label="Testovi">
-      @for (test of current.tests; track test.id; let index = $index) {
-        <a class="testing-index-link" [href]="'#test-' + test.id">{{ index + 1 }}. {{ test.name }}</a>
-      }
-    </nav>
 
     <div class="testing-list">
       @for (test of current.tests; track test.id; let index = $index) {

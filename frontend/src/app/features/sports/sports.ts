@@ -66,6 +66,10 @@ export class Sports {
         }
       };
       equalize();
+      document.fonts.ready.then(() => {
+        width = -1;
+        equalize();
+      });
       window.addEventListener('resize', equalize);
       destroyRef.onDestroy(() => window.removeEventListener('resize', equalize));
     });

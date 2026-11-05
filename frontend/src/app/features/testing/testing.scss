@@ -3,10 +3,13 @@
 
   .testing-toolbar {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 12px;
     align-items: center;
-    margin: 8px 0 20px;
+  }
+
+  .testing-toolbar .level-filter {
+    margin-bottom: 0;
   }
 
   .testing-title {
@@ -20,9 +23,8 @@
 
   .testing-index {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 8px;
-    margin: 16px 0 8px;
   }
 
   .testing-index-link {

@@ -7,13 +7,15 @@
       <p class="muted">Šta propisuju program i ZUOV, kako organizovati kros u školi, šta je sa Krosom RTS-a i kakva je veza sa školskim takmičenjima.</p>
     </div>
 
-    <div class="testing-toolbar">
-      <mat-button-toggle-group class="level-filter" [value]="sectionId()" (change)="selectSection($event.value)" aria-label="Deo uputstva">
-        @for (item of sections; track item.id) {
-          <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
-        }
-      </mat-button-toggle-group>
-      <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+    <div class="page-sticky">
+      <div class="testing-toolbar">
+        <mat-button-toggle-group class="level-filter" [value]="sectionId()" (change)="selectSection($event.value)" aria-label="Deo uputstva">
+          @for (item of sections; track item.id) {
+            <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+        <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+      </div>
     </div>
 
     @let current = section();
