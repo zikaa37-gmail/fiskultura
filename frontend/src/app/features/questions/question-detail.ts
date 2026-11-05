@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
+import { breadcrumbs, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question.model';
 
@@ -85,7 +85,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
               <p class="question-text">{{ item.body }}</p>
             }
             <h2 class="small-heading">Odgovor</h2>
-            <div class="markdown answer" [innerHTML]="item.answer ?? '' | simpleMarkdown"></div>
+            <div id="odgovor" class="markdown answer" [innerHTML]="item.answer ?? '' | simpleMarkdown"></div>
 
             @if (item.regulations?.length) {
               <h2 class="small-heading">Propisi</h2>
@@ -120,8 +120,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
 export class QuestionDetail {
   readonly slug = input.required<string>();
 
-  readonly #title = inject(Title);
-  readonly #meta = inject(Meta);
+  readonly #seo = inject(SeoService);
 
   protected readonly disclaimer = LEGAL_DISCLAIMER;
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
@@ -131,14 +130,64 @@ export class QuestionDetail {
   constructor() {
     effect(() => {
       const item = this.question();
-      if (item) {
-        this.#title.setTitle(`${item.title} — Fiskultura`);
-        this.#meta.updateTag({ name: 'description', content: item.excerpt });
+      const path = `/pitanja/${this.slug()}`;
+      if (this.resource.error()) {
+        this.#seo.set({ title: 'Pitanje nije pronađeno', path, noindex: true });
+        return;
       }
+      if (!item) {
+        return;
+      }
+      const url = SITE_URL + path;
+      const answer = plainText(item.answer ?? '');
+      this.#seo.set({
+        title: item.title,
+        description: item.excerpt,
+        path,
+        type: 'article',
+        publishedTime: item.published_at,
+        jsonLd: [
+          {
+            '@type': 'QAPage',
+            '@id': `${url}#page`,
+            url,
+            inLanguage: 'sr-Latn',
+            mainEntity: {
+              '@type': 'Question',
+              name: item.title,
+              text: item.body || item.title,
+              answerCount: 1,
+              datePublished: item.published_at,
+              author: { '@type': 'Person', name: 'Nastavnik fizičkog vaspitanja' },
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: answer,
+                url: `${url}#odgovor`,
+                datePublished: item.published_at,
+                author: SITE_ORGANIZATION,
+                upvoteCount: 0,
+              },
+            },
+          },
+          breadcrumbs([
+            { name: 'Fiskultura', path: '/' },
+            { name: 'Pitanja i odgovori', path: '/pitanja' },
+            { name: item.title, path },
+          ]),
+        ],
+      });
     });
   }
 
   protected date(value: string): string {
     return formatDate(value);
   }
+}
+
+function plainText(markdown: string): string {
+  return markdown
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '$1')
+    .replace(/^- /gm, '• ')
+    .trim();
 }

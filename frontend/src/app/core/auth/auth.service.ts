@@ -1,4 +1,5 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, shareReplay, tap } from 'rxjs';
@@ -16,6 +17,7 @@ export class AuthService {
   #router = inject(Router);
   #apiUrl = API_URL;
   #refreshInFlight: Observable<TokenResponse> | null = null;
+  #storage: Storage | null = isPlatformBrowser(inject(PLATFORM_ID)) ? localStorage : null;
 
   #currentUser = signal<User | null>(this.#readStoredUser());
   readonly currentUser = this.#currentUser.asReadonly();
@@ -58,7 +60,7 @@ export class AuthService {
   updateProfile(payload: ProfilePayload): Observable<User> {
     return this.#http.patch<User>(`${this.#apiUrl}/auth/me`, payload).pipe(
       tap((user) => {
-        localStorage.setItem(USER_KEY, JSON.stringify(user));
+        this.#storage?.setItem(USER_KEY, JSON.stringify(user));
         this.#currentUser.set(user);
       }),
     );
@@ -97,31 +99,31 @@ export class AuthService {
   }
 
   clearSession(): void {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    this.#storage?.removeItem(ACCESS_TOKEN_KEY);
+    this.#storage?.removeItem(REFRESH_TOKEN_KEY);
+    this.#storage?.removeItem(USER_KEY);
     this.#currentUser.set(null);
     this.#router.navigate(['/prijava']);
   }
 
   accessToken(): string | null {
-    return localStorage.getItem(ACCESS_TOKEN_KEY);
+    return this.#storage?.getItem(ACCESS_TOKEN_KEY) ?? null;
   }
 
   refreshToken(): string | null {
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
+    return this.#storage?.getItem(REFRESH_TOKEN_KEY) ?? null;
   }
 
   #storeSession(response: TokenResponse): void {
-    localStorage.setItem(ACCESS_TOKEN_KEY, response.access_token);
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
-    localStorage.setItem(USER_KEY, JSON.stringify(response.user));
+    this.#storage?.setItem(ACCESS_TOKEN_KEY, response.access_token);
+    this.#storage?.setItem(REFRESH_TOKEN_KEY, response.refresh_token);
+    this.#storage?.setItem(USER_KEY, JSON.stringify(response.user));
     this.#currentUser.set(response.user);
   }
 
   #readStoredUser(): User | null {
-    const stored = localStorage.getItem(USER_KEY);
-    if (!stored || !localStorage.getItem(REFRESH_TOKEN_KEY)) {
+    const stored = this.#storage?.getItem(USER_KEY);
+    if (!stored || !this.#storage?.getItem(REFRESH_TOKEN_KEY)) {
       return null;
     }
     try {

@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { OrgLinks } from '../../shared/org-links/org-links';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
 import { formatDate, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationDetail as OrganizationDetailModel } from '../../core/content/content.model';
+import { breadcrumbs, SeoService, SITE_URL } from '../../core/seo/seo.service';
 import { NewsCard } from '../../shared/news-card/news-card';
 
 @Component({
@@ -84,7 +84,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
 export class OrganizationDetail {
   readonly slug = input.required<string>();
 
-  readonly #title = inject(Title);
+  readonly #seo = inject(SeoService);
 
   protected readonly resource = httpResource<OrganizationDetailModel>(() => `${API_URL}/organizations/${encodeURIComponent(this.slug())}`);
   protected readonly organization = computed(() => (this.resource.hasValue() ? this.resource.value() : null));
@@ -95,9 +95,43 @@ export class OrganizationDetail {
   constructor() {
     effect(() => {
       const item = this.organization();
-      if (item) {
-        this.#title.setTitle(`${item.name} — Fiskultura`);
+      const path = `/udruzenja/${this.slug()}`;
+      if (this.resource.error()) {
+        this.#seo.set({ title: 'Udruženje nije pronađeno', path, noindex: true });
+        return;
       }
+      if (!item) {
+        return;
+      }
+      const place = item.city ? `, ${item.city}` : '';
+      const description =
+        item.description ||
+        `${this.typeLabels[item.type]}${place}: kontakt, sajt i mreže, članice i najnovije objave na portalu Fiskultura.`;
+      const sameAs = [item.website, item.social.facebook, item.social.instagram, item.social.youtube].filter((link): link is string => !!link);
+      this.#seo.set({
+        title: item.short_name && item.short_name !== item.name ? `${item.name} (${item.short_name})` : item.name,
+        description,
+        path,
+        jsonLd: [
+          {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}${path}#organization`,
+            name: item.name,
+            ...(item.short_name ? { alternateName: item.short_name } : {}),
+            url: item.website || SITE_URL + path,
+            description,
+            ...(item.email ? { email: item.email } : {}),
+            ...(item.city ? { address: { '@type': 'PostalAddress', addressLocality: item.city, addressCountry: 'RS' } } : {}),
+            ...(sameAs.length ? { sameAs } : {}),
+            ...(item.parent ? { parentOrganization: { '@type': 'Organization', name: item.parent.name, url: `${SITE_URL}/udruzenja/${item.parent.slug}` } } : {}),
+          },
+          breadcrumbs([
+            { name: 'Fiskultura', path: '/' },
+            { name: 'Udruženja', path: '/udruzenja' },
+            { name: item.name, path },
+          ]),
+        ],
+      });
     });
   }
 }

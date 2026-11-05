@@ -10,7 +10,9 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
 
 - Koren repoa: **statička naslovna** koja je sada na `fiskultura.rs` (`index.html`, `style.css`,
   `main.js`, `deploy/deploy.py`). Ostaje dok portal ne zameni naslovnu (zadatak #5).
-- `frontend/`: Angular 22 SPA (zoneless, OnPush, signali), Angular Material M3 (`mat.theme` u
+- `frontend/`: Angular 22 sa SSR-om (zoneless, OnPush, signali): javne stranice se prerenderuju pri deploy-u
+  (`app.routes.server.ts`), SEO svake stranice ide kroz `core/seo/seo.service.ts` (ruta `data.seo` ili detalj sam
+  zove `SeoService.set`); kod koji dira `localStorage`/`window` mora da radi i na serveru. Angular Material M3 (`mat.theme` u
   `src/styles.scss`, boje i tokeni preneti iz statičke naslovne), `@ngx-translate`
   (`public/translations/sr.json`) za tekst okvira (meni, footer, dugmad); sadržaj stranica je u
   `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.

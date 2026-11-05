@@ -14,8 +14,8 @@ const backendPort = backendDir && new URL(JSON.parse(readFileSync(join(frontendD
 
 const children = [];
 
-function run(name, color, command, args, cwd) {
-  const child = spawn([command, ...args].join(' '), { cwd, shell: true, stdio: ['inherit', 'pipe', 'pipe'] });
+function run(name, color, command, args, cwd, env = {}) {
+  const child = spawn([command, ...args].join(' '), { cwd, shell: true, stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, ...env } });
   const prefix = `\x1b[${color}m[${name}]\x1b[0m `;
   const print = (stream) => (chunk) => stream.write(chunk.toString().replace(/^(?=.)/gm, prefix));
   child.stdout.on('data', print(process.stdout));
@@ -38,7 +38,7 @@ process.on('SIGINT', stop);
 process.on('SIGTERM', stop);
 
 if (backendDir) run('api', '35', 'php', ['artisan', 'serve', '--host=127.0.0.1', `--port=${backendPort}`, '--no-reload'], backendDir);
-run('web', '36', 'npx', ['ng', 'serve', '--host', '0.0.0.0'], frontendDir);
+run('web', '36', 'npx', ['ng', 'serve', '--host', '0.0.0.0'], frontendDir, { SSR_API_ORIGIN: `http://127.0.0.1:${backendPort}` });
 
 const lan = Object.values(networkInterfaces()).flat().find((i) => i?.family === 'IPv4' && !i.internal)?.address;
 console.log(`\nFrontend: http://localhost:${frontendPort}${lan ? `  (telefon: http://${lan}:${frontendPort})` : ''}`);

@@ -8,7 +8,7 @@ import { SiteFooter } from './layout/site-footer';
   imports: [RouterOutlet, SiteHeader, SiteFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-site-header />
+    <app-site-header ngSkipHydration />
     <main>
       <router-outlet />
     </main>

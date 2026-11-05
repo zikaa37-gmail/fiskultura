@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsDetail as NewsDetailModel, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
+import { breadcrumbs, DEFAULT_IMAGE, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { NewsCard } from '../../shared/news-card/news-card';
 
 @Component({
@@ -73,8 +73,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
 export class NewsDetail {
   readonly slug = input.required<string>();
 
-  readonly #title = inject(Title);
-  readonly #meta = inject(Meta);
+  readonly #seo = inject(SeoService);
 
   protected readonly resource = httpResource<NewsDetailModel>(() => `${API_URL}/news/${encodeURIComponent(this.slug())}`);
   protected readonly news = computed(() => (this.resource.hasValue() ? this.resource.value() : null));
@@ -85,12 +84,48 @@ export class NewsDetail {
   constructor() {
     effect(() => {
       const item = this.news();
-      if (item) {
-        this.#title.setTitle(`${item.title} — Fiskultura`);
-        this.#meta.updateTag({ name: 'description', content: item.summary });
-        this.#meta.updateTag({ property: 'og:title', content: item.title });
-        this.#meta.updateTag({ property: 'og:description', content: item.summary });
+      const path = `/vesti/${this.slug()}`;
+      if (this.resource.error()) {
+        this.#seo.set({ title: 'Vest nije pronađena', path, noindex: true });
+        return;
       }
+      if (!item) {
+        return;
+      }
+      const url = SITE_URL + path;
+      const published = item.published_at ?? item.source.published_at;
+      this.#seo.set({
+        title: item.title,
+        description: item.summary,
+        path,
+        type: 'article',
+        image: item.cover_image,
+        publishedTime: published,
+        jsonLd: [
+          {
+            '@type': 'NewsArticle',
+            '@id': `${url}#article`,
+            headline: item.title.slice(0, 110),
+            description: item.summary,
+            url,
+            mainEntityOfPage: url,
+            inLanguage: 'sr-Latn',
+            datePublished: published,
+            image: item.cover_image ? [item.cover_image] : [DEFAULT_IMAGE],
+            articleSection: this.categoryLabels[item.category],
+            author: item.organization
+              ? { '@type': 'Organization', name: item.organization.name, url: `${SITE_URL}/udruzenja/${item.organization.slug}` }
+              : { '@type': 'Organization', name: 'Fiskultura', url: `${SITE_URL}/` },
+            publisher: SITE_ORGANIZATION,
+            ...(item.source.url ? { isBasedOn: item.source.url } : {}),
+          },
+          breadcrumbs([
+            { name: 'Fiskultura', path: '/' },
+            { name: 'Vesti', path: '/vesti' },
+            { name: item.title, path },
+          ]),
+        ],
+      });
     });
   }
 }
