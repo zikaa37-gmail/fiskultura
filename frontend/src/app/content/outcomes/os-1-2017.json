@@ -40,7 +40,11 @@
     {
      "name": "Fizičke sposobnosti",
      "contents": [
-      "Vežbe za razvoj snage. Vežbe za razvojpokretljivosti. Vežbe za razvoj izdržljivosti. Vežbe za razvoj brzine. Vežbe za razvoj koordinacije."
+      "Vežbe za razvoj snage",
+      "Vežbe za razvoj pokretljivosti",
+      "Vežbe za razvoj izdržljivosti",
+      "Vežbe za razvoj brzine",
+      "Vežbe za razvoj koordinacije"
      ]
     }
    ]
@@ -51,55 +55,99 @@
     {
      "name": "Hodanje i trčanje",
      "contents": [
-      "Hodanje: – kratkim koracima, – dugim koracima, – u različitom ritmu, – hodanje sa rekvizitom, – hodanje sa promenom, pravca i smera. Tehnika trčanja: – trčanje preko prepreka, – trčanje sa promenom pravca i smera, – brzo trčanje 20 m sa startom iz različitih početnih položaja, – igre sa korišćenjem naučenih oblika hodanja i trčanja."
+      "Hodanje: kratkim koracima",
+      "Hodanje: dugim koracima",
+      "Hodanje: u različitom ritmu",
+      "Hodanje sa rekvizitom",
+      "Hodanje sa promenom, pravca i smera",
+      "Tehnika trčanja: trčanje preko prepreka",
+      "Tehnika trčanja: trčanje sa promenom pravca i smera",
+      "Tehnika trčanja: brzo trčanje 20 m sa startom iz različitih početnih položaja",
+      "Tehnika trčanja: igre sa korišćenjem naučenih oblika hodanja i trčanja"
      ]
     },
     {
      "name": "Skakanja i preskakanja",
      "contents": [
-      "Poskoci u mestu. Poskoci u kretanju. Skakanja udalj. Skakanja uvis. Preskakanje duge vijače. Vežbe skakanja i preskakanja uporom rukama. Igre uz korišćenje različitih oblika skakanja i preskakanja."
+      "Poskoci u mestu",
+      "Poskoci u kretanju",
+      "Skakanja udalj",
+      "Skakanja uvis",
+      "Preskakanje duge vijače",
+      "Vežbe skakanja i preskakanja uporom rukama",
+      "Igre uz korišćenje različitih oblika skakanja i preskakanja"
      ]
     },
     {
      "name": "Bacanja i hvatanja",
      "contents": [
-      "Bacanje loptice iz mesta u daljinu i u cilj. Bacanje loptice iz kretanja. Bacanje lopte uvis. Vođenje lopte. Dodavanje lopte. Igre sa vođenjem, dodavanjem lopte i gađanjem u cilj."
+      "Bacanje loptice iz mesta u daljinu i u cilj",
+      "Bacanje loptice iz kretanja",
+      "Bacanje lopte uvis",
+      "Vođenje lopte",
+      "Dodavanje lopte",
+      "Igre sa vođenjem, dodavanjem lopte i gađanjem u cilj"
      ]
     },
     {
      "name": "Puzanja, višenja, upori i penjanja",
      "contents": [
-      "Puzanja na tlu. Penjanja. Provlačenja. Vis ležeći opruženo. Pomicanja ulevo i udesno u visu ležećem i visu slobodnom. Upori."
+      "Puzanja na tlu",
+      "Penjanja",
+      "Provlačenja",
+      "Vis ležeći opruženo",
+      "Pomicanja ulevo i udesno u visu ležećem i visu slobodnom",
+      "Upori"
      ]
     },
     {
      "name": "Vežbe na tlu",
      "contents": [
-      "Osnovni sadržaji Osnovni stavovi i položaji. Povaljka na leđima. Stav na lopaticama (sveća). Kolut napred iz čučnja u čučanj. Povaljka na stomaku. Sastav od naučenih elemenata. Igre sa usvojenim vežbama. Prošireni sadržaji Kolut nazad iz čučnja u čučanj, niz kosu površinu. Odeljenjsko takmičenje sa zadatom kombinacijom vežbi."
+      "Osnovni stavovi i položaji",
+      "Povaljka na leđima",
+      "Stav na lopaticama (sveća)",
+      "Kolut napred iz čučnja u čučanj",
+      "Povaljka na stomaku",
+      "Sastav od naučenih elemenata",
+      "Igre sa usvojenim vežbama",
+      "Prošireno: Kolut nazad iz čučnja u čučanj, niz kosu površinu",
+      "Prošireno: Odeljenjsko takmičenje sa zadatom kombinacijom vežbi"
      ]
     },
     {
      "name": "Vežbe ravnoteže",
      "contents": [
-      "Hodanje po liniji. Hodanje po švedskoj klupi. Lagano trčanje na švedskoj klupi ili niskoj gredi. Kratak sastav na liniji obeleženoj na tlu, švedskoj klupi i niskoj gredi."
+      "Hodanje po liniji",
+      "Hodanje po švedskoj klupi",
+      "Lagano trčanje na švedskoj klupi ili niskoj gredi",
+      "Kratak sastav na liniji obeleženoj na tlu, švedskoj klupi i niskoj gredi"
      ]
     },
     {
      "name": "Vežbe sa rekvizitima",
      "contents": [
-      "Vežbe oblikovanja sa rekvizitima. Trčanja, poskoci i skokovi uz korišćenje rekvizita. Dizanje i nošenje predmeta i rekvizita na različite načine. Elementarne igre sa rekvizitima. Igre sa lastišom."
+      "Vežbe oblikovanja sa rekvizitima",
+      "Trčanja, poskoci i skokovi uz korišćenje rekvizita",
+      "Dizanje i nošenje predmeta i rekvizita na različite načine",
+      "Elementarne igre sa rekvizitima",
+      "Igre sa lastišom"
      ]
     },
     {
      "name": "Ples i ritmika",
      "contents": [
-      "Hodanje i trčanje sa promenom ritma, tempa i dinamike uz pljesak i uz muzičku pratnju. Galop napred. Dečiji poskok. Njihanje i kruženje vijačom ili trakom. Sunožni skokovi kroz vijaču sa obrtanjem napred. Narodno kolo po izboru."
+      "Hodanje i trčanje sa promenom ritma, tempa i dinamike uz pljesak i uz muzičku pratnju",
+      "Galop napred",
+      "Dečiji poskok",
+      "Njihanje i kruženje vijačom ili trakom",
+      "Sunožni skokovi kroz vijaču sa obrtanjem napred",
+      "Narodno kolo po izboru"
      ]
     },
     {
      "name": "Poligoni",
      "contents": [
-      "Kombinovani poligon od usvojenih veština (vežbi)."
+      "Kombinovani poligon od usvojenih veština (vežbi)"
      ]
     }
    ]
@@ -110,13 +158,27 @@
     {
      "name": "Kultura vežbanja i igranja",
      "contents": [
-      "Osnovni termini u vežbanju. Vežbam bezbedno. Čuvam svoje i tuđe stvari. Pravila elementarnih igara. Nekad izgubim, a nekada. pobedim. Navijam fer."
+      "Osnovni termini u vežbanju",
+      "Vežbam bezbedno",
+      "Čuvam svoje i tuđe stvari",
+      "Pravila elementarnih igara",
+      "Nekad izgubim, a nekada. pobedim",
+      "Navijam fer"
      ]
     },
     {
      "name": "Zdravstveno vaspitanje",
      "contents": [
-      "Upoznaj svoje telo. Rastemo. Vidim, čujem, osećam. Moje zdravlje. Ko sve brine o mom zdravlju. Lična higijena. Higijena prostora u kome živim. Higijena prostora u kome vežbam. Životne namirnice i pravilna ishrana. Zajedno za stolom."
+      "Upoznaj svoje telo",
+      "Rastemo",
+      "Vidim, čujem, osećam",
+      "Moje zdravlje",
+      "Ko sve brine o mom zdravlju",
+      "Lična higijena",
+      "Higijena prostora u kome živim",
+      "Higijena prostora u kome vežbam",
+      "Životne namirnice i pravilna ishrana",
+      "Zajedno za stolom"
      ]
     }
    ]

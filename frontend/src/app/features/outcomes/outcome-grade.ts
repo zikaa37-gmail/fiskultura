@@ -75,8 +75,16 @@ import { changesNextYear, CURRENT_YEAR, findGrade, loadPrograms, OUTCOME_GRADES,
                         }
                       </h4>
                     }
-                    @for (content of topic.contents; track $index) {
-                      <p>{{ content }}</p>
+                    @if (topic.contents.length > 1) {
+                      <ul class="outcomes-contents">
+                        @for (content of topic.contents; track $index) {
+                          <li>{{ content }}</li>
+                        }
+                      </ul>
+                    } @else {
+                      @for (content of topic.contents; track $index) {
+                        <p>{{ content }}</p>
+                      }
                     }
                   </div>
                 }

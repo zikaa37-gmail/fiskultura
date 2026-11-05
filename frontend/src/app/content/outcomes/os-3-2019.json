@@ -43,7 +43,12 @@
     {
      "name": "Fizičke sposobnosti",
      "contents": [
-      "Osnovni sadržaji Vežbe za razvoj snage sa i bez rekvizita. Vežbe za razvoj pokretljivosti sa i bez rekvizita. Vežbe za razvoj aerobne izdržljivosti. Vežbe za razvoj brzine i eksplozivne snage. Vežbe za razvoj koordinacije. Primena nacionalne baterije testova za praćenje fizičkog razvoja i motoričkih sposobnosti."
+      "Vežbe za razvoj snage sa i bez rekvizita",
+      "Vežbe za razvoj pokretljivosti sa i bez rekvizita",
+      "Vežbe za razvoj aerobne izdržljivosti",
+      "Vežbe za razvoj brzine i eksplozivne snage",
+      "Vežbe za razvoj koordinacije",
+      "Primena nacionalne baterije testova za praćenje fizičkog razvoja i motoričkih sposobnosti"
      ]
     }
    ]
@@ -54,37 +59,49 @@
     {
      "name": "Atletika",
      "contents": [
-      "Tehnika trčanja. Istrajno trčanje. Skok udalj zgrčnom tehnikom. Bacanje loptice iz zaleta. Skok uvis prekoračnom tehnikom."
+      "Tehnika trčanja",
+      "Istrajno trčanje",
+      "Skok udalj zgrčnom tehnikom",
+      "Bacanje loptice iz zaleta",
+      "Skok uvis prekoračnom tehnikom"
      ]
     },
     {
      "name": "Sportska gimnastika",
      "contents": [
-      "Vežbe na tlu: vežbe i kombinacije. Preskoci i skokovi. Vežbe u visu, vežbe u uporu i vežbe i vežbe promenama visova i upora. Vežbe ravnoteže na švedskoj klupi i niskoj gredi."
+      "Vežbe na tlu: vežbe i kombinacije",
+      "Preskoci i skokovi",
+      "Vežbe u visu, vežbe u uporu i vežbe i vežbe promenama visova i upora",
+      "Vežbe ravnoteže na švedskoj klupi i niskoj gredi"
      ]
     },
     {
      "name": "Osnove timskih, sportskih i elementarnih igara",
      "contents": [
-      "Između četiri vatre Mini-rukomet. Futsal – „mali fudbal”."
+      "Između četiri vatre",
+      "Mini-rukomet",
+      "Futsal – „mali fudbal”"
      ]
     },
     {
      "name": "Ples i ritmika",
      "contents": [
-      "Vežbe sa vijačom. Vežbe sa loptom. Narodno kolo „Savila se bela loza vinova”. Narodno kolo iz kraja u kojem se škola nalazi."
+      "Vežbe sa vijačom",
+      "Vežbe sa loptom",
+      "Narodno kolo „Savila se bela loza vinova”",
+      "Narodno kolo iz kraja u kojem se škola nalazi"
      ]
     },
     {
      "name": "Plivanje",
      "contents": [
-      "Prilagođavanje na vodenu sredinu i osnovna obuka plivanja."
+      "Prilagođavanje na vodenu sredinu i osnovna obuka plivanja"
      ]
     },
     {
      "name": "Poligoni",
      "contents": [
-      "Poligon u skladu sa realizovanim motoričkim sadržajima."
+      "Poligon u skladu sa realizovanim motoričkim sadržajima"
      ]
     }
    ]
@@ -95,13 +112,24 @@
     {
      "name": "Kultura vežbanja i igranja",
      "contents": [
-      "Osnovna pravila: Između četiri vatre, Mini-rukometa i Futsala. Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe). Čuvanje i održavanje materijalnih dobara. Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje. „Ferplej” (navijanje, pobeda, poraz). Porodica i vežbanje. Vežbanje kao deo dnevnih aktivnosti."
+      "Osnovna pravila: Između četiri vatre, Mini-rukometa i Futsala",
+      "Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe)",
+      "Čuvanje i održavanje materijalnih dobara",
+      "Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje",
+      "„Ferplej” (navijanje, pobeda, poraz)",
+      "Porodica i vežbanje",
+      "Vežbanje kao deo dnevnih aktivnosti"
      ]
     },
     {
      "name": "Zdravstveno vaspitanje",
      "contents": [
-      "Moje srce – puls. Disanje i vežbanje. Higijena prostora za vežbanje. Značaj voća i povrća u ishrani. Značaj vode za organizam i vežbanje. Postupanje u slučaju povrede."
+      "Moje srce – puls",
+      "Disanje i vežbanje",
+      "Higijena prostora za vežbanje",
+      "Značaj voća i povrća u ishrani",
+      "Značaj vode za organizam i vežbanje",
+      "Postupanje u slučaju povrede"
      ]
     }
    ]

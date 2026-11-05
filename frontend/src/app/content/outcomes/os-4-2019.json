@@ -45,7 +45,13 @@
     {
      "name": "Fizičke sposobnosti",
      "contents": [
-      "Vežbe za razvoj snage sa rekvizitima i bez rekvizita. Vežbe za razvoj pokretljivosti sa rekvizitima i bez rekvizita. Vežbe za razvoj aerobne izdržljivosti. Vežbe za razvoj brzine i eksplozivne snage. Vežbe za razvoj koordinacije. Nacionalna baterija testova za praćenje fizičkog razvoja i motoričkih sposobnosti. Motoričke veštine i igre u razvoju motoričih sposobnosti"
+      "Vežbe za razvoj snage sa rekvizitima i bez rekvizita",
+      "Vežbe za razvoj pokretljivosti sa rekvizitima i bez rekvizita",
+      "Vežbe za razvoj aerobne izdržljivosti",
+      "Vežbe za razvoj brzine i eksplozivne snage",
+      "Vežbe za razvoj koordinacije",
+      "Nacionalna baterija testova za praćenje fizičkog razvoja i motoričkih sposobnosti",
+      "Motoričke veštine i igre u razvoju motoričih sposobnosti"
      ]
     }
    ]
@@ -56,37 +62,56 @@
     {
      "name": "Atletika",
      "contents": [
-      "Tehnike trčanja. Istrajno trčanje. Skok udalj zgrčnom tehnikom. Bacanje loptice iz zaleta. Skok uvis prekoračnom tehnikom. Troboj."
+      "Tehnike trčanja",
+      "Istrajno trčanje",
+      "Skok udalj zgrčnom tehnikom",
+      "Bacanje loptice iz zaleta",
+      "Skok uvis prekoračnom tehnikom",
+      "Troboj"
      ]
     },
     {
      "name": "Sportska gimnastika",
      "contents": [
-      "Osnovni sadržaji Vežbe na tlu: vežbe i kombinacije. Preskoci i skokovi (preskok raznoška). Vežbe u visu, vežbe u uporu i vežbe sa promenama visova i upora. Vežbe ravnoteže na švedskoj klupi i niskoj gredi. Prošireni sadržaji Vežbe na tlu: – leteći kolut iz mesta. – sastav."
+      "Vežbe na tlu: vežbe i kombinacije",
+      "Preskoci i skokovi (preskok raznoška)",
+      "Vežbe u visu, vežbe u uporu i vežbe sa promenama visova i upora",
+      "Vežbe ravnoteže na švedskoj klupi i niskoj gredi",
+      "Prošireno: Vežbe na tlu: leteći kolut iz mesta",
+      "Prošireno: Vežbe na tlu: sastav"
      ]
     },
     {
      "name": "Osnove timskih, sportskih i elementarnih igara",
      "contents": [
-      "Mini–rukomet. Futsal – „mali fudbal”. Osnovni elementi košarke i mini-košarka. Osnovni elementi odbojke. Jadžent."
+      "Mini–rukomet",
+      "Futsal – „mali fudbal”",
+      "Osnovni elementi košarke i mini-košarka",
+      "Osnovni elementi odbojke",
+      "Jadžent"
      ]
     },
     {
      "name": "Ples i ritmika",
      "contents": [
-      "Vežbe sa vijačom. Vežbe sa loptom. Vežbe sa obručem. Narodno kolo „Moravac”. Narodno kolo iz kraja u kojem se škola nalazi."
+      "Vežbe sa vijačom",
+      "Vežbe sa loptom",
+      "Vežbe sa obručem",
+      "Narodno kolo „Moravac”",
+      "Narodno kolo iz kraja u kojem se škola nalazi"
      ]
     },
     {
      "name": "Plivanje",
      "contents": [
-      "Osnovna obuka plivanja. Skok na noge."
+      "Osnovna obuka plivanja",
+      "Skok na noge"
      ]
     },
     {
      "name": "Poligoni",
      "contents": [
-      "Poligon u skladu sa realizovanim motoričkim sadržajima."
+      "Poligon u skladu sa realizovanim motoričkim sadržajima"
      ]
     }
    ]
@@ -97,13 +122,26 @@
     {
      "name": "Kultura vežbanja i igranja",
      "contents": [
-      "Osnovna pravila vežbanja. Osnovna pravila mini- – rukometa, futsala, košarke, mini-košarke i odbojke. Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe). Čuvanje i održavanje materijalnih dobara. Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje. „Ferplej” (navijanje, pobeda, poraz, tolerancija). Značaj vežbanja u porodici. Vežbanje u slobodno vreme."
+      "Osnovna pravila vežbanja",
+      "Osnovna pravila mini-rukometa, futsala, košarke, mini-košarke i odbojke",
+      "Ponašanje prema ostalim učesnicima u igri (prema sudiji, igračima suprotne i sopstvene ekipe)",
+      "Čuvanje i održavanje materijalnih dobara",
+      "Postavljanje, sklanjanje i čuvanje sprava i rekvizita neophodnih za vežbanje",
+      "„Ferplej” (navijanje, pobeda, poraz, tolerancija)",
+      "Značaj vežbanja u porodici",
+      "Vežbanje u slobodno vreme"
      ]
     },
     {
      "name": "Zdravstveno vaspitanje",
      "contents": [
-      "Pravilno držanje tela i zdravlje. Značaj vežbanja za pravilan rad srca i pluća. Mišići i zglobovi tela. Higijena prostora za vežbanje. Ishrana i vežbanje. Značaj lekarskih pregleda za vežbanje. Postupanje u slučaju povrede (obavestiti nastavnika i dr.)."
+      "Pravilno držanje tela i zdravlje",
+      "Značaj vežbanja za pravilan rad srca i pluća",
+      "Mišići i zglobovi tela",
+      "Higijena prostora za vežbanje",
+      "Ishrana i vežbanje",
+      "Značaj lekarskih pregleda za vežbanje",
+      "Postupanje u slučaju povrede (obavestiti nastavnika i dr.)"
      ]
     }
    ]
