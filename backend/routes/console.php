@@ -3,6 +3,7 @@
 use App\Models\Organization;
 use App\Models\User;
 use App\Services\LinkChecker;
+use App\Services\Notifications\NewsNotifier;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Str;
@@ -46,3 +47,17 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 })->purpose('Proverava sajtove i mreže organizacija i pamti koji ne rade');
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
+
+Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier) {
+    $dry = (bool) $this->option('dry-run');
+    $result = $notifier->run($dry);
+
+    $this->info(($dry ? 'Probno: ' : '')."Vesti za odmah: {$result['news']}, poslato odmah: {$result['instant']}, nedeljnih pregleda: {$result['weekly']}, neuspelih: {$result['failed']}.");
+    if ($result['limited']) {
+        $this->warn('Dostignut je limit po satu; ostatak ide u sledećem pokretanju.');
+    }
+
+    return 0;
+})->purpose('Šalje obaveštenja o istaknutim vestima i nedeljni pregled pretplatnicima');
+
+Schedule::command('notifications:send')->everyTenMinutes()->withoutOverlapping();

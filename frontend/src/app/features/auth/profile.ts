@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +13,7 @@ import { DISTRICTS } from '../../content/districts';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -62,6 +63,7 @@ import { DISTRICTS } from '../../content/districts';
             <button type="submit" mat-stroked-button [disabled]="busy()">Promeni lozinku</button>
           </form>
 
+          <a mat-stroked-button routerLink="/obavestenja">Moja obaveštenja</a>
           <button type="button" mat-button (click)="auth.logout()">Odjavi se</button>
         }
       </div>

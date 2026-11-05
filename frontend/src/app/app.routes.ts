@@ -38,6 +38,23 @@ export const routes: Routes = [
     loadComponent: () => import('./features/regulations/regulations').then((m) => m.Regulations),
   },
   {
+    path: 'obavestenja',
+    title: 'Obaveštenja mejlom — Fiskultura',
+    loadComponent: () => import('./features/notifications/notifications').then((m) => m.NotificationsPage),
+  },
+  {
+    path: 'obavestenja/potvrda',
+    title: 'Potvrda prijave — Fiskultura',
+    data: { action: 'confirm' },
+    loadComponent: () => import('./features/notifications/subscription-link').then((m) => m.SubscriptionLink),
+  },
+  {
+    path: 'obavestenja/odjava',
+    title: 'Odjava sa obaveštenja — Fiskultura',
+    data: { action: 'unsubscribe' },
+    loadComponent: () => import('./features/notifications/subscription-link').then((m) => m.SubscriptionLink),
+  },
+  {
     path: 'aplikacije',
     title: 'Aplikacije za nastavnike — Fiskultura',
     loadComponent: () => import('./features/apps/apps').then((m) => m.Apps),
@@ -92,6 +109,7 @@ export const routes: Routes = [
       { path: 'propisi', title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
       { path: 'propisi/novi', title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'propisi/:key', title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
+      { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],
   },
