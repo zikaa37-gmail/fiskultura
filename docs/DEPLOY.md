@@ -7,7 +7,10 @@ preko FTP-a, a jednokratni PHP fajl na serveru ih raspakuje i pokrene migracije,
 
 ```
 ~/public_html/            <- document root glavnog domena (javno)
-  index.html, *.js, *.css    <- Angular build (zamenjuje statičnu naslovnu)
+  index.html, *.js, *.css    <- Angular build; index.html je prerenderovana naslovna
+  index.csr.html             <- prazan Angular za rute bez prerendera (prijava, admin, profil...)
+  vesti/, udruzenja/, pitanja/, propisi/, sportovi/, aplikacije/  <- prerenderovane stranice (*/index.html)
+  _prerendered.txt           <- spisak prerenderovanih stranica (brisanje starih pri sledećem deploy-u)
   index.php                  <- iz deploy/index.php, prosleđuje /api na Laravel
   .htaccess                  <- iz deploy/htaccess-production (HTTPS, SPA rute, /api)
   portfolio/, assets/, test/ <- ne diraju se (raspakivanje briše samo stare *.js/*.css u korenu)
@@ -31,23 +34,41 @@ baza, SMTP `obavestenja@fiskultura.rs`). Redovi `FTP_*` i `DEPLOY_*` ne idu na s
 ## Komande
 
 ```bash
-python deploy/deploy.py --htaccess --seed   # PRVI deploy portala (zamenjuje .htaccess statične naslovne)
-python deploy/deploy.py                     # svaki sledeći: testovi + build + upload + migracije + provera
+python deploy/deploy.py --seed              # PRVI deploy portala
+python deploy/deploy.py                     # svaki sledeći: backend, pa frontend sa prerenderom + provera
 python deploy/deploy.py --skip-tests
+python deploy/deploy.py --frontend          # samo novi prerender i upload frontenda (posle novih vesti i odgovora)
 python deploy/deploy.py --skip-build        # samo upload postojećih paketa
 python deploy/deploy.py --check-links       # i provera linkova udruženja (organizations:check-links)
 python deploy/deploy-staticna.py            # stara statična naslovna (samo za povratak, vidi dole)
 ```
 
-1. `deploy/build-release.sh`: backend testovi, `backend-production-build/` (composer `--no-dev`, bez
-   `.env`, testova i `.exe`), `npm run build -- --configuration production`, zipovi `deploy/fiskultura-app.zip` i `-web.zip`.
-2. FTP: zipovi, produkcioni `.env`, `index.php`, `.htaccess` (samo uz `--htaccess` ili ako ga nema) i
-   `_deploy-<nasumično>.php`.
+1. `deploy/build-release.sh --backend`: backend testovi, `backend-production-build/` (composer `--no-dev`, bez
+   `.env`, testova i `.exe`), zip `deploy/fiskultura-app.zip`; FTP: zip, produkcioni `.env` i `_deploy-<nasumično>.php`,
+   pa raspakivanje i migracije (korak 3).
+2. `deploy/build-release.sh --frontend` sa `SSR_API_ORIGIN=APP_URL`: Angular build koji **prerenderuje** sve javne
+   stranice iz već ažuriranog živog API-ja (`/api/seo/routes` daje slug-ove vesti, udruženja i pitanja), spisak
+   `_prerendered.txt`, zip `-web.zip`; FTP: zip, `index.php`, `.htaccess` (uvek) i novi `_deploy-*.php`.
 3. HTTPS poziv tog fajla (zaštićen `DEPLOY_SECRET`-om): raspakivanje, brisanje starih JS/CSS i keša,
    `migrate --force`, `db:seed --force` uz `--seed` (u produkciji bez probnih naloga), `app:admin`
    ako je admin popunjen; fajl briše sam sebe. Organizacije i vesti iz `backend/database/data/*.json`
    uvozi `--seed` (`ContentSeeder`); ponovni uvoz preskače ono što već postoji.
-4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/api/organizations`, `/portfolio/` → 200, `/api/auth/me` → 401.
+4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/pitanja`, `/sitemap.xml`, `/robots.txt`, `/api/organizations`,
+   `/portfolio/` → 200, `/api/auth/me` → 401.
+
+## SEO i prerender (SSR)
+
+Frontend je Angular SSR (`@angular/ssr`, `outputMode: server`). Hosting nema Node.js, pa se stranice renderuju pri
+deploy-u (prerender, `src/app/app.routes.server.ts`) i Apache ih služi kao gotov HTML: naslovna, `/vesti`,
+`/udruzenja`, `/propisi`, `/pitanja`, `/sportovi`, `/aplikacije` i svaka vest, udruženje i pitanje. Svaka stranica ima
+title, description, canonical, robots, Open Graph, Twitter i JSON-LD (`SeoService`). Rute za nalog, admin i linkove iz
+mejlova su `RenderMode.Client` (`index.csr.html`, `noindex`). Nova vest ili odgovor posle deploy-a radi odmah kao
+obična Angular stranica (Google izvršava JS, meta se postavlja u pregledaču), a gotov HTML dobija pri sledećem deploy-u
+ili uz `python deploy/deploy.py --frontend`. Ako hosting jednom dobije Node.js, `dist/frontend/server/server.mjs` može
+da renderuje i nove stranice odmah (`RenderMode.Server`).
+
+`/sitemap.xml` pravi Laravel (`SeoController`, uvek aktuelan), `robots.txt` je u `frontend/public`. Posle prvog
+deploy-a: Google Search Console → dodati `fiskultura.rs` (DNS potvrda u cPanel-u) i poslati `sitemap.xml`.
 
 Admin se pravi komandom `php artisan app:admin <mejl> --password=...` (pri deploy-u automatski). Posle
 prvog deploy-a obriši `DEPLOY_ADMIN_PASSWORD` iz `deploy/.env`.

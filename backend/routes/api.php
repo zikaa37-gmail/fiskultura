@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\RegulationController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:10,1')->group(function () {
@@ -38,6 +39,7 @@ Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
 Route::get('/questions', [QuestionController::class, 'index']);
 Route::get('/questions/{slug}', [QuestionController::class, 'show']);
+Route::get('/seo/routes', [SeoController::class, 'routes']);
 
 Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);

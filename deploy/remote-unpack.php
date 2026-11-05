@@ -55,7 +55,20 @@ try {
     }
 
     if (is_file("$webDir/_deploy-web.zip")) {
+        $manifest = "$webDir/_prerendered.txt";
+        $before = is_file($manifest) ? file($manifest, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
         $names = unzipTo("$webDir/_deploy-web.zip", $webDir);
+        $after = is_file($manifest) ? file($manifest, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
+        $stale = 0;
+        foreach (array_diff($before, $after) as $page) {
+            if (preg_match('#^[a-z0-9_-]+(/[a-z0-9_.%-]+)*/index\.html$#i', $page) && is_file("$webDir/$page")) {
+                unlink("$webDir/$page");
+                @rmdir(dirname("$webDir/$page"));
+                $stale++;
+            }
+        }
+        $result['pages'] = count($after);
+        $result['pages_removed'] = $stale;
         $keep = array_flip($names);
         $removed = 0;
         foreach (glob("$webDir/*.{js,css,map}", GLOB_BRACE) ?: [] as $file) {

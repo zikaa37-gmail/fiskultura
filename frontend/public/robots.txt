@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /profil
+Disallow: /prijava
+Disallow: /registracija
+Disallow: /potvrda-naloga
+Disallow: /zaboravljena-lozinka
+Disallow: /nova-lozinka
+Disallow: /obavestenja/potvrda
+Disallow: /obavestenja/odjava
+Disallow: /api/
+
+Sitemap: https://fiskultura.rs/sitemap.xml

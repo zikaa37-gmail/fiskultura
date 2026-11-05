@@ -1,11 +1,14 @@
 """Deploy portala na fiskultura.rs (cPanel, FTP, bez SSH-a), isti obrazac kao evidencija-fv.
 
-    python deploy/deploy.py                 # build (sa testovima) + upload + raspakivanje + migracije + provera
+    python deploy/deploy.py                 # backend (testovi, upload, migracije), pa frontend sa prerenderom iz živog API-ja
     python deploy/deploy.py --skip-tests    # build bez backend testova
     python deploy/deploy.py --skip-build    # samo upload postojećih paketa
+    python deploy/deploy.py --frontend      # samo ponovni prerender i upload frontenda (npr. posle novih vesti)
     python deploy/deploy.py --seed          # i db:seed (u produkciji samo osnovni podaci, bez probnih naloga)
-    python deploy/deploy.py --htaccess      # zameni .htaccess na serveru (PRVI deploy — tamo je onaj od statične naslovne)
     python deploy/deploy.py --check-links   # i provera linkova udruženja (organizations:check-links, 1–3 min)
+
+Dva prolaza: prvo backend (raspakivanje, migracije, seed), pa frontend build čije se stranice prerenderuju iz već
+ažuriranog API-ja (SSR_API_ORIGIN = APP_URL). .htaccess se šalje svaki put (pravila za prerenderovane stranice).
 
 Prvi admin: DEPLOY_ADMIN_EMAIL i DEPLOY_ADMIN_PASSWORD u deploy/.env — nalog se pravi ili ažurira pri svakom
 deploy-u ako su popunjeni (lozinka ne ide u .env na serveru). Posle prvog deploy-a obriši lozinku iz deploy/.env.
@@ -61,14 +64,6 @@ def upload(ftp: ftplib.FTP, data: bytes | Path, remote: str) -> None:
         ftp.storbinary(f'STOR {remote}', io.BytesIO(data))
 
 
-def exists(ftp: ftplib.FTP, remote: str) -> bool:
-    try:
-        ftp.size(remote)
-        return True
-    except ftplib.error_perm:
-        return False
-
-
 def bash() -> str:
     git = shutil.which('git')
     if os.name == 'nt' and git:
@@ -95,6 +90,42 @@ def status(url: str) -> int:
         return error.code
 
 
+def run_build(parts: list[str], extra_env: dict | None = None) -> None:
+    command = [bash(), str(DEPLOY / 'build-release.sh'), *parts]
+    print('==> Build:', ' '.join(command[1:]))
+    subprocess.run(command, cwd=ROOT, check=True, env={**os.environ, **(extra_env or {})})
+
+
+def ship(env: dict, lines: list[str], app_dir: str, web_dir: str, app_folder: str, files: list, payload: dict) -> dict:
+    unpacker_name = f'_deploy-{secrets.token_hex(8)}.php'
+    unpacker = (DEPLOY / 'remote-unpack.php').read_text(encoding='utf-8')
+    unpacker = unpacker.replace('__DEPLOY_SECRET__', env['DEPLOY_SECRET']).replace('__DEPLOY_APP_DIR__', app_folder)
+    ftp = ftplib.FTP(timeout=120)
+    ftp.connect(env['FTP_HOST'], int(env.get('FTP_PORT') or 21))
+    ftp.login(env['FTP_USER'], env['FTP_PASSWORD'])
+    for folder in (app_dir, web_dir):
+        try:
+            ftp.mkd(folder)
+        except ftplib.error_perm:
+            pass
+    for data, remote in files:
+        upload(ftp, data, remote)
+    upload(ftp, unpacker.encode('utf-8'), f'{web_dir}/{unpacker_name}')
+    ftp.quit()
+
+    print('==> Raspakivanje na serveru')
+    base = env['APP_URL'].rstrip('/')
+    body = urllib.parse.urlencode({'key': env['DEPLOY_SECRET'], **payload}).encode()
+    request = urllib.request.Request(f'{base}/{unpacker_name}', data=body, headers=HEADERS, method='POST')
+    try:
+        with urllib.request.urlopen(request, timeout=600, context=tls()) as response:
+            result = json.loads(response.read().decode('utf-8'))
+    except urllib.error.HTTPError as error:
+        result = {'ok': False, 'error': f'HTTP {error.code}: {error.read()[:300].decode("utf-8", "replace")}'}
+    print('  ', result)
+    return result
+
+
 def main() -> int:
     sys.stdout.reconfigure(encoding='utf-8')
     args = set(sys.argv[1:])
@@ -108,61 +139,42 @@ def main() -> int:
         print('Nedostaje u deploy/.env:', ', '.join(missing))
         return 1
 
-    if '--skip-build' not in args:
-        command = [bash(), str(DEPLOY / 'build-release.sh')] + (['--skip-tests'] if '--skip-tests' in args else [])
-        print('==> Build:', ' '.join(command[1:]))
-        subprocess.run(command, cwd=ROOT, check=True)
-
-    app_zip, web_zip = DEPLOY / 'fiskultura-app.zip', DEPLOY / 'fiskultura-web.zip'
-    for path in (app_zip, web_zip):
-        if not path.exists():
-            print(f'Nema {path.name} — pokreni bez --skip-build')
-            return 1
-
     app_dir, web_dir = env['DEPLOY_APP_DIR'], env['DEPLOY_WEB_DIR']
     app_folder = Path(app_dir).name
-    unpacker_name = f'_deploy-{secrets.token_hex(8)}.php'
-    unpacker = (DEPLOY / 'remote-unpack.php').read_text(encoding='utf-8') \
-        .replace('__DEPLOY_SECRET__', env['DEPLOY_SECRET']) \
-        .replace('__DEPLOY_APP_DIR__', app_folder)
-    index = (DEPLOY / 'index.php').read_text(encoding='utf-8').replace('__DEPLOY_APP_DIR__', app_folder)
-
-    print(f"==> FTP upload ({env['FTP_HOST']})")
-    ftp = ftplib.FTP(timeout=120)
-    ftp.connect(env['FTP_HOST'], int(env.get('FTP_PORT') or 21))
-    ftp.login(env['FTP_USER'], env['FTP_PASSWORD'])
-    for folder in (app_dir, web_dir):
-        try:
-            ftp.mkd(folder)
-        except ftplib.error_perm:
-            pass
-    upload(ftp, app_zip, f'{app_dir}/_deploy-app.zip')
-    upload(ftp, server_env(lines), f'{app_dir}/_deploy.env')
-    upload(ftp, web_zip, f'{web_dir}/_deploy-web.zip')
-    upload(ftp, index.encode('utf-8'), f'{web_dir}/index.php')
-    if '--htaccess' in args or not exists(ftp, f'{web_dir}/.htaccess'):
-        upload(ftp, DEPLOY / 'htaccess-production', f'{web_dir}/.htaccess')
-    else:
-        print('  .htaccess već postoji na serveru — ne menja se (--htaccess za zamenu, vidi docs/DEPLOY.md)')
-    upload(ftp, unpacker.encode('utf-8'), f'{web_dir}/{unpacker_name}')
-    ftp.quit()
-
     base = env['APP_URL'].rstrip('/')
-    print('==> Raspakivanje i migracije na serveru')
-    payload = {
-        'key': env['DEPLOY_SECRET'],
-        'seed': '1' if '--seed' in args else '0',
-        'admin_email': env.get('DEPLOY_ADMIN_EMAIL', ''),
-        'admin_password': env.get('DEPLOY_ADMIN_PASSWORD', ''),
-        'check_links': '1' if '--check-links' in args else '0',
-    }
-    request = urllib.request.Request(f'{base}/{unpacker_name}', data=urllib.parse.urlencode(payload).encode(), headers=HEADERS, method='POST')
-    try:
-        with urllib.request.urlopen(request, timeout=600, context=tls()) as response:
-            result = json.loads(response.read().decode('utf-8'))
-    except urllib.error.HTTPError as error:
-        result = {'ok': False, 'error': f'HTTP {error.code}: {error.read()[:300].decode("utf-8", "replace")}'}
-    print('  ', result)
+    app_zip, web_zip = DEPLOY / 'fiskultura-app.zip', DEPLOY / 'fiskultura-web.zip'
+    build = '--skip-build' not in args
+    frontend_only = '--frontend' in args
+    tests = ['--skip-tests'] if '--skip-tests' in args else []
+
+    if not frontend_only:
+        if build:
+            run_build(['--backend', *tests])
+        if not app_zip.exists():
+            print(f'Nema {app_zip.name} — pokreni bez --skip-build')
+            return 1
+        print(f"==> Backend: FTP upload ({env['FTP_HOST']})")
+        result = ship(env, lines, app_dir, web_dir, app_folder, [(app_zip, f'{app_dir}/_deploy-app.zip'), (server_env(lines), f'{app_dir}/_deploy.env')], {
+            'seed': '1' if '--seed' in args else '0',
+            'admin_email': env.get('DEPLOY_ADMIN_EMAIL', ''),
+            'admin_password': env.get('DEPLOY_ADMIN_PASSWORD', ''),
+            'check_links': '1' if '--check-links' in args else '0',
+        })
+        if not result.get('ok'):
+            return 1
+
+    if build:
+        run_build(['--frontend'], {'SSR_API_ORIGIN': base})
+    if not web_zip.exists():
+        print(f'Nema {web_zip.name} — pokreni bez --skip-build')
+        return 1
+    index = (DEPLOY / 'index.php').read_text(encoding='utf-8').replace('__DEPLOY_APP_DIR__', app_folder)
+    print(f"==> Frontend: FTP upload ({env['FTP_HOST']})")
+    result = ship(env, lines, app_dir, web_dir, app_folder, [
+        (web_zip, f'{web_dir}/_deploy-web.zip'),
+        (index.encode('utf-8'), f'{web_dir}/index.php'),
+        (DEPLOY / 'htaccess-production', f'{web_dir}/.htaccess'),
+    ], {'seed': '0', 'admin_email': '', 'admin_password': '', 'check_links': '0'})
     if not result.get('ok'):
         return 1
 
@@ -172,12 +184,15 @@ def main() -> int:
         'prijava (200)': status(f'{base}/prijava'),
         'udruženja (200)': status(f'{base}/udruzenja'),
         'vesti (200)': status(f'{base}/vesti'),
+        'pitanja (200)': status(f'{base}/pitanja'),
+        'sitemap (200)': status(f'{base}/sitemap.xml'),
+        'robots (200)': status(f'{base}/robots.txt'),
         'api udruženja (200)': status(f'{base}/api/organizations'),
         'portfolio (200)': status(f'{base}/portfolio/'),
         'api bez tokena (401)': status(f'{base}/api/auth/me'),
     }
     print('  ', checks)
-    if list(checks.values()) != [200, 200, 200, 200, 200, 200, 401]:
+    if list(checks.values()) != [200, 200, 200, 200, 200, 200, 200, 200, 200, 401]:
         return 1
 
     print('Deploy je završen.')

@@ -1,116 +1,136 @@
 import { Routes } from '@angular/router';
 import { adminGuard, authGuard, editorGuard, guestGuard } from './core/auth/auth.guards';
+import { SITE_ORGANIZATION, SITE_WEBSITE } from './core/seo/seo.service';
 
 export const routes: Routes = [
   {
     path: '',
     title: 'Fiskultura — portal za fizičko vaspitanje',
+    data: { seo: { description: 'Portal za nastavnike fizičkog vaspitanja u Srbiji: vesti iz školskog sporta, strukovna udruženja, propisi, pitanja i odgovori, pravila sportova i aplikacije za nastavu.', jsonLd: [SITE_ORGANIZATION, SITE_WEBSITE] } },
     loadComponent: () => import('./features/home/home').then((m) => m.Home),
   },
   {
     path: 'vesti',
     title: 'Vesti i objave — Fiskultura',
+    data: { seo: { description: 'Vesti iz fizičkog vaspitanja i školskog sporta u Srbiji: seminari, takmičenja, konkursi i saopštenja strukovnih udruženja, ukratko i uz link na izvor.' } },
     loadComponent: () => import('./features/news/news').then((m) => m.News),
   },
   {
     path: 'vesti/:slug',
     title: 'Vest — Fiskultura',
+    data: { dynamicSeo: true },
     loadComponent: () => import('./features/news/news-detail').then((m) => m.NewsDetail),
   },
   {
     path: 'udruzenja/:slug',
     title: 'Udruženje — Fiskultura',
+    data: { dynamicSeo: true },
     loadComponent: () => import('./features/organizations/organization-detail').then((m) => m.OrganizationDetail),
   },
   {
     path: 'udruzenja',
     title: 'Strukovna udruženja — Fiskultura',
+    data: { seo: { description: 'Strukovna udruženja nastavnika fizičkog vaspitanja u Srbiji: SSPFVS i društva po gradovima, savezi za školski sport, kontakti, sajtovi i najnovije objave.' } },
     loadComponent: () => import('./features/organizations/organizations').then((m) => m.Organizations),
   },
   {
     path: 'sportovi',
     title: 'Sportovi i pravila — Fiskultura',
+    data: { seo: { description: 'Pravila sportskih igara za čas fizičkog vaspitanja: košarka, odbojka, rukomet, mali fudbal, atletika i gimnastika, sa sličicama i PDF uputstvima.' } },
     loadComponent: () => import('./features/sports/sports').then((m) => m.Sports),
   },
   {
     path: 'propisi',
     title: 'Propisi i literatura — Fiskultura',
+    data: { seo: { description: 'Zakoni, pravilnici i programi nastave fizičkog i zdravstvenog vaspitanja: šta je bitno za nastavnika, glasnik, datum važenja i link na zvanični tekst.' } },
     loadComponent: () => import('./features/regulations/regulations').then((m) => m.Regulations),
   },
   {
     path: 'pitanja',
     title: 'Pitanja i odgovori — Fiskultura',
+    data: { seo: { description: 'Pitanja i odgovori za nastavnike fizičkog vaspitanja: norma, ocenjivanje, oslobađanje od nastave, bezbednost na času i takmičenja, uz poziv na propis.' } },
     loadComponent: () => import('./features/questions/questions').then((m) => m.Questions),
   },
   {
     path: 'pitanja/postavi',
     title: 'Postavi pitanje — Fiskultura',
+    data: { seo: { description: 'Postavite pitanje o administraciji i propisima u nastavi fizičkog vaspitanja; urednik odgovara uz poziv na propis.' } },
     loadComponent: () => import('./features/questions/ask-question').then((m) => m.AskQuestion),
   },
   {
     path: 'pitanja/:slug',
     title: 'Pitanje — Fiskultura',
+    data: { dynamicSeo: true },
     loadComponent: () => import('./features/questions/question-detail').then((m) => m.QuestionDetail),
   },
   {
     path: 'obavestenja',
     title: 'Obaveštenja mejlom — Fiskultura',
+    data: { seo: { description: 'Primajte mejlom vesti, seminare, takmičenja i konkurse iz fizičkog vaspitanja: odmah ili kao nedeljni pregled, uz odjavu jednim klikom.' } },
     loadComponent: () => import('./features/notifications/notifications').then((m) => m.NotificationsPage),
   },
   {
     path: 'obavestenja/potvrda',
     title: 'Potvrda prijave — Fiskultura',
-    data: { action: 'confirm' },
+    data: { action: 'confirm', seo: { noindex: true } },
     loadComponent: () => import('./features/notifications/subscription-link').then((m) => m.SubscriptionLink),
   },
   {
     path: 'obavestenja/odjava',
     title: 'Odjava sa obaveštenja — Fiskultura',
-    data: { action: 'unsubscribe' },
+    data: { action: 'unsubscribe', seo: { noindex: true } },
     loadComponent: () => import('./features/notifications/subscription-link').then((m) => m.SubscriptionLink),
   },
   {
     path: 'aplikacije',
     title: 'Aplikacije za nastavnike — Fiskultura',
+    data: { seo: { description: 'Aplikacije za nastavnike fizičkog vaspitanja: e-pripreme, Evidencija FV, Jadžent i Zdravitas, sa opisom šta koja radi.' } },
     loadComponent: () => import('./features/apps/apps').then((m) => m.Apps),
   },
   {
     path: 'prijava',
     title: 'Prijava — Fiskultura',
+    data: { seo: { noindex: true } },
     canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/login').then((m) => m.Login),
   },
   {
     path: 'registracija',
     title: 'Napravi nalog — Fiskultura',
+    data: { seo: { noindex: true } },
     canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/register').then((m) => m.Register),
   },
   {
     path: 'potvrda-naloga',
     title: 'Potvrda naloga — Fiskultura',
+    data: { seo: { noindex: true } },
     loadComponent: () => import('./features/auth/verify-email').then((m) => m.VerifyEmail),
   },
   {
     path: 'zaboravljena-lozinka',
     title: 'Zaboravljena lozinka — Fiskultura',
+    data: { seo: { noindex: true } },
     canActivate: [guestGuard],
     loadComponent: () => import('./features/auth/forgot-password').then((m) => m.ForgotPassword),
   },
   {
     path: 'nova-lozinka',
     title: 'Nova lozinka — Fiskultura',
+    data: { seo: { noindex: true } },
     loadComponent: () => import('./features/auth/reset-password').then((m) => m.ResetPassword),
   },
   {
     path: 'profil',
     title: 'Moj profil — Fiskultura',
+    data: { seo: { noindex: true } },
     canActivate: [authGuard],
     loadComponent: () => import('./features/auth/profile').then((m) => m.Profile),
   },
   {
     path: 'admin',
     title: 'Admin — Fiskultura',
+    data: { seo: { noindex: true } },
     canActivate: [authGuard, editorGuard],
     loadComponent: () => import('./features/admin/admin-shell').then((m) => m.AdminShell),
     children: [
@@ -134,6 +154,7 @@ export const routes: Routes = [
   {
     path: '**',
     title: 'Stranica ne postoji — Fiskultura',
+    data: { seo: { noindex: true } },
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
   },
 ];
