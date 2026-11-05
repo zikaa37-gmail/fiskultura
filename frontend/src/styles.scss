@@ -722,6 +722,70 @@ h1 {
   white-space: nowrap;
 }
 
+.literature-index {
+  display: flex;
+  gap: 8px;
+}
+
+.literature-index-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.literature-index-link:hover {
+  border-color: var(--color-primary);
+}
+
+.literature-group {
+  margin-bottom: 32px;
+}
+
+.literature-group h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.literature-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.literature-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  min-height: 44px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.literature-item > .app-icon {
+  color: var(--color-primary);
+}
+
+a.literature-item:hover strong {
+  color: var(--color-primary);
+}
+
+.literature-text {
+  display: grid;
+  flex: 1 1 220px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .back-to-top {
   position: fixed;
   right: 16px;

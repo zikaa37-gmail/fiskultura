@@ -29,6 +29,7 @@ class SeoController extends Controller
         '/sportovi/elementarne-igre' => ['monthly', '0.6'],
         '/sportovi/vezbe-sa-rekvizitima' => ['monthly', '0.6'],
         '/sportovi/plesovi' => ['monthly', '0.6'],
+        '/literatura' => ['monthly', '0.5'],
         '/aplikacije' => ['monthly', '0.6'],
         '/obavestenja' => ['monthly', '0.4'],
     ];
