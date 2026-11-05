@@ -90,3 +90,22 @@ ključeve i ažurira samo propise koje niko nije menjao (verzija 1).
 Javni tekst pitanja urednik prepravlja bez imena i škole; pitalac nikad nije javan. Kad se pitanje prvi put objavi,
 pitalac dobija mejl sa linkom (`asker_notified_at`). `regulation_keys` su ključevi iz `/regulations`. Početni
 odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja samo zapise koje urednik nije dirao).
+
+## Obaveštenja mejlom (#16b, #16c)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| POST | `/subscriptions` | javno (10/min) | `email`, `frequency` (`weekly` \| `instant`), `categories[]`, `organization_ids[]`; šalje mejl za potvrdu, a za već aktivnu adresu link za podešavanja (odgovor je isti, ne otkriva da li adresa postoji) |
+| POST | `/subscriptions/confirm` | javno, `id` + `token` | potvrda prijave (dvostruki opt-in); vraća `manage_token` |
+| POST | `/subscriptions/manage` | javno, `id` + `token` | podešavanja preko linka iz mejla |
+| PATCH | `/subscriptions/manage` | javno, `id` + `token` | izmena podešavanja i `active` |
+| POST | `/subscriptions/unsubscribe` | javno, `id` + `token` | odjava jednim klikom (i `List-Unsubscribe-Post` iz mejla, parametri u adresi) |
+| GET / PUT | `/me/subscription` | prijavljen | „Moja obaveštenja“; potvrđen nalog ne traži potvrdu mejlom |
+| GET | `/admin/subscriptions/stats` | editor, admin | pretplatnici, poslato za 7 / 30 dana, neuspelo, odjave |
+
+Tokeni u linkovima su HMAC (`APP_KEY`, svrha, id, mejl), ništa se ne čuva u bazi. Prazne `categories` /
+`organization_ids` znače „sve“; vesti bez udruženja (portal) stižu uvek. Slanje: `php artisan notifications:send`
+(na 10 minuta preko schedule-a): istaknuta vest odmah pretplatnicima `instant` (jednom, `news.notified_at`, samo vesti
+objavljene u poslednja 3 dana), nedeljni pregled ponedeljkom od 7h pretplatnicima `weekly`. Najviše
+`NOTIFY_HOURLY_LIMIT` (100) mejlova na sat, ostatak ide u sledećem krugu; svako slanje je u `fk_notification_log`.
+Kanal je `NotificationChannel` (sada samo `MailChannel`); novi kanal se dodaje tagom `notification-channels`.

@@ -353,6 +353,15 @@ p {
   margin-bottom: 28px;
 }
 
+.news-subscribe {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-height: 44px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
 .section-head h2 {
   font-size: clamp(28px, 5vw, 40px);
   font-weight: 800;

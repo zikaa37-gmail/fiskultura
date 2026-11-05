@@ -35,6 +35,7 @@ export class AdminShell {
     { route: 'pitanja', label: 'Pitanja', adminOnly: false },
     { route: 'udruzenja', label: 'Udruženja', adminOnly: false },
     { route: 'propisi', label: 'Propisi', adminOnly: false },
+    { route: 'obavestenja', label: 'Obaveštenja', adminOnly: false },
     { route: 'korisnici', label: 'Korisnici', adminOnly: true },
   ];
 }
