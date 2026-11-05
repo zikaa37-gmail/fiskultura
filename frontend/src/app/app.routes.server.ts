@@ -37,6 +37,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'pitanja', renderMode: RenderMode.Prerender },
   { path: 'pitanja/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('questions'), fallback: PrerenderFallback.Client },
   { path: 'sportovi', renderMode: RenderMode.Prerender },
+  { path: 'sportovi/kosarka', renderMode: RenderMode.Prerender },
   { path: 'aplikacije', renderMode: RenderMode.Prerender },
   { path: '**', renderMode: RenderMode.Client },
 ];

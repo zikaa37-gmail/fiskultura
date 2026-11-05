@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\SeoController;
 use App\Models\News;
 use App\Models\Organization;
 use App\Models\Question;
@@ -52,7 +53,7 @@ class SeoTest extends TestCase
         $news = News::visible()->first();
         $this->assertContains("https://fiskultura.rs/vesti/{$news->slug}", $locations);
         $this->assertContains('https://fiskultura.rs/udruzenja/sspfvs', $locations);
-        $this->assertSame(8 + News::visible()->count() + Organization::count() + Question::visible()->count(), count($locations));
+        $this->assertSame(count(SeoController::STATIC_PAGES) + News::visible()->count() + Organization::count() + Question::visible()->count(), count($locations));
         $this->assertStringNotContainsString('/admin', $response->getContent());
     }
 }

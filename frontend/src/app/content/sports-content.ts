@@ -11,6 +11,7 @@ export interface Sport {
   status: ModuleStatus;
   officialSources: { label: string; url: string }[];
   externalSite?: string;
+  rulesPage?: string;
 }
 
 export const SPORT_GROUPS: { id: SportGroup; title: string; description: string }[] = [
@@ -28,7 +29,8 @@ export const SPORTS: Sport[] = [
     group: 'games',
     summary: 'Teren, dribling, koraci, 3 i 24 sekunde, faulovi — i kako igrati sa celim odeljenjem.',
     accent: 'orange',
-    status: 'first',
+    status: 'ready',
+    rulesPage: '/sportovi/kosarka',
     officialSources: [
       { label: 'Košarkaški savez Srbije', url: 'https://www.kss.rs/' },
       { label: 'FIBA pravila', url: 'https://www.fiba.basketball/documents' },

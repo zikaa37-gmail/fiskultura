@@ -17,6 +17,7 @@ class SeoController extends Controller
         '/propisi' => ['weekly', '0.8'],
         '/pitanja' => ['weekly', '0.8'],
         '/sportovi' => ['monthly', '0.6'],
+        '/sportovi/kosarka' => ['monthly', '0.6'],
         '/aplikacije' => ['monthly', '0.6'],
         '/obavestenja' => ['monthly', '0.4'],
     ];

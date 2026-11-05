@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SPORT_GROUPS, SPORTS } from '../../content/sports-content';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { Icon } from '../../shared/icon/icon';
 
 @Component({
   selector: 'app-sports',
-  imports: [Icon],
+  imports: [Icon, RouterLink, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -26,6 +28,9 @@ import { Icon } from '../../shared/icon/icon';
                   <h3>{{ sport.name }}</h3>
                   <p>{{ sport.summary }}</p>
                   <span class="status" [class.status-next]="sport.status !== 'soon'">{{ statusLabel[sport.status] }}</span>
+                  @if (sport.rulesPage) {
+                    <a mat-flat-button [routerLink]="sport.rulesPage">Pravila za decu i kviz</a>
+                  }
                   @if (sport.externalSite) {
                     <a class="inline-link" [href]="sport.externalSite" target="_blank" rel="noopener">Sajt sporta →</a>
                   }

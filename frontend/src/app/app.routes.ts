@@ -40,6 +40,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/sports/sports').then((m) => m.Sports),
   },
   {
+    path: 'sportovi/kosarka',
+    title: 'Pravila košarke za decu — Fiskultura',
+    data: { seo: { description: 'Pravila košarke za decu sa sličicama: teren, poeni, dribling, koraci, aut, 3 i 24 sekunde, faulovi i sudijski znaci. Kviz i zvanična pravila KSS i FIBA za mlađe kategorije.' } },
+    loadComponent: () => import('./features/sports/basketball/basketball-rules').then((m) => m.BasketballRules),
+  },
+  {
     path: 'propisi',
     title: 'Propisi i literatura — Fiskultura',
     data: { seo: { description: 'Zakoni, pravilnici i programi nastave fizičkog i zdravstvenog vaspitanja: šta je bitno za nastavnika, glasnik, datum važenja i link na zvanični tekst.' } },
