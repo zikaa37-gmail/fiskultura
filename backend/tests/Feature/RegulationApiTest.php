@@ -38,14 +38,14 @@ class RegulationApiTest extends TestCase
 
     public function test_import_brings_catalog_from_e_pripreme_and_is_repeatable(): void
     {
-        $this->assertSame(32, Regulation::count());
+        $this->assertSame($this->catalogCount(), Regulation::count());
         $this->seed(ContentSeeder::class);
-        $this->assertSame(32, Regulation::count());
+        $this->assertSame($this->catalogCount(), Regulation::count());
     }
 
     public function test_list_filters_by_area_kind_and_text(): void
     {
-        $all = $this->getJson('/api/regulations')->assertOk()->assertJsonCount(32)->json();
+        $all = $this->getJson('/api/regulations')->assertOk()->assertJsonCount($this->catalogCount())->json();
         $this->assertSame('zosov', $all[0]['key']);
 
         $norma = $this->getJson('/api/regulations?area=norma')->assertOk()->json();
@@ -110,5 +110,10 @@ class RegulationApiTest extends TestCase
         $this->withJwt($editor)->postJson('/api/admin/regulations', $this->payload())->assertCreated();
 
         $this->getJson('/api/regulations?updated_since='.urlencode($since))->assertOk()->assertJsonCount(1)->assertJsonPath('0.key', 'pravilnik-o-proba');
+    }
+
+    private function catalogCount(): int
+    {
+        return count(json_decode(file_get_contents(database_path('data/regulations.json')), true));
     }
 }
