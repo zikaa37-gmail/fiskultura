@@ -1,0 +1,72 @@
+.rp-ball.rp-fs-ball circle {
+  fill: var(--rb-surface);
+  stroke: var(--rb-text);
+}
+
+.rp-ball.rp-fs-ball path {
+  stroke: var(--rb-text);
+}
+
+.rp-ball.rp-fs-ball .rp-fs-patch {
+  fill: var(--rb-text);
+}
+
+.rp-fs-goal .rp-fs-goal-frame {
+  fill: none;
+  stroke: var(--rb-text);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+
+.rp-fs-goal .rp-fs-goal-net {
+  fill: none;
+  stroke: var(--rb-text-muted);
+  stroke-width: 0.5;
+}
+
+.rules-scope.rules-futsal {
+  --rb-primary: color-mix(in srgb, var(--color-lime) 55%, var(--color-text));
+  --rb-primary-dark: color-mix(in srgb, var(--color-lime) 30%, var(--color-text));
+  --rb-primary-tint: color-mix(in srgb, var(--color-lime) 22%, var(--color-surface));
+  --rb-info: var(--color-violet);
+  --rb-info-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+
+  .rule-picture svg {
+    overflow: hidden;
+  }
+
+  .rp-fs-post {
+    stroke: var(--rb-text);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .rp-fs-line {
+    stroke: var(--rb-text);
+    stroke-width: 5;
+  }
+
+  .rp-fs-mark {
+    fill: var(--rb-text);
+  }
+
+  .rp-fs-out {
+    fill: var(--rb-info-tint);
+  }
+
+  .rp-fs-ok-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-fs-sub-zone {
+    fill: var(--rb-success);
+  }
+
+  .rp-fs-keeper .rp-figure-us,
+  .rp-fs-keeper .rp-figure-them {
+    --rp-shirt: var(--color-orange);
+  }
+}

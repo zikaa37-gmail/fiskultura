@@ -1,0 +1,107 @@
+.rp-ball.rp-eg-ball circle {
+  fill: var(--rb-warning);
+}
+
+.rp-ball.rp-eg-ball path {
+  stroke: var(--rb-primary-dark);
+}
+
+.rp-eg-cone.rp-eg-prop path {
+  fill: var(--rb-danger);
+  stroke: var(--rb-danger-dark);
+  stroke-width: 1;
+}
+
+.rp-eg-cone.rp-eg-prop rect {
+  fill: var(--rb-danger-dark);
+}
+
+.rules-scope.rules-elementary {
+  --rb-primary: var(--color-lime-strong);
+  --rb-primary-dark: color-mix(in srgb, var(--color-lime-strong) 65%, var(--color-text));
+  --rb-primary-tint: color-mix(in srgb, var(--color-lime) 24%, var(--color-surface));
+  --rb-info: color-mix(in srgb, var(--color-orange) 85%, var(--color-text));
+  --rb-info-dark: color-mix(in srgb, var(--color-orange) 60%, var(--color-text));
+  --rb-info-tint: color-mix(in srgb, var(--color-orange) 14%, var(--color-surface));
+
+  .rp-eg-bound {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+
+  .rp-eg-dot-us {
+    fill: var(--rb-primary);
+  }
+
+  .rp-eg-dot-them {
+    fill: var(--rb-info);
+  }
+
+  .rp-eg-dot-blind {
+    fill: var(--rb-neutral);
+  }
+
+  .rp-eg-ring-ok {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-eg-loop-bad {
+    fill: none;
+    stroke: var(--rb-danger);
+    stroke-width: 3;
+    stroke-dasharray: 8 6;
+  }
+
+  .rp-eg-midline {
+    stroke: var(--rb-text);
+    stroke-width: 5;
+  }
+
+  .rp-eg-frost {
+    fill: var(--rb-info-tint);
+  }
+
+  .rp-eg-snow {
+    fill: none;
+    stroke: var(--rb-info);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+
+  .rp-eg-blindfold {
+    fill: var(--rb-neutral);
+  }
+
+  .rp-eg-wall {
+    fill: var(--rb-border-dark);
+  }
+
+  .rp-eg-mini-ball {
+    fill: var(--rb-warning);
+    stroke: var(--rb-text);
+    stroke-width: 1;
+  }
+
+  .rp-eg-line-a,
+  .rp-eg-line-b,
+  .rp-eg-line-c {
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+
+  .rp-eg-line-a {
+    stroke: var(--color-sky);
+  }
+
+  .rp-eg-line-b {
+    stroke: var(--rb-danger);
+  }
+
+  .rp-eg-line-c {
+    stroke: var(--rb-text);
+  }
+}

@@ -1,0 +1,232 @@
+<svg viewBox="0 0 240 160" role="img" [attr.aria-label]="label()">
+  @switch (name()) {
+    @case ('height') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-ts-device" x="146" y="14" width="10" height="126" rx="2" />
+      @for (y of scaleTicks; track y) {
+        <line class="rp-ts-tick" x1="146" [attr.y1]="y" x2="152" [attr.y2]="y" />
+      }
+      <rect class="rp-ts-slider" x="118" y="38" width="38" height="6" rx="2" />
+      <g appRuleFigure [x]="125" [y]="140" [scale]="1" team="us" />
+      <text class="rp-tag" x="200" y="44" text-anchor="middle">0,1 cm</text>
+      <text class="rp-tag" x="60" y="70" text-anchor="middle">bos, uspravno,</text>
+      <text class="rp-tag" x="60" y="86" text-anchor="middle">pogled pravo</text>
+    }
+
+    @case ('mass') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-ts-device" x="96" y="134" width="48" height="8" rx="3" />
+      <g appRuleFigure [x]="120" [y]="134" [scale]="1" team="us" />
+      <rect class="rp-board-bg" x="150" y="40" width="84" height="34" rx="6" />
+      <text class="rp-clock-small" x="192" y="64" text-anchor="middle">0,1 kg</text>
+      <text class="rp-tag" x="50" y="60" text-anchor="middle">BMI =</text>
+      <text class="rp-tag" x="50" y="76" text-anchor="middle">kg / m²</text>
+    }
+
+    @case ('sit-and-reach') {
+      <rect class="rp-ts-mat" x="10" y="138" width="220" height="8" rx="2" />
+      <rect class="rp-ts-device" x="160" y="104" width="40" height="34" />
+      <rect class="rp-ts-device" x="145" y="100" width="60" height="5" />
+      @for (x of [150, 160, 170, 180, 190, 200]; track x) {
+        <line class="rp-ts-tick" [attr.x1]="x" y1="100" [attr.x2]="x" y2="96" />
+      }
+      <rect class="rp-ts-slider" x="168" y="92" width="6" height="8" rx="1" />
+      <path class="rp-ts-limb rp-ts-legs" d="M80 136 L158 134" />
+      <path class="rp-ts-limb" d="M80 134 L114 104" />
+      <path class="rp-ts-limb rp-ts-arm" d="M110 108 L166 98" />
+      <circle class="rp-ts-head" cx="120" cy="94" r="8" />
+      <path class="rp-arrow-ok" d="M176 84 H200 m-8 -7 l8 7 l-8 7" />
+      <text class="rp-tag" x="175" y="160" text-anchor="middle">0–60 cm</text>
+    }
+
+    @case ('standing-jump') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-ts-line" x1="40" y1="140" x2="40" y2="152" />
+      <path class="rp-ts-limb rp-ts-legs" d="M36 140 L44 122 L32 108" />
+      <path class="rp-ts-limb" d="M32 108 L44 84" />
+      <path class="rp-ts-limb rp-ts-arm" d="M42 88 L20 100" />
+      <circle class="rp-ts-head" cx="48" cy="76" r="7" />
+      <path class="rp-dash" d="M50 70 Q110 10 168 118" />
+      <path class="rp-ts-limb rp-ts-legs" d="M172 140 L182 124 L172 112" />
+      <path class="rp-ts-limb" d="M172 112 L186 92" />
+      <path class="rp-ts-limb rp-ts-arm" d="M184 96 L206 104" />
+      <circle class="rp-ts-head" cx="190" cy="84" r="7" />
+      <circle class="rp-ts-heel" cx="170" cy="141" r="3" />
+      <g class="rp-measure">
+        <line x1="40" y1="150" x2="170" y2="150" />
+        <path d="M46 145 L40 150 L46 155 M164 145 L170 150 L164 155" />
+      </g>
+      <text class="rp-tag" x="105" y="136" text-anchor="middle">do pete</text>
+    }
+
+    @case ('sit-ups') {
+      <rect class="rp-ts-mat" x="20" y="136" width="200" height="8" rx="2" />
+      <path class="rp-ts-limb rp-ts-legs" d="M100 134 L134 108 L160 134" />
+      <path class="rp-ts-limb" d="M100 134 L124 98" />
+      <circle class="rp-ts-head" cx="126" cy="88" r="8" />
+      <path class="rp-ts-limb rp-ts-arm" d="M120 100 L134 92 L128 84" />
+      <path class="rp-dash" d="M66 132 L100 134" />
+      <circle class="rp-ts-head rp-ts-ghost" cx="60" cy="128" r="8" />
+      <path class="rp-ts-limb rp-ts-ghost" d="M66 132 L100 134" />
+      <path class="rp-arrow-ok" d="M72 116 Q90 96 112 92" />
+      <path class="rp-ts-limb rp-ts-helper" d="M176 134 L176 110 L164 130" />
+      <circle class="rp-ts-head rp-ts-helper-head" cx="180" cy="100" r="8" />
+      <g class="rp-clock-mini" transform="translate(56 40)">
+        <rect x="-22" y="-13" width="44" height="24" rx="5" />
+        <text class="rp-count" y="6" text-anchor="middle">30 s</text>
+      </g>
+    }
+
+    @case ('flexed-arm-hang') {
+      <rect class="rp-floor" x="0" y="150" width="240" height="10" />
+      <line class="rp-pole" x1="70" y1="150" x2="70" y2="40" />
+      <line class="rp-pole" x1="170" y1="150" x2="170" y2="40" />
+      <line class="rp-ts-bar" x1="70" y1="50" x2="170" y2="50" />
+      <g appRuleFigure [x]="120" [y]="118" [scale]="1" team="us" [leftArm]="[-12, 6]" [rightArm]="[12, 6]" leftHand="fist" rightHand="fist" />
+      <path class="rp-dash" d="M96 50 H144" />
+      <g class="rp-clock-mini" transform="translate(206 40)">
+        <rect x="-18" y="-13" width="36" height="24" rx="5" />
+        <text class="rp-count" y="6" text-anchor="middle">s</text>
+      </g>
+      <text class="rp-tag" x="205" y="80" text-anchor="middle">brada</text>
+      <text class="rp-tag" x="205" y="94" text-anchor="middle">iznad</text>
+      <text class="rp-tag" x="205" y="108" text-anchor="middle">pritke</text>
+    }
+
+    @case ('shuttle-4x10') {
+      <rect class="rp-floor" x="10" y="40" width="220" height="80" />
+      <line class="rp-ts-line" x1="40" y1="52" x2="40" y2="108" />
+      <line class="rp-ts-line" x1="200" y1="52" x2="200" y2="108" />
+      <rect class="rp-ts-sponge" x="206" y="66" width="10" height="7" rx="2" />
+      <rect class="rp-ts-sponge" x="206" y="86" width="10" height="7" rx="2" />
+      <path class="rp-arrow-ok" d="M46 64 H194 m-8 -7 l8 7 l-8 7" />
+      <path class="rp-arrow-them" d="M194 78 H46 m8 -7 l-8 7 l8 7" />
+      <path class="rp-arrow-ok" d="M46 92 H194 m-8 -7 l8 7 l-8 7" />
+      <path class="rp-arrow-them" d="M194 106 H46 m8 -7 l-8 7 l8 7" />
+      <text class="rp-tag" x="120" y="30" text-anchor="middle">10 m</text>
+      <text class="rp-tag" x="120" y="138" text-anchor="middle">4 × 10 m = 40 m, dva sunđera</text>
+    }
+
+    @case ('shuttle-run-20') {
+      <rect class="rp-floor" x="10" y="40" width="220" height="100" />
+      <line class="rp-ts-line" x1="30" y1="44" x2="30" y2="136" />
+      <line class="rp-ts-line" x1="210" y1="44" x2="210" y2="136" />
+      @for (y of runners; track y) {
+        <g appRuleFigure [x]="120" [y]="y + 20" [scale]="0.3" team="us" legs="run" />
+        <path class="rp-dash" [attr.d]="'M36 ' + (y + 14) + ' H204'" />
+      }
+      <path class="rp-ts-speaker" d="M18 14 h8 l8 -6 v20 l-8 -6 h-8 Z" />
+      <text class="rp-tag" x="40" y="22" text-anchor="start">bip!</text>
+      <text class="rp-tag" x="120" y="30" text-anchor="middle">20 m</text>
+      <text class="rp-tag" x="120" y="156" text-anchor="middle">8,5 km/h, +0,5 km/h svakog minuta</text>
+    }
+
+    @case ('sprint-30') {
+      <rect class="rp-floor" x="0" y="120" width="240" height="40" />
+      <line class="rp-ts-line" x1="30" y1="120" x2="30" y2="160" />
+      <line class="rp-ts-finish" x1="210" y1="120" x2="210" y2="160" />
+      <g appRuleFigure [x]="110" [y]="140" [scale]="0.9" team="us" legs="run" [leftArm]="[-18, 4]" [rightArm]="[16, -10]" />
+      <path class="rp-dash" d="M40 40 H70 M46 56 H72 M40 72 H66" />
+      <g class="rp-measure">
+        <line x1="30" y1="154" x2="210" y2="154" />
+        <path d="M36 149 L30 154 L36 159 M204 149 L210 154 L204 159" />
+      </g>
+      <text class="rp-tag" x="60" y="112" text-anchor="middle">30 m</text>
+      <g class="rp-clock-mini" transform="translate(206 40)">
+        <rect x="-18" y="-13" width="36" height="24" rx="5" />
+        <text class="rp-count" y="6" text-anchor="middle">s</text>
+      </g>
+    }
+
+    @case ('medicine-ball') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-ts-line" x1="70" y1="140" x2="70" y2="152" />
+      <g appRuleFigure [x]="48" [y]="140" [scale]="0.95" team="us" [leftArm]="[4, -30]" [rightArm]="[-4, -30]" />
+      <circle class="rp-ts-medball" cx="48" cy="28" r="10" />
+      <path class="rp-dash" d="M60 26 Q130 -6 200 132" />
+      <circle class="rp-ts-medball" cx="200" cy="132" r="8" />
+      <g class="rp-measure">
+        <line x1="70" y1="150" x2="200" y2="150" />
+        <path d="M76 145 L70 150 L76 155 M194 145 L200 150 L194 155" />
+      </g>
+      <text class="rp-tag" x="150" y="40" text-anchor="middle">1 · 2 · 4 · 6 kg</text>
+    }
+
+    @case ('wall-ball') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-ts-wall" x="200" y="10" width="30" height="130" />
+      <line class="rp-ts-line" x1="110" y1="140" x2="110" y2="152" />
+      <g appRuleFigure [x]="90" [y]="140" [scale]="0.95" team="us" [leftArm]="[24, -10]" [rightArm]="[28, -6]" />
+      <circle class="rp-ts-ball" cx="150" cy="60" r="8" />
+      <path class="rp-dash" d="M126 62 L198 50 L130 76" />
+      <g class="rp-measure">
+        <line x1="110" y1="150" x2="200" y2="150" />
+        <path d="M116 145 L110 150 L116 155 M194 145 L200 150 L194 155" />
+      </g>
+      <g class="rp-clock-mini" transform="translate(40 40)">
+        <rect x="-20" y="-13" width="40" height="24" rx="5" />
+        <text class="rp-count" y="6" text-anchor="middle">15 s</text>
+      </g>
+    }
+
+    @case ('pull-ups') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="60" y1="140" x2="60" y2="70" />
+      <line class="rp-pole" x1="180" y1="140" x2="180" y2="70" />
+      <line class="rp-ts-bar" x1="60" y1="74" x2="180" y2="74" />
+      <path class="rp-ts-limb rp-ts-legs" d="M98 128 L184 138" />
+      <path class="rp-ts-limb" d="M98 128 L116 96" />
+      <circle class="rp-ts-head" cx="118" cy="84" r="8" />
+      <path class="rp-ts-limb rp-ts-arm" d="M110 102 L118 76" />
+      <path class="rp-arrow-ok" d="M80 120 V92 m-7 8 l7 -8 l7 8" />
+      <text class="rp-tag" x="120" y="40" text-anchor="middle">brada do pritke</text>
+    }
+
+    @case ('bench-reach') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-ts-device" x="100" y="100" width="56" height="40" />
+      <rect class="rp-ts-device" x="156" y="70" width="6" height="70" />
+      @for (y of [80, 90, 100, 110, 120, 130]; track y) {
+        <line class="rp-ts-tick" x1="156" [attr.y1]="y" x2="162" [attr.y2]="y" />
+      }
+      <path class="rp-ts-limb rp-ts-legs" d="M128 100 L130 58" />
+      <path class="rp-ts-limb" d="M130 60 L150 92" />
+      <circle class="rp-ts-head" cx="148" cy="104" r="7" />
+      <path class="rp-ts-limb rp-ts-arm" d="M146 86 L156 118" />
+      <path class="rp-arrow-ok" d="M190 80 V120 m-7 -8 l7 8 l7 -8" />
+      <text class="rp-tag" x="60" y="80" text-anchor="middle">pružene noge,</text>
+      <text class="rp-tag" x="60" y="96" text-anchor="middle">što dublje</text>
+    }
+
+    @case ('endurance-run') {
+      <rect class="rp-ts-track" x="20" y="30" width="200" height="100" rx="50" />
+      <rect class="rp-floor" x="45" y="55" width="150" height="50" rx="25" />
+      <g appRuleFigure [x]="80" [y]="128" [scale]="0.24" team="us" legs="run" />
+      <g appRuleFigure [x]="150" [y]="54" [scale]="0.24" team="us" legs="run" [flip]="true" />
+      <text class="rp-tag" x="120" y="78" text-anchor="middle">800 m učenici</text>
+      <text class="rp-tag" x="120" y="94" text-anchor="middle">500 m učenice</text>
+    }
+
+    @case ('cross-course') {
+      <rect class="rp-ts-grass" x="0" y="0" width="240" height="160" />
+      <path class="rp-ts-path" d="M30 130 C40 60 100 20 150 40 S220 110 190 130 S80 150 60 130" />
+      <line class="rp-ts-line" x1="18" y1="124" x2="44" y2="136" />
+      <text class="rp-tag" x="20" y="152" text-anchor="start">start / cilj</text>
+      @for (spot of [[78, 50], [180, 62], [130, 142]]; track $index) {
+        <g appRuleFigure [x]="spot[0]" [y]="spot[1]" [scale]="0.3" team="ref" />
+      }
+      <path class="rp-ts-bottle" d="M60 112 h6 v4 l2 3 v12 h-10 v-12 l2 -3 Z" />
+      <text class="rp-tag" x="120" y="96" text-anchor="middle">nastavnici duž staze</text>
+    }
+
+    @case ('relay') {
+      <rect class="rp-ts-track" x="20" y="30" width="200" height="100" rx="50" />
+      <rect class="rp-floor" x="45" y="55" width="150" height="50" rx="25" />
+      @for (runner of relayRunners; track $index) {
+        <g appRuleFigure [x]="runner.x" [y]="runner.y" [scale]="0.28" [team]="runner.girl ? 'them' : 'us'" legs="run" />
+      }
+      <text class="rp-tag" x="120" y="78" text-anchor="middle">8 izmena: 1.–8. razred</text>
+      <text class="rp-tag" x="120" y="94" text-anchor="middle">4 × 200 m + 4 × 400 m</text>
+    }
+  }
+</svg>

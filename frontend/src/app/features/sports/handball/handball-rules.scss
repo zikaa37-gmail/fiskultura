@@ -1,0 +1,77 @@
+.rp-ball.rp-hb-ball circle {
+  fill: var(--rb-warning);
+}
+
+.rp-ball.rp-hb-ball path {
+  stroke: var(--rb-text);
+}
+
+.rp-hb-goal .rp-hb-goal-frame {
+  fill: none;
+  stroke: var(--rb-danger);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+
+.rp-hb-goal .rp-hb-goal-net {
+  fill: none;
+  stroke: var(--rb-text-muted);
+  stroke-width: 0.5;
+}
+
+.rules-scope.rules-handball {
+  --rb-primary: var(--color-sky);
+  --rb-primary-dark: color-mix(in srgb, var(--color-sky) 65%, #000);
+  --rb-primary-tint: color-mix(in srgb, var(--color-sky) 14%, var(--color-surface));
+  --rb-info: var(--color-violet);
+  --rb-info-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+
+  .rule-picture svg {
+    overflow: hidden;
+  }
+
+  .rp-hb-post {
+    stroke: var(--rb-danger);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .rp-hb-goal-line {
+    stroke: var(--rb-text);
+    stroke-width: 5;
+  }
+
+  .rp-hb-four {
+    stroke: var(--rb-danger);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-hb-ok-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-hb-bad-no {
+    fill: var(--rb-danger);
+  }
+
+  .rp-hb-sub-zone {
+    fill: var(--rb-success);
+  }
+
+  .rp-hb-card-green {
+    fill: var(--rb-success);
+  }
+
+  .rp-hb-card-blue {
+    fill: var(--color-primary);
+  }
+
+  .rp-hb-keeper .rp-figure-us,
+  .rp-hb-keeper .rp-figure-them {
+    --rp-shirt: var(--color-orange);
+  }
+}

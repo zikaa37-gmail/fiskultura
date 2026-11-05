@@ -1,0 +1,150 @@
+<section class="section">
+  <div class="container">
+    <a class="inline-link small" routerLink="/sportovi">← Svi sportovi</a>
+    <div class="section-head rules-head">
+      <p class="eyebrow">Testiranje fizičkih sposobnosti</p>
+      <h1>Uputstvo za merenja učenika</h1>
+      <p class="muted">Protokol svakog testa, oprema, organizacija časa i šta se kaže učenicima — za nacionalnu bateriju (Zdravitas) i za staru bateriju testova.</p>
+    </div>
+
+    <div class="testing-toolbar">
+      @if (batteries.length > 1) {
+        <mat-button-toggle-group class="level-filter" [value]="batteryId()" (change)="selectBattery($event.value)" aria-label="Baterija testova">
+          @for (item of batteries; track item.id) {
+            <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      }
+      <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+    </div>
+
+    @let current = battery();
+    <h2 class="testing-title">{{ current.title }}</h2>
+    @for (paragraph of current.intro; track $index) {
+      <p class="testing-intro">{{ paragraph }}</p>
+    }
+
+    <nav class="testing-index" aria-label="Testovi">
+      @for (test of current.tests; track test.id; let index = $index) {
+        <a class="testing-index-link" [href]="'#test-' + test.id">{{ index + 1 }}. {{ test.name }}</a>
+      }
+    </nav>
+
+    <div class="testing-list">
+      @for (test of current.tests; track test.id; let index = $index) {
+        <article class="testing-card" [id]="'test-' + test.id">
+          <app-test-picture class="testing-picture" [name]="test.picture" [label]="test.name" />
+          <div class="testing-body">
+            <p class="eyebrow">{{ test.measures }}</p>
+            <h3>{{ index + 1 }}. {{ test.name }}</h3>
+
+            <h4>Oprema</h4>
+            <ul>
+              @for (item of test.equipment; track $index) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+
+            @if (test.setup) {
+              <h4>Postavka</h4>
+              <p>{{ test.setup }}</p>
+            }
+
+            <h4>Izvođenje</h4>
+            <ol>
+              @for (step of test.execution; track $index) {
+                <li>{{ step }}</li>
+              }
+            </ol>
+
+            <h4>Rezultat</h4>
+            <p>{{ test.result }}</p>
+
+            @if (test.errors.length) {
+              <h4>Greške</h4>
+              <ul>
+                @for (error of test.errors; track $index) {
+                  <li>{{ error }}</li>
+                }
+              </ul>
+            }
+
+            @if (test.safety) {
+              <p class="testing-note"><strong>Pažnja:</strong> {{ test.safety }}</p>
+            }
+
+            @if (test.sayToStudents) {
+              <blockquote class="testing-say"><strong>Učenicima:</strong> „{{ test.sayToStudents }}"</blockquote>
+            }
+
+            <p class="muted small">
+              Izvor:
+              <a class="inline-link" [href]="test.source.url" target="_blank" rel="noopener">{{ test.source.publisher }}{{ test.source.year ? ', ' + test.source.year : '' }}</a>
+              @if (test.source.pages) {
+                <span>, str. {{ test.source.pages }}</span>
+              }
+            </p>
+          </div>
+        </article>
+      }
+    </div>
+
+    <h2 class="testing-title">Organizacija testiranja</h2>
+    <div class="testing-organization">
+      @for (block of current.organization; track block.title) {
+        <section class="testing-block">
+          <h3>{{ block.title }}</h3>
+          <ul>
+            @for (item of block.items; track $index) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+
+    @for (table of references(); track table.title) {
+      <h2 class="testing-title">{{ table.title }}</h2>
+      <p class="muted small">{{ table.note }}</p>
+      @for (group of table.groups; track group.label) {
+        <div class="testing-table-wrap">
+          <table class="testing-table">
+            <caption>{{ group.label }}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Razred</th>
+                @for (column of table.columns; track column) {
+                  <th scope="col">{{ column }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of group.rows; track row.grade) {
+                <tr>
+                  <th scope="row">{{ row.grade }}.</th>
+                  @for (values of row.values; track $index) {
+                    <td>{{ range(values) }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      <p class="muted small">
+        Izvor: <a class="inline-link" [href]="table.source.url" target="_blank" rel="noopener">{{ table.source.publisher }}, {{ table.source.year }}</a>, str. {{ table.source.pages }}.
+      </p>
+    }
+
+    <h2 class="testing-title">Izvori</h2>
+    <ul class="testing-sources">
+      @for (source of current.sources; track source.url + source.title) {
+        <li>
+          <app-icon [name]="source.url.endsWith('.pdf') ? 'pdf' : 'external'" [size]="18" />
+          <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.title }}</a>
+          <span class="muted small">— {{ source.publisher }}{{ source.year ? ', ' + source.year : '' }}{{ source.pages ? ', str. ' + source.pages : '' }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

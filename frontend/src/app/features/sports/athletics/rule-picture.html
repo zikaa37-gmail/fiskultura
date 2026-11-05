@@ -1,0 +1,495 @@
+<svg viewBox="0 0 240 160" role="img" [attr.aria-label]="label()">
+  @switch (name()) {
+    @case ('track-lanes') {
+      <rect class="rp-at-track" x="10" y="40" width="220" height="96" />
+      <g class="rp-at-lane-line">
+        @for (y of laneLines; track y) {
+          <line x1="10" [attr.y1]="y" x2="230" [attr.y2]="y" />
+        }
+      </g>
+      <line class="rp-at-line" x1="34" y1="40" x2="34" y2="136" />
+      <line class="rp-at-line" x1="210" y1="40" x2="210" y2="136" />
+      @for (runner of laneRunners; track runner.lane) {
+        <line class="rp-dash" [attr.x1]="runner.x + 10" [attr.y1]="runner.y" x2="204" [attr.y2]="runner.y" />
+        <g class="rp-at-runner" [attr.transform]="'translate(' + runner.x + ' ' + runner.y + ')'">
+          <circle r="8" />
+          <text y="4" text-anchor="middle">{{ runner.lane }}</text>
+        </g>
+      }
+      <text class="rp-tag" x="120" y="153" text-anchor="middle">svaka staza 1,22 m</text>
+    }
+
+    @case ('lane-line-bad') {
+      <path class="rp-at-track" d="M10 160 A110 110 0 0 1 230 160 L186 160 A66 66 0 0 0 54 160 Z" />
+      <g class="rp-at-lane-line">
+        <path d="M10 160 A110 110 0 0 1 230 160" />
+        <path d="M32 160 A88 88 0 0 1 208 160" />
+        <path d="M54 160 A66 66 0 0 1 186 160" />
+      </g>
+      <use href="#rp-at-foot" transform="translate(122 72) rotate(-90)" />
+      <circle class="rp-highlight" cx="116" cy="72" r="16" />
+      <text class="rp-tag" x="120" y="128" text-anchor="middle">leva linija —</text>
+      <text class="rp-tag" x="120" y="144" text-anchor="middle">ne gazi!</text>
+    }
+
+    @case ('no-push') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="80" [y]="140" legs="run" [rightArm]="[34, -4]" [leftArm]="[-14, 18]" />
+      <g appRuleFigure [x]="150" [y]="140" legs="run" team="them" [leftArm]="[-14, 18]" [rightArm]="[14, 16]" />
+      <path class="rp-impact" d="M132 52 l-6 -8 M136 66 l8 0 M132 80 l-6 8" />
+    }
+
+    @case ('start-marks') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(150 140) scale(1.3)">
+        <path class="rp-at-block" d="M-38 0 L-24 0 L-34 -9 Z M-70 0 L-56 0 L-66 -9 Z" />
+        <use href="#rp-at-crouch-marks" />
+        <line class="rp-at-line" x1="2" y1="1" x2="16" y2="1" />
+      </g>
+      <text class="rp-at-command" x="115" y="40" text-anchor="middle">„Na mesta“</text>
+      <text class="rp-tag" x="162" y="156" text-anchor="middle">linija</text>
+    }
+
+    @case ('start-set') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(150 140) scale(1.3)">
+        <path class="rp-at-block" d="M-38 0 L-24 0 L-34 -9 Z M-70 0 L-56 0 L-66 -9 Z" />
+        <use href="#rp-at-crouch-set" />
+        <line class="rp-at-line" x1="2" y1="1" x2="16" y2="1" />
+      </g>
+      <text class="rp-at-command" x="115" y="40" text-anchor="middle">„Pozor“</text>
+    }
+
+    @case ('start-go') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <path class="rp-at-block" d="M40 140 L58 140 L45 128 Z M70 140 L88 140 L75 128 Z" />
+      <g transform="rotate(28 110 140)">
+        <g appRuleFigure [x]="110" [y]="140" legs="run" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      </g>
+      <path class="rp-arrow-ok rp-anim-push" d="M168 100 H210 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-at-command" x="120" y="34" text-anchor="middle">pucanj!</text>
+    }
+
+    @case ('start-standing') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-at-line" x1="134" y1="141" x2="154" y2="141" />
+      <g transform="rotate(12 112 140)">
+        <g appRuleFigure [x]="112" [y]="140" legs="run" [leftArm]="[18, 14]" [rightArm]="[-16, 18]" />
+      </g>
+      <text class="rp-at-command" x="115" y="34" text-anchor="middle">„Na mesta“</text>
+      <text class="rp-tag" x="196" y="110" text-anchor="middle">800 m</text>
+    }
+
+    @case ('start-standing-hand') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(150 140) scale(1.3)">
+        <use href="#rp-at-crouch-set" />
+        <line class="rp-at-line" x1="2" y1="1" x2="16" y2="1" />
+      </g>
+      <circle class="rp-highlight" cx="145" cy="134" r="12" />
+      <text class="rp-at-command" x="115" y="40" text-anchor="middle">800 m</text>
+    }
+
+    @case ('false-start') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(80 140) scale(1.1)">
+        <use href="#rp-at-crouch-set" />
+        <line class="rp-at-line" x1="2" y1="1" x2="16" y2="1" />
+      </g>
+      <g transform="rotate(22 160 140)">
+        <g appRuleFigure [x]="160" [y]="140" [scale]="0.9" legs="run" team="them" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      </g>
+      <circle class="rp-highlight" cx="175" cy="86" r="40" />
+      <text class="rp-at-command" x="80" y="56" text-anchor="middle">„Pozor…“</text>
+    }
+
+    @case ('start-steady') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(110 140) scale(1.2)">
+        <path class="rp-at-block" d="M-38 0 L-24 0 L-34 -9 Z M-70 0 L-56 0 L-66 -9 Z" />
+        <use href="#rp-at-crouch-set" />
+      </g>
+      <g appRuleFigure [x]="190" [y]="140" [scale]="0.85" team="ref" [rightArm]="[4, -34]" rightHand="fist" />
+      <text class="rp-at-command" x="90" y="56" text-anchor="middle">mirno…</text>
+    }
+
+    @case ('start-game') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="46" [y]="140" [scale]="0.9" team="ref" [rightArm]="[18, -6]" />
+      <path class="rp-speech" d="M76 34 h76 a8 8 0 0 1 8 8 v14 a8 8 0 0 1 -8 8 h-60 l-12 10 v-10 h-4 a8 8 0 0 1 -8 -8 v-14 a8 8 0 0 1 8 -8 Z" />
+      <text class="rp-tag" x="114" y="54" text-anchor="middle">STRELA?</text>
+      @for (x of gameKids; track x) {
+        <g appRuleFigure [x]="x" [y]="140" [scale]="0.6" />
+      }
+      <text class="rp-tag rp-tag-ok" x="170" y="155" text-anchor="middle">čekaj START</text>
+    }
+
+    @case ('quiet-start') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g transform="translate(100 140) scale(1.1)">
+        <use href="#rp-at-crouch-set" />
+      </g>
+      <g transform="translate(200 140) scale(1.1)">
+        <use href="#rp-at-crouch-set" />
+      </g>
+      <text class="rp-at-command" x="110" y="50" text-anchor="middle">pssst…</text>
+    }
+
+    @case ('finish-torso') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-at-plane" x1="150" y1="36" x2="150" y2="140" />
+      <line class="rp-at-line" x1="146" y1="141" x2="154" y2="141" />
+      <g transform="rotate(20 126 140)">
+        <g appRuleFigure [x]="126" [y]="140" legs="run" [leftArm]="[-16, 16]" [rightArm]="[-20, 12]" />
+      </g>
+      <text class="rp-tag rp-tag-ok" x="190" y="80" text-anchor="middle">trup</text>
+      <text class="rp-tag" x="150" y="155" text-anchor="middle">cilj</text>
+    }
+
+    @case ('finish-hand') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-at-plane" x1="150" y1="36" x2="150" y2="140" />
+      <line class="rp-at-line" x1="146" y1="141" x2="154" y2="141" />
+      <g appRuleFigure [x]="104" [y]="140" legs="run" [rightArm]="[42, -6]" [leftArm]="[-14, 18]" />
+      <circle class="rp-highlight" cx="158" cy="60" r="12" />
+      <text class="rp-tag" x="150" y="155" text-anchor="middle">cilj</text>
+    }
+
+    @case ('finish-through') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-at-plane" x1="100" y1="36" x2="100" y2="140" />
+      <line class="rp-at-line" x1="96" y1="141" x2="104" y2="141" />
+      <g appRuleFigure [x]="150" [y]="140" legs="run" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      <path class="rp-arrow-ok rp-anim-push" d="M180 100 H222 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-tag" x="100" y="155" text-anchor="middle">cilj</text>
+    }
+
+    @case ('sprint-60') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g class="rp-dash">
+        <line x1="40" y1="70" x2="90" y2="70" />
+        <line x1="30" y1="90" x2="86" y2="90" />
+        <line x1="44" y1="110" x2="88" y2="110" />
+      </g>
+      <g transform="rotate(10 130 140)">
+        <g appRuleFigure [x]="130" [y]="140" legs="run" [leftArm]="[18, 10]" [rightArm]="[-18, 14]" />
+      </g>
+      <text class="rp-big" x="120" y="40" text-anchor="middle">60 m</text>
+    }
+
+    @case ('endurance-pace') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <path class="rp-at-speed" d="M20 110 H160 Q190 110 210 64" />
+      <path class="rp-at-speed" d="M198 70 L211 61 L214 76" />
+      <text class="rp-tag" x="90" y="100" text-anchor="middle">ravnomerno</text>
+      <text class="rp-tag rp-tag-ok" x="176" y="128" text-anchor="middle">ubrzaj!</text>
+      <text class="rp-tag" x="120" y="155" text-anchor="middle">poslednjih 100–150 m</text>
+    }
+
+    @case ('endurance-600-800') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="70" [y]="140" [scale]="0.9" legs="run" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      <g appRuleFigure [x]="165" [y]="140" [scale]="0.9" legs="run" team="them" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      <text class="rp-at-command" x="70" y="40" text-anchor="middle">600 m</text>
+      <text class="rp-at-command" x="165" y="40" text-anchor="middle">800 m</text>
+      <text class="rp-tag" x="70" y="155" text-anchor="middle">učenice</text>
+      <text class="rp-tag" x="165" y="155" text-anchor="middle">učenici</text>
+    }
+
+    @case ('cooldown-walk') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="100" [y]="140" legs="wide" [leftArm]="[-10, 28]" [rightArm]="[10, 28]" />
+      <path class="rp-arrow-ok rp-anim-push" d="M136 110 H170 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-at-command" x="180" y="80" text-anchor="middle">2–3 min</text>
+    }
+
+    @case ('relay-team') {
+      <rect class="rp-floor" x="0" y="130" width="240" height="30" />
+      @for (x of relayRunners; track x; let index = $index) {
+        <g appRuleFigure [x]="x" [y]="130" [scale]="0.6" [number]="index + 1" legs="run" />
+      }
+      <use href="#rp-at-baton" transform="translate(56 104) rotate(-60)" />
+      <text class="rp-at-command" x="120" y="40" text-anchor="middle">4 × 60 m</text>
+    }
+
+    @case ('relay-zone') {
+      <rect class="rp-at-track" x="10" y="64" width="220" height="40" />
+      <rect class="rp-at-zone" x="60" y="64" width="120" height="40" />
+      <g class="rp-at-lane-line">
+        <line x1="10" y1="64" x2="230" y2="64" />
+        <line x1="10" y1="104" x2="230" y2="104" />
+      </g>
+      <g class="rp-measure">
+        <line x1="60" y1="52" x2="180" y2="52" />
+        <path d="M66 47 L60 52 L66 57 M174 47 L180 52 L174 57" />
+      </g>
+      <text class="rp-tag" x="120" y="46" text-anchor="middle">30 m</text>
+      @for (runner of zoneRunners; track runner.no) {
+        <g class="rp-at-runner" [attr.transform]="'translate(' + runner.x + ' 84)'">
+          <circle r="8" />
+          <text y="4" text-anchor="middle">{{ runner.no }}</text>
+        </g>
+      }
+      <text class="rp-tag" x="120" y="130" text-anchor="middle">zona za izmenu</text>
+    }
+
+    @case ('relay-outside') {
+      <rect class="rp-at-track" x="10" y="64" width="220" height="40" />
+      <rect class="rp-at-zone" x="40" y="64" width="120" height="40" />
+      <g class="rp-at-lane-line">
+        <line x1="10" y1="64" x2="230" y2="64" />
+        <line x1="10" y1="104" x2="230" y2="104" />
+      </g>
+      <text class="rp-tag" x="100" y="56" text-anchor="middle">zona</text>
+      <g class="rp-at-runner" transform="translate(180 84)">
+        <circle r="8" />
+        <text y="4" text-anchor="middle">1</text>
+      </g>
+      <g class="rp-at-runner" transform="translate(212 84)">
+        <circle r="8" />
+        <text y="4" text-anchor="middle">2</text>
+      </g>
+      <use href="#rp-at-baton" transform="translate(196 84) scale(0.8)" />
+      <circle class="rp-highlight" cx="196" cy="84" r="14" />
+      <text class="rp-tag" x="150" y="130" text-anchor="middle">palica van zone</text>
+    }
+
+    @case ('relay-pass') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="80" [y]="140" legs="run" [rightArm]="[22, 10]" [leftArm]="[-14, 16]" />
+      <g appRuleFigure [x]="152" [y]="140" legs="run" team="them" [leftArm]="[-24, 10]" [rightArm]="[14, 16]" />
+      <use href="#rp-at-baton" transform="translate(114 76) rotate(80)" />
+      <text class="rp-at-command" x="116" y="36" text-anchor="middle">„Hop!“</text>
+    }
+
+    @case ('relay-drop') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="100" [y]="140" [rightArm]="[18, 26]" />
+      <path class="rp-dash" d="M130 94 Q150 110 152 128" />
+      <use href="#rp-at-baton" transform="translate(160 136)" />
+      <circle class="rp-highlight" cx="160" cy="136" r="14" />
+      <text class="rp-tag" x="120" y="155" text-anchor="middle">podiže onaj ko je ispustio</text>
+    }
+
+    @case ('lj-takeoff') {
+      <rect class="rp-floor" x="0" y="140" width="150" height="20" />
+      <rect class="rp-at-sand" x="150" y="140" width="86" height="14" />
+      <rect class="rp-at-board" x="122" y="139" width="18" height="4" />
+      <g appRuleFigure [x]="118" [y]="138" [scale]="0.9" legs="run" [leftArm]="[6, -32]" [rightArm]="[-6, -30]" />
+      <path class="rp-dash" d="M140 70 Q180 30 215 128" />
+      <text class="rp-tag" x="110" y="30" text-anchor="middle">daska za odraz</text>
+    }
+
+    @case ('lj-foul') {
+      <rect class="rp-floor" x="10" y="44" width="130" height="76" />
+      <rect class="rp-at-board" x="110" y="44" width="30" height="76" />
+      <rect class="rp-at-sand" x="150" y="44" width="80" height="76" />
+      <line class="rp-at-takeoff" x1="140" y1="40" x2="140" y2="124" />
+      <use href="#rp-at-foot" transform="translate(138 82) rotate(90)" />
+      <circle class="rp-highlight" cx="150" cy="82" r="13" />
+      <text class="rp-tag" x="140" y="140" text-anchor="middle">linija odraza</text>
+      <text class="rp-tag" x="140" y="156" text-anchor="middle">prestup</text>
+    }
+
+    @case ('lj-measure') {
+      <rect class="rp-at-board" x="20" y="40" width="30" height="90" />
+      <rect class="rp-at-sand" x="60" y="40" width="170" height="90" />
+      <line class="rp-at-takeoff" x1="50" y1="36" x2="50" y2="134" />
+      <ellipse class="rp-at-mark" cx="176" cy="70" rx="10" ry="5" />
+      <ellipse class="rp-at-mark" cx="178" cy="96" rx="10" ry="5" />
+      <g class="rp-measure">
+        <line x1="50" y1="112" x2="166" y2="112" />
+        <path d="M56 107 L50 112 L56 117 M160 107 L166 112 L160 117" />
+      </g>
+      <line class="rp-dash" x1="166" y1="70" x2="166" y2="116" />
+      <text class="rp-tag" x="120" y="150" text-anchor="middle">do najbližeg traga</text>
+    }
+
+    @case ('lj-fall-back') {
+      <rect class="rp-at-board" x="20" y="40" width="30" height="90" />
+      <rect class="rp-at-sand" x="60" y="40" width="170" height="90" />
+      <line class="rp-at-takeoff" x1="50" y1="36" x2="50" y2="134" />
+      <ellipse class="rp-at-mark" cx="186" cy="70" rx="10" ry="5" />
+      <ellipse class="rp-at-mark" cx="188" cy="96" rx="10" ry="5" />
+      <circle class="rp-at-mark" cx="140" cy="84" r="6" />
+      <circle class="rp-highlight" cx="140" cy="84" r="13" />
+      <g class="rp-measure">
+        <line x1="50" y1="116" x2="134" y2="116" />
+        <path d="M56 111 L50 116 L56 121 M128 111 L134 116 L128 121" />
+      </g>
+      <text class="rp-tag" x="120" y="150" text-anchor="middle">trag ruke je bliži</text>
+    }
+
+    @case ('hj-one-foot') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="160" y1="140" x2="160" y2="64" />
+      <circle class="rp-at-bar-end" cx="160" cy="84" r="5" />
+      <rect class="rp-at-mat" x="166" y="116" width="70" height="24" rx="4" />
+      <g appRuleFigure [x]="116" [y]="140" legs="run" [leftArm]="[4, -32]" [rightArm]="[-4, -30]" />
+      <circle class="rp-at-ok-ring" cx="96" cy="137" r="10" />
+      <text class="rp-tag" x="100" y="30" text-anchor="middle">jedna noga</text>
+    }
+
+    @case ('hj-bar-falls') {
+      <rect class="rp-at-mat" x="46" y="118" width="148" height="22" rx="4" />
+      <line class="rp-pole" x1="56" y1="140" x2="56" y2="56" />
+      <line class="rp-pole" x1="184" y1="140" x2="184" y2="56" />
+      <line class="rp-at-bar" x1="60" y1="76" x2="176" y2="114" />
+      <path class="rp-impact" d="M170 100 l8 -10 M184 104 l10 -4 M164 92 l2 -10" />
+      <text class="rp-tag" x="120" y="40" text-anchor="middle">letvica pala</text>
+    }
+
+    @case ('hj-three') {
+      @for (spot of threeFails; track spot.no) {
+        <text class="rp-tag" [attr.x]="spot.x" y="56" text-anchor="middle">{{ spot.no }}.</text>
+        <text class="rp-at-x" [attr.x]="spot.x" y="100" text-anchor="middle">X</text>
+      }
+      <text class="rp-tag" x="120" y="140" text-anchor="middle">tri neuspeha zaredom</text>
+    }
+
+    @case ('hj-landing') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="56" y1="140" x2="56" y2="56" />
+      <line class="rp-pole" x1="184" y1="140" x2="184" y2="56" />
+      <line class="rp-at-bar" x1="56" y1="70" x2="184" y2="70" />
+      <rect class="rp-at-mat" x="44" y="96" width="152" height="44" rx="6" />
+      <text class="rp-tag" x="120" y="124" text-anchor="middle">sunđer</text>
+      <g appRuleFigure [x]="22" [y]="140" [scale]="0.45" />
+    }
+
+    @case ('shot-neck') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="110" [y]="140" [scale]="1.1" legs="wide" [rightArm]="[-4, -4]" rightHand="none" [leftArm]="[-22, -10]" />
+      <use href="#rp-at-shot" transform="translate(119 55) scale(1.1)" />
+      <circle class="rp-at-ok-ring" cx="119" cy="55" r="14" />
+      <text class="rp-tag" x="176" y="60" text-anchor="middle">uz vrat</text>
+    }
+
+    @case ('shot-push') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="100" [y]="140" legs="run" [rightArm]="[26, -26]" rightHand="none" [leftArm]="[-20, 4]" />
+      <use href="#rp-at-shot" transform="translate(138 40)" />
+      <path class="rp-arrow-ok rp-anim-push" d="M152 50 L184 30 m-12 -1 l12 1 l-5 11" />
+      <text class="rp-tag" x="180" y="100" text-anchor="middle">gura se!</text>
+    }
+
+    @case ('shot-circle') {
+      <circle class="rp-at-circle" cx="104" cy="84" r="42" />
+      <path class="rp-at-stopboard" d="M144.6 62.4 A46 46 0 0 1 144.6 105.6" />
+      <line class="rp-at-midline" x1="104" y1="30" x2="104" y2="40" />
+      <line class="rp-at-midline" x1="104" y1="128" x2="104" y2="138" />
+      <g class="rp-measure">
+        <line x1="62" y1="96" x2="146" y2="96" />
+        <path d="M68 91 L62 96 L68 101 M140 91 L146 96 L140 101" />
+      </g>
+      <text class="rp-tag" x="104" y="80" text-anchor="middle">2,135 m</text>
+      <path class="rp-arrow-ok" d="M164 84 H214 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">krug za bacanje</text>
+    }
+
+    @case ('shot-sector') {
+      <path class="rp-at-sector-area" d="M40 80 L215 25 L215 135 Z" />
+      <g class="rp-at-sector">
+        <line x1="40" y1="80" x2="215" y2="25" />
+        <line x1="40" y1="80" x2="215" y2="135" />
+      </g>
+      <circle class="rp-at-circle" cx="40" cy="80" r="12" />
+      <use href="#rp-at-shot" transform="translate(160 84)" />
+      <circle class="rp-at-ok-ring" cx="160" cy="84" r="13" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">u sektoru</text>
+    }
+
+    @case ('shot-leave') {
+      <path class="rp-at-rear" d="M120 35 A45 45 0 0 0 120 125 Z" />
+      <circle class="rp-at-circle" cx="120" cy="80" r="45" />
+      <line class="rp-at-midline" x1="120" y1="24" x2="120" y2="34" />
+      <line class="rp-at-midline" x1="120" y1="126" x2="120" y2="136" />
+      <path class="rp-at-stopboard" d="M163.3 57 A49 49 0 0 1 163.3 103" />
+      <path class="rp-arrow-ok rp-anim-push" d="M110 80 H44 m10 -9 l-10 9 l10 9" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">izlaz pozadi</text>
+    }
+
+    @case ('ball-hold') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="116" [y]="140" legs="run" [rightArm]="[-22, -20]" [leftArm]="[-6, 28]" />
+      <use href="#rp-at-ball" transform="translate(105 46)" />
+      <circle class="rp-at-ok-ring" cx="105" cy="46" r="11" />
+      <text class="rp-tag" x="180" y="80" text-anchor="middle">iznad ramena</text>
+    }
+
+    @case ('ball-foot') {
+      <use href="#rp-at-foot" transform="translate(140 74) rotate(90)" />
+      <use href="#rp-at-foot" transform="translate(88 100) rotate(70)" />
+      <text class="rp-tag" x="140" y="62" text-anchor="middle">L</text>
+      <text class="rp-tag" x="84" y="88" text-anchor="middle">D</text>
+      <path class="rp-arrow-ok" d="M170 80 H212 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-tag" x="120" y="136" text-anchor="middle">baca desna ruka,</text>
+      <text class="rp-tag rp-tag-ok" x="120" y="152" text-anchor="middle">napred leva noga</text>
+    }
+
+    @case ('ball-line') {
+      <rect class="rp-floor" x="20" y="40" width="120" height="84" />
+      <line class="rp-at-takeoff" x1="140" y1="36" x2="140" y2="128" />
+      <use href="#rp-at-foot" transform="translate(138 82) rotate(90)" />
+      <circle class="rp-highlight" cx="150" cy="82" r="13" />
+      <text class="rp-tag" x="120" y="150" text-anchor="middle">prestup</text>
+    }
+
+    @case ('ball-best') {
+      @for (row of bestRows; track row.no) {
+        <text class="rp-tag" x="30" [attr.y]="row.y + 5" text-anchor="middle">{{ row.no }}.</text>
+        @if (row.width) {
+          <rect class="rp-at-result" x="44" [attr.y]="row.y - 8" [attr.width]="row.width" height="16" rx="4" />
+        } @else {
+          <text class="rp-at-x-small" x="56" [attr.y]="row.y + 8" text-anchor="middle">X</text>
+        }
+      }
+      <path class="rp-crown" d="M196 110 L200 100 L204 108 L208 98 L212 108 L216 100 L220 110 Z" />
+      <text class="rp-tag" x="120" y="150" text-anchor="middle">računa se najbolji</text>
+    }
+
+    @case ('safety-sector') {
+      <path class="rp-at-sector-area" d="M40 80 L215 25 L215 135 Z" />
+      <g class="rp-at-sector">
+        <line x1="40" y1="80" x2="215" y2="25" />
+        <line x1="40" y1="80" x2="215" y2="135" />
+      </g>
+      <circle class="rp-at-circle" cx="40" cy="80" r="12" />
+      <g appRuleFigure [x]="160" [y]="108" [scale]="0.5" team="them" />
+      <circle class="rp-highlight" cx="160" cy="84" r="32" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">niko u sektoru</text>
+    }
+
+    @case ('safety-carry') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="120" [y]="140" legs="wide" [rightArm]="[8, 22]" rightHand="none" />
+      <use href="#rp-at-shot" transform="translate(139 92)" />
+      <path class="rp-arrow-ok rp-anim-push" d="M84 100 H44 m10 -9 l-10 9 l10 9" />
+      <text class="rp-tag" x="190" y="80" text-anchor="middle">nosi se</text>
+    }
+
+    @case ('safety-warmup') {
+      <ellipse class="rp-dash" cx="120" cy="140" rx="96" ry="12" />
+      <g appRuleFigure [x]="120" [y]="140" legs="run" [leftArm]="[16, 12]" [rightArm]="[-16, 16]" />
+      <text class="rp-at-command" x="110" y="34" text-anchor="middle">zagrevanje</text>
+    }
+
+    @case ('safety-pit') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-at-sand" x="40" y="128" width="196" height="12" />
+      <g appRuleFigure [x]="70" [y]="128" [scale]="0.9" legs="wide" [rightArm]="[26, 12]" rightHand="none" />
+      <line class="rp-at-rake" x1="103" y1="72" x2="150" y2="126" />
+      <path class="rp-at-rake" d="M138 130 L162 122 M142 129 L142 134 M150 126 L150 131 M158 123 L158 128" />
+      <text class="rp-tag" x="120" y="40" text-anchor="middle">poravnaj pesak</text>
+    }
+
+    @case ('compare-self') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <rect class="rp-at-result-old" x="60" y="90" width="40" height="50" rx="4" />
+      <rect class="rp-at-result" x="140" y="60" width="40" height="80" rx="4" />
+      <path class="rp-arrow-ok" d="M108 84 L132 64 m-11 0 l11 0 l0 11" />
+      <text class="rp-tag" x="80" y="155" text-anchor="middle">ranije</text>
+      <text class="rp-tag" x="160" y="155" text-anchor="middle">sada</text>
+    }
+  }
+</svg>

@@ -1,0 +1,149 @@
+.rp-foot.rp-da-foot-r ellipse,
+.rp-foot.rp-da-foot-r circle {
+  fill: var(--rb-primary);
+}
+
+.rp-foot.rp-da-foot-l ellipse,
+.rp-foot.rp-da-foot-l circle {
+  fill: var(--rb-info);
+}
+
+.rp-da-note ellipse {
+  fill: var(--rb-primary);
+}
+
+.rp-da-note path {
+  fill: none;
+  stroke: var(--rb-primary);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.rules-scope.rules-dances {
+  --rb-primary: var(--color-violet);
+  --rb-primary-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-primary-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+  --rb-info: var(--color-orange);
+  --rb-info-dark: color-mix(in srgb, var(--color-orange) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-orange) 14%, var(--color-surface));
+
+  .rp-da-beat {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+    stroke-width: 2.4;
+  }
+
+  .rp-da-beat-on {
+    fill: var(--rb-primary);
+    stroke: var(--rb-primary-dark);
+  }
+
+  .rp-da-beat-text {
+    fill: var(--rb-text);
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .rp-da-beat-text-on {
+    fill: var(--rb-on-primary);
+  }
+
+  .rp-da-small {
+    fill: var(--rb-text-muted);
+    font-size: 9.5px;
+    font-weight: 700;
+  }
+
+  .rp-da-ghost {
+    opacity: 0.3;
+  }
+
+  .rp-da-num-r {
+    fill: var(--rb-primary-dark);
+  }
+
+  .rp-da-num-l {
+    fill: var(--rb-info-dark);
+  }
+
+  .rp-da-arms {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .rp-da-head {
+    fill: var(--rb-primary);
+    stroke: var(--rb-primary-dark);
+    stroke-width: 1.5;
+  }
+
+  .rp-da-head-them {
+    fill: var(--rb-info);
+    stroke: var(--rb-info-dark);
+  }
+
+  .rp-da-head-ref {
+    fill: var(--rb-neutral);
+    stroke: var(--rb-neutral-dark);
+  }
+
+  .rp-da-body {
+    fill: var(--rb-primary-tint);
+    stroke: var(--rb-primary);
+    stroke-width: 2;
+  }
+
+  .rp-da-body-them {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+  }
+
+  .rp-da-arm {
+    stroke: var(--rb-primary);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-da-arm-them {
+    stroke: var(--rb-info);
+  }
+
+  .rp-da-hand {
+    fill: var(--rb-text-muted);
+  }
+
+  .rp-da-heel {
+    fill: var(--rb-info);
+    stroke: var(--rb-info-dark);
+    stroke-width: 1.5;
+  }
+
+  .rp-da-block {
+    fill: var(--rb-primary);
+  }
+
+  .rp-da-block-q {
+    fill: var(--rb-info);
+  }
+
+  .rp-da-bar {
+    fill: var(--rb-info);
+  }
+
+  .rp-da-bar-fast {
+    fill: var(--rb-primary);
+  }
+
+  .rp-da-rope {
+    fill: none;
+    stroke: var(--rb-warning);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .rp-da-shadow {
+    fill: color-mix(in srgb, var(--rb-text-muted) 30%, transparent);
+  }
+}

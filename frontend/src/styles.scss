@@ -688,6 +688,28 @@ h1 {
   font-weight: 800;
 }
 
+app-module-card {
+  display: block;
+}
+
+app-module-card > .module {
+  height: 100%;
+}
+
+@media (min-width: 640px) {
+  .module-grid {
+    grid-auto-rows: 1fr;
+  }
+}
+
+app-sports {
+  display: block;
+}
+
+app-sports .module {
+  min-height: var(--sport-card-height, auto);
+}
+
 .sport-group .module-grid {
   margin-top: 8px;
 }
