@@ -1,0 +1,128 @@
+{
+ "arena": {
+  "author": "David Jones",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/45457437@N00/6784692106",
+  "size": [
+   1000,
+   563
+  ]
+ },
+ "team-court": {
+  "author": "Klearchos Kapoutsis",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/8383084@N06/3951111905",
+  "size": [
+   1000,
+   667
+  ]
+ },
+ "bench": {
+  "author": "acaben",
+  "license": "CC BY-SA 2.0",
+  "source": "https://www.flickr.com/photos/35034346178@N01/6341720844",
+  "size": [
+   1000,
+   667
+  ]
+ },
+ "bench-cheer": {
+  "author": "dannyb",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/37996616805@N01/6432299485",
+  "size": [
+   1000,
+   667
+  ]
+ },
+ "jump-ball": {
+  "author": "Steffen Prößdorf",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2022-07-03_Basketball,_M%C3%A4nner,_European_Qualifiers,_Deutschland_-_Polen_1DX_1281_by_Stepro.jpg",
+  "size": [
+   1000,
+   667
+  ]
+ },
+ "dribble-kids": {
+  "author": "褒忠國中 雲端網",
+  "license": "CC BY 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Boy_dribbling_the_ball_in_a_3x3_basketball_game_in_Baozhong_Junior_High_School_20130327.jpg",
+  "size": [
+   1000,
+   669
+  ]
+ },
+ "throw-in-kids": {
+  "author": "NohahCS34",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Nohah_Conti%C3%B1as_S%C3%A1nchez,_dirigiendo_un_partido.jpg",
+  "size": [
+   720,
+   960
+  ]
+ },
+ "girls-team": {
+  "author": "Vicarplus",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:OS_Unicaja_2010.png",
+  "size": [
+   408,
+   261
+  ]
+ },
+ "shot-clock-24": {
+  "author": "dph1110",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/56181704@N00/471799008",
+  "size": [
+   1000,
+   750
+  ]
+ },
+ "shot-clock-14": {
+  "author": "dph1110",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/56181704@N00/471799004",
+  "size": [
+   1000,
+   750
+  ]
+ },
+ "shooting-foul": {
+  "author": "Nathan Rhoades from Avon, IN, USA",
+  "license": "CC BY 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Personal_foul.jpg",
+  "size": [
+   667,
+   1000
+  ]
+ },
+ "free-throws": {
+  "author": "Michael Barera",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Wisconsin_vs._Milwaukee_women%27s_basketball_2022_61_(free_throw).jpg",
+  "size": [
+   1000,
+   667
+  ]
+ },
+ "timeout-huddle": {
+  "author": "bp6316",
+  "license": "CC BY 2.0",
+  "source": "https://www.flickr.com/photos/7232687@N03/3369502018",
+  "size": [
+   1000,
+   573
+  ]
+ },
+ "handshake": {
+  "author": "SurfaceWarriors",
+  "license": "CC BY-SA 2.0",
+  "source": "https://www.flickr.com/photos/55244200@N05/46691424314",
+  "size": [
+   1000,
+   623
+  ]
+ }
+}

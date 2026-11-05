@@ -1,0 +1,168 @@
+.rp-gy-def.rp-gy-buck rect {
+  fill: var(--rb-primary-tint);
+  stroke: var(--rb-text);
+  stroke-width: 2;
+}
+
+.rp-gy-def.rp-gy-buck path {
+  fill: none;
+  stroke: var(--rb-text-muted);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.rp-gy-def.rp-gy-board path {
+  fill: var(--rb-warning);
+  stroke: var(--rb-text);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.rp-gy-def.rp-gy-beam rect {
+  fill: var(--rb-warning);
+  stroke: var(--rb-text);
+  stroke-width: 1.5;
+}
+
+.rp-gy-def.rp-gy-beam path {
+  fill: none;
+  stroke: var(--rb-text-muted);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.rp-gy-def.rp-gy-ring circle {
+  fill: none;
+  stroke: var(--rb-text);
+  stroke-width: 3;
+}
+
+.rules-scope.rules-gymnastics {
+  --rb-primary: var(--color-violet);
+  --rb-primary-dark: color-mix(in srgb, var(--color-violet) 65%, var(--color-text));
+  --rb-primary-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+  --rb-info: var(--color-sky);
+  --rb-info-dark: color-mix(in srgb, var(--color-sky) 65%, var(--color-text));
+  --rb-info-tint: color-mix(in srgb, var(--color-sky) 14%, var(--color-surface));
+
+  .rp-gy-pose {
+    --gy-shirt: var(--rb-primary);
+    --gy-pants: var(--rb-primary-dark);
+    --gy-skin: var(--rb-text-muted);
+  }
+
+  .rp-gy-pose-help {
+    --gy-shirt: var(--rb-info);
+    --gy-pants: var(--rb-info-dark);
+  }
+
+  .rp-gy-legs,
+  .rp-gy-torso,
+  .rp-gy-arms {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .rp-gy-legs {
+    stroke: var(--gy-pants);
+    stroke-width: 8;
+  }
+
+  .rp-gy-torso {
+    stroke: var(--gy-shirt);
+    stroke-width: 11;
+  }
+
+  .rp-gy-arms {
+    stroke: var(--gy-skin);
+    stroke-width: 6;
+  }
+
+  .rp-gy-head {
+    fill: var(--gy-skin);
+  }
+
+  .rp-gy-matrect {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+    stroke-width: 1.5;
+  }
+
+  .rp-gy-line {
+    stroke: var(--rb-primary);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+
+  .rp-gy-wall {
+    fill: var(--rb-border-dark);
+  }
+
+  .rp-gy-bar {
+    fill: var(--rb-surface);
+    stroke: var(--rb-text);
+    stroke-width: 3;
+  }
+
+  .rp-gy-bar-big {
+    fill: var(--rb-border);
+    stroke: var(--rb-text);
+    stroke-width: 3;
+  }
+
+  .rp-gy-rail {
+    stroke: var(--rb-text);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+
+  .rp-gy-strap {
+    stroke: var(--rb-text-muted);
+    stroke-width: 3;
+  }
+
+  .rp-gy-beam-top {
+    fill: var(--rb-warning);
+    stroke: var(--rb-text);
+    stroke-width: 1.5;
+  }
+
+  .rp-gy-legs-static {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-gy-forearm {
+    stroke: var(--rb-text-muted);
+    stroke-width: 16;
+    stroke-linecap: round;
+  }
+
+  .rp-gy-hand,
+  .rp-gy-thumb {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-linecap: round;
+  }
+
+  .rp-gy-hand {
+    stroke-width: 10;
+  }
+
+  .rp-gy-thumb {
+    stroke-width: 7;
+  }
+
+  .rp-gy-ok-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-gy-tag-bad {
+    fill: var(--rb-danger);
+  }
+}

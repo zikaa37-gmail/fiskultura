@@ -1,0 +1,319 @@
+<svg viewBox="0 0 240 160" role="img" [attr.aria-label]="label()">
+  @switch (name()) {
+    @case ('court-full') {
+      <rect class="rp-floor" x="28" y="35" width="184" height="92" />
+      <circle class="rp-jz-dama" [attr.cx]="damaLeftX" cy="81" [attr.r]="damaRadius" />
+      <circle class="rp-jz-dama" [attr.cx]="damaRightX" cy="81" [attr.r]="damaRadius" />
+      <g class="rp-lines">
+        <rect x="28" y="35" width="184" height="92" />
+        <line x1="89.3" y1="35" x2="89.3" y2="127" />
+        <line x1="150.7" y1="35" x2="150.7" y2="127" />
+      </g>
+      <line class="rp-jz-net" x1="120" y1="30" x2="120" y2="132" />
+      <text class="rp-tag" x="120" y="22" text-anchor="middle">mreža 1 m</text>
+      <text class="rp-tag" x="120" y="146" text-anchor="middle">odbojkaški teren 18 × 9 m</text>
+      <text class="rp-tag" [attr.x]="damaLeftX" y="104" text-anchor="middle">Dama</text>
+      <text class="rp-tag" [attr.x]="damaRightX" y="104" text-anchor="middle">Dama</text>
+    }
+
+    @case ('dama-field') {
+      <rect class="rp-floor" x="10" y="10" width="220" height="140" />
+      <line class="rp-lines" x1="150" y1="10" x2="150" y2="150" />
+      <circle class="rp-jz-dama" cx="110" cy="80" r="40" />
+      <g class="rp-measure">
+        <line x1="70" y1="80" x2="150" y2="80" />
+        <path d="M76 75 L70 80 L76 85 M144 75 L150 80 L144 85" />
+      </g>
+      <text class="rp-tag" x="110" y="72" text-anchor="middle">2 m</text>
+      <text class="rp-tag" x="190" y="30" text-anchor="middle">linija 3 m</text>
+      <text class="rp-tag" x="110" y="140" text-anchor="middle">polje Dama</text>
+    }
+
+    @case ('ball') {
+      <use href="#rp-jz-ball" transform="translate(120 76) scale(6)" />
+      <text class="rp-tag" x="120" y="150" text-anchor="middle">odbojkaška lopta</text>
+    }
+
+    @case ('net-height') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="40" y1="140" x2="40" y2="80" />
+      <line class="rp-pole" x1="200" y1="140" x2="200" y2="80" />
+      <rect class="rp-jz-mesh" x="40" y="84" width="160" height="20" />
+      <line class="rp-jz-net-top" x1="40" y1="84" x2="200" y2="84" />
+      <g class="rp-measure">
+        <line x1="20" y1="84" x2="20" y2="140" />
+        <path d="M15 90 L20 84 L25 90 M15 134 L20 140 L25 134" />
+      </g>
+      <text class="rp-tag" x="20" y="74" text-anchor="middle">1 m</text>
+      <g appRuleFigure [x]="150" [y]="140" [scale]="0.8" team="us" />
+      <circle class="rp-jz-bun" cx="156" cy="62" r="4" />
+    }
+
+    @case ('ball-in-net') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="84" />
+      <line class="rp-jz-net-side" x1="120" y1="84" x2="120" y2="104" />
+      <use href="#rp-jz-ball" transform="translate(110 104) scale(1.3)" />
+      <g appRuleFigure [x]="60" [y]="140" [scale]="0.8" team="us" />
+      <g appRuleFigure [x]="185" [y]="140" [scale]="0.8" team="them" />
+      <path class="rp-arrow-ok" d="M100 112 Q85 120 74 110" />
+      <text class="rp-tag rp-tag-ok" x="60" y="40" text-anchor="middle">naša lopta</text>
+    }
+
+    @case ('team-pairs') {
+      <rect class="rp-floor" x="28" y="35" width="184" height="92" />
+      <circle class="rp-jz-dama" [attr.cx]="damaRightX" cy="81" [attr.r]="damaRadius" />
+      <g class="rp-lines"><rect x="28" y="35" width="184" height="92" /></g>
+      <line class="rp-jz-net" x1="120" y1="30" x2="120" y2="132" />
+      @for (player of fieldPairs; track $index) {
+        <g appRuleFigure [x]="player.x" [y]="player.y" [scale]="playerScale" [team]="player.team" />
+        @if (player.girl) {
+          <circle class="rp-jz-bun" [attr.cx]="bunX(player)" [attr.cy]="bunY(player)" r="1.6" />
+        }
+      }
+      @for (player of jokers; track $index) {
+        <g appRuleFigure [x]="player.x" [y]="player.y" [scale]="playerScale" [team]="player.team" />
+        @if (player.girl) {
+          <circle class="rp-jz-bun" [attr.cx]="bunX(player)" [attr.cy]="bunY(player)" r="1.6" />
+        }
+      }
+      <g appRuleFigure [x]="damaGirl.x" [y]="damaGirl.y" [scale]="playerScale" [team]="damaGirl.team" />
+      <circle class="rp-jz-bun" [attr.cx]="bunX(damaGirl)" [attr.cy]="bunY(damaGirl)" r="1.6" />
+      <text class="rp-tag" x="70" y="22" text-anchor="middle">4 para u polju</text>
+      <text class="rp-tag" x="70" y="146" text-anchor="middle">+ 2 para džokera</text>
+    }
+
+    @case ('jokers') {
+      <rect class="rp-floor" x="28" y="35" width="184" height="92" />
+      <circle class="rp-jz-dama" [attr.cx]="damaRightX" cy="81" [attr.r]="damaRadius" />
+      <g class="rp-lines"><rect x="28" y="35" width="184" height="92" /></g>
+      <line class="rp-jz-net" x1="120" y1="30" x2="120" y2="132" />
+      @for (player of jokers; track $index) {
+        <g appRuleFigure [x]="player.x" [y]="player.y" [scale]="playerScale" [team]="player.team" />
+        @if (player.girl) {
+          <circle class="rp-jz-bun" [attr.cx]="bunX(player)" [attr.cy]="bunY(player)" r="1.6" />
+        }
+        <circle class="rp-jz-ring" [attr.cx]="player.x" [attr.cy]="player.y - 14" r="13" />
+      }
+      <path class="rp-dash" d="M150 24 H200 M236 70 V116 M150 158 H200" />
+      <text class="rp-tag" x="70" y="85" text-anchor="middle">3 džokera</text>
+    }
+
+    @case ('dama-girl') {
+      <rect class="rp-floor" x="10" y="10" width="220" height="140" />
+      <line class="rp-lines" x1="150" y1="10" x2="150" y2="150" />
+      <circle class="rp-jz-dama" cx="110" cy="80" r="40" />
+      <g appRuleFigure [x]="110" [y]="110" [scale]="0.6" team="us" [rightArm]="[8, -28]" />
+      <circle class="rp-jz-bun" cx="114" cy="52" r="3" />
+      <use href="#rp-jz-ball" transform="translate(119 39)" />
+      <g appRuleFigure [x]="200" [y]="130" [scale]="0.5" team="them" />
+      <circle class="rp-jz-bun" cx="203.5" cy="81.5" r="2.5" />
+      <path class="rp-arrow-ok" d="M128 40 Q180 40 198 96" />
+      <text class="rp-tag" x="60" y="30" text-anchor="middle">gađa samo</text>
+      <text class="rp-tag" x="60" y="44" text-anchor="middle">devojčice</text>
+    }
+
+    @case ('boys-boys') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="112" />
+      <line class="rp-jz-net-side" x1="120" y1="112" x2="120" y2="126" />
+      <g appRuleFigure [x]="60" [y]="140" [scale]="0.9" team="us" [rightArm]="[12, -28]" />
+      <use href="#rp-jz-ball" transform="translate(81 46)" />
+      <path class="rp-arrow-ok" d="M92 46 Q160 60 182 116" />
+      <g appRuleFigure [x]="190" [y]="140" [scale]="0.9" team="them" />
+      <text class="rp-tag" x="120" y="24" text-anchor="middle">dečak → dečak</text>
+    }
+
+    @case ('girls-girls') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="112" />
+      <line class="rp-jz-net-side" x1="120" y1="112" x2="120" y2="126" />
+      <g appRuleFigure [x]="60" [y]="140" [scale]="0.9" team="us" [rightArm]="[12, -28]" />
+      <circle class="rp-jz-bun" cx="66" cy="53" r="4" />
+      <use href="#rp-jz-ball" transform="translate(81 46)" />
+      <path class="rp-arrow-ok" d="M92 46 Q160 60 182 116" />
+      <g appRuleFigure [x]="190" [y]="140" [scale]="0.9" team="them" />
+      <circle class="rp-jz-bun" cx="196" cy="53" r="4" />
+      <text class="rp-tag" x="120" y="24" text-anchor="middle">devojčica → devojčica</text>
+    }
+
+    @case ('protect') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="60" [y]="140" [scale]="0.85" team="us" />
+      <circle class="rp-jz-bun" cx="65" cy="58" r="4" />
+      <g appRuleFigure [x]="110" [y]="140" [scale]="0.95" team="us" legs="wide" [leftArm]="[-12, -26]" [rightArm]="[22, -16]" leftHand="flat" rightHand="flat" />
+      <use href="#rp-jz-ball" transform="translate(146 58)" />
+      <path class="rp-dash" d="M154 60 Q190 56 214 70" />
+      <g appRuleFigure [x]="210" [y]="140" [scale]="0.8" team="them" [leftArm]="[-14, -24]" />
+      <circle class="rp-jz-bun" cx="215" cy="61" r="3.6" />
+      <path class="rp-heart" d="M86 36 C74 26 80 16 86 24 C92 16 98 26 86 36 Z" />
+    }
+
+    @case ('hit-legs') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <path class="rp-dash" d="M70 100 H170" />
+      <text class="rp-tag" x="200" y="104" text-anchor="middle">pojas</text>
+      <g appRuleFigure [x]="120" [y]="140" [scale]="1" team="them" legs="run" />
+      <use href="#rp-jz-ball" transform="translate(112 122) scale(1.2)" />
+      <circle class="rp-jz-ring" cx="112" cy="122" r="12" />
+      <path class="rp-dash" d="M30 60 Q70 70 100 118" />
+    }
+
+    @case ('hit-head') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="120" [y]="140" [scale]="1" team="them" />
+      <use href="#rp-jz-ball" transform="translate(100 48) scale(1.2)" />
+      <circle class="rp-highlight" cx="108" cy="50" r="16" />
+      <path class="rp-dash" d="M20 40 Q60 30 92 46" />
+    }
+
+    @case ('hit-bounce') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <path class="rp-dash" d="M20 50 L100 138 L150 118" />
+      <path class="rp-impact" d="M92 146 l-6 6 M108 146 l6 6" />
+      <g appRuleFigure [x]="165" [y]="140" [scale]="1" team="them" />
+      <use href="#rp-jz-ball" transform="translate(155 118) scale(1.2)" />
+      <text class="rp-step-no" x="100" y="128" text-anchor="middle">1</text>
+    }
+
+    @case ('hit-bench') {
+      <rect class="rp-floor" x="0" y="140" width="150" height="20" />
+      <rect class="rp-bench" x="170" y="120" width="64" height="10" rx="4" />
+      <g appRuleFigure [x]="100" [y]="140" [scale]="0.85" team="us" legs="run" />
+      <path class="rp-arrow-them" d="M130 90 H170 m-10 -9 l10 9 l-10 9" />
+      <text class="rp-tag" x="202" y="146" text-anchor="middle">klupa</text>
+    }
+
+    @case ('bench-return') {
+      <rect class="rp-bench" x="10" y="120" width="90" height="10" rx="4" />
+      <g appRuleFigure [x]="35" [y]="120" [scale]="0.6" team="us" />
+      <g appRuleFigure [x]="75" [y]="120" [scale]="0.6" team="us" />
+      <circle class="rp-jz-bun" cx="79" cy="62" r="3" />
+      <path class="rp-arrow-ok rp-anim-push" d="M110 80 H170 m-10 -9 l10 9 l-10 9" />
+      <rect class="rp-floor" x="180" y="20" width="56" height="130" />
+      <text class="rp-tag" x="55" y="146" text-anchor="middle">dečak + devojčica</text>
+    }
+
+    @case ('front-zone') {
+      <rect class="rp-zone-back" x="28" y="35" width="61.3" height="92" />
+      <rect class="rp-zone-front" x="89.3" y="35" width="30.7" height="92" />
+      <rect class="rp-floor" x="120" y="35" width="92" height="92" />
+      <rect class="rp-zone-back" x="150.7" y="35" width="61.3" height="92" />
+      <g class="rp-lines">
+        <rect x="28" y="35" width="184" height="92" />
+        <line x1="89.3" y1="35" x2="89.3" y2="127" />
+        <line x1="150.7" y1="35" x2="150.7" y2="127" />
+      </g>
+      <line class="rp-jz-net" x1="120" y1="30" x2="120" y2="132" />
+      <g appRuleFigure [x]="100" [y]="80" [scale]="playerScale" team="us" />
+      <g appRuleFigure [x]="110" [y]="112" [scale]="playerScale" team="us" />
+      <circle class="rp-jz-bun" cx="112.1" cy="82.9" r="1.6" />
+      <path class="rp-arrow-ok" d="M116 70 Q150 50 180 70" />
+      <text class="rp-tag" x="104" y="28" text-anchor="middle">1 par</text>
+      <text class="rp-tag" x="182" y="146" text-anchor="middle">gađa zadnje polje</text>
+    }
+
+    @case ('back-zone') {
+      <rect class="rp-zone-front" x="28" y="35" width="61.3" height="92" />
+      <rect class="rp-floor" x="89.3" y="35" width="61.4" height="92" />
+      <rect class="rp-zone-back" x="150.7" y="35" width="61.3" height="92" />
+      <g class="rp-lines">
+        <rect x="28" y="35" width="184" height="92" />
+        <line x1="89.3" y1="35" x2="89.3" y2="127" />
+        <line x1="150.7" y1="35" x2="150.7" y2="127" />
+      </g>
+      <line class="rp-jz-net" x1="120" y1="30" x2="120" y2="132" />
+      <g appRuleFigure [x]="50" [y]="76" [scale]="playerScale" team="us" />
+      <g appRuleFigure [x]="62" [y]="114" [scale]="playerScale" team="us" />
+      <circle class="rp-jz-bun" cx="64.1" cy="84.9" r="1.6" />
+      <path class="rp-arrow-ok" d="M66 66 Q130 20 182 66" />
+      <text class="rp-tag" x="58" y="28" text-anchor="middle">1 par</text>
+      <text class="rp-tag" x="182" y="146" text-anchor="middle">zadnje polje</text>
+    }
+
+    @case ('front-block') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="112" />
+      <line class="rp-jz-net-side" x1="120" y1="112" x2="120" y2="126" />
+      <g appRuleFigure [x]="100" [y]="140" [scale]="0.85" team="us" legs="jump" [leftArm]="[10, -28]" [rightArm]="[18, -24]" leftHand="flat" rightHand="flat" />
+      <g appRuleFigure [x]="160" [y]="140" [scale]="0.85" team="them" [leftArm]="[-12, -28]" />
+      <use href="#rp-jz-ball" transform="translate(130 40)" />
+      <path class="rp-dash" d="M148 46 L136 42 M124 40 Q60 36 20 120" />
+      <path class="rp-impact" d="M120 30 l-6 -6 M140 30 l6 -6" />
+    }
+
+    @case ('height-barrier') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="112" />
+      <line class="rp-jz-net-side" x1="120" y1="112" x2="120" y2="126" />
+      <path class="rp-jz-barrier" d="M0 40 H240" />
+      <text class="rp-tag" x="236" y="34" text-anchor="end">2,43 m</text>
+      <path class="rp-arrow-bad" d="M40 120 Q120 -40 200 120" />
+      <use href="#rp-jz-ball" transform="translate(120 42)" />
+      <text class="rp-tag" x="120" y="100" text-anchor="middle">„balon"</text>
+    }
+
+    @case ('three-lobs') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <line class="rp-pole" x1="120" y1="140" x2="120" y2="112" />
+      <line class="rp-jz-net-side" x1="120" y1="112" x2="120" y2="126" />
+      <path class="rp-dash" d="M40 110 Q120 40 200 110" />
+      <path class="rp-dash" d="M200 104 Q120 48 40 104" />
+      <path class="rp-dash" d="M40 98 Q120 56 200 98" />
+      <text class="rp-step-no" x="120" y="66" text-anchor="middle">1</text>
+      <text class="rp-step-no" x="120" y="80" text-anchor="middle">2</text>
+      <text class="rp-step-no" x="120" y="94" text-anchor="middle">3</text>
+      <text class="rp-tag rp-tag-ok" x="120" y="28" text-anchor="middle">pa gađaj!</text>
+    }
+
+    @case ('think-fast') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="100" [y]="140" [scale]="1" team="us" [rightArm]="[14, 16]" />
+      <use href="#rp-jz-ball" transform="translate(128 106) scale(1.2)" />
+      <path class="rp-speech" d="M130 20 h60 a8 8 0 0 1 8 8 v20 a8 8 0 0 1 -8 8 h-44 l-12 10 v-10 a8 8 0 0 1 -12 -8 v-20 a8 8 0 0 1 8 -8 Z" />
+      <text class="rp-big" x="162" y="50" text-anchor="middle">!</text>
+    }
+
+    @case ('act-fast') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="90" [y]="140" [scale]="1" team="us" legs="run" [rightArm]="[24, -26]" />
+      <use href="#rp-jz-ball" transform="translate(128 34) scale(1.2)" />
+      <path class="rp-dash" d="M140 34 H220 M140 44 H200 M140 24 H200" />
+    }
+
+    @case ('gentleman') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="95" [y]="140" [scale]="1" team="us" [rightArm]="[20, 14]" />
+      <g appRuleFigure [x]="145" [y]="140" [scale]="1" team="us" [leftArm]="[-20, 14]" />
+      <circle class="rp-jz-bun" cx="152" cy="43" r="5" />
+      <path class="rp-heart" d="M120 30 C100 12 110 -2 120 10 C130 -2 140 12 120 30 Z" />
+    }
+
+    @case ('history') {
+      <rect class="rp-board-bg" x="50" y="30" width="140" height="70" rx="10" />
+      <text class="rp-board-score" x="120" y="80" text-anchor="middle">1993</text>
+      <text class="rp-tag" x="120" y="126" text-anchor="middle">Temerin · Janko Pavlis</text>
+    }
+
+    @case ('school') {
+      <rect class="rp-board-bg" x="40" y="30" width="160" height="70" rx="10" />
+      <text class="rp-board-score" x="120" y="78" text-anchor="middle">4.–8.</text>
+      <text class="rp-tag" x="120" y="126" text-anchor="middle">razred · od 2019.</text>
+    }
+
+    @case ('handshake') {
+      <g appRuleFigure [x]="85" [y]="150" [scale]="1" team="us" [rightArm]="[22, 10]" />
+      <g appRuleFigure [x]="155" [y]="150" [scale]="1" team="them" [leftArm]="[-22, 10]" />
+      <circle class="rp-jz-bun" cx="162" cy="53" r="5" />
+      <path class="rp-heart" d="M120 40 C100 22 110 8 120 20 C130 8 140 22 120 40 Z" />
+    }
+
+    @case ('help-up') {
+      <rect class="rp-floor" x="0" y="140" width="240" height="20" />
+      <g appRuleFigure [x]="90" [y]="140" [scale]="1" team="us" [rightArm]="[26, 26]" />
+      <g transform="translate(170 140) rotate(-60)">
+        <g appRuleFigure [x]="0" [y]="0" [scale]="0.85" team="them" [rightArm]="[-30, 6]" />
+      </g>
+    }
+  }
+</svg>

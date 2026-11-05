@@ -1,0 +1,130 @@
+.rp-pr-def.rp-pr-ball circle {
+  fill: var(--rb-warning);
+  stroke: var(--rb-primary-dark);
+  stroke-width: 1.2;
+}
+
+.rp-pr-def.rp-pr-ball path {
+  fill: none;
+  stroke: var(--rb-surface);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.rp-pr-def.rp-pr-med circle {
+  fill: var(--rb-info);
+  stroke: var(--rb-info-dark);
+  stroke-width: 1.2;
+}
+
+.rp-pr-def.rp-pr-med path {
+  fill: none;
+  stroke: var(--rb-info-dark);
+  stroke-width: 0.8;
+}
+
+.rp-pr-def.rp-pr-cone path {
+  fill: var(--color-orange);
+}
+
+.rp-pr-def.rp-pr-cone rect {
+  fill: color-mix(in srgb, var(--color-orange) 65%, var(--rb-neutral-dark));
+}
+
+.rp-pr-def.rp-pr-cone .rp-pr-cone-stripe {
+  fill: none;
+  stroke: var(--rb-surface);
+  stroke-width: 2.4;
+}
+
+.rules-scope.rules-props {
+  --rb-primary: var(--color-sky);
+  --rb-primary-dark: color-mix(in srgb, var(--color-sky) 60%, var(--rb-neutral-dark));
+  --rb-primary-tint: color-mix(in srgb, var(--color-sky) 14%, var(--color-surface));
+  --rb-info: var(--color-violet);
+  --rb-info-dark: color-mix(in srgb, var(--color-violet) 60%, var(--rb-neutral-dark));
+  --rb-info-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+
+  .rp-pr-rope {
+    fill: none;
+    stroke: var(--color-rose);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .rp-pr-rope-taut {
+    stroke-width: 4;
+  }
+
+  .rp-pr-hoop {
+    fill: none;
+    stroke: var(--color-lime-strong);
+    stroke-width: 4;
+  }
+
+  .rp-pr-turn {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 6 4;
+  }
+
+  .rp-pr-ghost {
+    opacity: 0.35;
+  }
+
+  .rp-pr-claw {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .rp-pr-bench {
+    fill: color-mix(in srgb, var(--rb-warning) 55%, var(--rb-text-muted));
+  }
+
+  .rp-pr-bench-leg {
+    fill: var(--rb-border-dark);
+  }
+
+  .rp-pr-mat {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+    stroke-width: 1.5;
+  }
+
+  .rp-pr-blind {
+    fill: var(--rb-neutral-dark);
+  }
+
+  .rp-pr-body,
+  .rp-pr-leg,
+  .rp-pr-limb {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .rp-pr-body {
+    stroke: var(--rb-primary);
+    stroke-width: 10;
+  }
+
+  .rp-pr-leg {
+    stroke: var(--rb-primary-dark);
+    stroke-width: 8;
+  }
+
+  .rp-pr-limb {
+    stroke: var(--rb-text-muted);
+    stroke-width: 6;
+  }
+
+  .rp-pr-head {
+    fill: var(--rb-text-muted);
+  }
+}

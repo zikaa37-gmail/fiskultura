@@ -44,8 +44,11 @@ class QuestionTest extends TestCase
             $this->assertNotEmpty($detail['valid_on']);
         }
 
-        $this->getJson('/api/questions?category=ocenjivanje')->assertOk()->assertJsonCount(2)->assertJsonMissingPath('0.answer');
-        $this->getJson('/api/questions?q=direktor')->assertOk()->assertJsonCount(1);
+        $grading = count(array_filter($rows, fn ($row) => $row['category'] === 'ocenjivanje'));
+        $this->getJson('/api/questions?category=ocenjivanje')->assertOk()->assertJsonCount($grading)->assertJsonMissingPath('0.answer');
+        $mentions = count(array_filter($rows, fn ($row) => stripos($row['title'].' '.($row['body'] ?? '').' '.$row['answer'], 'direktor') !== false));
+        $this->assertGreaterThan(0, $mentions);
+        $this->getJson('/api/questions?q=direktor')->assertOk()->assertJsonCount($mentions);
     }
 
     public function test_user_asks_editor_answers_and_asker_gets_one_mail_without_public_name(): void
@@ -57,7 +60,7 @@ class QuestionTest extends TestCase
         ])->assertCreated()->assertJsonPath('status', 'pending')->assertJsonPath('slug', null);
         $id = $asked->json('id');
 
-        $this->getJson('/api/questions?q=sekcija')->assertJsonCount(0);
+        $this->getJson('/api/questions?q=Vuk')->assertJsonCount(0);
         $this->withJwt($this->user)->getJson('/api/me/questions')->assertOk()->assertJsonPath('0.status', 'pending');
         $this->withJwt($this->user)->getJson("/api/admin/questions/{$id}")->assertForbidden();
 

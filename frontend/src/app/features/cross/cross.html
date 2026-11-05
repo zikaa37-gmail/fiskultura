@@ -1,0 +1,55 @@
+<section class="section">
+  <div class="container">
+    <a class="inline-link small" routerLink="/sportovi">← Svi sportovi</a>
+    <div class="section-head rules-head">
+      <p class="eyebrow">Školski kros</p>
+      <h1>Uputstvo za školski kros</h1>
+      <p class="muted">Šta propisuju program i ZUOV, kako organizovati kros u školi, šta je sa Krosom RTS-a i kakva je veza sa školskim takmičenjima.</p>
+    </div>
+
+    <div class="page-sticky">
+      <div class="testing-toolbar">
+        <mat-button-toggle-group class="level-filter" [value]="sectionId()" (change)="selectSection($event.value)" aria-label="Deo uputstva">
+          @for (item of sections; track item.id) {
+            <mat-button-toggle [value]="item.id">{{ item.tab }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+        <button type="button" mat-stroked-button class="testing-print" (click)="print()">Štampaj uputstvo</button>
+      </div>
+    </div>
+
+    @let current = section();
+    <article class="testing-card">
+      @if (current.picture) {
+        <app-test-picture class="testing-picture" [name]="current.picture" [label]="current.title" />
+      }
+      <div class="testing-body">
+        <h2>{{ current.title }}</h2>
+        <p>{{ current.lead }}</p>
+      </div>
+    </article>
+
+    <div class="testing-organization">
+      @for (block of current.blocks; track block.title) {
+        <section class="testing-block">
+          <h3>{{ block.title }}</h3>
+          <ul>
+            @for (item of block.items; track $index) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+          @if (block.note) {
+            <p class="testing-note">{{ block.note }}</p>
+          }
+          @for (source of block.sources; track source.url) {
+            <p class="muted small">
+              <app-icon [name]="source.url.endsWith('.pdf') ? 'pdf' : 'external'" [size]="16" />
+              <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.title }}</a>
+              — {{ source.publisher }}{{ source.year ? ', ' + source.year : '' }}{{ source.pages ? ', ' + source.pages : '' }}
+            </p>
+          }
+        </section>
+      }
+    </div>
+  </div>
+</section>

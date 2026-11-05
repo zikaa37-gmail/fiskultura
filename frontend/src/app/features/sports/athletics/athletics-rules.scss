@@ -1,0 +1,181 @@
+.rp-at-def.rp-at-baton rect {
+  fill: var(--rb-warning);
+  stroke: var(--rb-text);
+  stroke-width: 1.2;
+}
+
+.rp-at-def.rp-at-shot circle {
+  fill: var(--rb-neutral);
+  stroke: var(--rb-neutral-dark);
+  stroke-width: 1.2;
+}
+
+.rp-at-def.rp-at-ball circle {
+  fill: var(--rb-primary);
+  stroke: var(--rb-primary-dark);
+  stroke-width: 1.2;
+}
+
+.rules-scope.rules-athletics {
+  --rb-primary: var(--color-orange);
+  --rb-primary-dark: color-mix(in srgb, var(--color-orange) 65%, #000);
+  --rb-primary-tint: color-mix(in srgb, var(--color-orange) 16%, var(--color-surface));
+  --rb-info: var(--color-violet);
+  --rb-info-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+
+  .rp-at-track {
+    fill: var(--rb-primary-tint);
+  }
+
+  .rp-at-lane-line,
+  .rp-at-lane-line * {
+    fill: none;
+    stroke: var(--rb-primary-dark);
+    stroke-width: 1.6;
+  }
+
+  .rp-at-line {
+    stroke: var(--rb-text);
+    stroke-width: 4;
+  }
+
+  .rp-at-plane {
+    stroke: var(--rb-primary-dark);
+    stroke-width: 2;
+    stroke-dasharray: 5 4;
+  }
+
+  .rp-at-midline {
+    stroke: var(--rb-text);
+    stroke-width: 3;
+  }
+
+  .rp-at-block {
+    fill: var(--rb-neutral);
+  }
+
+  .rp-at-command {
+    fill: var(--rb-primary-dark);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .rp-at-runner circle {
+    fill: var(--rb-primary);
+  }
+
+  .rp-at-runner text {
+    fill: var(--rb-on-primary);
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .rp-at-zone {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+    stroke-width: 2;
+    stroke-dasharray: 5 4;
+  }
+
+  .rp-at-board {
+    fill: var(--rb-surface);
+    stroke: var(--rb-text);
+    stroke-width: 1.5;
+  }
+
+  .rp-at-sand {
+    fill: color-mix(in srgb, var(--rb-warning) 38%, var(--rb-surface));
+  }
+
+  .rp-at-takeoff {
+    stroke: var(--rb-danger);
+    stroke-width: 3;
+  }
+
+  .rp-at-mark {
+    fill: var(--rb-text-muted);
+  }
+
+  .rp-at-bar {
+    stroke: var(--rb-danger);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-at-bar-end {
+    fill: var(--rb-danger);
+  }
+
+  .rp-at-mat {
+    fill: var(--rb-info-tint);
+    stroke: var(--rb-info);
+    stroke-width: 2;
+  }
+
+  .rp-at-ok-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-at-x {
+    fill: var(--rb-danger);
+    font-size: 40px;
+    font-weight: 900;
+  }
+
+  .rp-at-x-small {
+    fill: var(--rb-danger);
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .rp-at-circle {
+    fill: var(--rb-surface);
+    stroke: var(--rb-text);
+    stroke-width: 3;
+  }
+
+  .rp-at-rear {
+    fill: var(--rb-success-tint);
+  }
+
+  .rp-at-stopboard {
+    fill: none;
+    stroke: var(--rb-neutral);
+    stroke-width: 6;
+  }
+
+  .rp-at-sector {
+    stroke: var(--rb-text);
+    stroke-width: 2;
+  }
+
+  .rp-at-sector-area {
+    fill: var(--rb-warning-tint);
+  }
+
+  .rp-at-speed {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .rp-at-result {
+    fill: var(--rb-info);
+  }
+
+  .rp-at-result-old {
+    fill: var(--rb-border-dark);
+  }
+
+  .rp-at-rake {
+    fill: none;
+    stroke: var(--rb-text-muted);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+}

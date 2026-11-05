@@ -1,0 +1,112 @@
+<section class="section">
+  <div class="container">
+    <a class="inline-link small" routerLink="/sportovi">← Svi sportovi</a>
+    <div class="section-head rules-head">
+      <p class="eyebrow">Sportovi i pravila</p>
+      <h1>Pravila malog fudbala (futsala) za decu</h1>
+      <p class="muted">
+        Otvori polje, pogledaj sličice i dodirni <span class="rules-i-inline" aria-hidden="true">i</span> da saznaš više. Pa probaj kviz!
+        Za nastavnike: zvanična pravila FIFA za futsal (izdanje 2025/26) su u trećoj kartici.
+      </p>
+    </div>
+
+    <mat-button-toggle-group class="level-filter" [value]="tab()" (change)="setTab($event.value)" aria-label="Deo pravila">
+      <mat-button-toggle value="play">Igraonica</mat-button-toggle>
+      <mat-button-toggle value="quiz">Kviz</mat-button-toggle>
+      <mat-button-toggle value="official">Zvanična pravila</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (tab() === 'play') {
+      <div class="rules-progress">
+        <span>Otkriveno <strong>{{ progress.openedCount() }}</strong> od {{ cards.length }} polja</span>
+        <span class="rules-progress-bar"><span [style.width.%]="(progress.openedCount() / cards.length) * 100"></span></span>
+        @if (progress.allOpened()) {
+          <span class="status status-next">Sva polja otkrivena — probaj kviz!</span>
+        }
+      </div>
+
+      <div class="rules-board">
+        @for (card of cards; track card.id; let index = $index) {
+          <button type="button" class="rules-tile" [class.rules-tile-done]="progress.isOpened(card.id)" (click)="openCard(card)">
+            <span class="rules-tile-number">{{ index + 1 }}</span>
+            <app-futsal-rule-media [picture]="card.picture" [image]="card.image" [label]="card.title" />
+            <strong>{{ card.title }}</strong>
+            @if (progress.isOpened(card.id)) {
+              <span class="rules-tile-check" aria-label="Otkriveno"><app-icon name="check" [size]="14" /></span>
+            }
+          </button>
+        }
+      </div>
+    } @else if (tab() === 'quiz') {
+      <div class="rules-quiz">
+        @if (quizDone()) {
+          <div class="rules-quiz-result">
+            <span class="rules-stars" [attr.aria-label]="stars() + ' od 3 zvezdice'">
+              @for (star of [1, 2, 3]; track star) {
+                <app-icon name="star" [size]="36" [class.rules-star-on]="star <= stars()" />
+              }
+            </span>
+            <strong class="rules-quiz-score">{{ quizScore() }} / {{ quiz.length }}</strong>
+            <p>{{ stars() === 3 ? 'Bravo, pravi si futsal stručnjak!' : stars() === 2 ? 'Odlično! Još malo i znaš sve.' : 'Pogledaj još jednom polja u igraonici, pa probaj ponovo.' }}</p>
+            @if (progress.state().best > 0) {
+              <p class="muted small">Tvoj najbolji rezultat: {{ progress.state().best }} / {{ quiz.length }}</p>
+            }
+            <button type="button" mat-flat-button (click)="restartQuiz()">Igraj ponovo</button>
+          </div>
+        } @else {
+          @let question = currentQuestion();
+          <span class="muted small">Pitanje {{ quizIndex() + 1 }} od {{ quiz.length }} · tačnih {{ quizScore() }}</span>
+          @if (question.picture || question.image) {
+            <app-futsal-rule-media class="rules-quiz-picture" [picture]="question.picture" [image]="question.image" [label]="question.text" />
+          }
+          <h2 class="rules-quiz-question">{{ question.text }}</h2>
+          <div class="rules-quiz-options">
+            @for (option of question.options; track $index; let index = $index) {
+              <button
+                type="button"
+                class="rules-quiz-option"
+                [class.rules-quiz-correct]="quizChoice() !== null && index === question.correct"
+                [class.rules-quiz-wrong]="quizChoice() === index && index !== question.correct"
+                [disabled]="quizChoice() !== null"
+                (click)="choose(index)"
+              >
+                {{ option }}
+              </button>
+            }
+          </div>
+          @if (quizChoice() !== null) {
+            <p class="rules-quiz-feedback" [class.rules-quiz-feedback-ok]="quizChoice() === question.correct">
+              <strong>{{ quizChoice() === question.correct ? 'Tačno!' : 'Nije tačno.' }}</strong> {{ question.explanation }}
+            </p>
+            <button type="button" mat-flat-button (click)="nextQuestion()">{{ quizIndex() + 1 < quiz.length ? 'Sledeće pitanje' : 'Rezultat' }}</button>
+          }
+        }
+      </div>
+    } @else {
+      @for (group of groups; track group.title) {
+        <section class="rules-doc-group">
+          <h2>{{ group.title }}</h2>
+          <p class="muted small">{{ group.description }}</p>
+          @for (doc of group.documents; track doc.url) {
+            <a class="rules-doc" [href]="doc.url" target="_blank" rel="noopener">
+              <app-icon [name]="doc.format === 'PDF' ? 'pdf' : 'external'" />
+              <span class="rules-doc-text">
+                <strong>{{ doc.title }}</strong>
+                @if (doc.note) {
+                  <span class="muted small">{{ doc.note }}</span>
+                }
+              </span>
+              <span class="post-category">{{ doc.format }} · {{ doc.language === 'sr' ? 'srpski' : 'engleski' }}</span>
+            </a>
+          }
+        </section>
+      }
+      <p class="muted small">
+        Izvor: <a class="inline-link" [href]="sourceUrl" target="_blank" rel="noopener">FIFA — Futsal Laws of the Game 2025/26</a>.
+        Igraonica je naš sažetak za decu; u spornim situacijama važe zvanična pravila.
+      </p>
+    }
+  </div>
+</section>
+
+<app-futsal-rule-defs />

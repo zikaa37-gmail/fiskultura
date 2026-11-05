@@ -1,0 +1,74 @@
+.rp-ball.rp-vb-ball circle {
+  fill: var(--rb-warning);
+}
+
+.rp-ball.rp-vb-ball path {
+  stroke: var(--rb-primary-dark);
+}
+
+.rules-scope.rules-volleyball {
+  --rb-primary: var(--color-primary);
+  --rb-primary-dark: color-mix(in srgb, var(--color-primary) 65%, #000);
+  --rb-primary-tint: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+  --rb-info: var(--color-violet);
+  --rb-info-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+
+  .rp-vb-net-top {
+    stroke: var(--rb-text);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-vb-net-side {
+    stroke: var(--rb-text);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .rp-vb-mesh {
+    fill: color-mix(in srgb, var(--rb-text-muted) 18%, transparent);
+    stroke: var(--rb-text-muted);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .rp-vb-antenna {
+    stroke: var(--rb-danger);
+    stroke-width: 3;
+    stroke-dasharray: 6 6;
+  }
+
+  .rp-vb-line {
+    stroke: var(--rb-text);
+    stroke-width: 5;
+  }
+
+  .rp-vb-cross-zone {
+    fill: var(--rb-success-tint);
+  }
+
+  .rp-vb-ok-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+  }
+
+  .rp-vb-bad-no {
+    fill: var(--rb-danger);
+  }
+
+  .rp-vb-rotate,
+  .rp-vb-rotate-head {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .rp-vb-libero .rp-figure-us {
+    --rp-shirt: var(--color-orange);
+    --rp-pants: var(--rb-primary-dark);
+  }
+}

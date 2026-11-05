@@ -1,0 +1,63 @@
+.rp-ball.rp-jz-ball circle {
+  fill: var(--rb-warning);
+}
+
+.rp-ball.rp-jz-ball path {
+  stroke: var(--rb-primary-dark);
+}
+
+.rules-scope.rules-jadzent {
+  --rb-primary: var(--color-violet);
+  --rb-primary-dark: color-mix(in srgb, var(--color-violet) 65%, #000);
+  --rb-primary-tint: color-mix(in srgb, var(--color-violet) 14%, var(--color-surface));
+  --rb-info: var(--color-sky);
+  --rb-info-dark: color-mix(in srgb, var(--color-sky) 65%, #000);
+  --rb-info-tint: color-mix(in srgb, var(--color-sky) 14%, var(--color-surface));
+
+  .rp-jz-dama {
+    fill: var(--rb-warning-tint);
+    stroke: var(--rb-warning);
+    stroke-width: 2;
+  }
+
+  .rp-jz-net {
+    stroke: var(--rb-text);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .rp-jz-net-top {
+    stroke: var(--rb-text);
+    stroke-width: 3;
+  }
+
+  .rp-jz-net-side {
+    stroke: var(--rb-text);
+    stroke-width: 6;
+    stroke-linecap: round;
+  }
+
+  .rp-jz-mesh {
+    fill: color-mix(in srgb, var(--rb-text-muted) 18%, transparent);
+    stroke: var(--rb-text-muted);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .rp-jz-bun {
+    fill: var(--rb-text-muted);
+  }
+
+  .rp-jz-ring {
+    fill: none;
+    stroke: var(--rb-success);
+    stroke-width: 2.5;
+  }
+
+  .rp-jz-barrier {
+    fill: none;
+    stroke: var(--rb-danger);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+  }
+}

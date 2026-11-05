@@ -1,0 +1,460 @@
+<svg viewBox="0 0 240 160" role="img" [attr.aria-label]="label()">
+  <rect class="rp-floor" x="0" y="132" width="240" height="8" />
+  @switch (name()) {
+    @case ('mats-joined') {
+      <rect class="rp-gy-matrect" x="30" y="124" width="90" height="8" rx="3" />
+      <rect class="rp-gy-matrect" x="120" y="124" width="90" height="8" rx="3" />
+      <g appGymnasticsPose pose="stand" [x]="120" [y]="124" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">spojene strunjače</text>
+    }
+
+    @case ('mats-gap') {
+      <rect class="rp-gy-matrect" x="30" y="124" width="78" height="8" rx="3" />
+      <rect class="rp-gy-matrect" x="132" y="124" width="78" height="8" rx="3" />
+      <g appGymnasticsPose pose="stand" [x]="80" [y]="124" />
+      <circle class="rp-highlight" cx="120" cy="128" r="14" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">razmak</text>
+    }
+
+    @case ('warmup') {
+      <g appRuleFigure [x]="60" [y]="132" [scale]="0.75" team="us" [leftArm]="[-10, -30]" [rightArm]="[10, -30]" />
+      <g appRuleFigure [x]="120" [y]="132" [scale]="0.75" team="us" [leftArm]="[-30, 0]" [rightArm]="[30, 0]" />
+      <g appRuleFigure [x]="180" [y]="132" [scale]="0.75" team="us" [leftArm]="[-10, -30]" [rightArm]="[10, -30]" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">zagrevanje</text>
+    }
+
+    @case ('one-on-apparatus') {
+      <use href="#rp-gy-beam" transform="translate(120 94)" />
+      <g appGymnasticsPose pose="beam-walk" [x]="120" [y]="94" [scale]="0.75" />
+      <g appRuleFigure [x]="18" [y]="132" [scale]="0.5" team="them" />
+      <g appRuleFigure [x]="222" [y]="132" [scale]="0.5" team="them" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">jedan po jedan</text>
+    }
+
+    @case ('roll-rock') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <path class="rp-dash" d="M80 70 Q110 52 140 70" />
+      <g appGymnasticsPose pose="rock" [x]="120" [y]="124" [scale]="1.4" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">povaljka</text>
+    }
+
+    @case ('roll-start') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="squat" [x]="96" [y]="124" [scale]="1.3" />
+      <g class="rp-measure">
+        <line x1="96" y1="144" x2="127" y2="144" />
+        <path d="M101 140 L96 144 L101 148 M122 140 L127 144 L122 148" />
+      </g>
+      <text class="rp-tag" x="134" y="148">30–40 cm</text>
+    }
+
+    @case ('roll-tuck') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="roll-tuck" [x]="116" [y]="124" [scale]="1.5" />
+      <circle class="rp-gy-ok-ring" cx="107" cy="110" r="16" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">potiljak i lopatice</text>
+    }
+
+    @case ('roll-head') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="roll-head" [x]="112" [y]="124" [scale]="1.4" />
+      <circle class="rp-highlight" cx="112" cy="113" r="15" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">oslonac na teme</text>
+    }
+
+    @case ('roll-help') {
+      <rect class="rp-gy-matrect" x="30" y="124" width="180" height="8" rx="3" />
+      <g appGymnasticsPose pose="roll-tuck" [x]="120" [y]="124" [scale]="1.3" />
+      <g appGymnasticsPose pose="kneel-spot" role="help" [x]="70" [y]="124" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">ruka na potiljku</text>
+    }
+
+    @case ('back-start') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="squat-hands-up" [x]="140" [y]="124" [scale]="1.3" />
+      <path class="rp-arrow-ok" d="M104 70 H70 m10 -9 l-10 9 l10 9" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">brada na grudi</text>
+    }
+
+    @case ('back-roll') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="back-roll" [x]="130" [y]="124" [scale]="1.5" />
+      <circle class="rp-gy-ok-ring" cx="146" cy="116" r="14" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">šake kod ušiju</text>
+    }
+
+    @case ('back-help') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="170" height="8" rx="3" />
+      <g appGymnasticsPose pose="back-roll" [x]="140" [y]="124" [scale]="1.3" />
+      <g appGymnasticsPose pose="spot-low" role="help" [x]="90" [y]="124" />
+      <path class="rp-arrow-ok" d="M135 70 V46 m-8 8 l8 -8 l8 8" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">podigni kukove</text>
+    }
+
+    @case ('back-kneel') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="kneel" [x]="120" [y]="124" [scale]="1.2" />
+      <circle class="rp-highlight" cx="118" cy="120" r="14" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">završetak u kleku</text>
+    }
+
+    @case ('candle-tuck') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="candle-tuck" [x]="130" [y]="124" [scale]="1.4" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">sveća zgrčeno</text>
+    }
+
+    @case ('candle') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="candle" [x]="128" [y]="124" [scale]="1.15" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">telo opruženo</text>
+    }
+
+    @case ('candle-bad') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="candle-bad" [x]="128" [y]="124" [scale]="1.3" />
+      <circle class="rp-highlight" cx="144" cy="85" r="15" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijen u kukovima</text>
+    }
+
+    @case ('candle-help') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="candle" [x]="110" [y]="124" [scale]="1.05" />
+      <g appGymnasticsPose pose="spot-up" role="help" [x]="138" [y]="124" [scale]="0.9" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">pete i kolena</text>
+    }
+
+    @case ('bridge-start') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="lie-back" [x]="134" [y]="124" [scale]="1.4" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">šake pored ušiju</text>
+    }
+
+    @case ('bridge') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="bridge" [x]="124" [y]="124" [scale]="1.4" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">ruke opružene</text>
+    }
+
+    @case ('bridge-bad') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="bridge-bad" [x]="124" [y]="124" [scale]="1.4" />
+      <circle class="rp-highlight" cx="79" cy="104" r="14" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijene ruke</text>
+    }
+
+    @case ('bridge-help') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="160" height="8" rx="3" />
+      <g appGymnasticsPose pose="bridge" [x]="104" [y]="124" [scale]="1.2" />
+      <g appGymnasticsPose pose="spot-low" role="help" [x]="160" [y]="124" [scale]="0.9" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">ruka ispod lopatica</text>
+    }
+
+    @case ('hs-wall') {
+      <rect class="rp-gy-wall" x="60" y="18" width="10" height="114" />
+      <rect class="rp-gy-matrect" x="70" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="handstand" [x]="84" [y]="124" />
+      <text class="rp-tag" x="140" y="154" text-anchor="middle">uz zid ili lestve</text>
+    }
+
+    @case ('hs-help') {
+      <rect class="rp-gy-matrect" x="50" y="124" width="140" height="8" rx="3" />
+      <g appGymnasticsPose pose="handstand" [x]="116" [y]="124" />
+      <g appGymnasticsPose pose="spot-up" role="help" [x]="142" [y]="124" [scale]="0.9" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">drži natkolenicu</text>
+    }
+
+    @case ('handstand') {
+      <rect class="rp-gy-matrect" x="50" y="124" width="140" height="8" rx="3" />
+      <line class="rp-dash" x1="120" y1="16" x2="120" y2="124" />
+      <g appGymnasticsPose pose="handstand" [x]="120" [y]="124" [scale]="1.02" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">sve u jednoj liniji</text>
+    }
+
+    @case ('handstand-bad') {
+      <rect class="rp-gy-matrect" x="50" y="124" width="140" height="8" rx="3" />
+      <g appGymnasticsPose pose="handstand-bad" [x]="116" [y]="124" [scale]="1.1" />
+      <circle class="rp-highlight" cx="107" cy="111" r="13" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijeni laktovi</text>
+    }
+
+    @case ('cw-weight') {
+      <rect class="rp-gy-matrect" x="40" y="124" width="170" height="8" rx="3" />
+      <g appGymnasticsPose pose="plank" [x]="160" [y]="124" [scale]="1.2" />
+      <path class="rp-arrow-ok" d="M150 84 Q160 72 172 84 m-9 -2 l9 2 l-1 -9" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">sa ruke na ruku</text>
+    }
+
+    @case ('cartwheel') {
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <line class="rp-gy-line" x1="30" y1="128" x2="210" y2="128" />
+      <g appGymnasticsPose pose="cartwheel" [x]="120" [y]="124" [scale]="0.95" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">noge kao slovo V</text>
+    }
+
+    @case ('cartwheel-bad') {
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <line class="rp-gy-line" x1="30" y1="128" x2="210" y2="128" />
+      <g appGymnasticsPose pose="cartwheel-bad" [x]="130" [y]="124" />
+      <circle class="rp-highlight" cx="130" cy="68" r="14" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijeni kukovi</text>
+    }
+
+    @case ('cw-help') {
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <g appRuleFigure [x]="120" [y]="132" [scale]="0.8" team="them" [leftArm]="[18, -6]" [rightArm]="[-18, -6]" />
+      <g appGymnasticsPose pose="cartwheel" [x]="120" [y]="124" [scale]="0.9" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">hvat za bokove</text>
+    }
+
+    @case ('board-takeoff') {
+      <use href="#rp-gy-board" transform="translate(110 132)" />
+      <use href="#rp-gy-buck" transform="translate(196 64)" />
+      <g appGymnasticsPose pose="stand-up" [x]="126" [y]="125" />
+      <text class="rp-tag rp-tag-ok" x="110" y="154" text-anchor="middle">sunožno, na prste</text>
+    }
+
+    @case ('board-one-foot') {
+      <use href="#rp-gy-board" transform="translate(110 132)" />
+      <use href="#rp-gy-buck" transform="translate(196 64)" />
+      <g appGymnasticsPose pose="one-foot" [x]="126" [y]="125" />
+      <circle class="rp-highlight" cx="102" cy="94" r="13" />
+      <text class="rp-tag rp-gy-tag-bad" x="110" y="154" text-anchor="middle">jednom nogom</text>
+    }
+
+    @case ('vault-tuck') {
+      <use href="#rp-gy-board" transform="translate(54 132)" />
+      <use href="#rp-gy-buck" transform="translate(120 64)" />
+      <rect class="rp-gy-matrect" x="150" y="124" width="70" height="8" rx="3" />
+      <g appGymnasticsPose pose="vault-tuck" [x]="120" [y]="64" [scale]="1.1" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">kolena ka grudima</text>
+    }
+
+    @case ('vault-hook') {
+      <use href="#rp-gy-board" transform="translate(54 132)" />
+      <use href="#rp-gy-buck" transform="translate(120 64)" />
+      <rect class="rp-gy-matrect" x="150" y="124" width="70" height="8" rx="3" />
+      <g appGymnasticsPose pose="vault-hook" [x]="124" [y]="64" [scale]="1.1" />
+      <circle class="rp-highlight" cx="102" cy="69" r="12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">stopala zakače spravu</text>
+    }
+
+    @case ('vault-help') {
+      <use href="#rp-gy-board" transform="translate(54 132)" />
+      <use href="#rp-gy-buck" transform="translate(120 64)" />
+      <rect class="rp-gy-matrect" x="150" y="124" width="70" height="8" rx="3" />
+      <g appGymnasticsPose pose="vault-tuck" [x]="120" [y]="64" />
+      <g appGymnasticsPose pose="spot-up" role="help" [x]="156" [y]="124" [scale]="0.95" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">drži nadlakticu</text>
+    }
+
+    @case ('vault-straddle') {
+      <use href="#rp-gy-board" transform="translate(54 132)" />
+      <use href="#rp-gy-buck" transform="translate(110 64)" />
+      <rect class="rp-gy-matrect" x="140" y="124" width="80" height="8" rx="3" />
+      <g appGymnasticsPose pose="vault-straddle" [x]="108" [y]="64" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">noge raznožno</text>
+    }
+
+    @case ('straddle-help') {
+      <use href="#rp-gy-board" transform="translate(44 132)" />
+      <use href="#rp-gy-buck" transform="translate(100 64)" />
+      <rect class="rp-gy-matrect" x="130" y="124" width="90" height="8" rx="3" />
+      <g appGymnasticsPose pose="vault-straddle" [x]="98" [y]="64" [scale]="0.95" />
+      <g appGymnasticsPose pose="spot-up" role="help" [x]="142" [y]="124" [scale]="0.95" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">hvat za nadlaktice</text>
+    }
+
+    @case ('landing') {
+      <rect class="rp-gy-matrect" x="50" y="124" width="140" height="8" rx="3" />
+      <g appGymnasticsPose pose="landing" [x]="112" [y]="124" [scale]="1.2" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">mekan doskok</text>
+    }
+
+    @case ('landing-bad') {
+      <rect class="rp-gy-matrect" x="50" y="124" width="140" height="8" rx="3" />
+      <g appGymnasticsPose pose="landing-bad" [x]="120" [y]="124" [scale]="1.15" />
+      <path class="rp-impact" d="M104 126 l-12 -6 M136 126 l12 -6 M108 118 l-10 -12 M132 118 l10 -12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">opružene noge</text>
+    }
+
+    @case ('beam-order') {
+      <line class="rp-gy-line" x1="20" y1="130" x2="70" y2="130" />
+      <rect class="rp-bench" x="95" y="110" width="50" height="6" rx="2" />
+      <path class="rp-gy-legs-static" d="M102 116 V132 M138 116 V132" />
+      <rect class="rp-gy-beam-top" x="168" y="92" width="56" height="7" rx="2" />
+      <path class="rp-gy-legs-static" d="M176 99 V132 M216 99 V132" />
+      <g appGymnasticsPose pose="beam-walk" [x]="45" [y]="130" [scale]="0.55" />
+      <g appGymnasticsPose pose="beam-walk" [x]="120" [y]="110" [scale]="0.55" />
+      <g appGymnasticsPose pose="beam-walk" [x]="196" [y]="92" [scale]="0.55" />
+      <path class="rp-arrow-ok" d="M72 100 h16 m-7 -7 l7 7 l-7 7" />
+      <path class="rp-arrow-ok" d="M148 84 h16 m-7 -7 l7 7 l-7 7" />
+      <text class="rp-tag" x="45" y="154" text-anchor="middle">linija</text>
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">klupa</text>
+      <text class="rp-tag" x="196" y="154" text-anchor="middle">greda</text>
+    }
+
+    @case ('beam-walk') {
+      <use href="#rp-gy-beam" transform="translate(120 94)" />
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <g appGymnasticsPose pose="beam-walk" [x]="116" [y]="94" [scale]="0.9" />
+      <path class="rp-arrow-ok" d="M150 40 h30 m-9 -9 l9 9 l-9 9" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">pogled napred</text>
+    }
+
+    @case ('beam-look-down') {
+      <use href="#rp-gy-beam" transform="translate(120 94)" />
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <g appGymnasticsPose pose="beam-look-down" [x]="116" [y]="94" [scale]="0.9" />
+      <circle class="rp-highlight" cx="131" cy="29" r="13" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">pogled na stopala</text>
+    }
+
+    @case ('beam-dismount') {
+      <use href="#rp-gy-beam" transform="translate(70 94)" />
+      <rect class="rp-gy-matrect" x="140" y="124" width="90" height="8" rx="3" />
+      <path class="rp-dash" d="M130 88 Q160 50 182 118" />
+      <g appGymnasticsPose pose="tuck-jump" [x]="166" [y]="104" [scale]="0.75" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">mekan doskok</text>
+    }
+
+    @case ('bar-grip-ok') {
+      <line class="rp-gy-forearm" x1="118" y1="88" x2="112" y2="140" />
+      <circle class="rp-gy-bar-big" cx="120" cy="66" r="14" />
+      <path class="rp-gy-hand" d="M104 70 A18 18 0 0 1 138 62" />
+      <path class="rp-gy-thumb" d="M108 82 A16 16 0 0 0 134 76" />
+      <circle class="rp-gy-ok-ring" cx="120" cy="68" r="32" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">palac obuhvata</text>
+    }
+
+    @case ('bar-grip-bad') {
+      <line class="rp-gy-forearm" x1="112" y1="84" x2="106" y2="140" />
+      <circle class="rp-gy-bar-big" cx="120" cy="66" r="14" />
+      <path class="rp-gy-hand" d="M104 70 A18 18 0 0 1 138 62" />
+      <path class="rp-gy-thumb" d="M102 76 A20 20 0 0 1 114 48" />
+      <circle class="rp-highlight" cx="124" cy="86" r="12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">bez palca</text>
+    }
+
+    @case ('bar-support') {
+      <line class="rp-pole" x1="120" y1="70" x2="120" y2="132" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="support" [x]="120" [y]="70" />
+      <circle class="rp-gy-bar" cx="120" cy="70" r="5" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">ruke opružene</text>
+    }
+
+    @case ('hang-knees') {
+      <line class="rp-pole" x1="110" y1="40" x2="110" y2="132" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="hang-knees" [x]="110" [y]="40" [scale]="0.9" />
+      <circle class="rp-gy-bar" cx="110" cy="40" r="5" />
+      <path class="rp-arrow-ok" d="M150 108 V84 m-8 8 l8 -8 l8 8" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">kolena ka grudima</text>
+    }
+
+    @case ('pb-support') {
+      <line class="rp-pole" x1="60" y1="70" x2="60" y2="132" />
+      <line class="rp-pole" x1="180" y1="70" x2="180" y2="132" />
+      <line class="rp-gy-rail" x1="40" y1="70" x2="200" y2="70" />
+      <g appGymnasticsPose pose="support" [x]="120" [y]="70" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">ramena spuštena</text>
+    }
+
+    @case ('pb-support-bad') {
+      <line class="rp-pole" x1="60" y1="70" x2="60" y2="132" />
+      <line class="rp-pole" x1="180" y1="70" x2="180" y2="132" />
+      <line class="rp-gy-rail" x1="40" y1="70" x2="200" y2="70" />
+      <g appGymnasticsPose pose="support-bad" [x]="120" [y]="70" />
+      <circle class="rp-highlight" cx="110" cy="62" r="12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijeni laktovi</text>
+    }
+
+    @case ('pb-swing') {
+      <line class="rp-pole" x1="60" y1="70" x2="60" y2="132" />
+      <line class="rp-pole" x1="180" y1="70" x2="180" y2="132" />
+      <line class="rp-gy-rail" x1="40" y1="70" x2="200" y2="70" />
+      <path class="rp-dash" d="M96 118 Q120 132 152 110" />
+      <g appGymnasticsPose pose="swing" [x]="120" [y]="70" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">njih iz ramena</text>
+    }
+
+    @case ('pb-swing-bad') {
+      <line class="rp-pole" x1="60" y1="70" x2="60" y2="132" />
+      <line class="rp-pole" x1="180" y1="70" x2="180" y2="132" />
+      <line class="rp-gy-rail" x1="40" y1="70" x2="200" y2="70" />
+      <g appGymnasticsPose pose="swing-bad" [x]="120" [y]="70" />
+      <circle class="rp-highlight" cx="118" cy="72" r="12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijeno telo</text>
+    }
+
+    @case ('pb-help') {
+      <line class="rp-pole" x1="60" y1="70" x2="60" y2="132" />
+      <line class="rp-pole" x1="180" y1="70" x2="180" y2="132" />
+      <line class="rp-gy-rail" x1="40" y1="70" x2="200" y2="70" />
+      <g appGymnasticsPose pose="support" [x]="116" [y]="70" />
+      <g appGymnasticsPose pose="spot-up" role="help" [x]="146" [y]="132" [scale]="0.9" [flip]="true" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">drži nadlakticu</text>
+    }
+
+    @case ('rings-height') {
+      <line class="rp-gy-strap" x1="122" y1="0" x2="122" y2="39" />
+      <use href="#rp-gy-ring" transform="translate(122 46)" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="stand-up" [x]="120" [y]="124" [scale]="0.8" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">stopala dosežu tlo</text>
+    }
+
+    @case ('rings-tuck') {
+      <line class="rp-gy-strap" x1="120" y1="0" x2="120" y2="37" />
+      <use href="#rp-gy-ring" transform="translate(120 44)" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="rings-tuck" [x]="126" [y]="44" [scale]="1.1" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">vis uzneto</text>
+    }
+
+    @case ('rings-inverted') {
+      <line class="rp-gy-strap" x1="114" y1="0" x2="114" y2="57" />
+      <use href="#rp-gy-ring" transform="translate(114 64)" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="rings-inverted" [x]="120" [y]="64" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">vis strmoglavo</text>
+    }
+
+    @case ('rings-bad') {
+      <line class="rp-gy-strap" x1="114" y1="0" x2="114" y2="57" />
+      <use href="#rp-gy-ring" transform="translate(114 64)" />
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appGymnasticsPose pose="rings-bad" [x]="120" [y]="64" />
+      <circle class="rp-highlight" cx="106" cy="74" r="12" />
+      <text class="rp-tag rp-gy-tag-bad" x="120" y="154" text-anchor="middle">savijene ruke</text>
+    }
+
+    @case ('judge-start') {
+      <rect class="rp-gy-matrect" x="60" y="124" width="120" height="8" rx="3" />
+      <g appRuleFigure [x]="120" [y]="128" [scale]="0.85" team="us" [leftArm]="[-10, -30]" [rightArm]="[10, -30]" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">početni i završni stav</text>
+    }
+
+    @case ('judge-flow') {
+      <rect class="rp-gy-matrect" x="20" y="124" width="200" height="8" rx="3" />
+      <g appGymnasticsPose pose="stand-up" [x]="44" [y]="124" [scale]="0.7" />
+      <g appGymnasticsPose pose="roll-tuck" [x]="116" [y]="124" [scale]="0.9" />
+      <g appGymnasticsPose pose="stand-up" [x]="192" [y]="124" [scale]="0.7" />
+      <path class="rp-arrow-ok" d="M62 90 h22 m-8 -8 l8 8 l-8 8" />
+      <path class="rp-arrow-ok" d="M146 90 h22 m-8 -8 l8 8 l-8 8" />
+      <text class="rp-tag rp-tag-ok" x="120" y="154" text-anchor="middle">bez zastoja</text>
+    }
+
+    @case ('judge-two') {
+      <rect class="rp-board-bg" x="44" y="50" width="66" height="60" rx="10" />
+      <rect class="rp-board-bg" x="130" y="50" width="66" height="60" rx="10" />
+      <text class="rp-board-team" x="77" y="68" text-anchor="middle">POKUŠAJ</text>
+      <text class="rp-board-team" x="163" y="68" text-anchor="middle">POKUŠAJ</text>
+      <text class="rp-board-score" x="77" y="100" text-anchor="middle">1</text>
+      <text class="rp-board-score rp-board-win" x="163" y="100" text-anchor="middle">2</text>
+      <path class="rp-crown" d="M145 44 L151 32 L157 40 L163 30 L169 40 L175 32 L181 44 Z" />
+      <text class="rp-tag" x="120" y="154" text-anchor="middle">računa se bolji</text>
+    }
+  }
+</svg>
