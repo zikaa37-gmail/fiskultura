@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
+use App\Http\Controllers\Api\Admin\AdminQuestionController;
 use App\Http\Controllers\Api\Admin\AdminRegulationController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\RegulationController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,11 +27,16 @@ Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
+Route::get('/questions', [QuestionController::class, 'index']);
+Route::get('/questions/{slug}', [QuestionController::class, 'show']);
 
 Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::middleware('jwt')->group(function () {
+    Route::post('/questions', [QuestionController::class, 'store'])->middleware('throttle:5,1');
+    Route::get('/me/questions', [QuestionController::class, 'mine']);
+
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
     Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
@@ -40,6 +47,11 @@ Route::middleware('jwt')->group(function () {
         Route::post('/news', [AdminNewsController::class, 'store']);
         Route::patch('/news/{news}', [AdminNewsController::class, 'update']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
+
+        Route::post('/questions/list', [AdminQuestionController::class, 'list']);
+        Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
+        Route::post('/questions', [AdminQuestionController::class, 'store']);
+        Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
 
         Route::get('/organizations', [AdminOrganizationController::class, 'index']);
         Route::get('/organizations/{organization}', [AdminOrganizationController::class, 'show']);
@@ -55,5 +67,6 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/regulations/{regulation}', [AdminRegulationController::class, 'destroy']);
         Route::post('/users/list', [AdminUserController::class, 'list']);
         Route::patch('/users/{user}', [AdminUserController::class, 'update']);
+        Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy']);
     });
 });

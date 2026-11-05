@@ -163,11 +163,14 @@ izmene super admina se ne gaze. Kasnije isto i za druge aplikacije (Evidencija F
   `deploy.py --regulations` u e-pripremama
 - [ ] Cron `schedule:run` za e-pripreme u cPanelu (`e-pripreme-fv/docs/DEPLOY.md`)
 
-### #40 Pitanja i odgovori — administracija i pravna pitanja (faza-1b)
+### #40 Pitanja i odgovori — administracija i pravna pitanja (faza-1b) — urađeno
 Proširenje #31: kategorije (norma i fond časova, ocenjivanje, oslobađanje od nastave, odgovornost i
 bezbednost na času, takmičenja, Zdravitas, ES dnevnik). Odgovor ima poziv na propis iz #38 i datum
 „važi na dan". „Postavi pitanje" (prijavljeni korisnik) → urednik odgovara i objavljuje anonimno; mejl
 pitaocu. Napomena da odgovor nije pravni savet.
+- [x] `/pitanja` (oblasti, pretraga), `/pitanja/:slug` sa propisima i „važi na dan“, `/pitanja/postavi` i „Moja pitanja“
+- [x] Admin „Pitanja“: red na čekanju, originalno pitanje samo za urednika, mejl pitaocu pri objavi
+- [x] 4 početna odgovora iz sažetaka propisa (`data/questions.json`); urednik treba da ih pročita pre puštanja
 
 ### #41 Kalendar sa podsetnicima (faza-1b)
 `/kalendar`: školski kalendar (iz pravilnika za tekuću godinu), takmičenja (#33), seminari (#15f),

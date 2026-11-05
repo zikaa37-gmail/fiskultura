@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "ko-oslobadja-ucenika-od-fizickog-i-kako-se-ocenjuje",
+    "category": "oslobadjanje",
+    "title": "Ko oslobađa učenika od praktičnog dela fizičkog i kako se on onda ocenjuje?",
+    "body": "Roditelj je doneo lekarsko uverenje. Da li ja kao nastavnik mogu da oslobodim učenika i šta radim sa ocenom?",
+    "answer": "Nastavnik ne oslobađa učenika sam.\n\n- **Odluku donosi direktor** škole, na predlog izabranog lekara (Zakon o osnovnom obrazovanju i vaspitanju, čl. 65). Lekarsko uverenje je osnova za predlog, ne i sama odluka.\n- Oslobađanje može biti **privremeno ili za jednu školsku godinu**, **delimično ili potpuno**.\n- Oslobođen je samo **praktični deo** nastave: učenik se **ocenjuje iz teorijskih znanja**.\n\nPraktično: uverenje predajte direktoru ili sekretaru škole, sačekajte rešenje i sačuvajte ga uz pedagošku dokumentaciju. Za srednju školu proverite odgovarajuće odredbe Zakona o srednjem obrazovanju i vaspitanju.",
+    "regulations": ["zoov", "ocenjivanje-os-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "koliko-ocena-iz-fizickog-u-polugodistu",
+    "category": "ocenjivanje",
+    "title": "Koliko ocena iz fizičkog i zdravstvenog vaspitanja učenik mora da ima u polugodištu?",
+    "body": null,
+    "answer": "Prema Pravilniku o ocenjivanju učenika u osnovnom obrazovanju i vaspitanju:\n\n- učenik dobija **najmanje 4 ocene u polugodištu**, a iz predmeta sa jednim časom nedeljno najmanje 2;\n- **sumativne ocene** upisuju se u dnevnik, a **formativne** vodite u svojoj pedagoškoj dokumentaciji;\n- FZV se ocenjuje na osnovu sposobnosti, spretnosti i umešnosti, a kod učenika bez posebnih sposobnosti uvažavaju se **napredak i angažovanje** (čl. 5).\n\nZa srednju školu važi poseban pravilnik o ocenjivanju u srednjem obrazovanju.",
+    "regulations": ["ocenjivanje-os-2024", "ocenjivanje-ss-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "da-li-se-inicijalno-testiranje-ocenjuje",
+    "category": "ocenjivanje",
+    "title": "Da li se inicijalno testiranje na početku godine ocenjuje?",
+    "body": null,
+    "answer": "Ne. Inicijalno procenjivanje radi se **do kraja treće nedelje** nastave, **ne ocenjuje se**, a rezultati se beleže u pedagoškoj dokumentaciji nastavnika (Pravilnik o ocenjivanju učenika u osnovnom obrazovanju i vaspitanju, čl. 10).\n\nRezultati služe za planiranje rada i praćenje napretka, pa ih sačuvajte uz plan.",
+    "regulations": ["ocenjivanje-os-2024"],
+    "validOn": "2026-11-05"
+  },
+  {
+    "slug": "ko-odgovara-ako-se-ucenik-povredi-na-casu",
+    "category": "bezbednost",
+    "title": "Ko odgovara ako se učenik povredi na času fizičkog?",
+    "body": "Brine me odgovornost kad radimo na spravama ili napolju. Da li odgovaram lično?",
+    "answer": "Ukratko, za štetu koju učenik pretrpi ili prouzrokuje dok je pod nadzorom škole **po pravilu odgovara škola** (Zakon o obligacionim odnosima, čl. 165). Od nastavnika se očekuje da sprovodi propisane mere bezbednosti.\n\n- Škola donosi **akt o merama bezbednosti** (Zakon o osnovama sistema obrazovanja i vaspitanja, čl. 108–112, i Uputstvo iz 2022), koji uređuje i bezbednost na časovima.\n- **Nesprovođenje mera bezbednosti je teža povreda radne obaveze** (ZOSOV, čl. 164): disciplinski može da odgovara zaposleni koji mere nije sproveo.\n\nPraktično: upoznajte se sa aktom vaše škole, proveravajte sprave i teren pre časa, obezbedite čuvanje i pomoć pri vežbama na spravama i zapišite povredu i preduzete mere odmah posle događaja.",
+    "regulations": ["zoo", "zosov", "uputstvo-bezbednost-2022"],
+    "validOn": "2026-11-05"
+  }
+]
