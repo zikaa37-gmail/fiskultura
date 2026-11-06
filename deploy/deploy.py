@@ -185,6 +185,10 @@ def main() -> int:
         'udruženja (200)': status(f'{base}/udruzenja'),
         'vesti (200)': status(f'{base}/vesti'),
         'pitanja (200)': status(f'{base}/pitanja'),
+        'propisi (200)': status(f'{base}/propisi'),
+        'ishodi (200)': status(f'{base}/ishodi'),
+        'literatura (200)': status(f'{base}/literatura'),
+        'kontakt (200)': status(f'{base}/kontakt'),
         'sitemap (200)': status(f'{base}/sitemap.xml'),
         'robots (200)': status(f'{base}/robots.txt'),
         'api udruženja (200)': status(f'{base}/api/organizations'),
@@ -192,7 +196,7 @@ def main() -> int:
         'api bez tokena (401)': status(f'{base}/api/auth/me'),
     }
     print('  ', checks)
-    if list(checks.values()) != [200, 200, 200, 200, 200, 200, 200, 200, 200, 401]:
+    if list(checks.values()) != [200] * (len(checks) - 1) + [401]:
         return 1
 
     print('Deploy je završen.')
