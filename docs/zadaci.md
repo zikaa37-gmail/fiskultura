@@ -242,12 +242,19 @@ Periodični pregled izvora:
 - [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
-### #48 „Šta važi danas”: aktuelna pravila, istorija i provera (faza-1b, centralno)
+### #48 Propisi: šta važi danas, istorija i provera (faza-1b, centralno)
 Pravilo portala: ono što važi danas uvek je istaknuto. Raniji propisi ostaju kao istorija, a kratko
 hronološko objašnjenje kaže šta se, kada i zašto promenilo, da nastavnici „jednom zauvek znaju šta je
 prava istina”. Mnoge kolege rade po pravilima koja više ne važe (primer: fond časova FZV).
 
-Stranica `/sta-vazi`, sa posebnom stranicom po temi (`/sta-vazi/:tema`):
+Sve ide u okviru `/propisi`, koja sada izgleda kao prost spisak i niko je ne otvara. Postaje glavno mesto
+za pravila:
+- na vrhu „Šta važi danas”: kartice tema, svaka sa jednom rečenicom šta važi i oznakom „menja se od …”
+  kad je izmena objavljena;
+- ispod „Novo u propisima”: poslednje izmene i ono što stupa na snagu, sa datumom;
+- zatim katalog propisa: važeći su gore, a prestali u sklopivoj istoriji.
+
+Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`):
 - **Važi danas**: pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put
   provereno;
 - **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
@@ -257,9 +264,9 @@ Stranica `/sta-vazi`, sa posebnom stranicom po temi (`/sta-vazi/:tema`):
 - veze ka pitanjima i odgovorima, ishodima, vestima i aplikacijama koje se oslanjaju na temu.
 
 Mesto na sajtu:
-- stavka u glavnom meniju i blok na naslovnoj („Šta važi od 1. septembra”, „Novo u propisima”);
-- na stranici propisa važeći su gore, a prestali u sklopivoj istoriji. Propis ima polja `replaces` i
-  `replacedBy`, pa se iz zastarelog propisa vidi koji ga je zamenio;
+- stavka „Propisi” u meniju vodi na novu stranicu; na naslovnoj je blok „Šta važi od 1. septembra” i
+  „Novo u propisima”;
+- propis ima polja `replaces` i `replacedBy`, pa se iz zastarelog propisa vidi koji ga je zamenio;
 - odgovor, vest ili ishod koji se poziva na propis koji više ne važi dobija upozorenje i link na važeću temu.
 
 Hronologija uz pomoć AI-ja:
@@ -290,7 +297,7 @@ Prve teme:
 9. stručno usavršavanje.
 
 - [ ] Model teme i podaci (`backend/database/data/topics.json`), polja `replaces`/`replacedBy` u propisima
-- [ ] Stranice `/sta-vazi` i `/sta-vazi/:tema`, meni, blok na naslovnoj, upozorenja na zastarelim propisima
+- [ ] Nova `/propisi` (teme, novo, katalog sa istorijom), `/propisi/:tema`, blok na naslovnoj, upozorenja na zastarelim propisima
 - [ ] Prve teme: AI nacrt, odobrenje urednika
 - [ ] `sources:check`, spisak „za proveru” i rokovi provere (sa #47)
 
