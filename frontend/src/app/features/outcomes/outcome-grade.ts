@@ -54,7 +54,7 @@ import { changesNextYear, CURRENT_YEAR, findGrade, loadPrograms, OUTCOME_GRADES,
             }
 
             <h2>Ishodi</h2>
-            <p class="muted">Po završetku razreda učenik će biti u stanju da:</p>
+            <p class="muted mb-2">Po završetku razreda učenik će biti u stanju da:</p>
             <ol class="outcomes-list">
               @for (outcome of current.outcomes; track $index) {
                 <li>{{ outcome }}</li>

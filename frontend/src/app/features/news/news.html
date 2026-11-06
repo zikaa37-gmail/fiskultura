@@ -57,7 +57,7 @@
         <p class="muted">Pokušaj ponovo za nekoliko minuta.</p>
       </div>
     } @else if (meta(); as info) {
-      <p class="muted small result-count">Pronađeno objava: {{ info.total }}</p>
+      <p class="muted small result-count mb-2">Pronađeno objava: {{ info.total }}</p>
       <div class="post-list">
         @for (item of items(); track item.id) {
           <app-news-card [news]="item" />

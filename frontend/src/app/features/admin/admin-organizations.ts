@@ -28,7 +28,7 @@ import { AdminOrganization } from './admin.model';
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count">Ukupno: {{ filtered().length }}</p>
+    <p class="muted small result-count mb-2">Ukupno: {{ filtered().length }}</p>
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
         <div class="admin-row">

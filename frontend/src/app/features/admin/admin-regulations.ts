@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,11 +13,12 @@ import { formatDate } from '../../core/content/content.model';
 import { Regulation, REGULATION_KIND_LABELS, REGULATION_STATUS_LABELS, RegulationReview, VERIFICATION_LABELS } from '../../core/content/regulation.model';
 import { RULE_TOPICS, reviewDue } from '../../content/rules/rule-topics';
 import { CONTACTS_CHECKED_AT } from '../../content/rules/contacts';
+import { AdminReviewRow } from './admin-review-row';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-admin-regulations',
-  imports: [NgTemplateOutlet, FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
+  imports: [AdminReviewRow, FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="admin-review">
@@ -43,40 +43,14 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
           </div>
         </div>
       }
-      <ng-template #reviewRow let-item>
-        <div class="admin-row" [class.admin-row-due]="item.change_detected_at">
-          <div class="admin-row-main">
-            <span class="admin-row-meta">
-              @if (item.change_detected_at) {
-                <span class="state-chip state-warn">izmena u PIS-u</span>
-              } @else {
-                <span class="state-chip state-muted">{{ item.checked_at ? 'provera istekla' : 'nije proveren' }}</span>
-              }
-              @if (item.checked_at) {
-                <span>provereno {{ date(item.checked_at) }}{{ item.checked_by ? ', ' + item.checked_by : '' }}</span>
-              }
-            </span>
-            <a class="post-title" [routerLink]="[item.key]">{{ item.title }}</a>
-            @if (item.change_detail) {
-              <span class="small">{{ item.change_detail }}</span>
-            }
-          </div>
-          <div class="admin-row-actions">
-            @if (item.url) {
-              <a mat-button [href]="item.url" target="_blank" rel="noopener">Tekst</a>
-            }
-            <button type="button" mat-stroked-button (click)="markChecked(item)">Provereno</button>
-          </div>
-        </div>
-      </ng-template>
       @for (item of changed(); track item.id) {
-        <ng-container [ngTemplateOutlet]="reviewRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+        <app-admin-review-row [regulation]="item" (checked)="markChecked($event)" />
       }
       @if (stale().length) {
         <details class="admin-review-stale">
           <summary>Propisi bez provere u poslednjih 6 meseci ({{ stale().length }})</summary>
           @for (item of stale(); track item.id) {
-            <ng-container [ngTemplateOutlet]="reviewRow" [ngTemplateOutletContext]="{ $implicit: item }" />
+            <app-admin-review-row [regulation]="item" (checked)="markChecked($event)" />
           }
         </details>
       }
@@ -96,7 +70,7 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count">Ukupno: {{ filtered().length }}</p>
+    <p class="muted small result-count mb-2">Ukupno: {{ filtered().length }}</p>
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
         <div class="admin-row">

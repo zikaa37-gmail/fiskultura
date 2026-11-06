@@ -92,7 +92,7 @@ const TOPIC_TABS: { id: TopicTab; label: string }[] = [
                 }
               }
               @case ('ranije') {
-                <p class="muted">Ovo više ne važi. Stoji ovde da bi se videlo šta je bilo pre i od kada je drugačije.</p>
+                <p class="muted mb-3">Ovo više ne važi. Stoji ovde da bi se videlo šta je bilo pre i od kada je drugačije.</p>
                 <div class="regulation-list">
                   @for (previous of item.previous; track $index) {
                     <article class="regulation regulation-expired">

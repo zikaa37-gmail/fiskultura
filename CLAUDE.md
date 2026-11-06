@@ -46,6 +46,9 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Za ljude, ne za advokate: na vrhu ide sažetak „šta važi i šta se menja” jednostavnim rečima, a spisak
   propisa je ispod ili sklopljen. Link na propis vodi na navedeni član (`regulationTextUrl`, sidra
   `#clan_N` na paragraf.rs).
+- Razmaci: klase `mb-1`…`mb-5` (4, 8, 12, 16, 24 px) iz `styles.scss`, ne `style="..."`. Tekst iznad kartica
+  ili liste (npr. `result-count`) uvek ima razmak do njih. Bez `ngTemplateOutlet`: deo šablona koji se ponavlja
+  postaje mala komponenta.
 - **Mobile first**: većina posetilaca dolazi sa telefona. Osnovni stilovi su za telefon (od 360 px), šire
   ekrane dodaje `@media (min-width: ...)`; nikad obrnuto. Dodirne površine bar 44 px, bez horizontalnog
   skrola, modali na telefonu preko celog ekrana, filteri i forme u jednoj koloni. Svaka nova stranica se

@@ -36,7 +36,7 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count">Ukupno: {{ items().length }}</p>
+    <p class="muted small result-count mb-2">Ukupno: {{ items().length }}</p>
     <div class="admin-rows">
       @for (item of items(); track item.id) {
         <div class="admin-row">
