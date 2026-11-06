@@ -24,32 +24,61 @@
             <h2 id="rules-today">Šta važi danas</h2>
             <div class="rule-topic-grid">
               @for (topic of topics; track topic.slug) {
-                <a class="rule-topic-card" [routerLink]="['/propisi', topic.slug]">
-                  <strong>{{ topic.title }}</strong>
-                  <span>{{ topic.card }}</span>
-                  <span class="small muted">Provereno {{ date(topic.checkedAt) }}</span>
+                <a class="rule-topic-card" [class]="'rule-topic-card accent-' + topic.accent" [routerLink]="['/propisi', topic.slug]">
+                  <span class="tint-icon"><app-icon [name]="topic.icon" [size]="18" /></span>
+                  <strong>{{ topic.cardTitle }}</strong>
+                  <span class="small">{{ topic.short }}</span>
+                  @if (topic.change) {
+                    <span class="rule-topic-change">menja se {{ topic.change }}</span>
+                  }
                 </a>
               }
+              <a class="rule-topic-card accent-lime" routerLink="/ishodi">
+                <span class="tint-icon"><app-icon name="checklist" [size]="18" /></span>
+                <strong>Ishodi po razredima</strong>
+                <span class="small">Ishodi, teme i fond za 1–8. razred i srednju školu</span>
+              </a>
+              <a class="rule-topic-card accent-orange" [routerLink]="[]" [queryParams]="{ tab: 'kontakti' }">
+                <span class="tint-icon"><app-icon name="mail" [size]="18" /></span>
+                <strong>Kome se obratiti</strong>
+                <span class="small">Ministarstvo, inspekcija, školske uprave, ZUOV</span>
+              </a>
             </div>
           </section>
 
-          @if (coming().length) {
-            <section class="rules-block" aria-labelledby="rules-coming">
-              <h2 id="rules-coming">Novo u propisima</h2>
-              <ul class="rules-coming">
+          <section class="rules-block" aria-labelledby="rules-coming">
+            <h2 id="rules-coming">Šta se menja</h2>
+            <ul class="rules-coming">
+              @for (change of upcoming; track change.title) {
+                <li class="rules-coming-item">
+                  <span class="rules-coming-when">{{ change.when }}</span>
+                  <strong>{{ change.title }}</strong>
+                  <p class="small">{{ change.text }}</p>
+                  @if (change.topic) {
+                    <a class="inline-link small" [routerLink]="['/propisi', change.topic]">Više o tome →</a>
+                  }
+                </li>
+              }
+            </ul>
+            <details class="rules-coming-sources">
+              <summary>Propisi na koje se ovo odnosi ({{ coming().length }})</summary>
+              <ul>
                 @for (item of coming(); track item.id) {
                   <li>
-                    <span class="state-chip" [class]="item.status === 'nacrt' ? 'state-muted' : 'state-warn'">
-                      {{ item.status === 'nacrt' ? 'nacrt' : 'od ' + date(item.valid_from) }}
-                    </span>
-                    <a class="inline-link" [routerLink]="[]" [queryParams]="{ pretraga: item.title }" queryParamsHandling="merge">{{ item.title }}</a>
+                    @if (item.url) {
+                      <a class="inline-link" [href]="item.url" target="_blank" rel="noopener">{{ item.title }}</a>
+                    } @else {
+                      {{ item.title }}
+                    }
+                    <span class="small muted">{{ item.gazette }}</span>
                   </li>
                 }
               </ul>
-            </section>
-          }
+            </details>
+          </section>
 
-          <h2>Važeći propisi</h2>
+          <h2>Katalog važećih propisa</h2>
+          <p class="muted small">Za one koji žele ceo tekst: uz svaki propis je kratko „šta je bitno za FV” i link na član na koji se odnosi.</p>
         }
         @case ('ranije') {
           <p class="muted">
@@ -82,50 +111,30 @@
           <p class="small muted">Pripremljeno uz pomoć AI-ja iz zvaničnih tekstova (PIS, „Prosvetni glasnik”); proverilo uredništvo.</p>
         }
         @case ('kontakti') {
-          <p class="muted">
-            Institucije kojima se nastavnik fizičkog obraća u radu. Podaci su sa zvaničnih sajtova, provereni {{ date(contactsCheckedAt) }} Pre slanja dopisa proverite stranicu institucije.
-            Strukovna udruženja, sindikati i savezi za školski sport su na stranici <a class="inline-link" routerLink="/udruzenja">Udruženja</a>, a uredništvo portala na stranici <a class="inline-link" routerLink="/kontakt">Kontakt</a>.
+          <p class="muted small">
+            Institucije kojima se nastavnik fizičkog obraća u radu. Dodirnite karticu za telefone i mejlove; poziv i mejl se otvaraju jednim dodirom.
+            Podaci su sa zvaničnih sajtova, provereni {{ date(contactsCheckedAt) }} Udruženja, sindikati i savezi za školski sport su na stranici
+            <a class="inline-link" routerLink="/udruzenja">Udruženja</a>, a uredništvo portala na stranici <a class="inline-link" routerLink="/kontakt">Kontakt</a>.
           </p>
           <div class="contact-grid">
             @for (institution of contacts; track institution.id) {
-              <article class="contact-card">
-                <h2>{{ institution.name }}</h2>
-                <p class="small">{{ institution.when }}</p>
-                @if (institution.address) {
-                  <p class="small muted">{{ institution.address }}</p>
-                }
-                @if (institution.lines.length) {
-                  <ul class="contact-lines">
-                    @for (line of institution.lines; track line.label) {
-                      <li>
-                        <span>{{ line.label }}</span>
-                        @if (line.phone) {
-                          <a class="inline-link" [href]="telHref(line.phone)">{{ line.phone }}</a>
-                        }
-                        @if (line.email) {
-                          <a class="inline-link contact-email" [href]="'mailto:' + line.email">{{ line.email }}</a>
-                        }
-                      </li>
-                    }
-                  </ul>
-                }
-                <a mat-stroked-button [href]="institution.url" target="_blank" rel="noopener">{{ institution.urlLabel }} <app-icon name="external" [size]="16" /></a>
-              </article>
+              <button type="button" class="contact-card" [class]="'contact-card accent-' + institution.accent" (click)="openInstitution(institution)">
+                <span class="contact-card-head">
+                  <span class="tint-icon"><app-icon [name]="institution.icon" [size]="18" /></span>
+                  <strong>{{ institution.name }}</strong>
+                </span>
+                <span class="small">{{ institution.when }}</span>
+              </button>
             }
           </div>
 
           <h2>Školske uprave</h2>
-          <p class="muted small">Školska uprava je prvo mesto za pitanja o radu škole, stručno-pedagoški nadzor i pritužbe na nivou okruga.</p>
-          <ul class="contact-administrations">
+          <p class="muted small">Prvo mesto za pitanja o radu škole, stručno-pedagoški nadzor i pritužbe na nivou okruga.</p>
+          <div class="contact-cities">
             @for (office of administrations; track office.city) {
-              <li>
-                <strong>{{ office.city }}</strong>
-                <span class="small muted">{{ office.address }}</span>
-                <a class="inline-link" [href]="telHref(office.phone)">{{ office.phone }}</a>
-                <a class="inline-link contact-email" [href]="'mailto:' + office.email">{{ office.email }}</a>
-              </li>
+              <button type="button" class="contact-city" (click)="openAdministration(office)"><app-icon name="pin" [size]="16" /> {{ office.city }}</button>
             }
-          </ul>
+          </div>
         }
       }
       @if (showsList()) {
@@ -135,37 +144,36 @@
     </mat-tab-nav-panel>
 
     <ng-template #filters>
-      <div class="filters">
-        <div class="chip-row" role="group" aria-label="Oblast">
-          <button type="button" class="filter-chip" [class.filter-chip-on]="!area()" (click)="setArea(null)">Sve oblasti</button>
-          @for (option of areas; track option) {
-            <button type="button" class="filter-chip" [class.filter-chip-on]="area() === option" [attr.aria-pressed]="area() === option" (click)="setArea(option)">
-              {{ areaLabels[option] }}
-            </button>
-          }
-        </div>
-        <div class="filter-row filter-row-two">
+      <div class="filters rules-filters">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Oblast</mat-label>
+          <mat-select [value]="area()" (selectionChange)="setArea($event.value)">
+            <mat-option [value]="null">Sve oblasti</mat-option>
+            @for (option of areas; track option) {
+              <mat-option [value]="option">{{ areaLabels[option] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Vrsta</mat-label>
+          <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
+            <mat-option [value]="null">Sve vrste</mat-option>
+            @for (option of kinds; track option) {
+              <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <form class="search-form" (ngSubmit)="search()">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Vrsta</mat-label>
-            <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
-              <mat-option [value]="null">Sve vrste</mat-option>
-              @for (option of kinds; track option) {
-                <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
-              }
-            </mat-select>
+            <mat-label>Pretraga</mat-label>
+            <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
           </mat-form-field>
-          <form class="search-form" (ngSubmit)="search()">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Pretraga (naziv, glasnik, sadržaj)</mat-label>
-              <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
-            </mat-form-field>
-            <button type="submit" mat-stroked-button>Traži</button>
-          </form>
-        </div>
-        @if (hasFilters()) {
-          <button type="button" mat-button class="clear-filters" (click)="clearFilters()">Poništi filtere</button>
-        }
+          <button type="submit" mat-flat-button class="btn-tertiary">Traži</button>
+        </form>
       </div>
+      @if (hasFilters()) {
+        <button type="button" mat-button class="clear-filters" (click)="clearFilters()">Poništi filtere</button>
+      }
       @if (isLoading()) {
         <mat-progress-bar mode="indeterminate" />
       }
@@ -180,24 +188,23 @@
           @for (item of shown(); track item.id) {
             <article class="regulation" [class.regulation-expired]="item.status === 'prestao'">
               <div class="regulation-head">
-                <span class="state-chip state-muted">{{ kindLabels[item.kind] }}</span>
-                <span class="state-chip" [class]="item.status === 'vazi' ? 'state-ok' : item.status === 'prestao' ? 'state-muted' : 'state-warn'">{{ statusLabels[item.status] }}</span>
-                <span class="verification" [class]="'verification-' + item.verification" [title]="item.verification_note ?? ''">{{ verificationLabels[item.verification] }}</span>
+                <span class="reg-label">{{ kindLabels[item.kind] }}</span>
+                <span class="reg-label" [class]="'reg-label reg-status-' + item.status">{{ statusLabels[item.status] }}</span>
+                <span class="reg-label verification" [class]="'reg-label verification verification-' + item.verification" [title]="item.verification_note ?? ''">{{ verificationLabels[item.verification] }}</span>
+                @for (tag of item.areas; track tag) {
+                  <span class="reg-label reg-area">{{ areaLabels[tag] }}</span>
+                }
               </div>
               <h3>{{ item.title }}</h3>
-              @if (item.gazette) {
-                <p class="muted small">{{ item.gazette }}</p>
-              }
-              @if (item.valid_from || item.valid_to) {
-                <p class="small">
-                  @if (item.valid_from) {
-                    {{ item.status === 'najava' ? 'Primenjuje se od' : 'Važi od' }} {{ date(item.valid_from) }}
-                  }
-                  @if (item.valid_to) {
-                    {{ item.status === 'prestao' ? '· ne važi od' : '· važi do' }} {{ date(item.valid_to) }}
-                  }
-                </p>
-              }
+              <p class="muted small">
+                {{ item.gazette }}
+                @if (item.valid_from) {
+                  · {{ item.status === 'najava' ? 'primenjuje se od' : 'važi od' }} {{ date(item.valid_from) }}
+                }
+                @if (item.valid_to) {
+                  · {{ item.status === 'prestao' ? 'ne važi od' : 'važi do' }} {{ date(item.valid_to) }}
+                }
+              </p>
               @if (item.replaced_by.length) {
                 <p class="small regulation-replaced">
                   Zamenio ga je:
@@ -206,23 +213,20 @@
                   }
                 </p>
               }
-              <div class="area-tags">
-                @for (tag of item.areas; track tag) {
-                  <button type="button" class="area-tag" (click)="setArea(tag)">{{ areaLabels[tag] }}</button>
-                }
-              </div>
-              <details class="regulation-summary">
-                <summary>Šta je bitno za nastavu FV</summary>
-                <div class="markdown" [innerHTML]="item.summary | simpleMarkdown"></div>
-              </details>
               <div class="regulation-actions">
-                @if (item.url) {
-                  <a mat-flat-button [href]="item.url" target="_blank" rel="noopener">Otvori tekst <app-icon name="external" [size]="18" /></a>
+                <button type="button" mat-button class="btn-tertiary-text" [attr.aria-expanded]="open().has(item.id)" (click)="toggle(item.id)">
+                  Šta je bitno za FV {{ open().has(item.id) ? '▴' : '▾' }}
+                </button>
+                @if (textUrl(item); as link) {
+                  <a mat-flat-button class="btn-tertiary" [href]="link" target="_blank" rel="noopener">Otvori tekst <app-icon name="external" [size]="16" /></a>
                 }
                 @if (item.versions_count) {
-                  <button type="button" mat-button (click)="showHistory(item)">Istorija izmena ({{ item.versions_count }})</button>
+                  <button type="button" mat-button class="btn-tertiary-text" (click)="showHistory(item)">Istorija ({{ item.versions_count }})</button>
                 }
               </div>
+              @if (open().has(item.id)) {
+                <div class="markdown regulation-summary-body" [innerHTML]="summaryHtml(item)"></div>
+              }
             </article>
           } @empty {
             @if (!isLoading()) {

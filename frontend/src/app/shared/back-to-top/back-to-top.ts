@@ -19,7 +19,7 @@ export class BackToTop {
   constructor() {
     const destroyRef = inject(DestroyRef);
     afterNextRender(() => {
-      const update = () => this.visible.set(window.scrollY > 600);
+      const update = () => this.visible.set(window.scrollY > Math.min(600, window.innerHeight));
       update();
       window.addEventListener('scroll', update, { passive: true });
       destroyRef.onDestroy(() => window.removeEventListener('scroll', update));

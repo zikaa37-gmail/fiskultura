@@ -37,6 +37,15 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   preko `httpResource`.
 - Material dugmad: `mat-flat-button` glavna akcija, `mat-stroked-button` sporedna; boje preko
   `--mat-sys-*` i tokena iz `styles.scss` (`--color-primary`, `.accent-*`), ne `color="primary"`.
+  Tercijarno (neutralno) dugme: `mat-flat-button class="btn-tertiary"` i `mat-button class="btn-tertiary-text"`
+  za česte akcije u listama (otvori tekst, istorija, prikaži više), da stranica ne bude previše plava.
+- Kartice su male i stoje jedna do druge (na telefonu dve u redu gde stane); dugačak sadržaj ide u modal, a
+  kartica ima naziv i kratak tekst. Boja kartice dolazi iz `.accent-*` (ikonica u `.tint-icon`, blaga pozadina).
+  Oznake (oblast, status) su male labele, ne linkovi. Telefon i mejl su `tel:` i `mailto:` linkovi
+  (`telHref`), mejl se lomi pre „@” i ima dugme za kopiranje. Dugme „na vrh” (`app-back-to-top`) je globalno.
+- Za ljude, ne za advokate: na vrhu ide sažetak „šta važi i šta se menja” jednostavnim rečima, a spisak
+  propisa je ispod ili sklopljen. Link na propis vodi na navedeni član (`regulationTextUrl`, sidra
+  `#clan_N` na paragraf.rs).
 - **Mobile first**: većina posetilaca dolazi sa telefona. Osnovni stilovi su za telefon (od 360 px), šire
   ekrane dodaje `@media (min-width: ...)`; nikad obrnuto. Dodirne površine bar 44 px, bez horizontalnog
   skrola, modali na telefonu preko celog ekrana, filteri i forme u jednoj koloni. Svaka nova stranica se

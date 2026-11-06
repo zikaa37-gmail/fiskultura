@@ -35,9 +35,10 @@
     </div>
     <div class="rule-topic-grid">
       @for (topic of ruleTopics; track topic.slug) {
-        <a class="rule-topic-card" [routerLink]="['/propisi', topic.slug]">
-          <strong>{{ topic.title }}</strong>
-          <span>{{ topic.card }}</span>
+        <a class="rule-topic-card" [class]="'rule-topic-card accent-' + topic.accent" [routerLink]="['/propisi', topic.slug]">
+          <span class="tint-icon"><app-icon [name]="topic.icon" [size]="18" /></span>
+          <strong>{{ topic.cardTitle }}</strong>
+          <span class="small">{{ topic.card }}</span>
         </a>
       }
     </div>

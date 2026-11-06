@@ -43,3 +43,41 @@ export const RULE_HISTORY: RuleEra[] = [
     regulations: ['program-5-6-izmene-2026', 'program-1-2026', 'gimnazija-izmena-2026'],
   },
 ];
+
+export interface RuleUpcoming {
+  when: string;
+  title: string;
+  text: string;
+  topic?: string;
+  regulations: string[];
+}
+
+export const RULE_UPCOMING: RuleUpcoming[] = [
+  {
+    when: 'od 1. 9. 2027.',
+    title: '5. i 6. razred dobijaju treći čas',
+    text: 'Fizičko i zdravstveno vaspitanje ima 3 časa nedeljno (108 godišnje). Obavezne fizičke aktivnosti prestaju; treći čas je redovan čas predmeta.',
+    topic: 'fond-casova',
+    regulations: ['program-5-6-izmene-2026'],
+  },
+  {
+    when: 'od 1. 9. 2027.',
+    title: 'Novi programi za 1. i 5. razred i I razred gimnazije',
+    text: 'Novi ishodi i teme važe za učenike koji tada kreću u te razrede. Ostali završavaju po programu po kom su počeli.',
+    topic: 'programi-i-ishodi',
+    regulations: ['program-1-2026', 'program-5-6-izmene-2026', 'gimnazija-izmena-2026'],
+  },
+  {
+    when: 'od 1. 9. 2027.',
+    title: '7. i 8. razred: za fizičko ništa novo',
+    text: 'Nov plan menja druge predmete; fond ostaje 3 časa nedeljno (108, u 8. razredu 102).',
+    topic: 'fond-casova',
+    regulations: ['plan-7-8-izmena-2026'],
+  },
+  {
+    when: 'nacrt, avgust 2026.',
+    title: 'Izmene Zakona o osnovama sistema obrazovanja',
+    text: 'Nacrt ne menja fond časova ni planiranje. Dotiče upis, disciplinu učenika, mobilne telefone, licence, a portfolio profesionalnog razvoja postaje dobrovoljan. Još nije usvojen.',
+    regulations: ['zosov-nacrt-2026'],
+  },
+];

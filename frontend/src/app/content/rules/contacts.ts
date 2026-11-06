@@ -1,3 +1,6 @@
+import { ModuleAccent } from '../portal-content';
+import { IconName } from '../../shared/icon/icon';
+
 export interface ContactLine {
   label: string;
   phone?: string;
@@ -7,6 +10,8 @@ export interface ContactLine {
 export interface InstitutionContact {
   id: string;
   name: string;
+  accent: ModuleAccent;
+  icon: IconName;
   when: string;
   address?: string;
   lines: ContactLine[];
@@ -26,6 +31,8 @@ export const CONTACTS_CHECKED_AT = '2026-11-06';
 export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   {
     id: 'ministarstvo',
+    accent: 'primary',
+    icon: 'book',
     name: 'Ministarstvo prosvete',
     when: 'Planovi i programi, organizacija rada škole, nasilje i inkluzija, licenca, pravna tumačenja. Zahtevi i dopisi idu preko e-Pisarnice.',
     address: 'Nemanjina 22–26, 11000 Beograd',
@@ -44,6 +51,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'prosvetna-inspekcija',
+    accent: 'rose',
+    icon: 'checklist',
     name: 'Prosvetna inspekcija (Ministarstvo prosvete)',
     when: 'Nepravilnosti u radu škole i povreda prava učenika ili zaposlenih. Prvo se obratite školskoj upravi i prosvetnom inspektoru u svojoj opštini; republička inspekcija prima pritužbe.',
     address: 'Nemanjina 22–26, 11000 Beograd',
@@ -56,6 +65,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'zuov',
+    accent: 'violet',
+    icon: 'clipboard',
     name: 'Zavod za unapređivanje obrazovanja i vaspitanja (ZUOV)',
     when: 'Programi nastave i učenja, katalog stručnog usavršavanja i seminari, udžbenici, priručnici.',
     address: 'Fabrisova 10, 11040 Beograd',
@@ -69,6 +80,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'zvkov',
+    accent: 'sky',
+    icon: 'chart',
     name: 'Zavod za vrednovanje kvaliteta obrazovanja i vaspitanja (ZVKOV)',
     when: 'Standardi obrazovnih postignuća, završni ispit, praćenje fizičkog razvoja i motoričkih sposobnosti.',
     address: 'Fabrisova 10, 11040 Beograd',
@@ -82,6 +95,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'pzv',
+    accent: 'lime',
+    icon: 'people',
     name: 'Pedagoški zavod Vojvodine',
     when: 'Stručna podrška školama u AP Vojvodini, programi na jezicima nacionalnih manjina.',
     address: 'Bulevar Mihajla Pupina 6/I, 21101 Novi Sad',
@@ -94,6 +109,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'ministarstvo-sporta',
+    accent: 'orange',
+    icon: 'trophy',
     name: 'Ministarstvo sporta',
     when: 'Sistem sporta i školska sportska takmičenja na nivou države; ima Odsek za inspekcijske poslove u sportu. Poruke idu preko obrasca na sajtu.',
     address: 'Bulevar Mihajla Pupina 2 (Palata „Srbija”), Beograd',
@@ -103,6 +120,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'inspekcija-rada',
+    accent: 'rose',
+    icon: 'heart',
     name: 'Inspektorat za rad',
     when: 'Bezbednost i zdravlje na radu (sala, sprave, povrede na radu) i radni odnosi zaposlenih.',
     address: 'Omladinskih brigada 1, Beograd',
@@ -115,6 +134,8 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   },
   {
     id: 'poverenik',
+    accent: 'violet',
+    icon: 'help',
     name: 'Poverenik za informacije od javnog značaja i zaštitu podataka o ličnosti',
     when: 'Podaci o učenicima (merenja, zdravstveni podaci, fotografije) i pristup informacijama.',
     address: 'Bulevar kralja Aleksandra 15, 11120 Beograd',

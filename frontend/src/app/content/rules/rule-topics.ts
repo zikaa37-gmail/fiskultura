@@ -1,3 +1,6 @@
+import { ModuleAccent } from '../portal-content';
+import { IconName } from '../../shared/icon/icon';
+
 export const REVIEW_MONTHS = 6;
 
 export interface RuleChange {
@@ -31,7 +34,12 @@ export interface RuleLink {
 export interface RuleTopic {
   slug: string;
   title: string;
+  cardTitle: string;
+  accent: ModuleAccent;
+  icon: IconName;
   card: string;
+  short: string;
+  change?: string;
   since: string;
   now: string;
   regulations: string[];
@@ -50,7 +58,12 @@ export const RULE_TOPICS: RuleTopic[] = [
   {
     slug: 'fond-casova',
     title: 'Fond časova fizičkog i zdravstvenog vaspitanja',
+    cardTitle: 'Fond časova',
+    accent: 'primary',
+    icon: 'chart',
     card: '1–4, 7. i 8. razred imaju 3 časa nedeljno, 5. i 6. razred 2 časa i obavezne fizičke aktivnosti; od 2027/28. i 5. i 6. razred dobijaju 3 časa.',
+    short: '3 časa nedeljno; 5. i 6. razred 2 + OFA',
+    change: '2027/28.',
     since: 'školska 2026/27.',
     now: [
       'Broj časova propisuje **plan nastave i učenja** za svaki razred. U školskoj 2026/27. važi:',
@@ -125,7 +138,12 @@ export const RULE_TOPICS: RuleTopic[] = [
   {
     slug: 'programi-i-ishodi',
     title: 'Programi nastave i učenja i ishodi',
+    cardTitle: 'Programi i ishodi',
+    accent: 'violet',
+    icon: 'book',
     card: 'U svim razredima važe programi sa ishodima (od 2018/19. do 2021/22); od 2027/28. novi programi za 1. i 5. razred i I razred gimnazije.',
+    short: 'Programi sa ishodima u svim razredima',
+    change: '2027/28.',
     since: 'školska 2026/27.',
     now: [
       'Svaki razred ima **program nastave i učenja**: cilj predmeta, **ishode** (šta učenik ume na kraju razreda), oblasti, teme i sadržaje. Programi su uvođeni po razredima:',
