@@ -242,6 +242,58 @@ Periodični pregled izvora:
 - [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
+### #48 „Šta važi danas”: aktuelna pravila, istorija i provera (faza-1b, centralno)
+Pravilo portala: ono što važi danas uvek je istaknuto. Raniji propisi ostaju kao istorija, a kratko
+hronološko objašnjenje kaže šta se, kada i zašto promenilo, da nastavnici „jednom zauvek znaju šta je
+prava istina”. Mnoge kolege rade po pravilima koja više ne važe (primer: fond časova FZV).
+
+Stranica `/sta-vazi`, sa posebnom stranicom po temi (`/sta-vazi/:tema`):
+- **Važi danas**: pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put
+  provereno;
+- **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
+- **Kako se menjalo**: vremenska linija, od najnovijeg ka starijem. Svaka stavka ima datum, propis i šta je
+  promenio. Prestali propisi su jasno označeni („ne važi od …”);
+- **Česte zablude**: „mislio sam da…” → šta važi i od kada;
+- veze ka pitanjima i odgovorima, ishodima, vestima i aplikacijama koje se oslanjaju na temu.
+
+Mesto na sajtu:
+- stavka u glavnom meniju i blok na naslovnoj („Šta važi od 1. septembra”, „Novo u propisima”);
+- na stranici propisa važeći su gore, a prestali u sklopivoj istoriji. Propis ima polja `replaces` i
+  `replacedBy`, pa se iz zastarelog propisa vidi koji ga je zamenio;
+- odgovor, vest ili ishod koji se poziva na propis koji više ne važi dobija upozorenje i link na važeću temu.
+
+Hronologija uz pomoć AI-ja:
+- nacrt sažetka i vremenske linije piše AI, i to samo iz zvaničnih tekstova (PIS, „Prosvetni glasnik”,
+  ZUOV);
+- urednik ga čita, ispravlja i odobrava. Na stranici piše „pripremljeno uz pomoć AI-ja, proverio urednik,
+  datum”;
+- ništa se ne objavljuje bez odobrenja.
+
+Mehanizam provere (nastavlja #47):
+- komanda `sources:check` po rasporedu (cron) proverava listu izmena svakog propisa u PIS-u i nove objave
+  ZUOV-a i Ministarstva;
+- novi broj glasnika ili nova objava otvara stavku „za proveru” uredniku i šalje mu mejl;
+- svaka tema ima rok provere: najmanje dva puta godišnje i obavezno pre 1. septembra. Tema sa isteklim rokom
+  ide na spisak „za proveru” u administraciji;
+- test proverava da svaka tema ima izvor iz kataloga propisa, datum provere i da važeći propis nije
+  označen kao prestao.
+
+Prve teme:
+1. fond časova po razredima;
+2. oslobađanje od praktičnog dela nastave;
+3. ocenjivanje;
+4. programi i ishodi po razredima;
+5. norma i 40-časovna radna nedelja;
+6. evidencija i dnevnik;
+7. testiranje fizičkih sposobnosti;
+8. bezbednost na času;
+9. stručno usavršavanje.
+
+- [ ] Model teme i podaci (`backend/database/data/topics.json`), polja `replaces`/`replacedBy` u propisima
+- [ ] Stranice `/sta-vazi` i `/sta-vazi/:tema`, meni, blok na naslovnoj, upozorenja na zastarelim propisima
+- [ ] Prve teme: AI nacrt, odobrenje urednika
+- [ ] `sources:check`, spisak „za proveru” i rokovi provere (sa #47)
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
