@@ -1,101 +1,340 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">Propisi i literatura</p>
-      <h1>Propisi za nastavu fizičkog</h1>
+      <p class="eyebrow">Propisi</p>
+      <h1>Šta važi u nastavi fizičkog</h1>
       <p class="muted">
-        Zakoni, pravilnici, programi nastave i drugi dokumenti — sa kratkim „šta je bitno za FV“ i linkom na tekst.
-        Sažeci su pomoć u snalaženju, ne zamena za zvanični tekst ni pravni savet.
+        Važeći propisi su na prvom mestu, stari su u istoriji sa podatkom šta ih je zamenilo. Svaki
+        sažetak ima link na zvanični tekst. Sažeci pomažu da se snađete; ne zamenjuju zvanični tekst
+        ni pravni savet.
       </p>
     </div>
 
-    <div class="filters">
-      <div class="chip-row" role="group" aria-label="Oblast">
-        <button type="button" class="filter-chip" [class.filter-chip-on]="!area()" (click)="setArea(null)">Sve oblasti</button>
-        @for (option of areas; track option) {
-          <button type="button" class="filter-chip" [class.filter-chip-on]="area() === option" [attr.aria-pressed]="area() === option" (click)="setArea(option)">
-            {{ areaLabels[option] }}
-          </button>
+    <div class="page-sticky rules-tabs-wrap">
+      <nav
+        mat-tab-nav-bar
+        [tabPanel]="panel"
+        class="rules-tabs"
+        mat-stretch-tabs="false"
+        [disablePagination]="true"
+        aria-label="Delovi stranice propisa"
+      >
+        @for (item of tabs; track item.id) {
+          <a
+            mat-tab-link
+            [routerLink]="[]"
+            [queryParams]="{ tab: item.id === 'vazece' ? null : item.id }"
+            queryParamsHandling="merge"
+            [active]="activeTab() === item.id"
+            >{{ item.label }}</a
+          >
         }
-      </div>
-      <div class="filter-row filter-row-two">
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Vrsta</mat-label>
-          <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
-            <mat-option [value]="null">Sve vrste</mat-option>
-            @for (option of kinds; track option) {
-              <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <form class="search-form" (ngSubmit)="search()">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Pretraga (naziv, glasnik, sadržaj)</mat-label>
-            <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
-          </mat-form-field>
-          <button type="submit" mat-stroked-button>Traži</button>
-        </form>
-      </div>
-      @if (hasFilters()) {
-        <button type="button" mat-button class="clear-filters" (click)="clearFilters()">Poništi filtere</button>
-      }
+      </nav>
     </div>
 
-    @if (isLoading()) {
-      <mat-progress-bar mode="indeterminate" />
-    }
-    @if (hasError()) {
-      <div class="empty-state"><h3>Propisi trenutno nisu dostupni</h3></div>
-    } @else {
-      <p class="muted small result-count">Pronađeno: {{ items().length }}</p>
-      <div class="regulation-list">
-        @for (item of items(); track item.id) {
-          <article class="regulation">
-            <div class="regulation-head">
-              <span class="state-chip state-muted">{{ kindLabels[item.kind] }}</span>
-              <span class="verification" [class]="'verification-' + item.verification" [title]="item.verification_note ?? ''">{{ verificationLabels[item.verification] }}</span>
-            </div>
-            <h3>{{ item.title }}</h3>
-            @if (item.gazette) {
-              <p class="muted small">{{ item.gazette }}</p>
-            }
-            @if (item.valid_from || item.valid_to) {
-              <p class="small">
-                @if (item.valid_from) {
-                  Važi od {{ date(item.valid_from) }}
-                }
-                @if (item.valid_to) {
-                  · važi do {{ date(item.valid_to) }}
-                }
-              </p>
-            }
-            <div class="area-tags">
-              @for (tag of item.areas; track tag) {
-                <button type="button" class="area-tag" (click)="setArea(tag)">{{ areaLabels[tag] }}</button>
+    <mat-tab-nav-panel #panel>
+      @switch (activeTab()) {
+        @case ('vazece') {
+          <section class="rules-block" aria-labelledby="rules-today">
+            <h2 id="rules-today">Šta važi danas</h2>
+            <div class="rule-topic-grid">
+              @for (topic of topics; track topic.slug) {
+                <a
+                  class="rule-topic-card"
+                  [class]="'rule-topic-card accent-' + topic.accent"
+                  [routerLink]="['/propisi', topic.slug]"
+                >
+                  <span class="tint-icon"><app-icon [name]="topic.icon" [size]="18" /></span>
+                  <strong>{{ topic.cardTitle }}</strong>
+                  <span class="small">{{ topic.short }}</span>
+                  @if (topic.change) {
+                    <span class="rule-topic-change">menja se {{ topic.change }}</span>
+                  }
+                </a>
               }
+              <a class="rule-topic-card accent-lime" routerLink="/ishodi">
+                <span class="tint-icon"><app-icon name="checklist" [size]="18" /></span>
+                <strong>Ishodi po razredima</strong>
+                <span class="small">Ishodi, teme i fond za 1–8. razred i srednju školu</span>
+              </a>
+              <a
+                class="rule-topic-card accent-orange"
+                [routerLink]="[]"
+                [queryParams]="{ tab: 'kontakti' }"
+              >
+                <span class="tint-icon"><app-icon name="mail" [size]="18" /></span>
+                <strong>Kome se obratiti</strong>
+                <span class="small">Ministarstvo, inspekcija, školske uprave, ZUOV</span>
+              </a>
             </div>
-            <details class="regulation-summary">
-              <summary>Šta je bitno za nastavu FV</summary>
-              <div class="markdown" [innerHTML]="item.summary | simpleMarkdown"></div>
+          </section>
+
+          <section class="rules-block" aria-labelledby="rules-coming">
+            <h2 id="rules-coming">Šta se menja</h2>
+            <ul class="rules-coming">
+              @for (change of upcoming; track change.title) {
+                <li class="rules-coming-item">
+                  <span class="rules-coming-when">{{ change.when }}</span>
+                  <strong>{{ change.title }}</strong>
+                  <p class="small">{{ change.text }}</p>
+                  @if (change.topic) {
+                    <a class="inline-link small" [routerLink]="['/propisi', change.topic]"
+                      >Više o tome →</a
+                    >
+                  }
+                </li>
+              }
+            </ul>
+            <details class="rules-coming-sources">
+              <summary>Propisi na koje se ovo odnosi ({{ coming().length }})</summary>
+              <ul>
+                @for (item of coming(); track item.id) {
+                  <li>
+                    @if (item.url) {
+                      <a class="inline-link" [href]="item.url" target="_blank" rel="noopener">{{
+                        item.title
+                      }}</a>
+                    } @else {
+                      {{ item.title }}
+                    }
+                    <span class="small muted">{{ item.gazette }}</span>
+                  </li>
+                }
+              </ul>
             </details>
-            <div class="regulation-actions">
-              @if (item.url) {
-                <a mat-flat-button [href]="item.url" target="_blank" rel="noopener">Otvori tekst <app-icon name="external" [size]="18" /></a>
-              }
-              @if (item.versions_count) {
-                <button type="button" mat-button (click)="showHistory(item)">Istorija izmena ({{ item.versions_count }})</button>
-              }
-            </div>
-          </article>
-        } @empty {
-          @if (!isLoading()) {
-            <div class="empty-state">
-              <h3>Nema propisa za izabrane filtere</h3>
-              <button type="button" mat-stroked-button (click)="clearFilters()">Poništi filtere</button>
-            </div>
-          }
+          </section>
+
+          <h2>Katalog važećih propisa</h2>
+          <p class="muted small mb-4">
+            Za one koji žele ceo tekst: uz svaki propis je kratko „šta je bitno za FV” i link na
+            član na koji se odnosi.
+          </p>
         }
-      </div>
-    }
+        @case ('ranije') {
+          <p class="muted mb-4">
+            Propisi koji više ne važe. Ostaju ovde da bi se videlo šta je bilo i šta ga je zamenilo;
+            za rad u školi važi ono iz taba „Važeće”.
+          </p>
+        }
+        @case ('kako-se-menjalo') {
+          <div class="markdown rules-intro" [innerHTML]="historyIntro | simpleMarkdown"></div>
+          <ol class="rules-eras">
+            @for (era of eras; track era.period) {
+              <li class="rules-era">
+                <span class="rules-era-period">{{ era.period }}</span>
+                <h2>{{ era.title }}</h2>
+                <div class="markdown" [innerHTML]="era.text | simpleMarkdown"></div>
+                <p class="small">
+                  Teme:
+                  @for (slug of era.topics; track slug; let last = $last) {
+                    <a
+                      class="inline-link"
+                      [routerLink]="['/propisi', slug]"
+                      [queryParams]="{ tab: 'kako-se-menjalo' }"
+                      >{{ topicTitle(slug) }}</a
+                    >{{ last ? '' : ' · ' }}
+                  }
+                </p>
+                <p class="small muted">
+                  Propisi:
+                  @for (key of era.regulations; track key; let last = $last) {
+                    {{ title(key) }}{{ last ? '' : '; ' }}
+                  }
+                </p>
+              </li>
+            }
+          </ol>
+          <p class="small muted">
+            Pripremljeno uz pomoć AI-ja iz zvaničnih tekstova (PIS, „Prosvetni glasnik”); proverilo
+            uredništvo.
+          </p>
+        }
+        @case ('kontakti') {
+          <p class="muted small mb-3">
+            Institucije kojima se nastavnik fizičkog obraća u radu. Dodirnite karticu za telefone i
+            mejlove; poziv i mejl se otvaraju jednim dodirom. Podaci su sa zvaničnih sajtova,
+            provereni {{ date(contactsCheckedAt) }} Udruženja, sindikati i savezi za školski sport
+            su na stranici <a class="inline-link" routerLink="/udruzenja">Udruženja</a>, a
+            uredništvo portala na stranici <a class="inline-link" routerLink="/kontakt">Kontakt</a>.
+          </p>
+          <div class="contact-grid">
+            @for (institution of contacts; track institution.id) {
+              <button
+                type="button"
+                class="contact-card"
+                [class]="'contact-card accent-' + institution.accent"
+                (click)="openInstitution(institution)"
+              >
+                <span class="contact-card-head">
+                  <span class="tint-icon"><app-icon [name]="institution.icon" [size]="18" /></span>
+                  <strong>{{ institution.name }}</strong>
+                </span>
+                <span class="small">{{ institution.when }}</span>
+              </button>
+            }
+          </div>
+
+          <h2>Školske uprave</h2>
+          <p class="muted small mb-3">
+            Prvo mesto za pitanja o radu škole, stručno-pedagoški nadzor i pritužbe na nivou okruga.
+          </p>
+          <div class="contact-cities">
+            @for (office of administrations; track office.city) {
+              <button type="button" class="contact-city" (click)="openAdministration(office)">
+                <app-icon name="pin" [size]="16" /> {{ office.city }}
+              </button>
+            }
+          </div>
+        }
+      }
+      @if (showsList()) {
+        <div class="filters rules-filters">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Oblast</mat-label>
+            <mat-select [value]="area()" (selectionChange)="setArea($event.value)">
+              <mat-option [value]="null">Sve oblasti</mat-option>
+              @for (option of areas; track option) {
+                <mat-option [value]="option">{{ areaLabels[option] }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Vrsta</mat-label>
+            <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
+              <mat-option [value]="null">Sve vrste</mat-option>
+              @for (option of kinds; track option) {
+                <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <form class="search-form" (ngSubmit)="search()">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Pretraga</mat-label>
+              <input
+                matInput
+                name="search"
+                [ngModel]="searchText()"
+                (ngModelChange)="searchText.set($event)"
+              />
+            </mat-form-field>
+            <button type="submit" mat-flat-button class="btn-tertiary">Traži</button>
+          </form>
+        </div>
+        @if (hasFilters()) {
+          <button type="button" mat-button class="clear-filters" (click)="clearFilters()">
+            Poništi filtere
+          </button>
+        }
+        @if (isLoading()) {
+          <mat-progress-bar mode="indeterminate" />
+        }
+        @if (hasError()) {
+          <div class="empty-state"><h3>Propisi trenutno nisu dostupni</h3></div>
+        } @else {
+          <p class="muted small result-count mb-2">Pronađeno: {{ shown().length }}</p>
+          <div class="regulation-list">
+            @for (item of shown(); track item.id) {
+              <article class="regulation" [class.regulation-expired]="item.status === 'prestao'">
+                <div class="regulation-head">
+                  <span class="reg-label">{{ kindLabels[item.kind] }}</span>
+                  <span class="reg-label" [class]="'reg-label reg-status-' + item.status">{{
+                    statusLabels[item.status]
+                  }}</span>
+                  <span
+                    class="reg-label verification"
+                    [class]="'reg-label verification verification-' + item.verification"
+                    [title]="item.verification_note ?? ''"
+                    >{{ verificationLabels[item.verification] }}</span
+                  >
+                  @for (tag of item.areas; track tag) {
+                    <span class="reg-label reg-area">{{ areaLabels[tag] }}</span>
+                  }
+                </div>
+                <h3>{{ item.title }}</h3>
+                <p class="muted small">
+                  {{ item.gazette }}
+                  @if (item.valid_from) {
+                    · {{ item.status === 'najava' ? 'primenjuje se od' : 'važi od' }}
+                    {{ date(item.valid_from) }}
+                  }
+                  @if (item.valid_to) {
+                    · {{ item.status === 'prestao' ? 'ne važi od' : 'važi do' }}
+                    {{ date(item.valid_to) }}
+                  }
+                </p>
+                @if (item.replaced_by.length) {
+                  <p class="small regulation-replaced">
+                    Zamenio ga je:
+                    @for (key of item.replaced_by; track key; let last = $last) {
+                      <a
+                        class="inline-link"
+                        [routerLink]="[]"
+                        [queryParams]="{ tab: null, pretraga: title(key) }"
+                        queryParamsHandling="merge"
+                        >{{ title(key) }}</a
+                      >{{ last ? '' : '; ' }}
+                    }
+                  </p>
+                }
+                <div class="regulation-actions">
+                  <button
+                    type="button"
+                    mat-button
+                    class="btn-tertiary-text"
+                    [attr.aria-expanded]="open().has(item.id)"
+                    (click)="toggle(item.id)"
+                  >
+                    Šta je bitno za FV {{ open().has(item.id) ? '▴' : '▾' }}
+                  </button>
+                  @if (textUrl(item); as link) {
+                    <a
+                      mat-flat-button
+                      class="btn-tertiary"
+                      [href]="link"
+                      target="_blank"
+                      rel="noopener"
+                      >Otvori tekst <app-icon name="external" [size]="16"
+                    /></a>
+                  }
+                  @if (item.versions_count) {
+                    <button
+                      type="button"
+                      mat-button
+                      class="btn-tertiary-text"
+                      (click)="showHistory(item)"
+                    >
+                      Istorija ({{ item.versions_count }})
+                    </button>
+                  }
+                </div>
+                @if (open().has(item.id)) {
+                  <div
+                    class="markdown regulation-summary-body"
+                    [innerHTML]="summaryHtml(item)"
+                  ></div>
+                }
+              </article>
+            } @empty {
+              @if (!isLoading()) {
+                <div class="empty-state">
+                  <h3>
+                    {{
+                      activeTab() === 'ranije'
+                        ? 'Nema starih propisa za izabrane filtere'
+                        : 'Nema važećih propisa za izabrane filtere'
+                    }}
+                  </h3>
+                  @if (hasFilters()) {
+                    <button type="button" mat-stroked-button (click)="clearFilters()">
+                      Poništi filtere
+                    </button>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      }
+    </mat-tab-nav-panel>
   </div>
 </section>

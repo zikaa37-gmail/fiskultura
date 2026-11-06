@@ -92,6 +92,8 @@ class QuestionController extends Controller
                     'title' => $regulation->title,
                     'gazette' => $regulation->gazette,
                     'url' => $regulation->url,
+                    'status' => $regulation->status(),
+                    'valid_to' => $regulation->valid_to?->toDateString(),
                 ])->values(),
             ] : []),
         ];

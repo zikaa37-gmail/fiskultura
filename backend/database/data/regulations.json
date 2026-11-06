@@ -201,10 +201,10 @@
       "planiranje"
     ],
     "gazette": "„Prosvetni glasnik\" 1/2026",
-    "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603007/pg-2026-1-6-os5",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/15/2/reg",
     "validFrom": "2027-09-01",
-    "verification": "secondary",
-    "verificationNote": "ZUOV, vest od 2. 3. 2026; datum primene po razredima proveriti u tekstu",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2018/15/2, izmena 1/2026): član 2 – primena od 2027/28; plan: FZV 3 | 108 u 5. i 6. razredu",
     "summary": "Novi plan za 5. i 6. razred i nov program FZV za 5. razred, **od školske 2027/28**.\n\n- Fond FZV u 5. i 6. razredu: **3 časa nedeljno, 108 godišnje**; obavezne fizičke aktivnosti više nisu u planu.\n- Program za 6. razred ostaje isti."
   },
   {
@@ -250,6 +250,21 @@
     "summary": "Program FZV za 8. razred. Fond FZV: **3 časa nedeljno, 102 godišnje** (34 nastavne nedelje; plan za 7. i 8. razred, „Prosvetni glasnik” 18/2018)."
   },
   {
+    "key": "plan-7-8-2018",
+    "title": "Pravilnik o planu nastave i učenja za 7. i 8. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 18/2018, 13/2023, 1/2026",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/18/3/reg",
+    "validFrom": "2020-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2018/18/3): član 2 – 7. razred od 2020/21, 8. razred od 2021/22; red 14: Fizičko i zdravstveno vaspitanje 3 | 108 | 3 | 102",
+    "summary": "Plan nastave za 7. i 8. razred. Zamenio je plan iz 2007. postepeno: 7. razred od školske 2020/21, 8. razred od 2021/22.\n\n- Fizičko i zdravstveno vaspitanje: **3 časa nedeljno**, 108 godišnje u 7. i **102** u 8. razredu (kraća godina zbog završnog ispita).\n- Predmet „Fizičko vaspitanje – izabrani sport” više ne postoji.\n- Izmene 2023. i 2026. (od 2027/28) ne menjaju fond FZV."
+  },
+  {
     "key": "plan-7-8-izmena-2026",
     "title": "Pravilnik o izmeni Pravilnika o planu nastave i učenja za 7. i 8. razred OŠ",
     "kind": "program",
@@ -258,10 +273,10 @@
       "planiranje"
     ],
     "gazette": "„Prosvetni glasnik\" 1/2026",
-    "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603005/pg-2026-1-7-os7-8",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/18/3/reg",
     "validFrom": "2027-09-01",
-    "verification": "secondary",
-    "verificationNote": "ZUOV i PIS (ELI 2018/18/3): red FZV 3 | 108 | 3 | 102 u planu iz 2018, 2023. i 2026; član 2: primena od 2027/28",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2018/18/3, izmena 1/2026-339): član 2 – primena od 2027/28; red FZV 3 | 108 | 3 | 102",
     "summary": "Nov plan za 7. i 8. razred od školske 2027/28. **Fond FZV se ne menja**: 3 časa nedeljno, 108 godišnje u 7. i 102 u 8. razredu."
   },
   {
@@ -302,10 +317,10 @@
     ],
     "gazette": "„Prosvetni glasnik\" 1/2026",
     "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603009/pg-2026-1-1-gimnazija",
-    "validFrom": null,
+    "validFrom": "2027-09-01",
     "verification": "secondary",
-    "verificationNote": "ZUOV, vest od 2. 3. 2026 (nov program za I razred gimnazije)",
-    "summary": "Nov program nastave i učenja za I razred gimnazije. Datum primene proveriti u tekstu."
+    "verificationNote": "ZUOV, vest od 2. 3. 2026; član 2 i 4: nov program za I razred od 2027/28, upisani zaključno sa 2026/27. završavaju po dosadašnjem programu (tekst pročitan za e-pripreme)",
+    "summary": "Nov program nastave i učenja za I razred gimnazije, **od školske 2027/28**.\n\n- Učenici upisani u I razred zaključno sa 2026/27. završavaju po dosadašnjem programu.\n- Fond FZV ostaje 2 časa nedeljno (74 godišnje)."
   },
   {
     "key": "strucne-skole-opsteobrazovni",
@@ -320,6 +335,134 @@
     "verification": "unverified",
     "verificationNote": "plan se donosi po obrazovnom profilu; fond nije potvrđen (#12)",
     "summary": "Fond FZV zavisi od obrazovnog profila (nezvanično 2 časa nedeljno, 70 godišnje, u završnom razredu manje). Nastavnik upisuje fond odeljenja."
+  },
+  {
+    "key": "plan-1-4-2005",
+    "title": "Pravilnik o nastavnom planu za 1–4. razred i nastavnom programu za 3. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/2005",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2005/1/1/reg",
+    "validFrom": "2005-09-01",
+    "validTo": "2021-08-31",
+    "replacedBy": [
+      "program-1-2017"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2005/1/1), glasnik 1/2005 str. 1: plan 1–4, red 9 Fizičko vaspitanje 3 | 108; član 3–4: 1. i 3. razred od 2005/06, 2. i 4. od 2006/07",
+    "summary": "Stari plan za prvi ciklus. **Ne važi**: zamenjivan je postepeno novim planom iz 2017 (1. razred od 2018/19 … 4. razred od 2021/22).\n\n- Predmet se zvao **Fizičko vaspitanje**, 3 časa nedeljno (108 godišnje) – isti fond kao danas."
+  },
+  {
+    "key": "program-1-2-2004",
+    "title": "Pravilnik o nastavnom planu i programu za 1. i 2. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 10/2004",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2004/10/2/reg",
+    "validTo": "2019-08-31",
+    "replacedBy": [
+      "program-1-2017",
+      "program-2-2018"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2004/10/2); kraj primene po razredima prema početku primene novih programa (1. razred 2018/19, 2. razred 2019/20)",
+    "summary": "Stari program fizičkog vaspitanja za 1. i 2. razred. **Ne važi**: za 1. razred od 2018/19, za 2. razred od 2019/20 važe novi programi sa ishodima."
+  },
+  {
+    "key": "program-4-2006",
+    "title": "Pravilnik o nastavnom programu za 4. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 3/2006",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2006/3/2/reg",
+    "validTo": "2021-08-31",
+    "replacedBy": [
+      "program-4-2019"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2006/3/2); kraj primene: novi program za 4. razred od 2021/22",
+    "summary": "Stari program fizičkog vaspitanja za 4. razred. **Ne važi** od školske 2021/22, kada počinje program iz „Prosvetnog glasnika” 11/2019."
+  },
+  {
+    "key": "plan-5-8-2007",
+    "title": "Pravilnik o nastavnom planu za drugi ciklus i nastavnom programu za 5. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 6/2007",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2007/6/1/reg",
+    "validFrom": "2007-09-01",
+    "validTo": "2021-08-31",
+    "replacedBy": [
+      "program-5-6-2018",
+      "plan-7-8-2018"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2007/6/1), glasnik 6/2007 str. 1–2: red 13 Fizičko vaspitanje 2 | 72 (8. r. 68); obavezni izborni „Fizičko vaspitanje – izabrani sport” 1 | 36 (8. r. 34); član 3: 5. razred od 2007/08 … 8. razred od 2010/11",
+    "summary": "Stari plan za 5–8. razred. **Ne važi**: zamenjen je planom iz 2018 (5. razred od 2018/19, 6. od 2019/20, 7. od 2020/21, 8. od 2021/22).\n\n- **Fizičko vaspitanje: 2 časa nedeljno** (72, u 8. razredu 68).\n- Uz to obavezni izborni predmet **„Fizičko vaspitanje – izabrani sport”: 1 čas nedeljno** – sportska grana po izboru učenika.\n- Ukupno 3 časa kretanja nedeljno, ali kao dva predmeta."
+  },
+  {
+    "key": "program-6-2008",
+    "title": "Pravilnik o nastavnom programu za 6. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2008",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2008/5/1/reg",
+    "validFrom": "2008-09-01",
+    "validTo": "2019-08-31",
+    "replacedBy": [
+      "program-6-2019"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2008/5/1): član 3 – primena od 2008/09; novi program za 6. razred od 2019/20",
+    "summary": "Stari program fizičkog vaspitanja za 6. razred. **Ne važi** od školske 2019/20."
+  },
+  {
+    "key": "program-7-2009",
+    "title": "Pravilnik o nastavnom programu za 7. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 6/2009",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2009/6/1/reg",
+    "validFrom": "2009-09-01",
+    "validTo": "2020-08-31",
+    "replacedBy": [
+      "program-7-2019"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2009/6/1); početak primene po planu 6/2007 (7. razred od 2009/10); novi program od 2020/21",
+    "summary": "Stari program fizičkog vaspitanja za 7. razred. **Ne važi** od školske 2020/21."
+  },
+  {
+    "key": "program-8-2010",
+    "title": "Pravilnik o nastavnom programu za 8. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 2/2010",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2010/2/4/reg",
+    "validFrom": "2010-09-01",
+    "validTo": "2021-08-31",
+    "replacedBy": [
+      "program-8-2019"
+    ],
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2010/2/4); početak primene po planu 6/2007 (8. razred od 2010/11); novi program od 2021/22",
+    "summary": "Stari program fizičkog vaspitanja za 8. razred. **Ne važi** od školske 2021/22."
   },
   {
     "key": "ocenjivanje-os-2024",

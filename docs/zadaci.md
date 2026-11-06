@@ -39,7 +39,7 @@ faza 1 prođe proveru.
 ## Faza 1 — kostur, javni portal, vesti, udruženja
 
 ### #6 Kostur frontenda (faza-1)
-`frontend/`: Angular 22 standalone, zoneless, Material, `@ngx-translate` (`sr.json`), rute, shell
+`frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
 - [ ] `ng build` i `ng test` prolaze
 
@@ -308,10 +308,68 @@ Prve teme:
 8. bezbednost na času;
 9. stručno usavršavanje.
 
-- [ ] Model teme i podaci (`backend/database/data/topics.json`), polja `replaces`/`replacedBy` u propisima
-- [ ] Nova `/propisi` sa tabovima Važeće / Ranije / Kako se menjalo, `/propisi/:tema`, blok na naslovnoj, upozorenja na zastarelim propisima
-- [ ] Prve teme: AI nacrt, odobrenje urednika
-- [ ] `sources:check`, spisak „za proveru” i rokovi provere (sa #47)
+Kontakti (dopuna, 6. 11. 2026):
+- tab **Kontakti** na `/propisi`: Ministarstvo prosvete (sektori za OŠ i SŠ, zaštita od nasilja, pravni poslovi,
+  licenca), prosvetna inspekcija, školske uprave, ZUOV, ZVKOV, Pedagoški zavod Vojvodine, Ministarstvo
+  sporta, Inspektorat za rad i Poverenik. Uz svaku instituciju piše kada joj se obraćamo, a podaci su samo
+  sa zvaničnih sajtova, sa datumom provere;
+- stranica `/kontakt`: ko radi portal (uredništvo) i obrazac „Piši uredništvu”. Poruka ide mejlom
+  urednicima, a odgovor ide direktno pošiljaocu. Link na stranicu je u podnožju.
+
+- [ ] Teme u `frontend/src/app/content/rules/`, polje `replacedBy` u propisima, stari programi iz PIS-a
+- [ ] Nova `/propisi` sa tabovima Važeće / Ranije / Kako se menjalo / Kontakti, `/propisi/:tema`, blok na
+      naslovnoj, upozorenja na zastarelim propisima
+- [ ] Prve teme (fond časova, programi i ishodi): AI nacrt, odobrenje urednika
+- [ ] `regulations:check` (PIS, nedeljno), spisak „za proveru” u administraciji, rokovi provere tema
+- [ ] Kontakti institucija i `/kontakt` sa obrascem za uredništvo
+
+### #49 Zajednica nastavnika FV: registracija, trajna prijava, umrežavanje (faza-1b, centralno)
+Cilj: okupiti sve nastavnike fizičkog vaspitanja i studente fakulteta sporta pod jednom kapom. Dugoročno to je
+osnova za strukovnu komoru, koja bi imala reč o struci, a jednog dana i nadležnosti oko licenci. Prvi korak je
+da ljudi počnu da koriste portal.
+
+Pravilo: **sadržaj ostaje javan**, ništa se ne krije iza prijave. Registracija daje dodatnu vrednost, a nama
+bazu kontakata struke.
+
+Javno, bez naloga:
+- vesti, propisi i teme, ishodi, pravila sportova, pitanja i odgovori, udruženja, kontakti.
+
+Uz nalog:
+- obaveštenja po izboru (oblast, okrug, nivo škole);
+- postavljanje pitanja i praćenje odgovora, sačuvani propisi i teme;
+- profil u imeniku struke: ime, škola ili fakultet, okrug, status (nastavnik OŠ ili SŠ, student, pripravnik,
+  u penziji). Vidljiv je drugim članovima samo uz izričitu saglasnost;
+- jedan nalog i za aplikacije (e-pripreme, Evidencija FV, Jadžent), kasnije;
+- učešće u anketama i inicijativama struke (#44).
+
+Prijava „jednom i zauvek”:
+- posle registracije i potvrde mejla korisnik je odmah prijavljen. Refresh token traje 365 dana i obnavlja
+  se pri svakom korišćenju (rotacija), pa se aktivan korisnik praktično nikad ne odjavljuje;
+- „Zapamti me” je podrazumevano uključeno. Odjava sa svih uređaja je u profilu;
+- registracija u jednom koraku (ime, mejl, lozinka, status), ostalo u profilu postepeno; razmotriti prijavu
+  preko Google naloga.
+
+Privlačenje novih članova:
+- stranica **„Za nove nastavnike i studente”**: prvi koraci u struci (propisi, ishodi, planiranje,
+  pripravnički staž, ispit za licencu, seminari);
+- kampanja na fakultetima sporta i fizičkog vaspitanja u Beogradu, Novom Sadu i Nišu: plakat sa QR kodom,
+  kratka prezentacija, posebna adresa po fakultetu (`?izvor=fsfv-bg` …) da se vidi odakle dolaze članovi;
+- poziv na registraciju na pravom mestu (posle korisnog sadržaja), bez iskačućih prozora.
+
+Baza kontakata i privatnost:
+- saglasnost po svrsi (obaveštenja, imenik, ankete), u skladu sa Zakonom o zaštiti podataka o ličnosti;
+- izvoz i brisanje sopstvenih podataka iz profila;
+- uredništvo vidi statistiku: broj članova po statusu, okrugu i izvoru registracije.
+
+Put ka komori (kasnije, posle dovoljnog broja članova):
+- članstvo i statut, saradnja sa SSPFVS i udruženjima, stav struke o propisima;
+- podaci o licenci i stažu se uvode tek kad za to postoji pravni osnov.
+
+- [ ] Analiza: šta je sada iza prijave, tok registracije i trajanje tokena
+- [ ] Trajna prijava (automatska prijava posle potvrde, 365 dana uz rotaciju, odjava sa svih uređaja)
+- [ ] Profil sa statusom i saglasnostima, imenik struke uz saglasnost
+- [ ] Stranica za nove nastavnike i studente, praćenje izvora registracije, materijal za fakultete
+- [ ] Statistika članstva za uredništvo
 
 ## Faza 2 — sportske igre i PDF uputstva
 

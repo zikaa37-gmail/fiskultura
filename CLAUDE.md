@@ -13,9 +13,8 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
 - `frontend/`: Angular 22 sa SSR-om (zoneless, OnPush, signali): javne stranice se prerenderuju pri deploy-u
   (`app.routes.server.ts`), SEO svake stranice ide kroz `core/seo/seo.service.ts` (ruta `data.seo` ili detalj sam
   zove `SeoService.set`); kod koji dira `localStorage`/`window` mora da radi i na serveru. Angular Material M3 (`mat.theme` u
-  `src/styles.scss`, boje i tokeni preneti iz statičke naslovne), `@ngx-translate`
-  (`public/translations/sr.json`) za tekst okvira (meni, footer, dugmad); sadržaj stranica je u
-  `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.
+  `src/styles.scss`, boje i tokeni preneti iz statičke naslovne). Bez biblioteke za prevode: sav tekst je na
+  srpskom, direktno u šablonima; duži sadržaj stranica je u `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.
 - `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), lokalno SQLite, na serveru MySQL.
   Mejl: SMTP `obavestenja@fiskultura.rs` (lozinka samo u `backend/.env` i na serveru; lokalno
   `MAIL_MAILER=log`, za probu slanja `smtp`). Auth: JWT access (60 min) + refresh sa rotacijom kao u
@@ -37,6 +36,18 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   preko `httpResource`.
 - Material dugmad: `mat-flat-button` glavna akcija, `mat-stroked-button` sporedna; boje preko
   `--mat-sys-*` i tokena iz `styles.scss` (`--color-primary`, `.accent-*`), ne `color="primary"`.
+  Tercijarno (neutralno) dugme: `mat-flat-button class="btn-tertiary"` i `mat-button class="btn-tertiary-text"`
+  za česte akcije u listama (otvori tekst, istorija, prikaži više), da stranica ne bude previše plava.
+- Kartice su male i stoje jedna do druge (na telefonu dve u redu gde stane); dugačak sadržaj ide u modal, a
+  kartica ima naziv i kratak tekst. Boja kartice dolazi iz `.accent-*` (ikonica u `.tint-icon`, blaga pozadina).
+  Oznake (oblast, status) su male labele, ne linkovi. Telefon i mejl su `tel:` i `mailto:` linkovi
+  (`telHref`), mejl se lomi pre „@” i ima dugme za kopiranje. Dugme „na vrh” (`app-back-to-top`) je globalno.
+- Za ljude, ne za advokate: na vrhu ide sažetak „šta važi i šta se menja” jednostavnim rečima, a spisak
+  propisa je ispod ili sklopljen. Link na propis vodi na navedeni član (`regulationTextUrl`, sidra
+  `#clan_N` na paragraf.rs).
+- Razmaci: klase `mb-1`…`mb-5` (4, 8, 12, 16, 24 px) iz `styles.scss`, ne `style="..."`. Tekst iznad kartica
+  ili liste (npr. `result-count`) uvek ima razmak do njih. Bez `ngTemplateOutlet`: deo šablona koji se ponavlja
+  postaje mala komponenta.
 - **Mobile first**: većina posetilaca dolazi sa telefona. Osnovni stilovi su za telefon (od 360 px), šire
   ekrane dodaje `@media (min-width: ...)`; nikad obrnuto. Dodirne površine bar 44 px, bez horizontalnog
   skrola, modali na telefonu preko celog ekrana, filteri i forme u jednoj koloni. Svaka nova stranica se

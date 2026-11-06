@@ -86,7 +86,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
         @if (resource.error()) {
           <div class="empty-state"><h3>Pitanja trenutno nisu dostupna</h3></div>
         } @else {
-          <p class="muted small result-count">Pronađeno: {{ items().length }}</p>
+          <p class="muted small result-count mb-2">Pronađeno: {{ items().length }}</p>
           <div class="question-list">
             @for (item of items(); track item.id) {
               <article class="question-card">

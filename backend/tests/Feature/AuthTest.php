@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\EnsureRole;
 use App\Mail\AccountVerificationMail;
 use App\Mail\PasswordResetMail;
 use App\Models\User;

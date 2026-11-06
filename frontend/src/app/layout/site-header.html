@@ -5,9 +5,9 @@
       <span>Fiskultura</span>
     </a>
 
-    <nav class="topnav" [class.topnav-open]="menuOpen()" [attr.aria-label]="'nav.main' | translate">
+    <nav class="topnav" [class.topnav-open]="menuOpen()" aria-label="Glavna navigacija">
       @for (item of navItems; track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label | translate }}</a>
+        <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label }}</a>
       }
       @if (auth.isEditor()) {
         <a routerLink="/admin" routerLinkActive="topnav-active" (click)="closeMenu()">Admin</a>
@@ -15,11 +15,11 @@
       @if (auth.currentUser(); as user) {
         <a class="topnav-account" routerLink="/profil" routerLinkActive="topnav-active" (click)="closeMenu()">{{ user.name }}</a>
       } @else {
-        <a class="topnav-account" routerLink="/prijava" routerLinkActive="topnav-active" (click)="closeMenu()">{{ 'nav.login' | translate }}</a>
+        <a class="topnav-account" routerLink="/prijava" routerLinkActive="topnav-active" (click)="closeMenu()">Prijava</a>
       }
     </nav>
 
-    <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" [attr.aria-label]="'nav.menu' | translate" [title]="'nav.menu' | translate">
+    <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Meni" title="Meni">
       <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
     </button>
   </div>

@@ -70,9 +70,26 @@ ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
 | POST | `/admin/regulations` | editor, admin | novi propis |
 | PATCH | `/admin/regulations/{id}` | editor, admin | izmena; ako se menja sadržaj, staro stanje ide u istoriju sa `change_note`, `version` + 1 |
 | DELETE | `/admin/regulations/{id}` | admin | brisanje sa istorijom |
+| GET | `/admin/regulations-review` | editor, admin | propisi za proveru: nova izmena u PIS-u (`change_detected_at`, `change_detail`) ili bez provere urednika duže od 6 meseci |
+| POST | `/admin/regulations/{id}/checked` | editor, admin | urednik je proverio propis: `checked_at`, `checked_by`, briše oznaku izmene |
+
+Svaki propis ima `status` (`vazi`, `najava` = primenjuje se kasnije, `nacrt`, `prestao` = `valid_to` je prošao),
+`replaced_by` (ključevi propisa koji su ga zamenili) i `checked_at`.
 
 Početni podaci: `backend/database/data/regulations.json` (katalog „Literatura“ iz e-priprema); uvoz dodaje nove
 ključeve i ažurira samo propise koje niko nije menjao (verzija 1).
+
+Komanda `regulations:check` (zakazana ponedeljkom u 05:00; `--key=`, `--no-mail`) za propise sa ELI adresom u
+PIS-u (`https://pravno-informacioni-sistem.rs/eli/rep/.../reg`) čita spisak izmena iz naslova akta. Prvo pokretanje
+beleži stanje; kad se pojavi novi broj glasnika, propis dobija oznaku izmene, a urednici i admini mejl. Na portalu
+se ništa ne menja samo. Teme „Šta važi“ (`frontend/src/app/content/rules/rule-topics.ts`) i kontakti institucija
+imaju datum provere; posle 6 meseci, i leti ako nisu provereni od juna, stoje u administraciji pod „Za proveru“.
+
+## Kontakt (#48)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| POST | `/contact` | javno (5 na sat) | `name`, `email`, `topic` (`pitanje`, `greska`, `predlog`, `saradnja`, `drugo`), `message`, prazno polje `website`; mejl urednicima i adminima, odgovor ide pošiljaocu (`Reply-To`) |
 
 ## Pitanja i odgovori (#40)
 

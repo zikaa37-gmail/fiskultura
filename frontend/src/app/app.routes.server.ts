@@ -1,6 +1,7 @@
 import { PrerenderFallback, RenderMode, ServerRoute } from '@angular/ssr';
 import { SERVER_USER_AGENT } from './core/http/api-origin.interceptor';
 import { OUTCOME_GRADES } from './content/outcomes/outcomes';
+import { RULE_TOPICS } from './content/rules/rule-topics';
 
 interface SeoRoutes {
   news: { slug: string }[];
@@ -35,6 +36,8 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'udruzenja', renderMode: RenderMode.Prerender },
   { path: 'udruzenja/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('organizations'), fallback: PrerenderFallback.Client },
   { path: 'propisi', renderMode: RenderMode.Prerender },
+  { path: 'propisi/:tema', renderMode: RenderMode.Prerender, getPrerenderParams: async () => RULE_TOPICS.map((topic) => ({ tema: topic.slug })) },
+  { path: 'kontakt', renderMode: RenderMode.Prerender },
   { path: 'pitanja', renderMode: RenderMode.Prerender },
   { path: 'pitanja/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('questions'), fallback: PrerenderFallback.Client },
   { path: 'sportovi', renderMode: RenderMode.Prerender },

@@ -10,10 +10,13 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\RegulationController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
@@ -73,6 +76,8 @@ Route::middleware('jwt')->group(function () {
 
         Route::post('/regulations', [AdminRegulationController::class, 'store']);
         Route::patch('/regulations/{regulation}', [AdminRegulationController::class, 'update']);
+        Route::get('/regulations-review', [AdminRegulationController::class, 'review']);
+        Route::post('/regulations/{regulation}/checked', [AdminRegulationController::class, 'checked']);
 
         Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
     });
