@@ -179,7 +179,7 @@ upućuje na Zdravitas (+ kasnije izveštaji iz e-priprema).
 ## Tehnika
 
 - Monorepo kao `evidencija-fv`: `frontend/` (Angular 22, zoneless, signali, **Angular Material M3**,
-  `@ngx-translate`), `backend/` (Laravel 13 API, MySQL, JWT + refresh, prefiks tabela `fk_`),
+  bez biblioteke za prevode), `backend/` (Laravel 13 API, MySQL, JWT + refresh, prefiks tabela `fk_`),
   `docs/`, `deploy/`. Portovi lokalno: frontend 5190, backend 8190.
 - Dizajn: isti kao sadašnja statička naslovna — Inter, plava `#1d4ed8` + limeta `#bef264`,
   kartice modula sa ikonicom u obojenom kvadratu, tamna tema preko `prefers-color-scheme`.

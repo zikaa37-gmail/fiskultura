@@ -39,7 +39,7 @@ faza 1 prođe proveru.
 ## Faza 1 — kostur, javni portal, vesti, udruženja
 
 ### #6 Kostur frontenda (faza-1)
-`frontend/`: Angular 22 standalone, zoneless, Material, `@ngx-translate` (`sr.json`), rute, shell
+`frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
 - [ ] `ng build` i `ng test` prolaze
 
