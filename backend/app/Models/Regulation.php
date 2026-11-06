@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-#[Fillable(['key', 'title', 'kind', 'areas', 'gazette', 'url', 'valid_from', 'valid_to', 'summary', 'verification', 'verification_note', 'sort'])]
+#[Fillable(['key', 'title', 'kind', 'areas', 'gazette', 'url', 'valid_from', 'valid_to', 'replaced_by', 'summary', 'verification', 'verification_note', 'sort'])]
 class Regulation extends Model
 {
     public const KINDS = ['zakon', 'nacrt', 'pravilnik', 'program', 'protokol', 'uputstvo', 'kalendar', 'strategija', 'ostalo'];
@@ -16,21 +18,67 @@ class Regulation extends Model
 
     public const VERIFICATIONS = ['verified', 'secondary', 'unverified'];
 
+    public const REVIEW_MONTHS = 6;
+
+    public const IN_FORCE = 'vazi';
+
+    public const UPCOMING = 'najava';
+
+    public const DRAFT = 'nacrt';
+
+    public const EXPIRED = 'prestao';
+
+    public const PIS_ELI = '#^https://pravno-informacioni-sistem\.rs/eli/(rep/[a-z0-9/]+)/reg/?$#';
+
     protected $attributes = [
         'version' => 1,
         'sort' => 0,
         'verification' => 'unverified',
     ];
 
-    private const TRACKED = ['title', 'kind', 'areas', 'gazette', 'url', 'valid_from', 'valid_to', 'summary', 'verification', 'verification_note'];
+    private const TRACKED = ['title', 'kind', 'areas', 'gazette', 'url', 'valid_from', 'valid_to', 'replaced_by', 'summary', 'verification', 'verification_note'];
 
     protected function casts(): array
     {
         return [
             'areas' => 'array',
+            'replaced_by' => 'array',
             'valid_from' => 'date',
             'valid_to' => 'date',
+            'pis_checked_at' => 'datetime',
+            'change_detected_at' => 'datetime',
+            'checked_at' => 'datetime',
         ];
+    }
+
+    public function status(?Carbon $on = null): string
+    {
+        $on ??= Carbon::today();
+
+        return match (true) {
+            $this->kind === 'nacrt' => self::DRAFT,
+            $this->valid_to !== null && $this->valid_to->lt($on) => self::EXPIRED,
+            $this->valid_from !== null && $this->valid_from->gt($on) => self::UPCOMING,
+            default => self::IN_FORCE,
+        };
+    }
+
+    public function eliPath(): ?string
+    {
+        return $this->url && preg_match(self::PIS_ELI, $this->url, $match) ? $match[1] : null;
+    }
+
+    public function checker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'checked_by');
+    }
+
+    public function markChecked(User $by): void
+    {
+        $this->forceFill(['checked_at' => now(), 'checked_by' => $by->id, 'change_detected_at' => null, 'change_detail' => null]);
+        $this->timestamps = false;
+        $this->save();
+        $this->timestamps = true;
     }
 
     public function versions(): HasMany
@@ -78,6 +126,7 @@ class Regulation extends Model
             'url' => $this->getOriginal('url'),
             'valid_from' => $this->getOriginal('valid_from')?->toDateString(),
             'valid_to' => $this->getOriginal('valid_to')?->toDateString(),
+            'replaced_by' => $this->getOriginal('replaced_by'),
             'summary' => $this->getOriginal('summary'),
             'verification' => $this->getOriginal('verification'),
             'verification_note' => $this->getOriginal('verification_note'),

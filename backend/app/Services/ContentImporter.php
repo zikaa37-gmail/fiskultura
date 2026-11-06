@@ -79,6 +79,7 @@ class ContentImporter
                 'url' => $row['url'] ?? null,
                 'valid_from' => $row['validFrom'] ?? null,
                 'valid_to' => $row['validTo'] ?? null,
+                'replaced_by' => $row['replacedBy'] ?? null,
                 'summary' => $row['summary'],
                 'verification' => $row['verification'] ?? 'unverified',
                 'verification_note' => $row['verificationNote'] ?? null,

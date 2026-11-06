@@ -31,6 +31,35 @@ class AdminRegulationController extends Controller
         return response()->json(RegulationController::present($regulation->fresh()->load('versions.author')->loadCount('versions'), withHistory: true));
     }
 
+    public function review()
+    {
+        $stale = now()->subMonths(Regulation::REVIEW_MONTHS);
+        $regulations = Regulation::query()
+            ->with('checker')
+            ->where(fn ($query) => $query->whereNotNull('change_detected_at')->orWhereNull('checked_at')->orWhere('checked_at', '<', $stale))
+            ->orderByRaw('change_detected_at is null')
+            ->orderBy('checked_at')
+            ->orderBy('sort')
+            ->get();
+
+        return response()->json($regulations->map(fn (Regulation $regulation) => [
+            ...RegulationController::present($regulation),
+            'eli' => $regulation->eliPath(),
+            'pis_amendments' => $regulation->pis_amendments,
+            'pis_checked_at' => $regulation->pis_checked_at?->toIso8601String(),
+            'change_detected_at' => $regulation->change_detected_at?->toIso8601String(),
+            'change_detail' => $regulation->change_detail,
+            'checked_by' => $regulation->checker?->name,
+        ])->values());
+    }
+
+    public function checked(Request $request, Regulation $regulation)
+    {
+        $regulation->markChecked($request->user());
+
+        return response()->json(RegulationController::present($regulation->fresh()));
+    }
+
     public function destroy(Regulation $regulation)
     {
         $regulation->delete();
@@ -50,6 +79,8 @@ class AdminRegulationController extends Controller
             'url' => ['nullable', 'url', 'max:2048'],
             'valid_from' => ['nullable', 'date'],
             'valid_to' => ['nullable', 'date', 'after_or_equal:valid_from'],
+            'replaced_by' => ['nullable', 'array'],
+            'replaced_by.*' => ['string', Rule::exists('regulations', 'key')],
             'summary' => ['required', 'string', 'max:20000'],
             'verification' => ['required', Rule::in(Regulation::VERIFICATIONS)],
             'verification_note' => ['nullable', 'string', 'max:1000'],

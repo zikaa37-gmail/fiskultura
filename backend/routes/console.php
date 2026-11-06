@@ -1,10 +1,14 @@
 <?php
 
+use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
+use App\Models\Regulation;
 use App\Models\User;
 use App\Services\LinkChecker;
+use App\Services\PisChecker;
 use App\Services\Notifications\NewsNotifier;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Str;
 
@@ -61,3 +65,38 @@ Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notif
 })->purpose('Šalje obaveštenja o istaknutim vestima i nedeljni pregled pretplatnicima');
 
 Schedule::command('notifications:send')->everyTenMinutes()->withoutOverlapping();
+
+Artisan::command('regulations:check {--key=} {--no-mail}', function (PisChecker $checker) {
+    $counts = ['baseline' => 0, 'same' => 0, 'changed' => 0, 'skipped' => 0, 'failed' => 0];
+    $lines = [];
+
+    Regulation::query()
+        ->when($this->option('key'), fn ($query, string $key) => $query->where('key', $key))
+        ->orderBy('sort')
+        ->each(function (Regulation $regulation) use ($checker, &$counts, &$lines) {
+            try {
+                $result = $checker->check($regulation);
+            } catch (Throwable $error) {
+                $counts['failed']++;
+                $this->warn("{$regulation->key}: {$error->getMessage()}");
+
+                return;
+            }
+            $counts[$result['status']]++;
+            if ($result['status'] === 'changed') {
+                $lines[] = "{$regulation->title}: {$result['detail']}";
+                $this->warn("{$regulation->key}: {$result['detail']}");
+            }
+        });
+
+    $this->info("Propisi: {$counts['changed']} sa novim izmenama, {$counts['same']} bez promene, {$counts['baseline']} prvi put zabeleženo, {$counts['skipped']} van PIS-a, {$counts['failed']} neuspelo.");
+
+    $recipients = User::query()->whereIn('role', [User::EDITOR, User::ADMIN])->whereNull('blocked_at')->whereNotNull('email_verified_at')->pluck('email');
+    if ($lines && $recipients->isNotEmpty() && ! $this->option('no-mail')) {
+        Mail::to($recipients->all())->send(new RegulationChangesMail($lines));
+    }
+
+    return 0;
+})->purpose('Proverava u PIS-u da li su propisi iz kataloga dobili nove izmene i javlja urednicima');
+
+Schedule::command('regulations:check')->weeklyOn(1, '05:00')->withoutOverlapping();

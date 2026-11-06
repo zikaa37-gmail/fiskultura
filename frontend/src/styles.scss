@@ -1781,3 +1781,272 @@ a.org-link:hover {
     display: none !important;
   }
 }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.rules-tabs-wrap {
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.rules-tabs {
+  min-width: 0;
+}
+
+.rules-tabs .mat-mdc-tab-link {
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 10px;
+  letter-spacing: 0;
+}
+
+@media (min-width: 720px) {
+  .rules-tabs .mat-mdc-tab-link {
+    padding: 0 20px;
+  }
+}
+
+.rules-block {
+  margin-bottom: 28px;
+}
+
+.rules-block h2,
+.rule-topic-page h2 {
+  margin-bottom: 12px;
+}
+
+.rule-topic-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.rule-topic-card {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.rule-topic-card strong {
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--color-primary);
+}
+
+.rules-coming,
+.rule-changes,
+.rule-links {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.rules-coming li,
+.rule-changes li {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+}
+
+.regulation-expired {
+  border-style: dashed;
+  background: var(--color-surface-alt);
+}
+
+.regulation-replaced {
+  font-weight: 600;
+}
+
+.rules-intro {
+  max-width: 760px;
+  margin-bottom: 20px;
+}
+
+.rules-eras,
+.rule-timeline {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 20px;
+  padding: 0 0 0 16px;
+  list-style: none;
+  border-left: 3px solid var(--color-border);
+}
+
+.rules-era h2 {
+  font-size: 20px;
+  margin: 4px 0 8px;
+}
+
+.rules-era-period {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rule-timeline p {
+  margin: 6px 0 0;
+}
+
+.rule-now {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-lime-strong);
+  background: var(--color-surface);
+}
+
+.rule-now-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-lime-strong);
+}
+
+.rule-myths {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.rule-myth {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.rule-myth-wrong {
+  margin: 0 0 8px;
+  color: var(--color-orange);
+}
+
+.rule-footnote {
+  margin-top: 28px;
+}
+
+.contact-grid,
+.editorial-team {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.contact-card {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.contact-card h2 {
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.contact-card p {
+  margin: 0;
+}
+
+.contact-lines,
+.contact-administrations {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.contact-lines li,
+.contact-administrations li {
+  display: grid;
+  gap: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contact-lines a,
+.contact-administrations a {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.contact-email {
+  overflow-wrap: anywhere;
+}
+
+.contact-form-card {
+  max-width: none;
+}
+
+.contact-form-card form {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-review {
+  margin-bottom: 28px;
+}
+
+.admin-row-due {
+  border-left: 4px solid var(--color-orange);
+}
+
+.admin-review-stale summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (min-width: 720px) {
+  .rule-topic-grid,
+  .contact-grid,
+  .editorial-team {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-administrations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .contact-page {
+    max-width: 880px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .contact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

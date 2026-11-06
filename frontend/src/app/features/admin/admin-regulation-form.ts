@@ -79,6 +79,11 @@ import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
         </mat-form-field>
       </div>
       <mat-form-field appearance="outline">
+        <mat-label>Zamenio ga je (ključevi propisa, odvojeni zarezom)</mat-label>
+        <input matInput formControlName="replaced_by" placeholder="program-5-6-2018, plan-7-8-2018" />
+        <mat-hint>Popunjava se kad propis prestane da važi; na stranici propisa vodi na novi propis.</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Šta je bitno za FV</mat-label>
         <textarea matInput formControlName="summary" rows="10"></textarea>
         <mat-hint>Redovi koji počinju sa „- “ postaju lista, **tekst** je podebljan, [naziv](https://...) je link.</mat-hint>
@@ -159,6 +164,7 @@ export class AdminRegulationForm {
     url: [''],
     valid_from: [''],
     valid_to: [''],
+    replaced_by: [''],
     summary: ['', Validators.required],
     verification: ['unverified' as Verification, Validators.required],
     verification_note: [''],
@@ -179,6 +185,7 @@ export class AdminRegulationForm {
           url: item.url ?? '',
           valid_from: item.valid_from ?? '',
           valid_to: item.valid_to ?? '',
+          replaced_by: (item.replaced_by ?? []).join(', '),
           summary: item.summary,
           verification: item.verification,
           verification_note: item.verification_note ?? '',
@@ -203,6 +210,7 @@ export class AdminRegulationForm {
       url: nullable(value.url),
       valid_from: nullable(value.valid_from),
       valid_to: nullable(value.valid_to),
+      replaced_by: value.replaced_by.split(',').map((key) => key.trim()).filter(Boolean),
       verification_note: nullable(value.verification_note),
       change_note: nullable(value.change_note),
     };

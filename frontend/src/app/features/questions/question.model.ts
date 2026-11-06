@@ -7,6 +7,8 @@ export interface QuestionRegulation {
   title: string;
   gazette: string | null;
   url: string | null;
+  status?: 'vazi' | 'najava' | 'nacrt' | 'prestao';
+  valid_to?: string | null;
 }
 
 export interface Question {

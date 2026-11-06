@@ -100,6 +100,9 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
                     @if (regulation.gazette) {
                       <span class="muted small">{{ regulation.gazette }}</span>
                     }
+                    @if (regulation.status === 'prestao') {
+                      <span class="outcomes-warning small">Ovaj propis više ne važi; proverite šta ga je zamenilo na stranici propisa.</span>
+                    }
                     <a class="inline-link small" routerLink="/propisi" [queryParams]="{ pretraga: regulation.title }">Šta je bitno za FV →</a>
                   </li>
                 }

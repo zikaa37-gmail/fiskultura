@@ -26,6 +26,25 @@
   </div>
 </section>
 
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Propisi</p>
+      <h2>Šta važi danas</h2>
+      <p class="muted">Propisi se menjaju po generacijama, pa je lako raditi po pravilu koje više ne važi. Ovde je tačno stanje, sa istorijom i linkom na zvanični tekst.</p>
+    </div>
+    <div class="rule-topic-grid">
+      @for (topic of ruleTopics; track topic.slug) {
+        <a class="rule-topic-card" [routerLink]="['/propisi', topic.slug]">
+          <strong>{{ topic.title }}</strong>
+          <span>{{ topic.card }}</span>
+        </a>
+      }
+    </div>
+    <a mat-stroked-button class="more-link" routerLink="/propisi">Svi propisi i kontakti institucija</a>
+  </div>
+</section>
+
 @if (latestNews().length) {
   <section class="section">
     <div class="container">

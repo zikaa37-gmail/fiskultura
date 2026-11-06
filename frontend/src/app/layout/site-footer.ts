@@ -30,6 +30,7 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/ishodi">{{ 'nav.outcomes' | translate }}</a>
           <a class="footer-link" routerLink="/literatura">{{ 'nav.literature' | translate }}</a>
           <a class="footer-link" routerLink="/obavestenja">{{ 'nav.notifications' | translate }}</a>
+          <a class="footer-link" routerLink="/kontakt">{{ 'nav.contact' | translate }}</a>
         </nav>
       </div>
       <div class="container footer-bottom">

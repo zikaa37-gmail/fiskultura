@@ -131,9 +131,21 @@ export const routes: Routes = [
   },
   {
     path: 'propisi',
-    title: 'Propisi i literatura — Fiskultura',
-    data: { seo: { description: 'Zakoni, pravilnici i programi nastave fizičkog i zdravstvenog vaspitanja: šta je bitno za nastavnika, glasnik, datum važenja i link na zvanični tekst.' } },
+    title: 'Propisi: šta važi u nastavi fizičkog — Fiskultura',
+    data: { seo: { description: 'Šta važi danas u nastavi fizičkog i zdravstvenog vaspitanja: fond časova, programi i ishodi, važeći i stari propisi, kako su se menjali i kontakti institucija.' } },
     loadComponent: () => import('./features/regulations/regulations').then((m) => m.Regulations),
+  },
+  {
+    path: 'propisi/:tema',
+    title: 'Šta važi — Fiskultura',
+    data: { dynamicSeo: true },
+    loadComponent: () => import('./features/regulations/rule-topic-page').then((m) => m.RuleTopicPage),
+  },
+  {
+    path: 'kontakt',
+    title: 'Kontakt i uredništvo — Fiskultura',
+    data: { seo: { description: 'Ko pravi portal Fiskultura i kako da pišete uredništvu: greške, pitanja, predlozi i saradnja.' } },
+    loadComponent: () => import('./features/regulations/contact-page').then((m) => m.ContactPage),
   },
   {
     path: 'pitanja',
