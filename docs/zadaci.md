@@ -248,20 +248,32 @@ hronološko objašnjenje kaže šta se, kada i zašto promenilo, da nastavnici �
 prava istina”. Mnoge kolege rade po pravilima koja više ne važe (primer: fond časova FZV).
 
 Sve ide u okviru `/propisi`, koja sada izgleda kao prost spisak i niko je ne otvara. Postaje glavno mesto
-za pravila:
-- na vrhu „Šta važi danas”: kartice tema, svaka sa jednom rečenicom šta važi i oznakom „menja se od …”
-  kad je izmena objavljena;
-- ispod „Novo u propisima”: poslednje izmene i ono što stupa na snagu, sa datumom;
-- zatim katalog propisa: važeći su gore, a prestali u sklopivoj istoriji.
+za pravila. Tabovi odvajaju ono što važi od starog, a jedan tab je priča. Tab se pamti u adresi
+(`?tab=istorija`), pa se link deli tačno na željeni deo. Na telefonu su tabovi preko cele širine, a zaglavlje
+tabova ostaje vidljivo pri skrolu.
 
-Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`):
-- **Važi danas**: pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put
-  provereno;
-- **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
-- **Kako se menjalo**: vremenska linija, od najnovijeg ka starijem. Svaka stavka ima datum, propis i šta je
-  promenio. Prestali propisi su jasno označeni („ne važi od …”);
-- **Česte zablude**: „mislio sam da…” → šta važi i od kada;
-- veze ka pitanjima i odgovorima, ishodima, vestima i aplikacijama koje se oslanjaju na temu.
+Stranica `/propisi`:
+- **Važeće** (podrazumevani tab):
+  - kartice tema „Šta važi danas”, svaka sa jednom rečenicom šta važi i oznakom „menja se od …” kad je
+    izmena objavljena;
+  - „Novo u propisima”: poslednje izmene i ono što stupa na snagu, sa datumom;
+  - katalog važećih propisa, uključujući i objavljene koji se primenjuju kasnije (oznaka „primenjuje se
+    od …”);
+- **Ranije**: propisi koji više ne važe. Svaki ima oznaku „ne važi od …” i link na propis koji ga je zamenio.
+  Ništa se ne briše;
+- **Kako se menjalo**: priča i opis. Hronološki pregled velikih promena (npr. reforma programa 2017–2021,
+  fond časova, ocenjivanje 2024, novi programi od 2027/28): šta je bilo, šta je sad i zašto je bitno, sa
+  linkovima na teme i zvanične tekstove.
+
+Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`) ima iste tabove:
+- **Važi danas**:
+  - pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put provereno;
+  - **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
+  - **Česte zablude**: „mislio sam da…” → šta važi i od kada;
+  - veze ka pitanjima i odgovorima, ishodima, vestima i aplikacijama koje se oslanjaju na temu;
+- **Ranije**: prestali propisi o temi, sa periodom važenja i šta su propisivali;
+- **Kako se menjalo**: priča o temi i vremenska linija, od najnovijeg ka starijem. Svaka stavka ima datum,
+  propis i šta je promenio.
 
 Mesto na sajtu:
 - stavka „Propisi” u meniju vodi na novu stranicu; na naslovnoj je blok „Šta važi od 1. septembra” i
@@ -297,7 +309,7 @@ Prve teme:
 9. stručno usavršavanje.
 
 - [ ] Model teme i podaci (`backend/database/data/topics.json`), polja `replaces`/`replacedBy` u propisima
-- [ ] Nova `/propisi` (teme, novo, katalog sa istorijom), `/propisi/:tema`, blok na naslovnoj, upozorenja na zastarelim propisima
+- [ ] Nova `/propisi` sa tabovima Važeće / Ranije / Kako se menjalo, `/propisi/:tema`, blok na naslovnoj, upozorenja na zastarelim propisima
 - [ ] Prve teme: AI nacrt, odobrenje urednika
 - [ ] `sources:check`, spisak „za proveru” i rokovi provere (sa #47)
 
