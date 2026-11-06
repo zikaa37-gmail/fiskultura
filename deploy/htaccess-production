@@ -35,7 +35,7 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     RewriteRule ^ index.php [L]
 
     RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
-    RewriteRule ^((?:vesti|udruzenja|propisi|pitanja|sportovi|aplikacije)(?:/[^/]+)?)/?$ $1/index.html [L]
+    RewriteRule ^(.+?)/?$ $1/index.html [L]
 
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
