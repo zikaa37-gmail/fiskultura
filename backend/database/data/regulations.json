@@ -106,6 +106,78 @@
     "summary": "- Obrada je zakonita i pristanak nije potreban; pravni osnov za školu je zakonska obaveza (ZOSOV čl. 177).\n- Podaci o zdravlju se ne obrađuju.\n- Pristup imaju direktor, ovlašćeni zaposleni, odeljenjski starešina, učitelj i **nastavnik FZV samo za svoje učenike**; nastavnik ne vidi JMBG."
   },
   {
+    "key": "program-1-2017",
+    "title": "Pravilnik o planu nastave i učenja za prvi ciklus i programu nastave i učenja za 1. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 10/2017",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2017/10/1/reg",
+    "validFrom": "2018-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2017/10/1): plan prvog ciklusa i program FZV za 1. razred; izmene 12/18 … 11/24 ne menjaju FZV",
+    "summary": "Plan nastave za 1–4. razred i program FZV za 1. razred, do školske 2026/27.\n\n- Fond FZV od 1. do 4. razreda: **3 časa nedeljno, 108 godišnje**.\n- Broj časova po temama planira nastavnik prema uslovima rada; program ga ne propisuje.\n- Nastavu u prvom ciklusu izvodi učitelj; nastavnik FZV izvodi plivanje i rad sa učenicima sa zdravstvenim teškoćama."
+  },
+  {
+    "key": "program-1-2026",
+    "title": "Pravilnik o izmenama Pravilnika o planu nastave i učenja za prvi ciklus i programu za 1. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program",
+      "planiranje"
+    ],
+    "gazette": "„Prosvetni glasnik\" 1/2026",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2017/10/1/reg",
+    "validFrom": "2027-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2017/10/1, izmena 1/2026-157): nov program FZV za 1. razred, primena od 2027/28",
+    "summary": "Nov program FZV za 1. razred, **od školske 2027/28**: 3 časa nedeljno, 108 godišnje, 9 tema motoričkih veština (hodanje i trčanje, skakanja, bacanja, višenja i penjanja, vežbe na tlu, ravnoteža, rekviziti, ples i ritmika, poligoni). Fond FZV u prvom ciklusu se ne menja."
+  },
+  {
+    "key": "program-2-2018",
+    "title": "Pravilnik o programu nastave i učenja za 2. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 16/2018",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/16/3/reg",
+    "validFrom": "2019-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2018/16/3); izmene 3/19, 5/21 i 13/23 ne menjaju FZV",
+    "summary": "Program FZV za 2. razred: 3 časa nedeljno, 108 godišnje. Ishodi i sadržaji su na stranici Ishodi po razredima."
+  },
+  {
+    "key": "program-3-2019",
+    "title": "Pravilnik o programu nastave i učenja za 3. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 5/2019",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/5/3/reg",
+    "validFrom": "2020-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2019/5/3); izmene 1/20, 6/20, 7/22 i 13/23 ne menjaju FZV",
+    "summary": "Program FZV za 3. razred: 3 časa nedeljno, 108 godišnje; teme atletika, sportska gimnastika, igre (između četiri vatre, mini-rukomet, futsal), ples i ritmika, plivanje, poligoni."
+  },
+  {
+    "key": "program-4-2019",
+    "title": "Pravilnik o programu nastave i učenja za 4. razred OŠ",
+    "kind": "program",
+    "areas": [
+      "program"
+    ],
+    "gazette": "„Prosvetni glasnik\" 11/2019",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/11/1/reg",
+    "validFrom": "2021-09-01",
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2019/11/1); izmene 6/20, 7/21, 1/23 i 13/23 ne menjaju FZV",
+    "summary": "Program FZV za 4. razred: 3 časa nedeljno, 108 godišnje; uz atletiku, gimnastiku, ples i plivanje igre mini-rukomet, futsal, mini-košarka, odbojka i jadžent, i nacionalna baterija testova."
+  },
+  {
     "key": "program-5-6-2018",
     "title": "Pravilnik o planu nastave i učenja za 5. i 6. razred i programu nastave i učenja za 5. razred OŠ",
     "kind": "program",
@@ -114,11 +186,11 @@
       "planiranje"
     ],
     "gazette": "„Prosvetni glasnik\" 15/2018",
-    "url": "https://www.eupropisi.com/dokumenti/plan5_6_prs_15_18.docx",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2018/15/2/reg",
     "validFrom": "2018-09-01",
-    "verification": "secondary",
-    "verificationNote": "kopija na eupropisi.com (docx); original PG nije otvoren",
-    "summary": "Plan nastave za drugi ciklus (5. i 6. razred) i program FZV za 5. razred. Sadržaj (teme, ishodi) je u katalogu programa (#14).\n\n- Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi i 54 časa obaveznih fizičkih aktivnosti (OFA), koje aplikacija ne planira."
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2018/15/2): plan i program FZV za 5. razred upoređeni sa zvaničnim tekstom; izmene do PG 1/2026",
+    "summary": "Plan nastave za drugi ciklus (5. i 6. razred) i program FZV za 5. razred. Sadržaj (teme, ishodi) je na stranici Ishodi po razredima.\n\n- Fond u 5. i 6. razredu do 2026/27: **2 časa nedeljno (72 godišnje)** i **obavezne fizičke aktivnosti 1,5 čas nedeljno (54 godišnje)**, koje se ostvaruju u okviru predmeta.\n- Od 2027/28 važi novi plan iz „Prosvetnog glasnika” 1/2026: 3 časa nedeljno."
   },
   {
     "key": "program-5-6-izmene-2026",
@@ -133,7 +205,7 @@
     "validFrom": "2027-09-01",
     "verification": "secondary",
     "verificationNote": "ZUOV, vest od 2. 3. 2026; datum primene po razredima proveriti u tekstu",
-    "summary": "Nov program za 5. razred i izmene plana nastave. Program od 2027/28 navodi 3 časa nedeljno bez OFA; aplikacija planira 2 časa FZV nedeljno (odluka korisnika, docs/02)."
+    "summary": "Novi plan za 5. i 6. razred i nov program FZV za 5. razred, **od školske 2027/28**.\n\n- Fond FZV u 5. i 6. razredu: **3 časa nedeljno, 108 godišnje**; obavezne fizičke aktivnosti više nisu u planu.\n- Program za 6. razred ostaje isti."
   },
   {
     "key": "program-6-2019",
@@ -146,8 +218,8 @@
     "url": "https://www.fsfv.ni.ac.rs/files/documents/oas/cetvrta_godina/metodika_fiz_vaspitanja/skolska_20_21/VI_razred.pdf",
     "validFrom": "2019-09-01",
     "verification": "secondary",
-    "verificationNote": "Pravilnik o dopunama Pravilnika o planu nastave i učenja za 5. i 6. razred i programu za 5. razred (PG 3/2019, primena od 2019/20), prema spisku propisa ZUOV-a; tekst programa pročitan sa kopije FSFV Niš, original PG nije otvoren (#14)",
-    "summary": "Program FZV za 6. razred. Fond FZV: **2 časa nedeljno** (72 godišnje); program navodi i OFA, koje aplikacija ne planira."
+    "verificationNote": "kopija FSFV Niš; original u glasniku nije pronađen u PIS-u (program za 6. razred nije u PG 3/2019, 15/2018 ni 18/2018)",
+    "summary": "Program FZV za 6. razred. Fond do 2026/27: **2 časa nedeljno (72)** i obavezne fizičke aktivnosti 1,5 čas nedeljno (54); od 2027/28: **3 časa nedeljno (108)**."
   },
   {
     "key": "program-7-2019",
@@ -157,11 +229,11 @@
       "program"
     ],
     "gazette": "„Prosvetni glasnik\" 5/2019",
-    "url": "https://www.eupropisi.com/dokumenti/sedmi_osnovno_5_2019.pdf",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/5/4/reg",
     "validFrom": "2020-09-01",
-    "verification": "secondary",
-    "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
-    "summary": "Program FZV za 7. razred. Fond FZV: **2 časa nedeljno** (72 godišnje). Program navodi godišnji fond od 108 časova; aplikacija planira 2 časa FZV nedeljno."
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2019/5/4): ishodi FZV upoređeni sa zvaničnim tekstom",
+    "summary": "Program FZV za 7. razred. Fond FZV: **3 časa nedeljno, 108 godišnje** (plan za 7. i 8. razred, „Prosvetni glasnik” 18/2018)."
   },
   {
     "key": "program-8-2019",
@@ -171,11 +243,11 @@
       "program"
     ],
     "gazette": "„Prosvetni glasnik\" 11/2019",
-    "url": "https://www.eupropisi.com/dokumenti/osmiPRS11_19.pdf",
+    "url": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2019/11/2/reg",
     "validFrom": "2021-09-01",
-    "verification": "secondary",
-    "verificationNote": "kopija na eupropisi.com (docx), FZV pročitan za katalog opreme (#9)",
-    "summary": "Program FZV za 8. razred. Fond FZV: **2 časa nedeljno** (68 godišnje, 34 nastavne nedelje). Program navodi godišnji fond od 102 časa."
+    "verification": "verified",
+    "verificationNote": "PIS (ELI 2019/11/2): ishodi FZV upoređeni sa zvaničnim tekstom",
+    "summary": "Program FZV za 8. razred. Fond FZV: **3 časa nedeljno, 102 godišnje** (34 nastavne nedelje; plan za 7. i 8. razred, „Prosvetni glasnik” 18/2018)."
   },
   {
     "key": "plan-7-8-izmena-2026",
@@ -187,10 +259,10 @@
     ],
     "gazette": "„Prosvetni glasnik\" 1/2026",
     "url": "https://zuov.gov.rs/preuzimanje/2281/prosvetni-glasnik-2026-1/603005/pg-2026-1-7-os7-8",
-    "validFrom": null,
+    "validFrom": "2027-09-01",
     "verification": "secondary",
-    "verificationNote": "ZUOV, vest od 2. 3. 2026; sadržaj izmene nije pročitan",
-    "summary": "Izmena plana nastave za 7. i 8. razred. Da li menja fond FZV treba pročitati u tekstu."
+    "verificationNote": "ZUOV i PIS (ELI 2018/18/3): red FZV 3 | 108 | 3 | 102 u planu iz 2018, 2023. i 2026; član 2: primena od 2027/28",
+    "summary": "Nov plan za 7. i 8. razred od školske 2027/28. **Fond FZV se ne menja**: 3 časa nedeljno, 108 godišnje u 7. i 102 u 8. razredu."
   },
   {
     "key": "sna-vezbanjem-do-zdravlja",

@@ -118,6 +118,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/literature/literature').then((m) => m.Literature),
   },
   {
+    path: 'ishodi',
+    title: 'Ishodi fizičkog i zdravstvenog vaspitanja po razredima — Fiskultura',
+    data: { seo: { description: 'Ishodi, teme, sadržaji i fond časova fizičkog i zdravstvenog vaspitanja za svaki razred osnovne i srednje škole, prema važećim pravilnicima i sa linkom na zvanični tekst.' } },
+    loadComponent: () => import('./features/outcomes/outcomes').then((m) => m.Outcomes),
+  },
+  {
+    path: 'ishodi/:razred',
+    title: 'Ishodi po razredima — Fiskultura',
+    data: { dynamicSeo: true },
+    loadComponent: () => import('./features/outcomes/outcome-grade').then((m) => m.OutcomeGrade),
+  },
+  {
     path: 'propisi',
     title: 'Propisi i literatura — Fiskultura',
     data: { seo: { description: 'Zakoni, pravilnici i programi nastave fizičkog i zdravstvenog vaspitanja: šta je bitno za nastavnika, glasnik, datum važenja i link na zvanični tekst.' } },

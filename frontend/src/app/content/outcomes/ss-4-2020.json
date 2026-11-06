@@ -1,0 +1,142 @@
+{
+ "key": "ss-4-2020",
+ "level": "ss",
+ "grade": 4,
+ "gazette": "„Prosvetni glasnik” 4/2020",
+ "sourceUrl": "https://pravno-informacioni-sistem.rs/eli/rep/pg/ministarstva/pravilnik/2020/4/1/reg",
+ "validFrom": "2021/22",
+ "validTo": null,
+ "goal": "",
+ "outcomes": [
+  "analizira i uporedi rezultate testiranja sa vrednostima za svoj uzrast",
+  "sagleda sopstvene motoričke i funkcionalne [sposobnosti] i primeni vežbanja u cilju njihovog poboljšanja",
+  "bira i primenjuje vežbe, raznovrsna prirodna i izvedena kretanja",
+  "primeni osnovne principe trenažnog procesa i osnovne metode unapređivanja motoričkih sposobnosti",
+  "izradi individualni program vežbanja",
+  "primeni odgovarajuće vežbe u skladu sa mogućnostima i potrebama",
+  "koristi mogućnosti za svakodnevnu fizičku aktivnost",
+  "koriguje posledice dugotrajne sedentarne aktivnosti, položaje, pokrete i kretanja koji imaju negativan uticaj na zdravlje primenom fizičkog vežbanja",
+  "svrsishodno primeni usvojene motoričke veštine u različitim životnim situacijama",
+  "odgovorno se odnosi prema objektima, spravama i rekvizitima u prostorima za vežbanje",
+  "rešava konfliktne situacije",
+  "učestvuje na odeljenskom, razrednom i drugim takmičenjima",
+  "pomaže i učestvuje u organizaciji školskih sportskih manifestacija",
+  "sagleda uzroke i posledice devijantnog ponašanja na sportskim priredbama",
+  "igra narodne i društvene plesove",
+  "primenjuje pravila bezbednosti u različitim fizičkim aktivnostima i prenosi ih na druge učesnike u vežbanju",
+  "uskladi ishranu sa vežbanjem",
+  "redovno kontroliše svoje zdravlje",
+  "razlikuje pozitivan i negativan uticaj vežbanja za reproduktivno zdravlje i primenjuje mere predostrožnosti kod sebe i drugih",
+  "odupre [se] izazovima konzumiranja energetskih napitaka, psihoaktivnih i farmakoloških supstanci i drugih nedozvoljenih sredstava",
+  "adekvatno reaguje pri pružanju prve pomoći sebi ili drugom licu"
+ ],
+ "areas": [
+  {
+   "name": "Fizičke sposobnosti",
+   "topics": [
+    {
+     "name": "Testiranje i merenje",
+     "contents": [
+      "Testiranje učenika"
+     ],
+     "hours": "„Za ove aktivnosti planirati do 6 časova u toku školske godine” (testiranje na početku i kraju školske godine)"
+    },
+    {
+     "name": "Kondiciona priprema",
+     "contents": [
+      "Kondiciona priprema učenika (snaga, brzina, izdržljivost, gipkost, koordinacija)",
+      "Primena prirodnih i izvedenih oblika kretanja u funkciji razvoja fizičkih sposobnosti"
+     ],
+     "hours": "planira se na svakom času, u skladu sa nastavnom temom glavnog dela časa; nastavnik može planirati i određen broj časova isključivo za kondicionu pripremu; nastavnik u saradnji sa učenicima daje uputstva za izradu ličnih programa vežbanja koje učenici povremeno prikazuju na časovima"
+    }
+   ]
+  },
+  {
+   "name": "Motoričke veštine, sport i sportske discipline",
+   "topics": [
+    {
+     "name": "Atletika",
+     "contents": [
+      "Usavršavanje tehnike atletskih disciplina – trčanja, skokova udalj i uvis i bacanja",
+      "Atletsko odeljensko takmičenje"
+     ]
+    },
+    {
+     "name": "Sportska gimnastika",
+     "contents": [
+      "Vežbe na tlu",
+      "Gimnastički poligon",
+      "Vežbe na spravama i tlu (prošireni)"
+     ],
+     "hours": "osnovni i prošireni sadržaji"
+    },
+    {
+     "name": "Sportske igre",
+     "contents": [
+      "Rukomet, košarka, odbojka, futsal – igra"
+     ],
+     "hours": "u tabeli programa deo teme „Sportske igre i aktivnosti po izboru”"
+    },
+    {
+     "name": "Aktivnosti po izboru",
+     "contents": [
+      "Aerobik, pilates i drugi fitnes programi, stoni tenis, badminton, orijentiring, borenja i dr."
+     ],
+     "hours": "u tabeli programa deo teme „Sportske igre i aktivnosti po izboru”"
+    },
+    {
+     "name": "Ples i ritmika",
+     "contents": [
+      "Priprema za maturski ples",
+      "Ritmički elementi i sastavi"
+     ]
+    },
+    {
+     "name": "Poligoni",
+     "contents": [
+      "Kombinovani poligon u skladu sa savladanim motoričkim sadržajima"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Fizička i zdravstvena kultura",
+   "topics": [
+    {
+     "name": "Teorijska nastava",
+     "contents": [
+      "Sadržaji tema Fizičko obrazovanje i Zdravstvena kultura, uz mogući praktičan rad"
+     ],
+     "hours": "teorijska nastava (do 4 časa); maksimalan broj časova bez praktičnog rada ne bi trebalo da bude veći od četiri (4) u toku školske godine"
+    },
+    {
+     "name": "Fizičko obrazovanje",
+     "contents": [
+      "Osnovni principi treninga i izrada individualnih programa vežbanja",
+      "Fitnes programi",
+      "Bezbednost u vežbanju",
+      "Značaj fizičke osposobljenosti i motoričkih znanja za snalaženje u vanrednim situacijama",
+      "Sociološki aspekti navijanja u sportu",
+      "Značaj fizičke osposobljenosti za rad, odbranu i poslove u fizičkom vaspitanju, rekreaciji i sportu",
+      "Primena informacionih tehnologija u fizičkom vežbanju, sportu i rekreaciji"
+     ],
+     "hours": "realizuje se kroz sve organizacione oblike rada, nastavne oblasti i teme uz praktičan rad"
+    },
+    {
+     "name": "Zdravstvena kultura",
+     "contents": [
+      "Zdravlje, reproduktivno zdravlje, prevencija bolesti i fizičko vežbanje",
+      "Hipokinezija i njene posledice na zdravlje",
+      "Redovni lekarski pregledi kao mera smanjenja rizika u vežbanju i treningu",
+      "Posledice neadekvatnih dijeta i upotreba dijetetskih proizvoda",
+      "Pravilna upotreba dodataka ishrani",
+      "Posledice konzumiranja energetskih napitaka, psihoaktivnih supstanci i nedozvoljenih sredstava",
+      "Osnove prve pomoći"
+     ],
+     "hours": "realizuje se kroz sve organizacione oblike rada, nastavne oblasti i teme uz praktičan rad"
+    }
+   ]
+  }
+ ],
+ "verified": "pis"
+}

@@ -209,6 +209,110 @@ može da proveri, pa urednik ručno označava link koji ne radi (admin, kvačica
 mogu da nose `brokenLinks`. Ručna oznaka se ne gubi dok automatska provera ne potvrdi da link radi.
 Instagram kartica je uvek prikazana, posivljena dok udruženje nema nalog.
 
+### #47 ZUOV i praćenje zvaničnih izvora (faza-1b, sadrzaj)
+ZUOV je jedno od centralnih mesta za informisanje nastavnika. Radi se na posebnoj grani, posle
+ishoda po razredima.
+
+Istraživanje:
+- sve što ZUOV objavljuje u vezi sa nastavom fizičkog i zdravstvenog vaspitanja (programi, priručnici,
+  standardi, obuke, planovi realizacije);
+- katalog stalnog stručnog usavršavanja, oblast 17
+  (<https://zuov-katalog.rs/index.php?action=page/catalog/all&oblast=17>): svih 25 seminara sa
+  linkom na stranicu programa u katalogu (naziv, autori, trajanje, bodovi, kompetencija, prioritet);
+  prikaz na portalu uz seminare iz vesti.
+
+Stranice ZUOV-a koje pratimo:
+- <https://zuov.gov.rs/download-category/zdravstveno-vaspitanje/>
+- <https://zuov.gov.rs/category/vesti/>
+- <https://zuov.gov.rs/konkursi-za-prosvetne-radnike-i-skole/>
+- <https://zuov.gov.rs/novi-pravilnici-vesti-i-obavestenja/>
+
+Periodični pregled izvora:
+- zapisan spisak mesta koja se proveravaju (zakoni i pravilnici u PIS-u, Prosvetni glasnik, ZUOV,
+  Ministarstvo, konkursi, katalog seminara, udruženja), sa redosledom i učestalošću provere;
+- PIS ima javni API: ELI adresa (`https://slgl.pravno-informacioni-sistem.rs/api/prins/eli/rep/pg/...`)
+  daje GUID propisa, `https://reg.pravno-informacioni-sistem.rs/api/GetLawActViewByLawAdActGuid`
+  daje naslov sa spiskom svih izmena (npr. „5/2019-6, 1/2020-1, …”) i HTML svake izmene. Nova
+  izmena = novi broj glasnika u naslovu;
+- komanda/zakazani posao beleži stanje svakog izvora (poslednja izmena, poslednja objava) i javlja
+  uredniku šta je novo; ništa se ne objavljuje samo, urednik pregleda i odobri;
+- kad se promeni propis: ažurirati propise, pitanja i odgovore, ishode i planove koji ga navode
+  (polje „važi od”) i objaviti kratku vest sa linkom na zvanični tekst.
+- [ ] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
+- [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
+- [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
+
+### #48 Propisi: šta važi danas, istorija i provera (faza-1b, centralno)
+Pravilo portala: ono što važi danas uvek je istaknuto. Raniji propisi ostaju kao istorija, a kratko
+hronološko objašnjenje kaže šta se, kada i zašto promenilo, da nastavnici „jednom zauvek znaju šta je
+prava istina”. Mnoge kolege rade po pravilima koja više ne važe (primer: fond časova FZV).
+
+Sve ide u okviru `/propisi`, koja sada izgleda kao prost spisak i niko je ne otvara. Postaje glavno mesto
+za pravila. Tabovi odvajaju ono što važi od starog, a jedan tab je priča. Tab se pamti u adresi
+(`?tab=istorija`), pa se link deli tačno na željeni deo. Na telefonu su tabovi preko cele širine, a zaglavlje
+tabova ostaje vidljivo pri skrolu.
+
+Stranica `/propisi`:
+- **Važeće** (podrazumevani tab):
+  - kartice tema „Šta važi danas”, svaka sa jednom rečenicom šta važi i oznakom „menja se od …” kad je
+    izmena objavljena;
+  - „Novo u propisima”: poslednje izmene i ono što stupa na snagu, sa datumom;
+  - katalog važećih propisa, uključujući i objavljene koji se primenjuju kasnije (oznaka „primenjuje se
+    od …”);
+- **Ranije**: propisi koji više ne važe. Svaki ima oznaku „ne važi od …” i link na propis koji ga je zamenio.
+  Ništa se ne briše;
+- **Kako se menjalo**: priča i opis. Hronološki pregled velikih promena (npr. reforma programa 2017–2021,
+  fond časova, ocenjivanje 2024, novi programi od 2027/28): šta je bilo, šta je sad i zašto je bitno, sa
+  linkovima na teme i zvanične tekstove.
+
+Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`) ima iste tabove:
+- **Važi danas**:
+  - pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put provereno;
+  - **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
+  - **Česte zablude**: „mislio sam da…” → šta važi i od kada;
+  - veze ka pitanjima i odgovorima, ishodima, vestima i aplikacijama koje se oslanjaju na temu;
+- **Ranije**: prestali propisi o temi, sa periodom važenja i šta su propisivali;
+- **Kako se menjalo**: priča o temi i vremenska linija, od najnovijeg ka starijem. Svaka stavka ima datum,
+  propis i šta je promenio.
+
+Mesto na sajtu:
+- stavka „Propisi” u meniju vodi na novu stranicu; na naslovnoj je blok „Šta važi od 1. septembra” i
+  „Novo u propisima”;
+- propis ima polja `replaces` i `replacedBy`, pa se iz zastarelog propisa vidi koji ga je zamenio;
+- odgovor, vest ili ishod koji se poziva na propis koji više ne važi dobija upozorenje i link na važeću temu.
+
+Hronologija uz pomoć AI-ja:
+- nacrt sažetka i vremenske linije piše AI, i to samo iz zvaničnih tekstova (PIS, „Prosvetni glasnik”,
+  ZUOV);
+- urednik ga čita, ispravlja i odobrava. Na stranici piše „pripremljeno uz pomoć AI-ja, proverio urednik,
+  datum”;
+- ništa se ne objavljuje bez odobrenja.
+
+Mehanizam provere (nastavlja #47):
+- komanda `sources:check` po rasporedu (cron) proverava listu izmena svakog propisa u PIS-u i nove objave
+  ZUOV-a i Ministarstva;
+- novi broj glasnika ili nova objava otvara stavku „za proveru” uredniku i šalje mu mejl;
+- svaka tema ima rok provere: najmanje dva puta godišnje i obavezno pre 1. septembra. Tema sa isteklim rokom
+  ide na spisak „za proveru” u administraciji;
+- test proverava da svaka tema ima izvor iz kataloga propisa, datum provere i da važeći propis nije
+  označen kao prestao.
+
+Prve teme:
+1. fond časova po razredima;
+2. oslobađanje od praktičnog dela nastave;
+3. ocenjivanje;
+4. programi i ishodi po razredima;
+5. norma i 40-časovna radna nedelja;
+6. evidencija i dnevnik;
+7. testiranje fizičkih sposobnosti;
+8. bezbednost na času;
+9. stručno usavršavanje.
+
+- [ ] Model teme i podaci (`backend/database/data/topics.json`), polja `replaces`/`replacedBy` u propisima
+- [ ] Nova `/propisi` sa tabovima Važeće / Ranije / Kako se menjalo, `/propisi/:tema`, blok na naslovnoj, upozorenja na zastarelim propisima
+- [ ] Prve teme: AI nacrt, odobrenje urednika
+- [ ] `sources:check`, spisak „za proveru” i rokovi provere (sa #47)
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
