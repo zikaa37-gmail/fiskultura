@@ -161,7 +161,7 @@ export class QuestionDetail {
               text: item.body || item.title,
               answerCount: 1,
               datePublished: item.published_at,
-              author: { '@type': 'Person', name: 'Nastavnik fizičkog vaspitanja' },
+              author: { '@type': 'Person', name: 'Nastavnik fizičkog vaspitanja', url: `${SITE_URL}/pitanja` },
               acceptedAnswer: {
                 '@type': 'Answer',
                 text: answer,
