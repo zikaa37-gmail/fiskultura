@@ -2,6 +2,10 @@ DirectoryIndex index.html index.php
 DirectorySlash Off
 
 RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteCond %{REQUEST_URI} !^/.well-known/
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
 RewriteCond %{HTTPS} off
 RewriteCond %{REQUEST_URI} !^/.well-known/
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
