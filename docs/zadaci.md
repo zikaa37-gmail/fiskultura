@@ -365,11 +365,18 @@ Put ka komori (kasnije, posle dovoljnog broja članova):
 - članstvo i statut, saradnja sa SSPFVS i udruženjima, stav struke o propisima;
 - podaci o licenci i stažu se uvode tek kad za to postoji pravni osnov.
 
-- [ ] Analiza: šta je sada iza prijave, tok registracije i trajanje tokena
-- [ ] Trajna prijava (automatska prijava posle potvrde, 365 dana uz rotaciju, odjava sa svih uređaja)
-- [ ] Profil sa statusom i saglasnostima, imenik struke uz saglasnost
-- [ ] Stranica za nove nastavnike i studente, praćenje izvora registracije, materijal za fakultete
-- [ ] Statistika članstva za uredništvo
+- [x] Analiza: iza prijave su samo postavljanje pitanja, profil i administracija; automatska prijava posle potvrde
+  i refresh 365 dana sa rotacijom već postoje (sesija u `localStorage`, „zapamti me” je uvek uključeno)
+- [x] Trajna prijava: `last_active_at` pri svakom osvežavanju, odjava sa svih uređaja u profilu
+- [x] Registracija u jednom koraku (ime, mejl, lozinka, status), škola i mesto kasnije u profilu
+- [x] Profil sa statusom i saglasnostima (imenik, ankete), izvoz i brisanje sopstvenih podataka
+- [x] Imenik struke `/imenik`: vide ga samo članovi koji su i sami u njemu, bez mejlova
+- [x] Stranica `/novi-nastavnici` (ZOSOV čl. 142, 144, 145, 147, 151) i poziv na registraciju posle sadržaja
+- [x] Izvor registracije (`?izvor=fsfv-bg|fsfv-ns|fsfv-nis`), linkovi za kampanju u administraciji
+- [x] Statistika članstva za uredništvo (Admin → Članstvo)
+- [ ] Plakat sa QR kodom i kratka prezentacija za fakultete
+- [ ] Prijava preko Google naloga (razmotriti)
+- [ ] Ankete i inicijative struke (#44) za članove sa saglasnošću
 
 ## Faza 2 — sportske igre i PDF uputstva
 

@@ -190,6 +190,24 @@ export const routes: Routes = [
     loadComponent: () => import('./features/apps/apps').then((m) => m.Apps),
   },
   {
+    path: 'novi-nastavnici',
+    title: 'Za nove nastavnike i studente — Fiskultura',
+    data: {
+      seo: {
+        description:
+          'Prvi koraci za nove nastavnike fizičkog vaspitanja i studente fakulteta sporta: pripravnički staž, ispit za licencu, 30 ESPB, stručno usavršavanje i gde na portalu šta nalaziš.',
+      },
+    },
+    loadComponent: () => import('./features/community/new-teachers').then((m) => m.NewTeachers),
+  },
+  {
+    path: 'imenik',
+    title: 'Imenik struke — Fiskultura',
+    data: { seo: { noindex: true } },
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/community/directory').then((m) => m.Directory),
+  },
+  {
     path: 'prijava',
     title: 'Prijava — Fiskultura',
     data: { seo: { noindex: true } },
@@ -250,6 +268,7 @@ export const routes: Routes = [
       { path: 'propisi/novi', title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'propisi/:key', title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
+      { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],
   },

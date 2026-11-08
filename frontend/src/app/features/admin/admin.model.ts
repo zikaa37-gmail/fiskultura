@@ -1,4 +1,4 @@
-import { UserRole } from '../../core/auth/user.model';
+import { MemberStatus, UserRole } from '../../core/auth/user.model';
 import { LinkField, NewsCategory, Organization, OrganizationRef, SourceType } from '../../core/content/content.model';
 
 export type NewsStatus = 'draft' | 'published';
@@ -48,12 +48,33 @@ export interface AdminUser {
   name: string;
   email: string;
   role: UserRole;
+  member_status: MemberStatus | null;
   school: string | null;
   municipality: string | null;
   district: string | null;
+  source: string | null;
   verified: boolean;
   blocked: boolean;
   created_at: string | null;
+  last_active_at: string | null;
+}
+
+export interface MemberCount {
+  value: string | null;
+  total: number;
+}
+
+export interface MemberStats {
+  total: number;
+  unverified: number;
+  new_7_days: number;
+  new_30_days: number;
+  active_30_days: number;
+  in_directory: number;
+  surveys_consent: number;
+  by_status: MemberCount[];
+  by_district: MemberCount[];
+  by_source: MemberCount[];
 }
 
 export interface Page<T> {

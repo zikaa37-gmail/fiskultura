@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /profil
+Disallow: /imenik
 Disallow: /prijava
 Disallow: /registracija
 Disallow: /potvrda-naloga
