@@ -75,12 +75,15 @@ class AdminUserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->role,
+            'member_status' => $user->member_status,
             'school' => $user->school,
             'municipality' => $user->municipality,
             'district' => $user->district,
+            'source' => $user->source,
             'verified' => $user->email_verified_at !== null,
             'blocked' => $user->isBlocked(),
             'created_at' => $user->created_at?->toIso8601String(),
+            'last_active_at' => $user->last_active_at?->toIso8601String(),
         ];
     }
 }

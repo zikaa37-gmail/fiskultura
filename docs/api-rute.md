@@ -17,8 +17,22 @@ Osnova: `/api`. Odgovori su JSON, ključevi `snake_case`. Greške validacije: `4
 | GET | `/auth/me` | `jwt` | trenutni korisnik |
 | PATCH | `/auth/me` | `jwt` | ime, škola, opština, okrug |
 | POST | `/auth/change-password` | `jwt` | `current_password`, `password` (+ potvrda), poništava sve sesije |
+| POST | `/auth/logout-all` | `jwt` | poništava sve refresh tokene (odjava sa svih uređaja) |
+| GET | `/me/export` | `jwt` | moji podaci: nalog, prijava na obaveštenja, moja pitanja (JSON) |
+| DELETE | `/auth/me` | `jwt`, 5/min | `password` → briše nalog i prijavu na obaveštenja; pitanja ostaju bez veze sa nalogom; poslednji admin ne može |
 
-Korisnik u odgovoru: `id`, `name`, `email`, `role` (`user` | `author` | `editor` | `admin`), `school`, `municipality`, `district`.
+Korisnik u odgovoru: `id`, `name`, `email`, `role` (`user` | `author` | `editor` | `admin`), `member_status`
+(`nastavnik-os` | `nastavnik-ss` | `pripravnik` | `student` | `penzija` | `drugo`), `school`, `municipality`, `district`,
+`directory_consent`, `surveys_consent`. Registracija prima i `member_status` i `source` (izvor iz `?izvor=`, samo
+`[a-z0-9-]`, inače se odbacuje); `PATCH /auth/me` prima i `member_status`, `directory_consent`, `surveys_consent`
+(datum saglasnosti se čuva od prvog uključivanja). Refresh beleži `last_active_at`.
+
+## Članstvo (#49)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/members` | `jwt` | imenik: potvrđeni, neblokirani članovi sa saglasnošću; `member_status`, `district`, `q`, `page` (30 po strani); bez mejla; `403` sa `code: directory_consent_required` ako korisnik sam nije u imeniku |
+| GET | `/admin/members/stats` | editor, admin | `total`, `unverified`, `new_7_days`, `new_30_days`, `active_30_days`, `in_directory`, `surveys_consent`, `by_status`, `by_district`, `by_source` |
 
 Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (lista dozvoljenih uloga).
 

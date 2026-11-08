@@ -6,12 +6,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
 import { breadcrumbs, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
+import { JoinCta } from '../../shared/join-cta/join-cta';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question.model';
 
 @Component({
   selector: 'app-question-detail',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule, SimpleMarkdownPipe],
+  imports: [RouterLink, MatButtonModule, MatProgressBarModule, SimpleMarkdownPipe, JoinCta],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .small-heading {
@@ -114,6 +115,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
               <a mat-flat-button routerLink="/pitanja/postavi">Postavi svoje pitanje</a>
               <a mat-stroked-button routerLink="/pitanja" [queryParams]="{ oblast: item.category }">Još iz ove oblasti</a>
             </div>
+            <app-join-cta text="Besplatan nalog: pitaj uredništvo, dobij mejl kad odgovorimo i obaveštenja kad se propisi promene." />
           </article>
         }
       </div>

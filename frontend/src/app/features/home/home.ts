@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { httpResource } from '@angular/common/http';
 import { ModuleCard } from '../../shared/module-card/module-card';
 import { NewsCard } from '../../shared/news-card/news-card';
+import { JoinCta } from '../../shared/join-cta/join-cta';
 import { Icon } from '../../shared/icon/icon';
 import { API_URL } from '../../core/http/api';
 import { NewsPage } from '../../core/content/content.model';
@@ -14,7 +15,7 @@ const DAY_MS = 86_400_000;
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, MatButtonModule, ModuleCard, NewsCard, Icon],
+  imports: [RouterLink, MatButtonModule, ModuleCard, NewsCard, Icon, JoinCta],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
 })

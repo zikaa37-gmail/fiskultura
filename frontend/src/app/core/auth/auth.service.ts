@@ -10,6 +10,8 @@ import { MessageResponse, ProfilePayload, RegisterPayload, TokenResponse, User }
 const ACCESS_TOKEN_KEY = 'fk_access_token';
 const REFRESH_TOKEN_KEY = 'fk_refresh_token';
 const USER_KEY = 'fk_user';
+const SOURCE_KEY = 'fk_source';
+const SOURCE_PATTERN = /^[a-z0-9-]{2,40}$/;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,7 +34,18 @@ export class AuthService {
   }
 
   register(payload: RegisterPayload): Observable<MessageResponse> {
-    return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/register`, payload);
+    return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/register`, payload).pipe(tap(() => this.#storage?.removeItem(SOURCE_KEY)));
+  }
+
+  rememberSource(value: string | null): void {
+    const source = value?.trim().toLowerCase() ?? '';
+    if (SOURCE_PATTERN.test(source) && !this.#storage?.getItem(SOURCE_KEY)) {
+      this.#storage?.setItem(SOURCE_KEY, source);
+    }
+  }
+
+  source(): string | null {
+    return this.#storage?.getItem(SOURCE_KEY) ?? null;
   }
 
   verifyEmail(token: string): Observable<TokenResponse> {
@@ -66,12 +79,33 @@ export class AuthService {
     );
   }
 
+  reloadUser(): Observable<User> {
+    return this.#http.get<User>(`${this.#apiUrl}/auth/me`).pipe(
+      tap((user) => {
+        this.#storage?.setItem(USER_KEY, JSON.stringify(user));
+        this.#currentUser.set(user);
+      }),
+    );
+  }
+
   changePassword(currentPassword: string, password: string): Observable<MessageResponse> {
     return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/change-password`, {
       current_password: currentPassword,
       password,
       password_confirmation: password,
     });
+  }
+
+  logoutAll(): Observable<MessageResponse> {
+    return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/logout-all`, {}).pipe(tap(() => this.clearSession()));
+  }
+
+  exportData(): Observable<unknown> {
+    return this.#http.get(`${this.#apiUrl}/me/export`);
+  }
+
+  deleteAccount(password: string): Observable<MessageResponse> {
+    return this.#http.delete<MessageResponse>(`${this.#apiUrl}/auth/me`, { body: { password } }).pipe(tap(() => this.clearSession()));
   }
 
   refresh(): Observable<TokenResponse> {

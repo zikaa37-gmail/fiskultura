@@ -27,6 +27,7 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
           <a class="footer-link" routerLink="/sportovi">Sportovi i pravila</a>
           <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
+          <a class="footer-link" routerLink="/novi-nastavnici">Za nove nastavnike i studente</a>
           <a class="footer-link" routerLink="/literatura">Literatura i izvori</a>
           <a class="footer-link" routerLink="/obavestenja">Obaveštenja mejlom</a>
           <a class="footer-link" routerLink="/kontakt">Kontakt i uredništvo</a>

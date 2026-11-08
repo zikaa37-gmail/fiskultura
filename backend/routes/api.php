@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\AdminRegulationController;
 use App\Http\Controllers\Api\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
@@ -54,6 +55,10 @@ Route::middleware('jwt')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
     Route::post('/auth/change-password', [AuthController::class, 'changePassword']);
+    Route::post('/auth/logout-all', [AuthController::class, 'logoutAll']);
+    Route::get('/me/export', [AuthController::class, 'export']);
+    Route::delete('/auth/me', [AuthController::class, 'destroy'])->middleware('throttle:5,1');
+    Route::get('/members', [MemberController::class, 'index']);
     Route::get('/me/subscription', [SubscriptionController::class, 'mine']);
     Route::put('/me/subscription', [SubscriptionController::class, 'updateMine']);
 
@@ -80,6 +85,7 @@ Route::middleware('jwt')->group(function () {
         Route::post('/regulations/{regulation}/checked', [AdminRegulationController::class, 'checked']);
 
         Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
+        Route::get('/members/stats', [MemberController::class, 'stats']);
     });
 
     Route::prefix('admin')->middleware('role:admin')->group(function () {

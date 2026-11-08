@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'role', 'school', 'municipality', 'district', 'password'])]
+#[Fillable(['name', 'email', 'role', 'member_status', 'school', 'municipality', 'district', 'source', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,11 +28,18 @@ class User extends Authenticatable
 
     public const ROLES = [self::USER, self::AUTHOR, self::EDITOR, self::ADMIN];
 
+    public const MEMBER_STATUSES = ['nastavnik-os', 'nastavnik-ss', 'pripravnik', 'student', 'penzija', 'drugo'];
+
+    public const SOURCE_PATTERN = '/^[a-z0-9-]{2,40}$/';
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'blocked_at' => 'datetime',
+            'directory_consent_at' => 'datetime',
+            'surveys_consent_at' => 'datetime',
+            'last_active_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -54,6 +62,11 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === self::ADMIN;
+    }
+
+    public function scopeInDirectory(Builder $query): Builder
+    {
+        return $query->whereNotNull('email_verified_at')->whereNull('blocked_at')->whereNotNull('directory_consent_at');
     }
 
     public function isBlocked(): bool

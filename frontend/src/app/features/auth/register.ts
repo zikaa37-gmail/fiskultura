@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
+import { MEMBER_STATUS_LABELS, MEMBER_STATUSES, MemberStatus } from '../../core/auth/user.model';
 import { apiErrorMessage } from '../../core/http/api';
-import { DISTRICTS } from '../../content/districts';
 
 @Component({
   selector: 'app-register',
@@ -20,13 +20,19 @@ import { DISTRICTS } from '../../content/districts';
           <div class="auth-card">
             <h1>Proveri mejl</h1>
             <p>{{ message }}</p>
-            <p class="muted">Link stiže sa adrese obavestenja&#64;fiskultura.rs. Ako ga ne vidiš, pogledaj i folder za neželjenu poštu.</p>
+            <p class="muted">
+              Link stiže sa adrese obavestenja&#64;fiskultura.rs. Ako ga ne vidiš, pogledaj i folder za neželjenu poštu.
+              Kad klikneš na link, odmah si prijavljen i ostaješ prijavljen na tom uređaju.
+            </p>
             <a mat-stroked-button routerLink="/prijava">Na prijavu</a>
           </div>
         } @else {
           <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
-            <h1>Napravi nalog</h1>
-            <p class="muted">Besplatno, za nastavnike fizičkog, učitelje, trenere, roditelje i sve koje zanima fizičko vaspitanje i školski sport.</p>
+            <h1>Pridruži se struci</h1>
+            <p class="muted">
+              Sav sadržaj portala je javan. Nalog je besplatan i služi da se nastavnici fizičkog i studenti povežu: obaveštenja po izboru,
+              pitanja uredništvu, imenik kolega i glas struke u anketama.
+            </p>
             <mat-form-field appearance="outline">
               <mat-label>Ime i prezime</mat-label>
               <input matInput formControlName="name" autocomplete="name" />
@@ -41,24 +47,14 @@ import { DISTRICTS } from '../../content/districts';
               <mat-hint>Najmanje 8 znakova</mat-hint>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Škola (nije obavezno)</mat-label>
-              <input matInput formControlName="school" />
+              <mat-label>Ja sam</mat-label>
+              <mat-select formControlName="member_status">
+                @for (status of statuses; track status) {
+                  <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+                }
+              </mat-select>
             </mat-form-field>
-            <div class="form-row">
-              <mat-form-field appearance="outline">
-                <mat-label>Opština / grad</mat-label>
-                <input matInput formControlName="municipality" />
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Okrug</mat-label>
-                <mat-select formControlName="district">
-                  <mat-option value="">—</mat-option>
-                  @for (district of districts; track district) {
-                    <mat-option [value]="district">{{ district }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
+            <p class="small muted">Školu, opštinu i okrug možeš da dodaš kasnije u profilu.</p>
             @if (error(); as message) {
               <p class="form-error" role="alert">{{ message }}</p>
             }
@@ -75,14 +71,13 @@ import { DISTRICTS } from '../../content/districts';
 export class Register {
   readonly #auth = inject(AuthService);
 
-  protected readonly districts = DISTRICTS;
+  protected readonly statuses = MEMBER_STATUSES;
+  protected readonly statusLabels = MEMBER_STATUS_LABELS;
   protected readonly form = inject(NonNullableFormBuilder).group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
-    school: [''],
-    municipality: [''],
-    district: [''],
+    member_status: ['' as MemberStatus | '', Validators.required],
   });
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -98,11 +93,12 @@ export class Register {
     this.error.set(null);
     this.#auth
       .register({
-        ...value,
+        name: value.name,
+        email: value.email,
+        password: value.password,
         password_confirmation: value.password,
-        school: value.school || null,
-        municipality: value.municipality || null,
-        district: value.district || null,
+        member_status: value.member_status || null,
+        source: this.#auth.source(),
       })
       .subscribe({
         next: (response) => this.sentMessage.set(response.message),

@@ -18,6 +18,7 @@ class SeoController extends Controller
         '/propisi/fond-casova' => ['monthly', '0.8'],
         '/propisi/programi-i-ishodi' => ['monthly', '0.8'],
         '/kontakt' => ['yearly', '0.4'],
+        '/novi-nastavnici' => ['monthly', '0.7'],
         '/pitanja' => ['weekly', '0.8'],
         '/sportovi' => ['monthly', '0.6'],
         '/sportovi/kosarka' => ['monthly', '0.6'],
