@@ -30,25 +30,28 @@ class QuestionTest extends TestCase
         Mail::fake();
     }
 
-    public function test_seeded_answers_are_public_with_existing_regulations_and_import_is_idempotent(): void
+    public function test_seeded_answers_are_for_members_with_existing_regulations_and_import_is_idempotent(): void
     {
         $rows = json_decode(file_get_contents(database_path('data/questions.json')), true);
         $this->assertSame(count($rows), Question::visible()->count());
+
+        $this->getJson('/api/questions')->assertUnauthorized();
+        $this->getJson('/api/questions/'.$rows[0]['slug'])->assertUnauthorized();
 
         $this->seed(ContentSeeder::class);
         $this->assertSame(count($rows), Question::count());
 
         foreach ($rows as $row) {
-            $detail = $this->getJson("/api/questions/{$row['slug']}")->assertOk()->json();
+            $detail = $this->withJwt($this->user)->getJson("/api/questions/{$row['slug']}")->assertOk()->json();
             $this->assertCount(count($row['regulations']), $detail['regulations'], $row['slug']);
             $this->assertNotEmpty($detail['valid_on']);
         }
 
         $grading = count(array_filter($rows, fn ($row) => $row['category'] === 'ocenjivanje'));
-        $this->getJson('/api/questions?category=ocenjivanje')->assertOk()->assertJsonCount($grading)->assertJsonMissingPath('0.answer');
+        $this->withJwt($this->user)->getJson('/api/questions?category=ocenjivanje')->assertOk()->assertJsonCount($grading)->assertJsonMissingPath('0.answer');
         $mentions = count(array_filter($rows, fn ($row) => stripos($row['title'].' '.($row['body'] ?? '').' '.$row['answer'], 'direktor') !== false));
         $this->assertGreaterThan(0, $mentions);
-        $this->getJson('/api/questions?q=direktor')->assertOk()->assertJsonCount($mentions);
+        $this->withJwt($this->user)->getJson('/api/questions?q=direktor')->assertOk()->assertJsonCount($mentions);
     }
 
     public function test_user_asks_editor_answers_and_asker_gets_one_mail_without_public_name(): void
@@ -60,7 +63,7 @@ class QuestionTest extends TestCase
         ])->assertCreated()->assertJsonPath('status', 'pending')->assertJsonPath('slug', null);
         $id = $asked->json('id');
 
-        $this->getJson('/api/questions?q=Vuk')->assertJsonCount(0);
+        $this->withJwt($this->user)->getJson('/api/questions?q=Vuk')->assertJsonCount(0);
         $this->withJwt($this->user)->getJson('/api/me/questions')->assertOk()->assertJsonPath('0.status', 'pending');
         $this->withJwt($this->user)->getJson("/api/admin/questions/{$id}")->assertForbidden();
 
@@ -79,7 +82,7 @@ class QuestionTest extends TestCase
         Mail::assertSent(QuestionAnsweredMail::class, 1);
         Mail::assertSent(QuestionAnsweredMail::class, fn (QuestionAnsweredMail $mail) => $mail->hasTo($this->user->email));
 
-        $public = $this->getJson('/api/questions/'.Question::find($id)->slug)->assertOk()
+        $public = $this->withJwt($this->user)->getJson('/api/questions/'.Question::find($id)->slug)->assertOk()
             ->assertJsonPath('regulations.0.key', 'norma-os')->json();
         $this->assertStringNotContainsString('Vuk', json_encode($public));
         $this->assertArrayNotHasKey('original', $public);

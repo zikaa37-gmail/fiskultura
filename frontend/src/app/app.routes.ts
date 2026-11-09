@@ -1,8 +1,9 @@
-import { Routes } from '@angular/router';
+import { Route, Routes } from '@angular/router';
+import { GateSection } from './content/members-gate';
 import { adminGuard, authGuard, editorGuard, guestGuard } from './core/auth/auth.guards';
 import { SITE_ORGANIZATION, SITE_WEBSITE } from './core/seo/seo.service';
 
-export const routes: Routes = [
+const allRoutes: Routes = [
   {
     path: '',
     title: 'Fiskultura — portal za fizičko vaspitanje',
@@ -279,3 +280,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
   },
 ];
+
+const MEMBERS_ONLY: GateSection[] = ['sportovi', 'propisi', 'pitanja'];
+
+function membersOnly(route: Route): Route {
+  const section = MEMBERS_ONLY.find((prefix) => route.path === prefix || route.path?.startsWith(`${prefix}/`));
+  if (!section) {
+    return route;
+  }
+  const { loadComponent, ...rest } = route;
+  return {
+    ...rest,
+    data: { ...route.data, gate: section },
+    loadComponent: () => import('./shared/members-only/members-only').then((m) => m.MembersOnly),
+    children: [{ path: '', loadComponent }],
+  };
+}
+
+export const routes: Routes = allRoutes.map(membersOnly);
