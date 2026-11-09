@@ -39,12 +39,12 @@ import { AdminNews, AdminNewsPayload, AdminOrganization, newsState } from './adm
         <mat-label>Naslov</mat-label>
         <input matInput formControlName="title" maxlength="255" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline">
         <mat-label>Sažetak</mat-label>
         <textarea matInput formControlName="summary" rows="3" maxlength="1000"></textarea>
         <mat-hint>Svojim rečima, 1–3 rečenice. Prikazuje se u listi i ispod naslova.</mat-hint>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline">
         <mat-label>Tekst (nije obavezno)</mat-label>
         <textarea matInput formControlName="body" rows="10"></textarea>
         <mat-hint>Za prenete objave dovoljan je sažetak i link na izvor — ne kopirati tuđi tekst.</mat-hint>
@@ -105,7 +105,7 @@ import { AdminNews, AdminNewsPayload, AdminOrganization, newsState } from './adm
             <span class="small muted consent-note">Stoji na vrhu liste vesti i na naslovnoj dok je ne isključiš.</span>
           </mat-slide-toggle>
         </div>
-        <mat-form-field appearance="outline">
+        <mat-form-field subscriptSizing="dynamic" appearance="outline">
           <mat-label>Adresa (slug, nije obavezno)</mat-label>
           <input matInput formControlName="slug" />
           <mat-hint>Pravi se iz naslova. Menjati samo ako je potrebno.</mat-hint>
