@@ -2582,6 +2582,48 @@ button.contact-card .small {
   max-width: none;
 }
 
+.members-gate {
+  max-width: 760px;
+}
+
+.gate-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gate-topics li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gate-topics .app-icon {
+  color: var(--color-lime-strong);
+}
+
+.gate-card {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--color-border));
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
+}
+
+.gate-card .profile-links .mat-mdc-button-base {
+  min-height: 44px;
+}
+
 .theme-toggle {
   display: flex;
   width: 100%;

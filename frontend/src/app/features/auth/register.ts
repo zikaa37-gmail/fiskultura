@@ -31,7 +31,7 @@ import { apiErrorMessage } from '../../core/http/api';
           <form class="auth-card" [formGroup]="form" (ngSubmit)="submit()">
             <h1>Pridruži se struci</h1>
             <p class="muted">
-              Sav sadržaj portala je javan. Nalog je besplatan i služi da se nastavnici fizičkog i studenti povežu: obaveštenja po izboru,
+              Vesti i udruženja su javni. Nalog je besplatan i otvara propise, pitanja i odgovore, pravila sportova sa PDF uputstvima, obaveštenja po izboru,
               pitanja uredništvu, imenik kolega i glas struke u anketama.
             </p>
             <mat-form-field appearance="outline">

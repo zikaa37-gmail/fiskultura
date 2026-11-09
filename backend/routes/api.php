@@ -41,8 +41,6 @@ Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
-Route::get('/questions', [QuestionController::class, 'index']);
-Route::get('/questions/{slug}', [QuestionController::class, 'show']);
 Route::get('/seo/routes', [SeoController::class, 'routes']);
 
 Route::post('/auth/refresh', [AuthController::class, 'refresh']);
@@ -51,6 +49,8 @@ Route::post('/auth/logout', [AuthController::class, 'logout']);
 Route::middleware('jwt')->group(function () {
     Route::post('/questions', [QuestionController::class, 'store'])->middleware('throttle:5,1');
     Route::get('/me/questions', [QuestionController::class, 'mine']);
+    Route::get('/questions', [QuestionController::class, 'index']);
+    Route::get('/questions/{slug}', [QuestionController::class, 'show']);
 
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);

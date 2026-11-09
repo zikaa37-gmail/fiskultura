@@ -38,7 +38,7 @@ class SeoTest extends TestCase
         }
     }
 
-    public function test_sitemap_has_static_pages_and_every_public_detail_page(): void
+    public function test_sitemap_has_static_pages_and_public_details_but_not_members_only_questions(): void
     {
         $response = $this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type', 'application/xml; charset=UTF-8');
 
@@ -53,7 +53,8 @@ class SeoTest extends TestCase
         $news = News::visible()->first();
         $this->assertContains("https://fiskultura.rs/vesti/{$news->slug}", $locations);
         $this->assertContains('https://fiskultura.rs/udruzenja/sspfvs', $locations);
-        $this->assertSame(count(SeoController::STATIC_PAGES) + News::visible()->count() + Organization::count() + Question::visible()->count(), count($locations));
+        $this->assertSame(count(SeoController::STATIC_PAGES) + News::visible()->count() + Organization::count(), count($locations));
+        $this->assertEmpty(array_filter($locations, fn (string $location) => str_contains($location, '/pitanja/')));
         $this->assertStringNotContainsString('/admin', $response->getContent());
     }
 }

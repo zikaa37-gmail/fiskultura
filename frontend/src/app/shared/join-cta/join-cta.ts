@@ -24,5 +24,5 @@ import { Icon } from '../icon/icon';
 export class JoinCta {
   protected readonly auth = inject(AuthService);
   readonly title = input('Pridruži se kolegama');
-  readonly text = input('Besplatno: obaveštenja po izboru, pitanja uredništvu i imenik struke. Sadržaj ostaje javan.');
+  readonly text = input('Besplatno: propisi, pitanja i odgovori, pravila sportova, obaveštenja mejlom i imenik struke.');
 }

@@ -15,8 +15,6 @@ class SeoController extends Controller
         '/vesti' => ['daily', '0.9'],
         '/udruzenja' => ['weekly', '0.8'],
         '/propisi' => ['weekly', '0.8'],
-        '/propisi/fond-casova' => ['monthly', '0.8'],
-        '/propisi/programi-i-ishodi' => ['monthly', '0.8'],
         '/kontakt' => ['yearly', '0.4'],
         '/novi-nastavnici' => ['monthly', '0.7'],
         '/pitanja' => ['weekly', '0.8'],
@@ -80,7 +78,7 @@ class SeoController extends Controller
         foreach (self::STATIC_PAGES as $path => [$frequency, $priority]) {
             $urls[] = ['loc' => $base.($path === '/' ? '/' : $path), 'lastmod' => $latest($newest[$path] ?? null), 'changefreq' => $frequency, 'priority' => $priority];
         }
-        foreach (['news' => ['/vesti/', 'monthly', '0.7'], 'organizations' => ['/udruzenja/', 'weekly', '0.6'], 'questions' => ['/pitanja/', 'monthly', '0.7']] as $kind => [$prefix, $frequency, $priority]) {
+        foreach (['news' => ['/vesti/', 'monthly', '0.7'], 'organizations' => ['/udruzenja/', 'weekly', '0.6']] as $kind => [$prefix, $frequency, $priority]) {
             foreach ($routes[$kind] as $item) {
                 $urls[] = ['loc' => $base.$prefix.rawurlencode($item['slug']), 'lastmod' => $latest($item['updated_at']), 'changefreq' => $frequency, 'priority' => $priority];
             }
