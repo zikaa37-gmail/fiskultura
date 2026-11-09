@@ -1,24 +1,22 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
-import { Organization } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
-import { NEWS_CATEGORY_LABELS, NewsCategory } from '../news/news.model';
-import { FREQUENCY_OPTIONS, Subscription, SubscriptionFrequency } from './subscription.model';
+import { NewsCategory } from '../news/news.model';
+import { SubscriptionFields } from './subscription-fields';
+import { Subscription, SubscriptionFrequency } from './subscription.model';
 
 type Mode = 'public' | 'link' | 'mine';
 
 @Component({
   selector: 'app-notifications',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatRadioModule, MatSelectModule],
+  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, SubscriptionFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     form {
@@ -28,41 +26,6 @@ type Mode = 'public' | 'link' | 'mine';
     }
     mat-form-field {
       width: 100%;
-    }
-    .choice-list {
-      display: grid;
-      gap: 8px;
-      margin: 0 0 8px;
-    }
-    .choice {
-      display: block;
-      padding: 8px 8px 8px 0;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-    }
-    .choice-hint {
-      display: block;
-      margin: 0 12px 0 40px;
-      font-size: 14px;
-    }
-    fieldset {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      min-width: 0;
-    }
-    legend {
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-    .chip-row.choice-chips {
-      flex-wrap: wrap;
-      overflow: visible;
-      margin: 0 0 16px;
-      padding: 0;
-    }
-    .filter-chip {
-      min-height: 44px;
     }
     .status-line {
       font-weight: 600;
@@ -104,39 +67,7 @@ type Mode = 'public' | 'link' | 'mine';
                 </mat-form-field>
               }
 
-              <fieldset>
-                <legend>Koliko često</legend>
-                <mat-radio-group class="choice-list" name="frequency" [ngModel]="frequency()" (ngModelChange)="frequency.set($event)">
-                  @for (option of frequencyOptions; track option.value) {
-                    <label class="choice">
-                      <mat-radio-button [value]="option.value">{{ option.label }}</mat-radio-button>
-                      <span class="choice-hint muted">{{ option.hint }}</span>
-                    </label>
-                  }
-                </mat-radio-group>
-              </fieldset>
-
-              <fieldset>
-                <legend>Šta pratite</legend>
-                <div class="chip-row choice-chips">
-                  <button type="button" class="filter-chip" [class.filter-chip-on]="categories().length === 0" [attr.aria-pressed]="categories().length === 0" (click)="categories.set([])">Sve</button>
-                  @for (category of categoryOptions; track category) {
-                    <button type="button" class="filter-chip" [class.filter-chip-on]="categories().includes(category)" [attr.aria-pressed]="categories().includes(category)" (click)="toggleCategory(category)">
-                      {{ categoryLabels[category] }}
-                    </button>
-                  }
-                </div>
-              </fieldset>
-
-              <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                <mat-label>Udruženja</mat-label>
-                <mat-select multiple name="organizations" [ngModel]="organizationIds()" (ngModelChange)="organizationIds.set($event)" placeholder="Sva udruženja">
-                  @for (organization of organizations(); track organization.id) {
-                    <mat-option [value]="organization.id">{{ organization.short_name || organization.name }}</mat-option>
-                  }
-                </mat-select>
-                <mat-hint>Prazno = sva udruženja. Vesti samog portala stižu uvek.</mat-hint>
-              </mat-form-field>
+              <app-subscription-fields [(frequency)]="frequency" [(categories)]="categories" [(organizationIds)]="organizationIds" />
 
               @if (error(); as message) {
                 <p class="form-error" role="alert">{{ message }}</p>
@@ -173,19 +104,10 @@ export class NotificationsPage {
   readonly #http = inject(HttpClient);
   readonly #auth = inject(AuthService);
 
-  protected readonly frequencyOptions = FREQUENCY_OPTIONS;
-  protected readonly categoryLabels = NEWS_CATEGORY_LABELS;
-  protected readonly categoryOptions = Object.keys(NEWS_CATEGORY_LABELS) as NewsCategory[];
-
   protected readonly mode = computed<Mode>(() => (this.id() && this.token() ? 'link' : this.#auth.isAuthenticated() ? 'mine' : 'public'));
 
-  readonly #organizations = httpResource<Organization[]>(() => `${API_URL}/organizations`);
-  protected readonly organizations = computed(() =>
-    [...(this.#organizations.hasValue() ? this.#organizations.value() : [])].sort((a, b) => (a.short_name || a.name).localeCompare(b.short_name || b.name, 'sr')),
-  );
-
   protected readonly email = signal('');
-  protected readonly frequency = signal<SubscriptionFrequency>('weekly');
+  protected readonly frequency = signal<SubscriptionFrequency>('instant');
   protected readonly categories = signal<NewsCategory[]>([]);
   protected readonly organizationIds = signal<number[]>([]);
   protected readonly active = signal(false);
@@ -219,10 +141,6 @@ export class NotificationsPage {
         },
       });
     });
-  }
-
-  protected toggleCategory(category: NewsCategory): void {
-    this.categories.update((list) => (list.includes(category) ? list.filter((item) => item !== category) : [...list, category]));
   }
 
   protected save(): void {

@@ -32,6 +32,6 @@ export interface SubscriptionStats {
 }
 
 export const FREQUENCY_OPTIONS: { value: SubscriptionFrequency; label: string; hint: string }[] = [
+  { value: 'instant', label: 'Odmah', hint: 'Mejl čim se objavi vest koju pratite: rok, seminar, takmičenje, propis.' },
   { value: 'weekly', label: 'Nedeljni pregled', hint: 'Jedan mejl ponedeljkom ujutru sa svim vestima koje pratite.' },
-  { value: 'instant', label: 'Odmah', hint: 'Mejl čim se objavi istaknuta vest: važan rok, seminar, takmičenje.' },
 ];

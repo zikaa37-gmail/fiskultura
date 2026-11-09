@@ -28,6 +28,7 @@ class SubscriptionTest extends TestCase
         parent::setUp();
         $this->seed([UserSeeder::class, ContentSeeder::class]);
         News::query()->update(['notified_at' => now()]);
+        Subscription::query()->delete();
         Mail::fake();
     }
 
@@ -106,7 +107,7 @@ class SubscriptionTest extends TestCase
         $this->assertNotNull(Subscription::firstOrFail()->unsubscribed_at);
     }
 
-    public function test_featured_news_goes_once_to_matching_instant_subscribers(): void
+    public function test_every_published_news_goes_once_to_matching_instant_subscribers(): void
     {
         $news = $this->news();
         $matching = $this->active(['categories' => ['seminar']]);
@@ -119,11 +120,28 @@ class SubscriptionTest extends TestCase
         $this->artisan('notifications:send')->assertSuccessful();
         $this->artisan('notifications:send')->assertSuccessful();
 
-        $this->assertSame(1, Mail::sent(NoticeMail::class, fn (NoticeMail $mail) => $mail->notice->kind === Subscription::INSTANT)->count());
+        $this->assertSame(2, Mail::sent(NoticeMail::class, fn (NoticeMail $mail) => $mail->notice->kind === Subscription::INSTANT)->count());
         Mail::assertSent(NoticeMail::class, fn (NoticeMail $mail) => $mail->hasTo($matching->email)
             && str_contains($mail->notice->subject, 'Seminar o igrama')
             && str_contains($mail->notice->unsubscribeUrl, 'obavestenja/odjava'));
         $this->assertNotNull($news->fresh()->notified_at);
+    }
+
+    public function test_verified_account_gets_instant_notifications_for_everything_by_default(): void
+    {
+        $user = User::factory()->unverified()->create(['email' => 'Nova@Skola.rs']);
+        $this->assertSame(0, Subscription::count());
+
+        $user->forceFill(['email_verified_at' => now()])->save();
+
+        $subscription = Subscription::firstOrFail();
+        $this->assertSame(['nova@skola.rs', $user->id, Subscription::INSTANT, [], []], [$subscription->email, $subscription->user_id, $subscription->frequency, $subscription->categories, $subscription->organization_ids]);
+        $this->assertTrue($subscription->isActive());
+
+        $subscription->forceFill(['unsubscribed_at' => now(), 'frequency' => Subscription::WEEKLY])->save();
+        $user->forceFill(['email_verified_at' => now()->addMinute()])->save();
+        $this->assertFalse($subscription->fresh()->isActive());
+        $this->assertSame(Subscription::WEEKLY, $subscription->fresh()->frequency);
     }
 
     public function test_hourly_limit_leaves_the_rest_for_the_next_run(): void

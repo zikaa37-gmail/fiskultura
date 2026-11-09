@@ -32,6 +32,15 @@ class User extends Authenticatable
 
     public const SOURCE_PATTERN = '/^[a-z0-9-]{2,40}$/';
 
+    protected static function booted(): void
+    {
+        static::saved(function (User $user) {
+            if ($user->email_verified_at && ($user->wasRecentlyCreated || $user->wasChanged('email_verified_at'))) {
+                Subscription::ensureFor($user);
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

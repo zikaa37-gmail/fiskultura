@@ -70,7 +70,6 @@ class NewsNotifier
     {
         $pending = News::visible()
             ->with('organization')
-            ->where('featured', true)
             ->whereNull('notified_at')
             ->where('published_at', '>=', $now->copy()->subDays((int) config('notifications.instant_window_days')))
             ->orderBy('published_at')

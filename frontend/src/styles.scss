@@ -514,10 +514,6 @@ p {
 }
 
 @media (min-width: 640px) {
-  .topnav {
-    display: flex;
-  }
-
   .hero-actions {
     width: auto;
   }
@@ -627,6 +623,73 @@ h1 {
   background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-button:hover {
+  border-color: var(--color-primary);
+}
+
+.account-name {
+  display: none;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-menu-head {
+  display: grid;
+  gap: 2px;
+  padding: 8px 16px 12px;
+}
+
+.account-menu .mat-mdc-menu-item .app-icon {
+  margin-right: 12px;
+  color: var(--color-muted);
+}
+
+.account-menu .logout-item,
+.account-menu .logout-item .app-icon {
+  color: var(--mat-sys-error);
+  font-weight: 600;
+}
+
+@media (min-width: 420px) {
+  .account-name {
+    display: inline;
+  }
+}
+
+@media (min-width: 1080px) {
+  .topnav {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
 }
 
 .topnav.topnav-open {
@@ -872,10 +935,6 @@ app-sports .module {
 }
 
 @media (min-width: 640px) {
-  .menu-toggle {
-    display: none;
-  }
-
   .hero-actions .mat-mdc-button-base {
     flex: none;
   }
@@ -961,10 +1020,6 @@ app-sports .module {
 .form-error {
   color: var(--mat-sys-error);
   font-weight: 600;
-}
-
-.topnav a.topnav-account {
-  border: 1px solid var(--color-border);
 }
 
 @media (min-width: 640px) {
@@ -2464,6 +2519,50 @@ button.contact-card .small {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.profile-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profile-head h1 {
+  font-size: clamp(28px, 5vw, 38px);
+}
+
+.profile-head .mat-mdc-button-base {
+  min-height: 44px;
+}
+
+.profile-head .app-icon {
+  margin-right: 6px;
+}
+
+.profile-grid,
+.profile-side {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.profile-grid .auth-card {
+  max-width: none;
+}
+
+button.rule-topic-card {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (min-width: 960px) {
+  .profile-grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
 }
 
 .profile-delete {

@@ -26,6 +26,7 @@ export class AuthService {
   readonly isAuthenticated = computed(() => this.#currentUser() !== null);
   readonly isAdmin = computed(() => this.#currentUser()?.role === 'admin');
   readonly isEditor = computed(() => ['editor', 'admin'].includes(this.#currentUser()?.role ?? ''));
+  readonly homeUrl = computed(() => (this.isEditor() ? '/admin' : '/'));
 
   login(email: string, password: string): Observable<TokenResponse> {
     return this.#http
@@ -126,18 +127,18 @@ export class AuthService {
 
   logout(): void {
     const refreshToken = this.refreshToken();
-    this.clearSession();
+    this.clearSession('/');
     this.#http
       .post(`${this.#apiUrl}/auth/logout`, { refresh_token: refreshToken })
       .subscribe({ error: () => undefined });
   }
 
-  clearSession(): void {
+  clearSession(redirect = '/prijava'): void {
     this.#storage?.removeItem(ACCESS_TOKEN_KEY);
     this.#storage?.removeItem(REFRESH_TOKEN_KEY);
     this.#storage?.removeItem(USER_KEY);
     this.#currentUser.set(null);
-    this.#router.navigate(['/prijava']);
+    this.#router.navigateByUrl(redirect);
   }
 
   accessToken(): string | null {
