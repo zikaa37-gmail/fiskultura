@@ -42,29 +42,37 @@ html {
   --color-on-tertiary: #1f2a44;
 }
 
+@mixin dark-tokens {
+  --color-bg: #080f22;
+  --color-surface: #0f1a35;
+  --color-surface-alt: #0c1530;
+  --color-text: #e8eefc;
+  --color-muted: #9aa8c4;
+  --color-border: #1c2a4d;
+  --color-primary: #7aa2ff;
+  --color-primary-hover: #a3c0ff;
+  --color-on-primary: #061033;
+  --color-lime-strong: #a3e635;
+  --color-orange: #fb923c;
+  --color-sky: #38bdf8;
+  --color-violet: #a78bfa;
+  --color-rose: #fb7185;
+  --color-band: #0f1a35;
+  --color-tertiary: #18233f;
+  --color-tertiary-hover: #22305a;
+  --color-on-tertiary: #dfe6f7;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px rgb(0 0 0 / 0.3);
+  color-scheme: dark;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #080f22;
-    --color-surface: #0f1a35;
-    --color-surface-alt: #0c1530;
-    --color-text: #e8eefc;
-    --color-muted: #9aa8c4;
-    --color-border: #1c2a4d;
-    --color-primary: #7aa2ff;
-    --color-primary-hover: #a3c0ff;
-    --color-on-primary: #061033;
-    --color-lime-strong: #a3e635;
-    --color-orange: #fb923c;
-    --color-sky: #38bdf8;
-    --color-violet: #a78bfa;
-    --color-rose: #fb7185;
-    --color-band: #0f1a35;
-    --color-tertiary: #18233f;
-    --color-tertiary-hover: #22305a;
-    --color-on-tertiary: #dfe6f7;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px rgb(0 0 0 / 0.3);
-    color-scheme: dark;
+  :root:not(.theme-light) {
+    @include dark-tokens;
   }
+}
+
+:root.theme-dark {
+  @include dark-tokens;
 }
 
 *,
@@ -2572,6 +2580,16 @@ button.contact-card .small {
 
 .profile-grid .auth-card {
   max-width: none;
+}
+
+.theme-toggle {
+  display: flex;
+  width: 100%;
+}
+
+.theme-toggle .mat-button-toggle {
+  flex: 1 1 0;
+  min-height: 44px;
 }
 
 button.rule-topic-card {

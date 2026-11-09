@@ -24,10 +24,15 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .rules-scope {
+  :root:not(.theme-light) .rules-scope {
     --rb-neutral: #475569;
     --rb-neutral-dark: #334155;
   }
+}
+
+:root.theme-dark .rules-scope {
+  --rb-neutral: #475569;
+  --rb-neutral-dark: #334155;
 }
 
 .rules-head {

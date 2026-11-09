@@ -4,6 +4,7 @@ import { httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +13,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { MEMBER_STATUS_LABELS, MEMBER_STATUSES, MemberStatus, ROLE_LABELS, User } from '../../core/auth/user.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
+import { THEME_OPTIONS, ThemeService } from '../../core/theme.service';
 import { DISTRICTS } from '../../content/districts';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { Icon } from '../../shared/icon/icon';
@@ -21,7 +23,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, Icon],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -122,6 +124,16 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
             </form>
 
             <div class="profile-side">
+              <div class="auth-card">
+                <h2>Izgled</h2>
+                <p class="small muted mb-2">Tema važi na ovom uređaju. „Kao uređaj” prati svetli ili tamni režim telefona i računara.</p>
+                <mat-button-toggle-group class="theme-toggle" hideSingleSelectionIndicator [value]="theme.choice()" (change)="theme.set($event.value)" aria-label="Tema">
+                  @for (option of themeOptions; track option.value) {
+                    <mat-button-toggle [value]="option.value">{{ option.label }}</mat-button-toggle>
+                  }
+                </mat-button-toggle-group>
+              </div>
+
               <form class="auth-card" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
                 <h2>Promena lozinke</h2>
                 <mat-form-field appearance="outline">
@@ -164,6 +176,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 })
 export class Profile {
   protected readonly auth = inject(AuthService);
+  protected readonly theme = inject(ThemeService);
   readonly #notifications = inject(NotificationService);
   readonly #confirm = inject(ConfirmService);
   readonly #formBuilder = inject(NonNullableFormBuilder);
@@ -172,6 +185,7 @@ export class Profile {
   readonly #questionDialog = inject(AskQuestionDialogService);
 
   protected readonly roleLabels = ROLE_LABELS;
+  protected readonly themeOptions = THEME_OPTIONS;
   protected readonly statuses = MEMBER_STATUSES;
   protected readonly statusLabels = MEMBER_STATUS_LABELS;
   protected readonly districts = DISTRICTS;
