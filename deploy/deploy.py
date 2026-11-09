@@ -6,6 +6,7 @@
     python deploy/deploy.py --frontend      # samo ponovni prerender i upload frontenda (npr. posle novih vesti)
     python deploy/deploy.py --seed          # i db:seed (u produkciji samo osnovni podaci, bez probnih naloga)
     python deploy/deploy.py --check-links   # i provera linkova udruženja (organizations:check-links, 1–3 min)
+    python deploy/deploy.py --users         # i nalozi iz DEPLOY_USERS (email:uloga:Ime, zarezom) sa DEPLOY_USERS_PASSWORD
 
 Dva prolaza: prvo backend (raspakivanje, migracije, seed), pa frontend build čije se stranice prerenderuju iz već
 ažuriranog API-ja (SSR_API_ORIGIN = APP_URL). .htaccess se šalje svaki put (pravila za prerenderovane stranice).
@@ -52,6 +53,15 @@ def read_env(path: Path) -> tuple[dict, list[str]]:
 def server_env(lines: list[str]) -> bytes:
     kept = [line for line in lines if not line.split('=', 1)[0].strip().startswith(DEPLOY_ONLY_PREFIXES)]
     return ('\n'.join(kept).rstrip() + '\n').encode('utf-8')
+
+
+def deploy_users(env: dict) -> list[dict]:
+    password = env.get('DEPLOY_USERS_PASSWORD', '')
+    accounts = []
+    for item in filter(None, (part.strip() for part in env.get('DEPLOY_USERS', '').split(','))):
+        email, role, *name = item.split(':')
+        accounts.append({'email': email.strip(), 'role': role.strip(), 'password': password, 'name': name[0].strip() if name else ''})
+    return accounts
 
 
 def upload(ftp: ftplib.FTP, data: bytes | Path, remote: str) -> None:
@@ -159,6 +169,7 @@ def main() -> int:
             'admin_email': env.get('DEPLOY_ADMIN_EMAIL', ''),
             'admin_password': env.get('DEPLOY_ADMIN_PASSWORD', ''),
             'check_links': '1' if '--check-links' in args else '0',
+            'users': json.dumps(deploy_users(env)) if '--users' in args else '[]',
         })
         if not result.get('ok'):
             return 1
@@ -174,7 +185,7 @@ def main() -> int:
         (web_zip, f'{web_dir}/_deploy-web.zip'),
         (index.encode('utf-8'), f'{web_dir}/index.php'),
         (DEPLOY / 'htaccess-production', f'{web_dir}/.htaccess'),
-    ], {'seed': '0', 'admin_email': '', 'admin_password': '', 'check_links': '0'})
+    ], {'seed': '0', 'admin_email': '', 'admin_password': '', 'check_links': '0', 'users': '[]'})
     if not result.get('ok'):
         return 1
 

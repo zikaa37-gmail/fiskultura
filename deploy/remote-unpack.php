@@ -106,6 +106,11 @@ try {
             $console->call('app:admin', ['email' => $_POST['admin_email'], '--password' => $_POST['admin_password']]);
             $result['admin'] = trim($console->output()) ?: 'ok';
         }
+
+        foreach (json_decode((string) ($_POST['users'] ?? '[]'), true) ?: [] as $account) {
+            $console->call('app:user', ['email' => $account['email'], 'role' => $account['role'], '--password' => $account['password'], '--name' => $account['name'] ?? '']);
+            $result['users'][] = trim($console->output()) ?: 'ok';
+        }
     }
 } catch (Throwable $exception) {
     http_response_code(500);

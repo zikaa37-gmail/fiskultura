@@ -30,6 +30,29 @@ Artisan::command('app:admin {email} {--password=} {--name=Administrator}', funct
     return 0;
 })->purpose('Pravi ili ažurira administratorski nalog');
 
+Artisan::command('app:user {email} {role} {--password=} {--name=}', function (string $email, string $role) {
+    $password = (string) $this->option('password');
+
+    if (! in_array($role, User::ROLES, true)) {
+        $this->error('Uloga mora biti jedna od: '.implode(', ', User::ROLES).'.');
+
+        return 1;
+    }
+    if (strlen($password) < 8) {
+        $this->error('Lozinka mora imati bar 8 znakova.');
+
+        return 1;
+    }
+
+    $user = User::firstOrNew(['email' => Str::lower($email)]);
+    $user->fill(['name' => $this->option('name') ?: ($user->name ?? Str::before($email, '@')), 'role' => $role, 'password' => $password]);
+    $user->forceFill(['email_verified_at' => $user->email_verified_at ?? now(), 'blocked_at' => null])->save();
+
+    $this->info("Nalog {$user->email} ({$role}) je spreman.");
+
+    return 0;
+})->purpose('Pravi ili ažurira nalog sa zadatom ulogom i lozinkom (nalozi za testiranje)');
+
 Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $checker) {
     $counts = [LinkChecker::OK => 0, LinkChecker::BROKEN => 0, LinkChecker::UNKNOWN => 0];
 
