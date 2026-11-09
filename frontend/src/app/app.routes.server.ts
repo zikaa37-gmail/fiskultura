@@ -58,5 +58,6 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'ishodi/:razred', renderMode: RenderMode.Prerender, getPrerenderParams: async () => OUTCOME_GRADES.map((grade) => ({ razred: grade.slug })) },
   { path: 'aplikacije', renderMode: RenderMode.Prerender },
   { path: 'novi-nastavnici', renderMode: RenderMode.Prerender },
+  { path: 'obavestenja', renderMode: RenderMode.Prerender },
   { path: '**', renderMode: RenderMode.Client },
 ];
