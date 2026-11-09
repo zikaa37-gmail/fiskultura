@@ -140,7 +140,7 @@ type OrganizationStatus = AdminOrganization['status'];
             <input matInput formControlName="member_source" type="url" />
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline">
+        <mat-form-field subscriptSizing="dynamic" appearance="outline">
           <mat-label>Adresa (slug, nije obavezno)</mat-label>
           <input matInput formControlName="slug" />
           <mat-hint>Pravi se iz skraćenice ili naziva.</mat-hint>

@@ -1252,6 +1252,10 @@ a.post-title:hover {
   margin-bottom: 6px;
 }
 
+.admin-form mat-form-field[subscriptSizing='dynamic'] {
+  margin-bottom: 16px;
+}
+
 .admin-rows {
   display: grid;
   gap: 8px;

@@ -78,12 +78,12 @@ import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
           <input matInput formControlName="valid_to" type="date" />
         </mat-form-field>
       </div>
-      <mat-form-field appearance="outline">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline">
         <mat-label>Zamenio ga je (ključevi propisa, odvojeni zarezom)</mat-label>
         <input matInput formControlName="replaced_by" placeholder="program-5-6-2018, plan-7-8-2018" />
         <mat-hint>Popunjava se kad propis prestane da važi; na stranici propisa vodi na novi propis.</mat-hint>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+      <mat-form-field subscriptSizing="dynamic" appearance="outline">
         <mat-label>Šta je bitno za FV</mat-label>
         <textarea matInput formControlName="summary" rows="10"></textarea>
         <mat-hint>Redovi koji počinju sa „- “ postaju lista, **tekst** je podebljan, [naziv](https://...) je link.</mat-hint>
@@ -109,7 +109,7 @@ import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
         </mat-form-field>
       </div>
       <div class="form-row">
-        <mat-form-field appearance="outline">
+        <mat-form-field subscriptSizing="dynamic" appearance="outline">
           <mat-label>Ključ (adresa)</mat-label>
           <input matInput formControlName="key" />
           <mat-hint>mala slova, brojevi i crtice, npr. ocenjivanje-os-2024</mat-hint>
