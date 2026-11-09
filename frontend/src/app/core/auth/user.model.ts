@@ -41,6 +41,8 @@ export interface RegisterPayload {
   password: string;
   password_confirmation: string;
   member_status: MemberStatus | null;
+  directory_consent: boolean;
+  surveys_consent: boolean;
   source: string | null;
 }
 

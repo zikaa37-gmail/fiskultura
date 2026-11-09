@@ -35,6 +35,7 @@ class NewsController extends Controller
                 ->where('title', 'like', "%{$search}%")
                 ->orWhere('summary', 'like', "%{$search}%")))
             ->when($filters['featured'] ?? false, fn (Builder $query) => $query->where('featured', true))
+            ->orderByDesc('featured')
             ->orderByDesc('published_at')
             ->orderByDesc('id')
             ->paginate($filters['per_page'] ?? 12, page: $filters['page'] ?? 1);

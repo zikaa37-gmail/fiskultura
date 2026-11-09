@@ -34,7 +34,6 @@ export interface AdminNewsPayload {
   source_type: SourceType | null;
   source_published_at: string | null;
   status: NewsStatus;
-  published_at: string | null;
   featured: boolean;
 }
 
@@ -87,13 +86,4 @@ export function newsState(news: AdminNews): { label: string; tone: 'ok' | 'muted
     return { label: 'Nacrt', tone: 'muted' };
   }
   return news.is_visible ? { label: 'Objavljeno', tone: 'ok' } : { label: 'Zakazano', tone: 'warn' };
-}
-
-export function toLocalInput(value: string | null): string {
-  if (!value) {
-    return '';
-  }
-  const date = new Date(value);
-  const pad = (part: number) => String(part).padStart(2, '0');
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }

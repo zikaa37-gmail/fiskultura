@@ -60,7 +60,7 @@
       <p class="muted small result-count mb-2">Pronađeno objava: {{ info.total }}</p>
       <div class="post-list">
         @for (item of items(); track item.id) {
-          <app-news-card [news]="item" />
+          <app-news-card [news]="item" (changed)="reloadNews()" />
         } @empty {
           <div class="empty-state">
             <h3>Nema objava za izabrane filtere</h3>

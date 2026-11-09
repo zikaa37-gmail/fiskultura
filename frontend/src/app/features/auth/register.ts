@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -11,7 +12,7 @@ import { apiErrorMessage } from '../../core/http/api';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -55,6 +56,14 @@ import { apiErrorMessage } from '../../core/http/api';
               </mat-select>
             </mat-form-field>
             <p class="small muted">Školu, opštinu i okrug možeš da dodaš kasnije u profilu.</p>
+            <mat-checkbox formControlName="directory_consent">
+              Prikaži me u imeniku struke
+              <span class="small muted consent-note">Ime, status, škola, opština i okrug, samo članovima koji su i sami u imeniku. Mejl se ne prikazuje.</span>
+            </mat-checkbox>
+            <mat-checkbox formControlName="surveys_consent">
+              Pozivaj me na ankete i inicijative struke
+              <span class="small muted consent-note">Povremeni mejl kad struka treba da kaže svoje mišljenje. Obe saglasnosti menjaš u profilu kad hoćeš.</span>
+            </mat-checkbox>
             @if (error(); as message) {
               <p class="form-error" role="alert">{{ message }}</p>
             }
@@ -78,6 +87,8 @@ export class Register {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
     member_status: ['' as MemberStatus | '', Validators.required],
+    directory_consent: [true],
+    surveys_consent: [true],
   });
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -98,6 +109,8 @@ export class Register {
         password: value.password,
         password_confirmation: value.password,
         member_status: value.member_status || null,
+        directory_consent: value.directory_consent,
+        surveys_consent: value.surveys_consent,
         source: this.#auth.source(),
       })
       .subscribe({

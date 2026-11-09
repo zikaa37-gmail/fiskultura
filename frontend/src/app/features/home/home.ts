@@ -30,4 +30,8 @@ export class Home {
   protected nextExercise(): void {
     this.exerciseIndex.update((index) => (index + 1) % EXERCISES.length);
   }
+
+  protected reloadNews(): void {
+    this.#latestResource.reload();
+  }
 }

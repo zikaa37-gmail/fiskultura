@@ -85,6 +85,7 @@ type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
             @if (item.is_visible) {
               <a mat-button [routerLink]="['/vesti', item.slug]" target="_blank">Pogledaj</a>
             }
+            <button type="button" mat-button class="btn-tertiary-text" (click)="toggleFeatured(item)">{{ item.featured ? 'Ukloni isticanje' : 'Istakni' }}</button>
             <a mat-stroked-button [routerLink]="[item.id]">Izmeni</a>
             <button type="button" mat-button class="danger-text" (click)="remove(item)">Obriši</button>
           </div>
@@ -149,6 +150,16 @@ export class AdminNewsList {
 
   protected date(value: string | null): string {
     return formatDate(value);
+  }
+
+  protected toggleFeatured(item: AdminNews): void {
+    this.#http.patch<AdminNews>(`${API_URL}/admin/news/${item.id}/featured`, { featured: !item.featured }).subscribe({
+      next: (saved) => {
+        this.#notifications.show(saved.featured ? 'Vest je istaknuta.' : 'Vest više nije istaknuta.');
+        this.resource.reload();
+      },
+      error: (error) => this.#notifications.show(apiErrorMessage(error)),
+    });
   }
 
   protected setStatus(value: StatusFilter): void {

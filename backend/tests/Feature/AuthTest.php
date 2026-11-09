@@ -39,6 +39,17 @@ class AuthTest extends TestCase
             ->assertJsonValidationErrors('email');
     }
 
+    public function test_registration_consents_can_be_turned_off(): void
+    {
+        Mail::fake();
+        $this->postJson('/api/auth/register', [
+            'name' => 'Bez Saglasnosti', 'email' => 'bez@skola.rs', 'password' => 'tajna-lozinka', 'password_confirmation' => 'tajna-lozinka',
+            'directory_consent' => false, 'surveys_consent' => false,
+        ])->assertCreated();
+        $this->assertNull(User::where('email', 'bez@skola.rs')->value('directory_consent_at'));
+        $this->assertNull(User::where('email', 'bez@skola.rs')->value('surveys_consent_at'));
+    }
+
     public function test_registration_sends_verification_and_blocks_login_until_verified(): void
     {
         Mail::fake();
@@ -54,6 +65,8 @@ class AuthTest extends TestCase
         $user = User::where('email', 'nova@skola.rs')->firstOrFail();
         $this->assertSame(User::USER, $user->role);
         $this->assertNull($user->email_verified_at);
+        $this->assertNotNull($user->directory_consent_at);
+        $this->assertNotNull($user->surveys_consent_at);
 
         $this->postJson('/api/auth/login', ['email' => 'nova@skola.rs', 'password' => 'tajna-lozinka'])
             ->assertUnprocessable()
