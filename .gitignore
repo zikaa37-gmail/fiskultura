@@ -4,3 +4,5 @@ deploy/.env
 /backend-production-build/
 /deploy/.env.*
 __pycache__/
+
+/deploy/nalozi.md
