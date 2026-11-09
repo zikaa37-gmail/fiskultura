@@ -81,6 +81,14 @@ class AdminNewsController extends Controller
         return response()->json($this->present($news->fresh(['organization', 'author'])));
     }
 
+    public function feature(Request $request, News $news)
+    {
+        $data = $request->validate(['featured' => ['required', 'boolean']]);
+        $news->forceFill(['featured' => $data['featured']])->save();
+
+        return response()->json($this->present($news->fresh(['organization', 'author'])));
+    }
+
     public function destroy(News $news)
     {
         $news->delete();
@@ -101,7 +109,6 @@ class AdminNewsController extends Controller
             'source_type' => ['nullable', Rule::in(News::SOURCE_TYPES)],
             'source_published_at' => ['nullable', 'date'],
             'status' => ['required', Rule::in([News::DRAFT, News::PUBLISHED])],
-            'published_at' => ['nullable', 'date'],
             'featured' => ['boolean'],
         ], [
             'slug.regex' => 'Adresa sme da sadrži samo mala slova bez kvačica, brojeve i crtice.',
@@ -110,10 +117,6 @@ class AdminNewsController extends Controller
 
     private function publishedAt(array $data, ?News $news = null): ?Carbon
     {
-        if (! empty($data['published_at'])) {
-            return Carbon::parse($data['published_at']);
-        }
-
         if ($data['status'] === News::PUBLISHED) {
             return $news?->published_at ?? now();
         }

@@ -107,6 +107,15 @@ export function formatDate(value: string | null): string {
   return `${Number(day)}. ${Number(month)}. ${year}.`;
 }
 
+export function formatDateTime(value: string | null): string {
+  if (!value) {
+    return '';
+  }
+  const date = new Date(value);
+  const pad = (part: number) => String(part).padStart(2, '0');
+  return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}. u ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
 export function organizationLabel(organization: OrganizationRef | null): string {
   return organization ? (organization.short_name ?? organization.name) : '';
 }

@@ -75,15 +75,24 @@ class AdminApiTest extends TestCase
         $this->getJson("/api/news/{$created['slug']}")->assertNotFound();
     }
 
-    public function test_scheduled_news_is_hidden_until_publish_time(): void
+    public function test_publish_time_is_set_on_publish_and_featured_goes_first_and_can_be_switched_off(): void
     {
-        $news = $this->withJwt($this->editor)->postJson('/api/admin/news', $this->newsPayload(['published_at' => now()->addDays(2)->toIso8601String()]))
-            ->assertCreated()
-            ->assertJsonPath('is_visible', false)
-            ->json();
+        $draft = $this->withJwt($this->editor)->postJson('/api/admin/news', $this->newsPayload(['status' => 'draft', 'published_at' => now()->addDays(2)->toIso8601String()]))
+            ->assertCreated()->assertJsonPath('published_at', null)->json();
 
-        $this->withJwt($this->editor)->postJson('/api/admin/news/list', ['status' => 'scheduled'])->assertJsonPath('meta.total', 1);
-        $this->getJson("/api/news/{$news['slug']}")->assertNotFound();
+        $this->travel(5)->minutes();
+        $published = $this->withJwt($this->editor)->patchJson("/api/admin/news/{$draft['id']}", $this->newsPayload(['status' => 'published', 'featured' => true]))
+            ->assertOk()->assertJsonPath('is_visible', true)->json();
+        $this->assertNotNull($published['published_at']);
+
+        $this->travel(5)->minutes();
+        $this->withJwt($this->editor)->postJson('/api/admin/news', $this->newsPayload(['title' => 'Novija obična vest', 'featured' => false]))->assertCreated();
+
+        $this->postJson('/api/news/list', [])->assertJsonPath('data.0.slug', $published['slug']);
+
+        $this->withJwt($this->user)->patchJson("/api/admin/news/{$draft['id']}/featured", ['featured' => false])->assertForbidden();
+        $this->withJwt($this->editor)->patchJson("/api/admin/news/{$draft['id']}/featured", ['featured' => false])->assertOk()->assertJsonPath('featured', false);
+        $this->postJson('/api/news/list', [])->assertJsonPath('data.0.title', 'Novija obična vest');
     }
 
     public function test_news_validation_and_duplicate_slugs(): void

@@ -963,6 +963,27 @@ app-sports .module {
   font-size: 18px;
 }
 
+.publish-toggles {
+  display: grid;
+  gap: 16px;
+}
+
+.post.post-featured {
+  border: 3px solid var(--color-lime-strong);
+  background: color-mix(in srgb, var(--color-lime-strong) 7%, var(--color-surface));
+}
+
+.featured-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-lime-strong) 22%, var(--color-surface));
+  color: var(--color-text);
+  font-weight: 700;
+}
+
 .post-meta {
   font-size: 13px;
   font-weight: 600;

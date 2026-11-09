@@ -97,4 +97,8 @@ export class News {
   #navigate(queryParams: Record<string, string | number | null>): void {
     this.#router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
+
+  protected reloadNews(): void {
+    this.#newsResource.reload();
+  }
 }

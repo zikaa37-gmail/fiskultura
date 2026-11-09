@@ -77,7 +77,7 @@ export class NewsDetail {
 
   protected readonly resource = httpResource<NewsDetailModel>(() => `${API_URL}/news/${encodeURIComponent(this.slug())}`);
   protected readonly news = computed(() => (this.resource.hasValue() ? this.resource.value() : null));
-  protected readonly date = computed(() => formatDate(this.news()?.source.published_at ?? null));
+  protected readonly date = computed(() => formatDate(this.news()?.source.published_at ?? this.news()?.published_at ?? null));
   protected readonly categoryLabels = NEWS_CATEGORY_LABELS;
   protected readonly sourceLabels = SOURCE_TYPE_LABELS;
 

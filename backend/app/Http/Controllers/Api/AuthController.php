@@ -41,11 +41,17 @@ class AuthController extends Controller
             'municipality' => ['nullable', 'string', 'max:120'],
             'district' => ['nullable', 'string', 'max:120'],
             'source' => ['nullable', 'string'],
+            'directory_consent' => ['sometimes', 'boolean'],
+            'surveys_consent' => ['sometimes', 'boolean'],
         ]);
 
         $source = isset($data['source']) && preg_match(User::SOURCE_PATTERN, $data['source']) ? $data['source'] : null;
 
-        $user = User::create([...$data, 'email' => Str::lower($data['email']), 'role' => User::USER, 'source' => $source]);
+        $user = User::create([...Arr::except($data, ['directory_consent', 'surveys_consent']), 'email' => Str::lower($data['email']), 'role' => User::USER, 'source' => $source]);
+        $user->forceFill([
+            'directory_consent_at' => ($data['directory_consent'] ?? true) ? now() : null,
+            'surveys_consent_at' => ($data['surveys_consent'] ?? true) ? now() : null,
+        ])->save();
 
         $this->sendVerification($user);
 

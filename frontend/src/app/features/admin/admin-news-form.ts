@@ -3,19 +3,20 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
-import { NEWS_CATEGORY_LABELS, NewsCategory, organizationLabel, SOURCE_TYPE_LABELS, SourceType } from '../../core/content/content.model';
-import { AdminNews, AdminNewsPayload, AdminOrganization, NewsStatus, newsState, toLocalInput } from './admin.model';
+import { formatDateTime, NEWS_CATEGORY_LABELS, NewsCategory, organizationLabel, SOURCE_TYPE_LABELS, SourceType } from '../../core/content/content.model';
+import { AdminNews, AdminNewsPayload, AdminOrganization, newsState } from './admin.model';
 
 @Component({
   selector: 'app-admin-news-form',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="inline-link small" routerLink="/admin/vesti">← Sve vesti</a>
@@ -94,21 +95,16 @@ import { AdminNews, AdminNewsPayload, AdminOrganization, NewsStatus, newsState, 
 
       <fieldset class="admin-fieldset">
         <legend>Objavljivanje</legend>
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status">
-              <mat-option value="draft">Nacrt (ne vidi se)</mat-option>
-              <mat-option value="published">Objavljeno</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Vreme objave</mat-label>
-            <input matInput formControlName="published_at" type="datetime-local" />
-            <mat-hint>Prazno = odmah. Vreme u budućnosti = zakazano.</mat-hint>
-          </mat-form-field>
+        <div class="publish-toggles mb-4">
+          <mat-slide-toggle formControlName="published">
+            Objavljeno
+            <span class="small muted consent-note">{{ publishedNote() }}</span>
+          </mat-slide-toggle>
+          <mat-slide-toggle formControlName="featured">
+            Istaknuta vest
+            <span class="small muted consent-note">Stoji na vrhu liste vesti i na naslovnoj dok je ne isključiš.</span>
+          </mat-slide-toggle>
         </div>
-        <mat-checkbox formControlName="featured">Istaknuta vest</mat-checkbox>
         <mat-form-field appearance="outline">
           <mat-label>Adresa (slug, nije obavezno)</mat-label>
           <input matInput formControlName="slug" />
@@ -160,10 +156,18 @@ export class AdminNewsForm {
     source_url: [''],
     source_type: [null as SourceType | null],
     source_published_at: [''],
-    status: ['draft' as NewsStatus, Validators.required],
-    published_at: [''],
+    published: [false],
     featured: [false],
     slug: [''],
+  });
+
+  readonly #published = toSignal(this.form.controls.published.valueChanges, { initialValue: false });
+  protected readonly publishedNote = computed(() => {
+    const at = this.loaded()?.published_at;
+    if (!this.#published()) {
+      return at ? `Skinuto sa sajta. Prvi put objavljeno ${formatDateTime(at)}.` : 'Nacrt: vest se ne vidi na sajtu. Vreme objave se upisuje samo kad uključiš.';
+    }
+    return at && this.loaded()?.status === 'published' ? `Objavljeno ${formatDateTime(at)}.` : 'Biće objavljeno čim sačuvaš.';
   });
 
   constructor() {
@@ -179,8 +183,7 @@ export class AdminNewsForm {
           source_url: item.source_url ?? '',
           source_type: item.source_type,
           source_published_at: item.source_published_at ?? '',
-          status: item.status,
-          published_at: toLocalInput(item.published_at),
+          published: item.status === 'published',
           featured: item.featured,
           slug: item.slug,
         });
@@ -194,13 +197,14 @@ export class AdminNewsForm {
       return;
     }
     const value = this.form.getRawValue();
+    const { published, ...rest } = value;
     const payload: AdminNewsPayload = {
-      ...value,
-      body: value.body || null,
-      source_url: value.source_url || null,
-      source_published_at: value.source_published_at || null,
-      published_at: value.published_at ? new Date(value.published_at).toISOString() : null,
-      slug: value.slug || null,
+      ...rest,
+      body: rest.body || null,
+      source_url: rest.source_url || null,
+      source_published_at: rest.source_published_at || null,
+      status: published ? 'published' : 'draft',
+      slug: rest.slug || null,
     };
     const request = this.id() ? this.#http.patch<AdminNews>(`${API_URL}/admin/news/${this.id()}`, payload) : this.#http.post<AdminNews>(`${API_URL}/admin/news`, payload);
 

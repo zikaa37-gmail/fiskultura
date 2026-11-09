@@ -67,6 +67,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/news/{news}', [AdminNewsController::class, 'show']);
         Route::post('/news', [AdminNewsController::class, 'store']);
         Route::patch('/news/{news}', [AdminNewsController::class, 'update']);
+        Route::patch('/news/{news}/featured', [AdminNewsController::class, 'feature']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
 
         Route::post('/questions/list', [AdminQuestionController::class, 'list']);
