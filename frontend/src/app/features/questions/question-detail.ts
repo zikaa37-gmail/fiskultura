@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
-import { API_URL } from '../../core/http/api';
+import { API_URL, isNotFound } from '../../core/http/api';
 import { breadcrumbs, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { JoinCta } from '../../shared/join-cta/join-cta';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
@@ -136,7 +136,7 @@ export class QuestionDetail {
     effect(() => {
       const item = this.question();
       const path = `/pitanja/${this.slug()}`;
-      if (this.resource.error()) {
+      if (isNotFound(this.resource.error())) {
         this.#seo.set({ title: 'Pitanje nije pronađeno', path, noindex: true });
         return;
       }

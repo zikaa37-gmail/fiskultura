@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { OrgLinks } from '../../shared/org-links/org-links';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { API_URL } from '../../core/http/api';
+import { API_URL, isNotFound } from '../../core/http/api';
 import { formatDate, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationDetail as OrganizationDetailModel } from '../../core/content/content.model';
 import { breadcrumbs, SeoService, SITE_URL } from '../../core/seo/seo.service';
 import { NewsCard } from '../../shared/news-card/news-card';
@@ -96,7 +96,7 @@ export class OrganizationDetail {
     effect(() => {
       const item = this.organization();
       const path = `/udruzenja/${this.slug()}`;
-      if (this.resource.error()) {
+      if (isNotFound(this.resource.error())) {
         this.#seo.set({ title: 'Udruženje nije pronađeno', path, noindex: true });
         return;
       }

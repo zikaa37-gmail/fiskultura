@@ -3,7 +3,7 @@ import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { API_URL } from '../../core/http/api';
+import { API_URL, isNotFound } from '../../core/http/api';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsDetail as NewsDetailModel, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
 import { breadcrumbs, DEFAULT_IMAGE, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { NewsCard } from '../../shared/news-card/news-card';
@@ -85,7 +85,7 @@ export class NewsDetail {
     effect(() => {
       const item = this.news();
       const path = `/vesti/${this.slug()}`;
-      if (this.resource.error()) {
+      if (isNotFound(this.resource.error())) {
         this.#seo.set({ title: 'Vest nije pronađena', path, noindex: true });
         return;
       }

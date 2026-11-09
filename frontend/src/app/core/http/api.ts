@@ -19,3 +19,7 @@ export function apiErrorMessage(error: unknown, fallback = 'Nešto nije u redu. 
   }
   return (error.error?.message as string | undefined) ?? fallback;
 }
+
+export function isNotFound(error: unknown): boolean {
+  return error instanceof HttpErrorResponse && error.status === 404;
+}
