@@ -82,7 +82,7 @@ class SubscriptionController extends Controller
         $subscription = Subscription::where('email', Str::lower($user->email))->first();
 
         return response()->json($subscription ? $this->present($subscription) : [
-            'email' => $user->email, 'categories' => [], 'organization_ids' => [], 'frequency' => Subscription::WEEKLY,
+            'email' => $user->email, 'categories' => [], 'organization_ids' => [], 'frequency' => Subscription::INSTANT,
             'confirmed' => false, 'active' => false,
         ]);
     }

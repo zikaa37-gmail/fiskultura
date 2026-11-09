@@ -9,18 +9,46 @@
       @for (item of navItems; track item.route) {
         <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label }}</a>
       }
+      @if (auth.isAuthenticated()) {
+        <a routerLink="/imenik" routerLinkActive="topnav-active" (click)="closeMenu()">Imenik</a>
+      }
       @if (auth.isEditor()) {
         <a routerLink="/admin" routerLinkActive="topnav-active" (click)="closeMenu()">Admin</a>
       }
-      @if (auth.currentUser(); as user) {
-        <a class="topnav-account" routerLink="/profil" routerLinkActive="topnav-active" (click)="closeMenu()">{{ user.name }}</a>
-      } @else {
-        <a class="topnav-account" routerLink="/prijava" routerLinkActive="topnav-active" (click)="closeMenu()">Prijava</a>
-      }
     </nav>
 
-    <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Meni" title="Meni">
-      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
-    </button>
+    <div class="topbar-actions">
+      @if (auth.currentUser(); as user) {
+        <button type="button" class="account-button" [matMenuTriggerFor]="accountMenu" aria-label="Moj nalog" (click)="closeMenu()">
+          <app-icon name="user" [size]="20" />
+          <span class="account-name">{{ firstName() }}</span>
+          <app-icon name="chevron-down" [size]="16" />
+        </button>
+        <mat-menu #accountMenu="matMenu" xPosition="before" class="account-menu">
+          <div class="account-menu-head">
+            <strong>{{ user.name }}</strong>
+            <span class="small muted">{{ user.email }}</span>
+          </div>
+          <a mat-menu-item routerLink="/profil"><app-icon name="user" [size]="20" /> Moj profil</a>
+          <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Moja obaveštenja</button>
+          <button type="button" mat-menu-item (click)="askQuestion()"><app-icon name="help" [size]="20" /> Postavi pitanje</button>
+          <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik struke</a>
+          @if (auth.isEditor()) {
+            <a mat-menu-item routerLink="/admin"><app-icon name="clipboard" [size]="20" /> Admin</a>
+          }
+          <mat-divider />
+          <button type="button" mat-menu-item class="logout-item" (click)="auth.logout()"><app-icon name="logout" [size]="20" /> Odjavi se</button>
+        </mat-menu>
+      } @else {
+        <a class="account-button" routerLink="/prijava" (click)="closeMenu()">
+          <app-icon name="user" [size]="20" />
+          <span>Prijava</span>
+        </a>
+      }
+
+      <button type="button" class="menu-toggle" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Meni" title="Meni">
+        <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+      </button>
+    </div>
   </div>
 </header>

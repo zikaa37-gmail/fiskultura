@@ -1,28 +1,23 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
-import { LEGAL_DISCLAIMER, OwnQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionCategory } from './question.model';
+import { createQuestionForm, QuestionFields, questionPayload } from './question-fields';
+import { LEGAL_DISCLAIMER, OwnQuestion, QUESTION_STATUS_LABELS } from './question.model';
 
 @Component({
   selector: 'app-ask-question',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, QuestionFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     form {
       display: grid;
       gap: 4px;
       min-width: 0;
-    }
-    mat-form-field {
-      width: 100%;
     }
     .own-list {
       display: grid;
@@ -64,24 +59,7 @@ import { LEGAL_DISCLAIMER, OwnQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATU
           } @else {
             <p class="muted">Urednik odgovara uz poziv na propis i objavljuje odgovor <strong>bez vašeg imena i škole</strong>, da pomogne i drugim kolegama. Javićemo vam mejlom kad odgovor bude objavljen.</p>
             <form [formGroup]="form" (ngSubmit)="submit()">
-              <mat-form-field appearance="outline">
-                <mat-label>Oblast</mat-label>
-                <mat-select formControlName="category">
-                  @for (option of categories; track option) {
-                    <mat-option [value]="option">{{ categoryLabels[option] }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Pitanje ukratko</mat-label>
-                <input matInput formControlName="title" maxlength="200" placeholder="npr. Da li se sekcija računa u normu?" />
-                <mat-hint align="end">{{ form.controls.title.value.length }}/200</mat-hint>
-              </mat-form-field>
-              <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                <mat-label>Više detalja (nije obavezno)</mat-label>
-                <textarea matInput formControlName="body" rows="5" maxlength="3000"></textarea>
-                <mat-hint>Ne upisujte imena učenika ni druge lične podatke.</mat-hint>
-              </mat-form-field>
+              <app-question-fields [form]="form" />
               @if (error(); as message) {
                 <p class="form-error" role="alert">{{ message }}</p>
               }
@@ -117,15 +95,9 @@ export class AskQuestion {
   readonly #http = inject(HttpClient);
 
   protected readonly disclaimer = LEGAL_DISCLAIMER;
-  protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly statusLabels = QUESTION_STATUS_LABELS;
-  protected readonly categories = Object.keys(QUESTION_CATEGORY_LABELS) as QuestionCategory[];
 
-  protected readonly form = inject(NonNullableFormBuilder).group({
-    category: ['ostalo' as QuestionCategory, Validators.required],
-    title: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
-    body: ['', Validators.maxLength(3000)],
-  });
+  protected readonly form = createQuestionForm(inject(NonNullableFormBuilder));
 
   readonly #own = httpResource<OwnQuestion[]>(() => (this.auth.isAuthenticated() ? `${API_URL}/me/questions` : undefined));
   protected readonly ownQuestions = computed(() => (this.#own.hasValue() ? this.#own.value() : []));
@@ -139,10 +111,9 @@ export class AskQuestion {
       this.error.set(this.form.controls.title.invalid ? 'Pitanje ukratko treba da ima bar 10 znakova.' : null);
       return;
     }
-    const value = this.form.getRawValue();
     this.busy.set(true);
     this.error.set(null);
-    this.#http.post<{ message: string }>(`${API_URL}/questions`, { ...value, body: value.body.trim() || null }).subscribe({
+    this.#http.post<{ message: string }>(`${API_URL}/questions`, questionPayload(this.form)).subscribe({
       next: (response) => {
         this.sentMessage.set(response.message);
         this.busy.set(false);

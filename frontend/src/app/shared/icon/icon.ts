@@ -29,7 +29,10 @@ export type IconName =
   | 'star'
   | 'help'
   | 'phone'
-  | 'pin';
+  | 'pin'
+  | 'logout'
+  | 'user'
+  | 'chevron-down';
 
 const ICON_PATHS: Record<IconName, string[]> = {
   dumbbell: ['M6.5 6.5l11 11', 'M3 10l7-7', 'M14 21l7-7', 'M5 12l7-7', 'M12 19l7-7'],
@@ -50,6 +53,9 @@ const ICON_PATHS: Record<IconName, string[]> = {
   external: ['M14 4h6v6', 'M20 4l-9 9', 'M18 14v6H4V6h6'],
   menu: ['M4 7h16', 'M4 12h16', 'M4 17h16'],
   close: ['M6 6l12 12', 'M18 6L6 18'],
+  logout: ['M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4', 'M10 16l-4-4l4-4', 'M6 12h10'],
+  user: ['M12 12a4 4 0 1 0 0-8a4 4 0 0 0 0 8z', 'M4.5 20a7.5 7.5 0 0 1 15 0'],
+  'chevron-down': ['M6 9l6 6l6-6'],
   web: ['M3 5h18v14H3z', 'M3 9h18', 'M6 7h.01', 'M8.5 7h.01', 'M8 13h8', 'M8 16h5'],
   facebook: ['M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V9H7v3h2v9h3v-9h2.5l.5-3h-3V7a1 1 0 0 1 1-1h2z'],
   instagram: ['M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z', 'M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z', 'M17.5 6.5h.01'],

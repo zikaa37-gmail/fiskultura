@@ -1,24 +1,32 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { AuthService } from '../core/auth/auth.service';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../core/auth/auth.service';
+import { NotificationsDialogService } from '../features/notifications/notifications-dialog';
+import { AskQuestionDialogService } from '../features/questions/ask-question-dialog';
 import { Icon } from '../shared/icon/icon';
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, RouterLinkActive, Icon],
+  imports: [RouterLink, RouterLinkActive, MatDividerModule, MatMenuModule, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './site-header.html',
 })
 export class SiteHeader {
   protected readonly auth = inject(AuthService);
+  readonly #notificationsDialog = inject(NotificationsDialogService);
+  readonly #questionDialog = inject(AskQuestionDialogService);
+
   protected readonly menuOpen = signal(false);
+  protected readonly firstName = computed(() => (this.auth.currentUser()?.name ?? '').trim().split(/\s+/)[0] || 'Nalog');
   protected readonly navItems = [
     { route: '/vesti', label: 'Vesti' },
     { route: '/udruzenja', label: 'Udruženja' },
     { route: '/propisi', label: 'Propisi' },
     { route: '/ishodi', label: 'Ishodi' },
     { route: '/pitanja', label: 'Pitanja' },
-    { route: '/sportovi', label: 'Sportovi i pravila' },
+    { route: '/sportovi', label: 'Sportovi' },
     { route: '/aplikacije', label: 'Aplikacije' },
   ];
 
@@ -28,5 +36,13 @@ export class SiteHeader {
 
   protected closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  protected openNotifications(): void {
+    this.#notificationsDialog.open();
+  }
+
+  protected askQuestion(): void {
+    this.#questionDialog.open();
   }
 }

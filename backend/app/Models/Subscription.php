@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 #[Fillable(['email', 'user_id', 'categories', 'organization_ids', 'frequency', 'channel'])]
 class Subscription extends Model
@@ -23,7 +24,7 @@ class Subscription extends Model
     public const UNSUBSCRIBE = 'unsubscribe';
 
     protected $attributes = [
-        'frequency' => self::WEEKLY,
+        'frequency' => self::INSTANT,
         'channel' => 'mail',
     ];
 
@@ -37,6 +38,20 @@ class Subscription extends Model
             'confirmation_sent_at' => 'datetime',
             'last_digest_at' => 'datetime',
         ];
+    }
+
+    public static function ensureFor(User $user): self
+    {
+        $subscription = self::firstOrNew(['email' => Str::lower($user->email)]);
+        if (! $subscription->exists) {
+            $subscription->fill(['frequency' => self::INSTANT, 'categories' => [], 'organization_ids' => []]);
+            $subscription->forceFill(['last_digest_at' => now()]);
+        }
+        $subscription->user_id ??= $user->id;
+        $subscription->confirmed_at ??= now();
+        $subscription->save();
+
+        return $subscription;
     }
 
     public function user(): BelongsTo

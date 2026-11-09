@@ -66,7 +66,7 @@ export class Login {
     this.busy.set(true);
     this.error.set(null);
     this.#auth.login(email, password).subscribe({
-      next: () => this.#router.navigateByUrl(this.povratak() || '/profil'),
+      next: () => this.#router.navigateByUrl(this.povratak() || this.#auth.homeUrl()),
       error: (error) => {
         const message = apiErrorMessage(error);
         this.error.set(message);

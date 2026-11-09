@@ -23,15 +23,15 @@ describe('Obaveštenja', () => {
 
     const page = fixture.componentInstance as unknown as {
       email: { set(value: string): void };
-      toggleCategory(category: string): void;
+      categories: { set(value: string[]): void };
       save(): void;
     };
     page.email.set('nastavnik@primer.rs');
-    page.toggleCategory('seminar');
+    page.categories.set(['seminar']);
     page.save();
 
     const request = http.expectOne('/api/subscriptions');
-    expect(request.request.body).toEqual({ email: 'nastavnik@primer.rs', frequency: 'weekly', categories: ['seminar'], organization_ids: [] });
+    expect(request.request.body).toEqual({ email: 'nastavnik@primer.rs', frequency: 'instant', categories: ['seminar'], organization_ids: [] });
     request.flush({ message: 'Proverite mejl.' });
     await fixture.whenStable();
 

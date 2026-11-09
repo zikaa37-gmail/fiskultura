@@ -13,4 +13,7 @@ export const adminGuard: CanActivateFn = () => {
   return auth.isAdmin() || inject(Router).createUrlTree([auth.isEditor() ? '/admin' : '/']);
 };
 
-export const guestGuard: CanActivateFn = () => !inject(AuthService).isAuthenticated() || inject(Router).createUrlTree(['/profil']);
+export const guestGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  return !auth.isAuthenticated() || inject(Router).parseUrl(auth.homeUrl());
+};

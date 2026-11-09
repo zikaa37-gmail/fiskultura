@@ -142,7 +142,7 @@ class MembershipTest extends TestCase
     public function test_export_and_delete_own_account(): void
     {
         $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
-        Subscription::create(['email' => $user->email, 'user_id' => $user->id, 'frequency' => 'weekly']);
+        Subscription::updateOrCreate(['email' => $user->email], ['user_id' => $user->id, 'frequency' => 'weekly']);
 
         $this->withJwt($user)->getJson('/api/me/export')
             ->assertOk()
