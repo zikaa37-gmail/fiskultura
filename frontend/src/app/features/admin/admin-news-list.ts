@@ -12,6 +12,8 @@ import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsCategory, organizationLabel } from '../../core/content/content.model';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { FilterPanel } from '../../shared/filter-panel/filter-panel';
+import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminNews, AdminOrganization, newsState, Page } from './admin.model';
 
 type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
@@ -20,17 +22,17 @@ type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-news-list',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, FilterPanel, ListHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="admin-toolbar">
+    <app-filter-panel [summary]="filterSummary()">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Status</mat-label>
         <mat-select [value]="status()" (selectionChange)="setStatus($event.value)">
           <mat-option value="">Svi</mat-option>
-          <mat-option value="draft">Nacrti</mat-option>
-          <mat-option value="published">Objavljeno</mat-option>
-          <mat-option value="scheduled">Zakazano</mat-option>
+          @for (option of statusOptions; track option) {
+            <mat-option [value]="option">{{ statusLabels[option] }}</mat-option>
+          }
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -57,14 +59,13 @@ type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
           <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
         </mat-form-field>
       </form>
-      <a mat-flat-button routerLink="nova">Nova vest</a>
-    </div>
+    </app-filter-panel>
 
+    <app-list-header [count]="meta()?.total ?? null">
+      <a mat-flat-button routerLink="nova">Nova vest</a>
+    </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
-    }
-    @if (meta(); as info) {
-      <p class="muted small result-count">Ukupno: {{ info.total }}</p>
     }
     <div class="admin-rows">
       @for (item of items(); track item.id) {
@@ -112,6 +113,8 @@ export class AdminNewsList {
   protected readonly categories = Object.keys(NEWS_CATEGORY_LABELS) as NewsCategory[];
   protected readonly label = organizationLabel;
   protected readonly stateOf = newsState;
+  protected readonly statusLabels: Record<Exclude<StatusFilter, ''>, string> = { draft: 'Nacrti', published: 'Objavljeno', scheduled: 'Zakazano' };
+  protected readonly statusOptions = Object.keys(this.statusLabels) as Exclude<StatusFilter, ''>[];
 
   protected readonly status = signal<StatusFilter>('');
   protected readonly category = signal<NewsCategory | ''>('');
@@ -143,6 +146,14 @@ export class AdminNewsList {
   protected readonly organizations = computed(() =>
     (this.#organizationsResource.hasValue() ? this.#organizationsResource.value() : []).slice().sort((a, b) => this.label(a).localeCompare(this.label(b), 'sr')),
   );
+
+  protected readonly filterSummary = computed(() => {
+    const status = this.status();
+    const category = this.category();
+    const organization = this.organizations().find((item) => item.id === this.organizationId());
+    const parts = [status ? this.statusLabels[status] : '', category ? this.categoryLabels[category] : '', organization ? this.label(organization) : '', this.search() ? `„${this.search()}”` : ''];
+    return parts.filter(Boolean).join(' · ') || 'Sve vesti';
+  });
 
   protected date(value: string | null): string {
     return formatDate(value);
