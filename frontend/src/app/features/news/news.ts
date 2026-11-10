@@ -3,7 +3,6 @@ import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -12,13 +11,16 @@ import { API_URL } from '../../core/http/api';
 import { NEWS_CATEGORY_LABELS, NewsCategory, NewsPage, Organization, organizationLabel } from '../../core/content/content.model';
 import { NewsCard } from '../../shared/news-card/news-card';
 import { Pagination } from '../../shared/pagination/pagination';
+import { FilterPanel } from '../../shared/filter-panel/filter-panel';
+import { ListHeader } from '../../shared/list-header/list-header';
+import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 
 const PER_PAGE = 12;
 const UMBRELLA_FILTER = 'sspfvs-mreza';
 
 @Component({
   selector: 'app-news',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard, Pagination],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard, Pagination, FilterPanel, ListHeader, ScrollArea],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './news.html',
 })
@@ -77,6 +79,18 @@ export class News {
   );
   protected readonly hasFilters = computed(() => this.category() !== 'all' || !!this.organization() || !!this.year() || !!this.pretraga());
 
+  protected readonly filterSummary = computed(() => {
+    const organization = this.organization();
+    const source = organization === UMBRELLA_FILTER ? 'SSPFVS i članice' : this.organizations().find((item) => item.slug === organization);
+    const parts = [
+      this.category() === 'all' ? '' : this.categoryLabels[this.category() as NewsCategory],
+      typeof source === 'string' ? source : source ? this.label(source) : '',
+      this.year(),
+      this.pretraga() ? `„${this.pretraga()}”` : '',
+    ].filter(Boolean);
+    return parts.length ? parts.join(' · ') : 'Sve objave';
+  });
+
   protected setFilter(name: 'kategorija' | 'udruzenje' | 'godina', value: string | null): void {
     this.#navigate({ [name]: value && value !== 'all' ? value : null, strana: null });
   }
@@ -87,7 +101,6 @@ export class News {
 
   protected goToPage(page: number): void {
     this.#navigate({ strana: page > 1 ? page : null });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   protected clearFilters(): void {
