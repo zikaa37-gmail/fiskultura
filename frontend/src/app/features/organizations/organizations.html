@@ -36,12 +36,15 @@
       <div class="empty-state found-cta">
         <h3>Nema društva u tvom gradu?</h3>
         <p class="muted">
-          Cilj je da svaki grad i opština imaju svoje strukovno društvo, povezano sa SSPFVS. Uskoro ovde: vodič za osnivanje
-          i okupljanje kolega iz istog mesta.
+          Cilj je da svaki grad i opština imaju svoje strukovno društvo, povezano sa SSPFVS. Za osnivanje su dovoljna tri kolege, a
+          statut, osnivački akt i zapisnik postoje kao gotovi primeri.
         </p>
-        @if (umbrellaEmail(); as email) {
-          <a mat-flat-button [href]="'mailto:' + email + '?subject=Osnivanje%20dru%C5%A1tva%20pedagoga%20fizi%C4%8Dke%20kulture'">Piši SSPFVS-u</a>
-        }
+        <div class="found-cta-actions">
+          <a mat-flat-button routerLink="/udruzenja/osnivanje">Vodič za osnivanje</a>
+          @if (umbrellaEmail(); as email) {
+            <a mat-stroked-button theme="tertiary" [href]="'mailto:' + email + '?subject=Osnivanje%20dru%C5%A1tva%20pedagoga%20fizi%C4%8Dke%20kulture'">Piši SSPFVS-u</a>
+          }
+        </div>
       </div>
 
       @for (section of sections(); track section.type) {
