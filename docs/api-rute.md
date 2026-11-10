@@ -32,7 +32,7 @@ Korisnik u odgovoru: `id`, `name`, `email`, `role` (`user` | `author` | `editor`
 | Metod | Ruta | Pristup | Opis |
 |---|---|---|---|
 | GET | `/members` | `jwt` | imenik: potvrđeni, neblokirani članovi sa saglasnošću; `member_status`, `district`, `q`, `page` (30 po strani); bez mejla; `403` sa `code: directory_consent_required` ako korisnik sam nije u imeniku |
-| GET | `/admin/members/stats` | editor, admin | `total`, `unverified`, `new_7_days`, `new_30_days`, `active_30_days`, `in_directory`, `surveys_consent`, `by_status`, `by_district`, `by_source` |
+| GET | `/admin/members/stats` | admin | `total`, `unverified`, `new_7_days`, `new_30_days`, `active_30_days`, `in_directory`, `surveys_consent`, `by_status`, `by_district`, `by_source` |
 
 Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (lista dozvoljenih uloga).
 
@@ -68,7 +68,12 @@ postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
 | PATCH | `/admin/organizations/{id}` | editor, admin | izmena (ne može biti sama sebi krovna) |
 | DELETE | `/admin/organizations/{id}` | admin | brisanje; vesti ostaju bez organizacije |
 | POST | `/admin/users/list` | admin | `role`, `search` (ime, mejl, škola, opština), `page` |
-| PATCH | `/admin/users/{id}` | admin | `role`, `blocked` (blokiranje poništava sesije); svoj nalog ne može |
+| POST | `/admin/users` | admin | `name`, `email`, `role`, profil; korisnik dobija lični poziv (14 dana); `password` admina za `editor` i `admin` |
+| POST | `/admin/users/invitations` | admin | `ids` (do 50): lični poziv za naloge koji čekaju aktivaciju → `sent`, `skipped`, `failed`; novi poziv poništava stari link |
+| POST | `/auth/invitation` | javno, 10/min | `token` → podaci naloga za završetak registracije |
+| POST | `/auth/invitation/complete` | javno, 10/min | `token`, `name`, `password` (+ potvrda), profil, saglasnosti → aktivira nalog i prijavu na obaveštenja |
+| PATCH | `/admin/users/{id}` | admin | `name`, `email`, `member_status`, `school`, `municipality`, `district`, `role`, `blocked` (blokiranje poništava sesije), `password` (lozinka admina, obavezna kad se uloga podiže na `editor` ili `admin`); svoj nalog ne može |
+| DELETE | `/admin/users/{id}` | admin | briše nalog i prijavu na obaveštenja; svoj nalog ne može |
 
 Organizacija ima i `link_status: { website?, facebook?, instagram?, youtube?, member_source? }` sa vrednostima
 `ok` | `broken` | `unknown` (samo za linkove koji postoje). Proverava ih `php artisan organizations:check-links`
@@ -132,7 +137,7 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | PATCH | `/subscriptions/manage` | javno, `id` + `token` | izmena podešavanja i `active` |
 | POST | `/subscriptions/unsubscribe` | javno, `id` + `token` | odjava jednim klikom (i `List-Unsubscribe-Post` iz mejla, parametri u adresi) |
 | GET / PUT | `/me/subscription` | prijavljen | „Moja obaveštenja“; potvrđen nalog ne traži potvrdu mejlom |
-| GET | `/admin/subscriptions/stats` | editor, admin | pretplatnici, poslato za 7 / 30 dana, neuspelo, odjave |
+| GET | `/admin/subscriptions/stats` | admin | pretplatnici, poslato za 7 / 30 dana, neuspelo, odjave |
 
 Tokeni u linkovima su HMAC (`APP_KEY`, svrha, id, mejl), ništa se ne čuva u bazi. Prazne `categories` /
 `organization_ids` znače „sve“; vesti bez udruženja (portal) stižu uvek. Slanje: `php artisan notifications:send`

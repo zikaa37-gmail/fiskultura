@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, sig
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsCategory, organizationLabel } from '../../core/content/content.model';
@@ -15,9 +16,11 @@ import { AdminNews, AdminOrganization, newsState, Page } from './admin.model';
 
 type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
 
+type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
+
 @Component({
   selector: 'app-admin-news-list',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="admin-toolbar">
@@ -66,7 +69,7 @@ type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
     <div class="admin-rows">
       @for (item of items(); track item.id) {
         @let state = stateOf(item);
-        <div class="admin-row">
+        <div class="admin-row admin-row-compact">
           <div class="admin-row-main">
             <span class="admin-row-meta">
               <span class="state-chip" [class]="'state-' + state.tone">{{ state.label }}</span>
@@ -81,14 +84,7 @@ type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
             </span>
             <a class="post-title" [routerLink]="[item.id]">{{ item.title }}</a>
           </div>
-          <div class="admin-row-actions">
-            @if (item.is_visible) {
-              <a mat-button [routerLink]="['/vesti', item.slug]" target="_blank">Pogledaj</a>
-            }
-            <button type="button" mat-button class="btn-tertiary-text" (click)="toggleFeatured(item)">{{ item.featured ? 'Ukloni isticanje' : 'Istakni' }}</button>
-            <a mat-stroked-button [routerLink]="[item.id]">Izmeni</a>
-            <button type="button" mat-button class="danger-text" (click)="remove(item)">Obriši</button>
-          </div>
+          <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
         </div>
       } @empty {
         @if (!resource.isLoading()) {
@@ -150,6 +146,23 @@ export class AdminNewsList {
 
   protected date(value: string | null): string {
     return formatDate(value);
+  }
+
+  protected menuFor(item: AdminNews): MenuOption<NewsAction>[] {
+    return [
+      ...(item.is_visible ? [{ value: 'view' as const, label: 'Pogledaj', icon: 'eye' as const, link: ['/vesti', item.slug], newTab: true }] : []),
+      { value: 'feature', label: item.featured ? 'Ukloni isticanje' : 'Istakni', icon: 'star' },
+      { value: 'edit', label: 'Izmeni', icon: 'edit', link: ['/admin/vesti', item.id] },
+      { value: 'remove', label: 'Obriši', icon: 'trash', danger: true },
+    ];
+  }
+
+  protected onAction(item: AdminNews, action: NewsAction): void {
+    if (action === 'feature') {
+      this.toggleFeatured(item);
+    } else if (action === 'remove') {
+      this.remove(item);
+    }
   }
 
   protected toggleFeatured(item: AdminNews): void {

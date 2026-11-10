@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { DialogShell } from '../../../shared/dialog-shell/dialog-shell';
 import { Icon } from '../../../shared/icon/icon';
 import { GymnasticsRuleMedia } from './rule-media';
@@ -9,7 +9,7 @@ import { GymnasticsRulesProgress } from './rules-progress';
 
 @Component({
   selector: 'app-gymnastics-rule-card-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell, Icon, GymnasticsRuleMedia],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon, GymnasticsRuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let card = current();

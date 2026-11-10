@@ -217,7 +217,7 @@
                 (ngModelChange)="searchText.set($event)"
               />
             </mat-form-field>
-            <button type="submit" mat-flat-button class="btn-tertiary">Traži</button>
+            <button type="submit" mat-flat-button theme="tertiary">Traži</button>
           </form>
         </div>
         @if (hasFilters()) {
@@ -280,7 +280,7 @@
                   <button
                     type="button"
                     mat-button
-                    class="btn-tertiary-text"
+                    theme="tertiary"
                     [attr.aria-expanded]="open().has(item.id)"
                     (click)="toggle(item.id)"
                   >
@@ -289,7 +289,7 @@
                   @if (textUrl(item); as link) {
                     <a
                       mat-flat-button
-                      class="btn-tertiary"
+                      theme="tertiary"
                       [href]="link"
                       target="_blank"
                       rel="noopener"
@@ -300,7 +300,7 @@
                     <button
                       type="button"
                       mat-button
-                      class="btn-tertiary-text"
+                      theme="tertiary"
                       (click)="showHistory(item)"
                     >
                       Istorija ({{ item.versions_count }})

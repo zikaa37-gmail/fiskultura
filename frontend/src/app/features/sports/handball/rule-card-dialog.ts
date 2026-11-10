@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { DialogShell } from '../../../shared/dialog-shell/dialog-shell';
 import { Icon } from '../../../shared/icon/icon';
 import { HandballRuleMedia } from './rule-media';
@@ -9,7 +9,7 @@ import { HandballRulesProgress } from './rules-progress';
 
 @Component({
   selector: 'app-handball-rule-card-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell, Icon, HandballRuleMedia],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon, HandballRuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let card = current();

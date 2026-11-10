@@ -192,11 +192,12 @@ class SubscriptionTest extends TestCase
         $this->active(['email' => 'odjavljen@primer.rs'])->forceFill(['unsubscribed_at' => now()])->save();
         app(NewsNotifier::class)->record(Subscription::first(), Subscription::INSTANT);
 
-        $editor = User::where('email', 'urednik@fiskultura.test')->firstOrFail();
-        $this->withJwt($editor)->getJson('/api/admin/subscriptions/stats')->assertOk()
+        $admin = User::where('email', 'admin@fiskultura.test')->firstOrFail();
+        $this->withJwt($admin)->getJson('/api/admin/subscriptions/stats')->assertOk()
             ->assertJsonPath('active', 1)->assertJsonPath('instant', 1)->assertJsonPath('unsubscribed', 1)->assertJsonPath('sent_7d', 1);
 
         $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
+        $this->withJwt(User::where('email', 'urednik@fiskultura.test')->firstOrFail())->getJson('/api/admin/subscriptions/stats')->assertForbidden();
         $this->withJwt($user)->getJson('/api/admin/subscriptions/stats')->assertForbidden();
     }
 }

@@ -1,0 +1,210 @@
+@use 'sass:map';
+@use 'sizes';
+
+$filled: '.mat-mdc-unelevated-button, .mat-mdc-raised-button, .mat-tonal-button';
+$outlined: '.mat-mdc-outlined-button';
+$text: '.mat-mdc-button';
+$all: '#{$filled}, #{$outlined}, #{$text}';
+$sizes: sizes.$controls;
+
+@mixin theme($color, $hover, $active, $on-color, $ink, $outline) {
+  --btn-color: #{$color};
+  --btn-color-hover: #{$hover};
+  --btn-color-active: #{$active};
+  --btn-on-color: #{$on-color};
+  --btn-ink: #{$ink};
+  --btn-outline: #{$outline};
+  --btn-soft: color-mix(in srgb, #{$ink} 9%, transparent);
+  --btn-soft-active: color-mix(in srgb, #{$ink} 16%, transparent);
+  --btn-ring: color-mix(in srgb, #{$ink} 55%, transparent);
+  --btn-disabled-color: color-mix(in srgb, #{$color} 22%, var(--color-surface));
+  --btn-disabled-ink: color-mix(in srgb, #{$ink} 40%, var(--color-surface));
+  --btn-disabled-outline: color-mix(in srgb, #{$outline} 40%, var(--color-surface));
+}
+
+@mixin size($name) {
+  $size: map.get($sizes, $name);
+  --btn-height: #{map.get($size, height)};
+  --btn-padding: #{map.get($size, padding)};
+  --btn-font-size: #{map.get($size, font)};
+  --btn-gap: #{map.get($size, gap)};
+}
+
+#{$all} {
+  @include size(md);
+  @include theme(
+    var(--color-primary),
+    var(--color-primary-hover),
+    color-mix(in srgb, var(--color-primary-hover) 82%, var(--color-text)),
+    var(--color-on-primary),
+    var(--color-primary),
+    color-mix(in srgb, var(--color-primary) 45%, var(--color-border))
+  );
+  --btn-radius: #{sizes.$radius};
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.btn-theme-primary {
+  @include theme(
+    var(--color-primary),
+    var(--color-primary-hover),
+    color-mix(in srgb, var(--color-primary-hover) 82%, var(--color-text)),
+    var(--color-on-primary),
+    var(--color-primary),
+    color-mix(in srgb, var(--color-primary) 45%, var(--color-border))
+  );
+}
+
+.btn-theme-secondary {
+  @include theme(
+    var(--color-lime),
+    color-mix(in srgb, var(--color-lime) 82%, var(--color-lime-strong)),
+    color-mix(in srgb, var(--color-lime) 64%, var(--color-lime-strong)),
+    #1a2e05,
+    var(--color-lime-strong),
+    color-mix(in srgb, var(--color-lime-strong) 55%, var(--color-border))
+  );
+}
+
+.btn-theme-tertiary {
+  @include theme(
+    var(--color-tertiary),
+    var(--color-tertiary-hover),
+    color-mix(in srgb, var(--color-on-tertiary) 16%, var(--color-tertiary)),
+    var(--color-on-tertiary),
+    var(--color-on-tertiary),
+    var(--color-border)
+  );
+}
+
+.btn-theme-danger {
+  @include theme(
+    var(--mat-sys-error),
+    color-mix(in srgb, var(--mat-sys-error) 86%, var(--color-text)),
+    color-mix(in srgb, var(--mat-sys-error) 72%, var(--color-text)),
+    var(--mat-sys-on-error),
+    var(--mat-sys-error),
+    color-mix(in srgb, var(--mat-sys-error) 45%, var(--color-border))
+  );
+}
+
+@each $name, $size in $sizes {
+  .btn-size-#{$name} {
+    @include size($name);
+  }
+}
+
+#{$filled} {
+  --mat-button-filled-container-shape: var(--btn-radius);
+  --mat-button-filled-container-height: var(--btn-height);
+  --mat-button-filled-horizontal-padding: var(--btn-padding);
+  --mat-button-filled-label-text-size: var(--btn-font-size);
+  --mat-button-filled-label-text-weight: 600;
+  --mat-button-filled-icon-spacing: var(--btn-gap);
+  --mat-button-filled-container-color: var(--btn-color);
+  --mat-button-filled-label-text-color: var(--btn-on-color);
+  --mat-button-filled-state-layer-color: var(--btn-on-color);
+  --mat-button-filled-ripple-color: color-mix(in srgb, var(--btn-on-color) 18%, transparent);
+  --mat-button-filled-hover-state-layer-opacity: 0;
+  --mat-button-filled-focus-state-layer-opacity: 0;
+  --mat-button-filled-pressed-state-layer-opacity: 0;
+  --mat-button-filled-disabled-container-color: var(--btn-disabled-color);
+  --mat-button-filled-disabled-label-text-color: var(--btn-disabled-ink);
+  --mat-button-protected-container-shape: var(--btn-radius);
+  --mat-button-protected-container-height: var(--btn-height);
+  --mat-button-protected-horizontal-padding: var(--btn-padding);
+  --mat-button-protected-label-text-size: var(--btn-font-size);
+  --mat-button-protected-label-text-weight: 600;
+  --mat-button-protected-container-color: var(--btn-color);
+  --mat-button-protected-label-text-color: var(--btn-on-color);
+  --mat-button-protected-disabled-container-color: var(--btn-disabled-color);
+  --mat-button-protected-disabled-label-text-color: var(--btn-disabled-ink);
+  --mat-button-tonal-container-shape: var(--btn-radius);
+  --mat-button-tonal-container-height: var(--btn-height);
+  --mat-button-tonal-horizontal-padding: var(--btn-padding);
+  --mat-button-tonal-label-text-size: var(--btn-font-size);
+  --mat-button-tonal-container-color: var(--btn-color);
+  --mat-button-tonal-label-text-color: var(--btn-on-color);
+
+  &:hover {
+    --btn-color: var(--btn-color-hover);
+  }
+
+  &:active {
+    --btn-color: var(--btn-color-active);
+  }
+}
+
+#{$outlined} {
+  --mat-button-outlined-container-shape: var(--btn-radius);
+  --mat-button-outlined-container-height: var(--btn-height);
+  --mat-button-outlined-horizontal-padding: var(--btn-padding);
+  --mat-button-outlined-label-text-size: var(--btn-font-size);
+  --mat-button-outlined-label-text-weight: 600;
+  --mat-button-outlined-icon-spacing: var(--btn-gap);
+  --mat-button-outlined-label-text-color: var(--btn-ink);
+  --mat-button-outlined-outline-color: var(--btn-outline);
+  --mat-button-outlined-state-layer-color: var(--btn-ink);
+  --mat-button-outlined-ripple-color: var(--btn-soft);
+  --mat-button-outlined-hover-state-layer-opacity: 0;
+  --mat-button-outlined-focus-state-layer-opacity: 0;
+  --mat-button-outlined-pressed-state-layer-opacity: 0;
+  --mat-button-outlined-disabled-label-text-color: var(--btn-disabled-ink);
+  --mat-button-outlined-disabled-outline-color: var(--btn-disabled-outline);
+
+  &:hover {
+    background-color: var(--btn-soft);
+    --mat-button-outlined-outline-color: var(--btn-ink);
+  }
+
+  &:active {
+    background-color: var(--btn-soft-active);
+  }
+}
+
+#{$text} {
+  --mat-button-text-container-shape: var(--btn-radius);
+  --mat-button-text-container-height: var(--btn-height);
+  --mat-button-text-horizontal-padding: calc(var(--btn-padding) * 0.6);
+  --mat-button-text-label-text-size: var(--btn-font-size);
+  --mat-button-text-label-text-weight: 600;
+  --mat-button-text-icon-spacing: var(--btn-gap);
+  --mat-button-text-label-text-color: var(--btn-ink);
+  --mat-button-text-state-layer-color: var(--btn-ink);
+  --mat-button-text-ripple-color: var(--btn-soft);
+  --mat-button-text-hover-state-layer-opacity: 0;
+  --mat-button-text-focus-state-layer-opacity: 0;
+  --mat-button-text-pressed-state-layer-opacity: 0;
+  --mat-button-text-disabled-label-text-color: var(--btn-disabled-ink);
+
+  &:hover {
+    background-color: var(--btn-soft);
+  }
+
+  &:active {
+    background-color: var(--btn-soft-active);
+  }
+}
+
+#{$all} {
+  &:focus-visible {
+    outline: 2px solid var(--btn-ring);
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &.mat-mdc-button-disabled {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+}
+
+#{$filled} {
+  &:disabled,
+  &.mat-mdc-button-disabled {
+    background-color: var(--btn-disabled-color);
+  }
+}

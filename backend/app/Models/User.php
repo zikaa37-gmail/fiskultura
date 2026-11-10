@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\Phone;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'role', 'member_status', 'school', 'municipality', 'district', 'source', 'password'])]
+#[Fillable(['name', 'email', 'phone', 'role', 'member_status', 'school', 'municipality', 'district', 'source', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -41,11 +43,17 @@ class User extends Authenticatable
         });
     }
 
+    protected function phone(): Attribute
+    {
+        return Attribute::make(set: fn (?string $value) => Phone::format($value) ?? (trim((string) $value) ?: null));
+    }
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'blocked_at' => 'datetime',
+            'invited_at' => 'datetime',
             'directory_consent_at' => 'datetime',
             'surveys_consent_at' => 'datetime',
             'last_active_at' => 'datetime',

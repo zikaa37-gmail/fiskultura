@@ -10,8 +10,8 @@ import {
 import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -57,8 +57,8 @@ export const REGULATIONS_TABS: { id: RegulationsTab; label: string }[] = [
   imports: [
     FormsModule,
     RouterLink,
-    MatButtonModule,
-    MatFormFieldModule,
+    BUTTON_IMPORTS,
+    FORM_FIELD_IMPORTS,
     MatInputModule,
     MatProgressBarModule,
     MatSelectModule,

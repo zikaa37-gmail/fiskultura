@@ -169,20 +169,21 @@ class MembershipTest extends TestCase
         $this->assertNotNull(User::find($admin->id));
     }
 
-    public function test_member_stats_for_editors(): void
+    public function test_member_stats_for_admins_only(): void
     {
         $this->member(['member_status' => 'student', 'source' => 'fsfv-bg', 'directory_consent_at' => now()]);
         $this->member(['member_status' => 'student', 'source' => 'fsfv-bg']);
         $this->member(['member_status' => 'nastavnik-os']);
 
-        $editor = User::where('email', 'urednik@fiskultura.test')->firstOrFail();
-        $response = $this->withJwt($editor)->getJson('/api/admin/members/stats')->assertOk();
+        $admin = User::where('email', 'admin@fiskultura.test')->firstOrFail();
+        $response = $this->withJwt($admin)->getJson('/api/admin/members/stats')->assertOk();
 
         $this->assertSame(1, $response->json('in_directory'));
         $this->assertContains(['value' => 'fsfv-bg', 'total' => 2], $response->json('by_source'));
         $this->assertContains(['value' => 'student', 'total' => 2], $response->json('by_status'));
 
         $user = User::where('email', 'korisnik@fiskultura.test')->firstOrFail();
+        $this->withJwt(User::where('email', 'urednik@fiskultura.test')->firstOrFail())->getJson('/api/admin/members/stats')->assertForbidden();
         $this->withJwt($user)->getJson('/api/admin/members/stats')->assertForbidden();
     }
 }

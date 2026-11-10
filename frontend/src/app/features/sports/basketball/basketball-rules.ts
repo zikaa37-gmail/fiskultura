@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { Icon } from '../../../shared/icon/icon';
@@ -21,7 +21,7 @@ interface PhotoCredit {
 
 @Component({
   selector: 'app-basketball-rules',
-  imports: [RouterLink, MatButtonModule, MatButtonToggleModule, Icon, RuleDefs, RuleMedia],
+  imports: [RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, Icon, RuleDefs, RuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrl: './basketball-rules.scss',

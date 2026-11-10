@@ -13,7 +13,7 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
 - `frontend/`: Angular 22 sa SSR-om (zoneless, OnPush, signali): javne stranice se prerenderuju pri deploy-u
   (`app.routes.server.ts`), SEO svake stranice ide kroz `core/seo/seo.service.ts` (ruta `data.seo` ili detalj sam
   zove `SeoService.set`); kod koji dira `localStorage`/`window` mora da radi i na serveru. Angular Material M3 (`mat.theme` u
-  `src/styles.scss`, boje i tokeni preneti iz statičke naslovne). Bez biblioteke za prevode: sav tekst je na
+  `src/styles.scss`, boje i tokeni u `src/theme/styles/colors.scss`, preneti iz statičke naslovne). Bez biblioteke za prevode: sav tekst je na
   srpskom, direktno u šablonima; duži sadržaj stranica je u `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.
 - `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), lokalno SQLite, na serveru MySQL.
   Mejl: SMTP `obavestenja@fiskultura.rs` (lozinka samo u `backend/.env` i na serveru; lokalno
@@ -34,10 +34,16 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Angular: `input()`/`output()`/`model()`, `inject()`, `@if`/`@for`, `[class.x]`, bez `NgModule`-a,
   bez `standalone: true`, bez getter/setter-a, stanje u `signal()`/`computed()`, čitanje sa API-ja
   preko `httpResource`.
-- Material dugmad: `mat-flat-button` glavna akcija, `mat-stroked-button` sporedna; boje preko
-  `--mat-sys-*` i tokena iz `styles.scss` (`--color-primary`, `.accent-*`), ne `color="primary"`.
-  Tercijarno (neutralno) dugme: `mat-flat-button class="btn-tertiary"` i `mat-button class="btn-tertiary-text"`
-  za česte akcije u listama (otvori tekst, istorija, prikaži više), da stranica ne bude previše plava.
+- Tema je u `src/theme/`: `styles/` (`colors.scss` tokeni i tamna tema, `buttons.scss`) i `ui/` (direktive i
+  komponente koje prilagođavaju Material). Dugmad: u `imports` ide `BUTTON_IMPORTS` iz `theme/ui/button`, ne
+  `MatButtonModule`; direktiva `AppButton` prima `theme="primary|secondary|tertiary|danger"` i
+  `size="xs|sm|md|lg|xl"` (podrazumevano `primary`, `md` = 44 px), zaobljenje 8 px. `mat-flat-button` glavna
+  akcija, `mat-stroked-button` sporedna; `theme="tertiary"` (neutralno) za česte akcije u listama (otvori tekst,
+  istorija, prikaži više), da stranica ne bude previše plava; `theme="danger"` za brisanje. Boje preko tokena,
+  ne `color="primary"` ni klase za boju dugmeta. Polja (input, select, textarea): `FORM_FIELD_IMPORTS` iz
+  `theme/ui/form-field` umesto `MatFormFieldModule`, direktiva `AppFormField` na `mat-form-field` prima isti
+  `size` (stilovi u `form-fields.scss`); visine i zaobljenje su zajednički u `sizes.scss`, pa su dugme i polje
+  iste veličine uvek iste visine.
 - Kartice su male i stoje jedna do druge (na telefonu dve u redu gde stane); dugačak sadržaj ide u modal, a
   kartica ima naziv i kratak tekst. Boja kartice dolazi iz `.accent-*` (ikonica u `.tint-icon`, blaga pozadina).
   Oznake (oblast, status) su male labele, ne linkovi. Telefon i mejl su `tel:` i `mailto:` linkovi

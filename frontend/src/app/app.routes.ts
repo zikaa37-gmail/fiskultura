@@ -236,6 +236,12 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/auth/forgot-password').then((m) => m.ForgotPassword),
   },
   {
+    path: 'zavrsi-registraciju',
+    title: 'Završetak registracije — Fiskultura',
+    data: { seo: { noindex: true } },
+    loadComponent: () => import('./features/auth/complete-registration').then((m) => m.CompleteRegistration),
+  },
+  {
     path: 'nova-lozinka',
     title: 'Nova lozinka — Fiskultura',
     data: { seo: { noindex: true } },
@@ -268,8 +274,8 @@ const allRoutes: Routes = [
       { path: 'propisi', title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
       { path: 'propisi/novi', title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'propisi/:key', title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
-      { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
-      { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
+      { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
+      { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],
   },

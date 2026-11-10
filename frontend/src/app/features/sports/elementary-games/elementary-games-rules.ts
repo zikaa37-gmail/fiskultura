@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { Icon } from '../../../shared/icon/icon';
@@ -14,7 +14,7 @@ type RulesTab = 'play' | 'quiz' | 'official';
 
 @Component({
   selector: 'app-elementary-games-rules',
-  imports: [RouterLink, MatButtonModule, MatButtonToggleModule, Icon, ElementaryGamesRuleDefs, ElementaryGamesRuleMedia],
+  imports: [RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, Icon, ElementaryGamesRuleDefs, ElementaryGamesRuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['../basketball/basketball-rules.scss', './elementary-games-rules.scss'],

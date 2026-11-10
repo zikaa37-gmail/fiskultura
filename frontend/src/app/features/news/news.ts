@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSign
 import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +17,7 @@ const UMBRELLA_FILTER = 'sspfvs-mreza';
 
 @Component({
   selector: 'app-news',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatButtonToggleModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './news.html',
 })

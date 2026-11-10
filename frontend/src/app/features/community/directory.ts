@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, sig
 import { HttpErrorResponse, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,7 +25,7 @@ interface Member {
 
 @Component({
   selector: 'app-directory',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

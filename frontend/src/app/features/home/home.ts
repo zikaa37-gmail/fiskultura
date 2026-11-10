@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { httpResource } from '@angular/common/http';
 import { ModuleCard } from '../../shared/module-card/module-card';
 import { NewsCard } from '../../shared/news-card/news-card';
@@ -15,7 +15,7 @@ const DAY_MS = 86_400_000;
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, MatButtonModule, ModuleCard, NewsCard, Icon, JoinCta],
+  imports: [RouterLink, BUTTON_IMPORTS, ModuleCard, NewsCard, Icon, JoinCta],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
 })

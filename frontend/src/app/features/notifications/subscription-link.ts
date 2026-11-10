@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { Subscription } from './subscription.model';
 
 @Component({
   selector: 'app-subscription-link',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .actions {

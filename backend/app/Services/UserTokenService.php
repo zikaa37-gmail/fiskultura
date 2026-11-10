@@ -23,6 +23,13 @@ class UserTokenService
         return $token;
     }
 
+    public function peek(string $token, string $purpose): ?User
+    {
+        $stored = UserToken::where('token_hash', hash('sha256', $token))->where('purpose', $purpose)->first();
+
+        return $stored && $stored->isValid() ? $stored->user : null;
+    }
+
     public function consume(string $token, string $purpose): ?User
     {
         $stored = UserToken::where('token_hash', hash('sha256', $token))->where('purpose', $purpose)->first();

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { AuthService } from '../../core/auth/auth.service';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsItem, organizationLabel, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
@@ -11,7 +11,7 @@ import { NewsDialogService } from '../news-dialog/news-dialog';
 
 @Component({
   selector: 'app-news-card',
-  imports: [RouterLink, MatButtonModule, Icon],
+  imports: [RouterLink, BUTTON_IMPORTS, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'post', '[class.post-featured]': 'news().featured' },
   template: `
@@ -37,7 +37,7 @@ import { NewsDialogService } from '../news-dialog/news-dialog';
         </a>
       }
       @if (item.featured && auth.isEditor()) {
-        <button type="button" mat-button class="btn-tertiary-text" [disabled]="busy()" (click)="unfeature()">Ukloni isticanje</button>
+        <button type="button" mat-button theme="tertiary" [disabled]="busy()" (click)="unfeature()">Ukloni isticanje</button>
       }
     </div>
   `,

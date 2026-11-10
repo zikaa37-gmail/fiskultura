@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { DialogShell } from '../../../shared/dialog-shell/dialog-shell';
 import { Icon } from '../../../shared/icon/icon';
 import { VolleyballRuleMedia } from './rule-media';
@@ -9,7 +9,7 @@ import { VolleyballRulesProgress } from './rules-progress';
 
 @Component({
   selector: 'app-volleyball-rule-card-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell, Icon, VolleyballRuleMedia],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon, VolleyballRuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let card = current();

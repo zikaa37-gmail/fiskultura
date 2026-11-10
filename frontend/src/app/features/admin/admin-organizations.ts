@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
@@ -15,7 +15,7 @@ import { AdminOrganization } from './admin.model';
 
 @Component({
   selector: 'app-admin-organizations',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="admin-toolbar">
@@ -53,7 +53,7 @@ import { AdminOrganization } from './admin.model';
             <a mat-button [routerLink]="['/udruzenja', item.slug]" target="_blank">Pogledaj</a>
             <a mat-stroked-button [routerLink]="[item.id]">Izmeni</a>
             @if (auth.isAdmin()) {
-              <button type="button" mat-button class="danger-text" (click)="remove(item)">Obriši</button>
+              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
             }
           </div>
         </div>

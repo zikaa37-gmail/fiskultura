@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
@@ -12,7 +12,7 @@ import { Subscription, SubscriptionFrequency } from './subscription.model';
 
 @Component({
   selector: 'app-notifications-dialog',
-  imports: [MatButtonModule, MatDialogModule, MatProgressBarModule, DialogShell, SubscriptionFields],
+  imports: [BUTTON_IMPORTS, MatDialogModule, MatProgressBarModule, DialogShell, SubscriptionFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell title="Moja obaveštenja">
