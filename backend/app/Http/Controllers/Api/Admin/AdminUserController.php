@@ -67,6 +67,7 @@ class AdminUserController extends Controller
             'email' => ['required', 'email', 'max:190', 'unique:users,email'],
             'role' => ['required', Rule::in(User::ROLES)],
             'password' => ['sometimes', 'nullable', 'string'],
+            'invite' => ['sometimes', 'boolean'],
         ]);
 
         if ($this->isPromotionToStaff(User::USER, $data['role']) && ! Hash::check((string) ($data['password'] ?? ''), $request->user()->password)) {
@@ -74,8 +75,10 @@ class AdminUserController extends Controller
         }
 
         $user = DB::transaction(function () use ($data) {
-            $user = User::create([...Arr::except($data, ['password']), 'password' => Str::random(40)]);
-            $this->sendInvitation($user);
+            $user = User::create([...Arr::except($data, ['password', 'invite']), 'password' => Str::random(40)]);
+            if ($data['invite'] ?? true) {
+                $this->sendInvitation($user);
+            }
 
             return $user;
         });

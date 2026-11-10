@@ -193,7 +193,7 @@ export class AdminUsers {
   protected inviteAll(): void {
     const ids = this.invitable().map((user) => user.id);
     this.#confirm
-      .confirm({ title: 'Slanje pozivnica', message: `Poslati lični poziv za ${ids.length} korisnika koji čekaju aktivaciju (na ovoj strani)? Svako dobija mejl sa svojim linkom, a raniji linkovi prestaju da važe.`, confirmLabel: 'Pošalji' })
+      .confirm({ title: 'Slanje pozivnica', message: `Poslati lični poziv za ${ids.length} korisnika koji čekaju aktivaciju (na ovoj strani)? Svako dobija mejl sa svojim linkom, a raniji linkovi prestaju da važe.`, confirmLabel: 'Pošalji', theme: 'primary' })
       .subscribe((confirmed) => confirmed && this.#sendInvitations(ids));
   }
 
@@ -214,13 +214,26 @@ export class AdminUsers {
 
   protected openForm(user: AdminUser | null): void {
     this.#dialog
-      .open<UserFormDialog, AdminUser | null, boolean>(UserFormDialog, { data: user, width: '520px', maxWidth: 'calc(100vw - 32px)', panelClass: 'app-dialog-panel' })
+      .open<UserFormDialog, AdminUser | null, AdminUser>(UserFormDialog, { data: user, width: '520px', maxWidth: 'calc(100vw - 32px)', panelClass: 'app-dialog-panel' })
       .afterClosed()
       .subscribe((saved) => {
-        if (saved) {
-          this.#notifications.show(user ? 'Izmene su sačuvane.' : 'Korisnik je dodat i dobio je mejl za postavljanje lozinke.');
-          this.resource.reload();
+        if (!saved) {
+          return;
         }
+        this.resource.reload();
+        if (user) {
+          this.#notifications.show('Izmene su sačuvane.');
+          return;
+        }
+        this.#confirm
+          .confirm({
+            title: 'Poslati poziv?',
+            message: `${saved.name} je dodat. Da li želiš da mu sada pošalješ lični poziv na ${saved.email} da završi registraciju? Poziv možeš poslati i kasnije iz menija.`,
+            confirmLabel: 'Pošalji poziv',
+            cancelLabel: 'Ne sada',
+            theme: 'primary',
+          })
+          .subscribe((send) => (send ? this.#sendInvitations([saved.id]) : this.#notifications.show(`${saved.name} je dodat, poziv nije poslat.`)));
       });
   }
 
