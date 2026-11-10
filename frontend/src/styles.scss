@@ -1050,6 +1050,12 @@ app-sports .module {
   background: var(--color-surface-alt);
 }
 
+.found-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .filters {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
