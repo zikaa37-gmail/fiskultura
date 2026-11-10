@@ -583,7 +583,7 @@ h1 {
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .account-button {
@@ -1199,7 +1199,34 @@ a.post-title:hover {
 .topbar-start {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  min-width: 0;
+}
+
+.brand-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 340px) {
+  .brand-text {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+@media (min-width: 360px) {
+  .topbar-start,
+  .topbar-actions {
+    gap: 8px;
+  }
 }
 
 .admin-menu-toggle {
