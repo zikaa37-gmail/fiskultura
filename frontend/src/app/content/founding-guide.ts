@@ -91,9 +91,22 @@ export const AFTER_FOUNDING: FoundingStep[] = [
     ref: article(ASSOCIATIONS_ACT, 33, 'Zakon o udruženjima'),
   },
   {
-    title: 'Pečat nije obavezan',
-    text: 'Od 1. oktobra 2018. udruženja ne moraju da imaju pečat, pa ga ne morate ni izrađivati ni opisivati u statutu. Tačka o pečatu u članu 12 Zakona o udruženjima prestala je da važi.',
+    title: 'Izrada pečata (po želji)',
+    text: 'Od 1. oktobra 2018. pečat nije obavezan, ali dobro dođe za dopise školama, opštini i konkursima. Skupština ili upravni odbor donese odluku o izgledu pečata (primer je ispod), a pečat izrađuje bilo koja radnja za izradu pečata. Ponesite rešenje APR-a i odluku. Naziv u pečatu piše se ćirilicom, tačno kako je upisan u registar. Ako statut opisuje pečat, pečat mora da odgovara statutu.',
   },
+];
+
+export const SEAL_TEMPLATE_TITLE = 'Одлука о изгледу и употреби печата';
+
+export const SEAL_TEMPLATE: string[] = [
+  'На основу члана ___ Статута Друштва педагога физичке културе ________ (у даљем тексту: Друштво), Скупштина Друштва на седници одржаној ___.___.______. године доноси',
+  'ОДЛУКУ о изгледу и употреби печата',
+  '1. Друштво има печат округлог облика, пречника ___ мм.',
+  '2. По ободу печата исписан је назив Друштва, онако како је уписан у Регистар удружења, а у средини печата седиште Друштва.',
+  '3. Печат се користи на актима, дописима и другим документима које потписује заступник Друштва.',
+  '4. О чувању и употреби печата стара се заступник Друштва.',
+  '5. Одлука ступа на снагу даном доношења.',
+  'Председавајући Скупштине: ________________',
 ];
 
 export const FOUNDING_DOCUMENTS: FoundingDocument[] = [

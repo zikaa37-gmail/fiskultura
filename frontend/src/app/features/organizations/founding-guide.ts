@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { EXPANSION_IMPORTS } from '../../../theme/ui/expansion';
 import { formatDate } from '../../core/content/content.model';
-import { AFTER_FOUNDING, FOUNDING_ACTS, FOUNDING_CHECKED_AT, FOUNDING_DOCUMENTS, FOUNDING_LINKS, FOUNDING_STEPS } from '../../content/founding-guide';
+import { AFTER_FOUNDING, FOUNDING_ACTS, FOUNDING_CHECKED_AT, FOUNDING_DOCUMENTS, FOUNDING_LINKS, FOUNDING_STEPS, SEAL_TEMPLATE, SEAL_TEMPLATE_TITLE } from '../../content/founding-guide';
 import { Icon } from '../../shared/icon/icon';
 
 @Component({
@@ -51,6 +51,19 @@ import { Icon } from '../../shared/icon/icon';
       padding: 0;
       list-style: none;
     }
+    .seal-template {
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+      border: 1px dashed var(--color-border);
+      border-radius: 8px;
+      background: var(--color-bg);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .seal-template p {
+      margin: 0;
+    }
     .founding-cta {
       display: flex;
       flex-wrap: wrap;
@@ -75,7 +88,7 @@ import { Icon } from '../../shared/icon/icon';
             <li><app-icon name="people" [size]="18" /><span>Najmanje <strong>tri osnivača</strong>, bar jedan sa prebivalištem u Srbiji.</span></li>
             <li><app-icon name="checklist" [size]="18" /><span>Osnivačka skupština usvaja <strong>osnivački akt i statut</strong> i bira zastupnika.</span></li>
             <li><app-icon name="clipboard" [size]="18" /><span>Prijava APR-u, naknada <strong>8.000 dinara</strong>, rešenje za <strong>pet radnih dana</strong>.</span></li>
-            <li><app-icon name="check" [size]="18" /><span>Pečat <strong>nije obavezan</strong> od 2018. godine.</span></li>
+            <li><app-icon name="check" [size]="18" /><span>Pečat <strong>nije obavezan</strong> od 2018, ali ga možete napraviti (primer odluke je ispod).</span></li>
             <li><app-icon name="chart" [size]="18" /><span>Svake godine do <strong>31. marta</strong> izveštaj APR-u, ili izjava o neaktivnosti.</span></li>
           </ul>
         </section>
@@ -129,6 +142,19 @@ import { Icon } from '../../shared/icon/icon';
           </ol>
         </section>
 
+        <mat-expansion-panel class="mb-3">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Primer odluke o pečatu</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p class="small muted mb-3">Naš primer, nije zvanični obrazac. Upišite podatke društva, odštampajte i ponesite u radnju za izradu pečata uz rešenje APR-a.</p>
+          <div class="seal-template mb-3">
+            @for (line of sealTemplate; track $index) {
+              <p>{{ line }}</p>
+            }
+          </div>
+          <button type="button" mat-stroked-button theme="tertiary" size="sm" (click)="copySeal()">{{ sealCopied() ? 'Kopirano' : 'Kopiraj tekst' }}</button>
+        </mat-expansion-panel>
+
         <mat-expansion-panel class="mb-5">
           <mat-expansion-panel-header>
             <mat-panel-title>Propisi i izvori</mat-panel-title>
@@ -168,4 +194,11 @@ export class FoundingGuide {
   protected readonly links = FOUNDING_LINKS;
   protected readonly acts = FOUNDING_ACTS;
   protected readonly checkedAt = formatDate(FOUNDING_CHECKED_AT);
+  protected readonly sealTemplate = SEAL_TEMPLATE;
+  protected readonly sealCopied = signal(false);
+
+  protected copySeal(): void {
+    const text = [SEAL_TEMPLATE_TITLE, ...SEAL_TEMPLATE].join('\n\n');
+    navigator.clipboard?.writeText(text).then(() => this.sealCopied.set(true));
+  }
 }
