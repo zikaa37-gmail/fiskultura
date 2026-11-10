@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
@@ -15,7 +15,7 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
 
 @Component({
   selector: 'app-admin-questions',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="admin-toolbar">
@@ -26,9 +26,9 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
       <a mat-flat-button routerLink="novo">Novo pitanje i odgovor</a>
     </div>
     <div class="chip-row" role="group" aria-label="Status">
-      <button type="button" class="filter-chip" [class.filter-chip-on]="!status()" (click)="status.set(null)">Sva</button>
+      <button type="button" [matButton]="!status() ? 'filled' : 'outlined'" [theme]="!status() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!status()" (click)="status.set(null)">Sva</button>
       @for (option of statuses; track option) {
-        <button type="button" class="filter-chip" [class.filter-chip-on]="status() === option" [attr.aria-pressed]="status() === option" (click)="status.set(option)">
+        <button type="button" [matButton]="status() === option ? 'filled' : 'outlined'" [theme]="status() === option ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="status() === option" (click)="status.set(option)">
           {{ statusLabels[option] }}{{ option === 'pending' && pending() ? ' (' + pending() + ')' : '' }}
         </button>
       }
@@ -56,7 +56,7 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
           <div class="admin-row-actions">
             <a mat-stroked-button [routerLink]="[item.id]">{{ item.status === 'pending' ? 'Odgovori' : 'Izmeni' }}</a>
             @if (auth.isAdmin()) {
-              <button type="button" mat-button class="danger-text" (click)="remove(item)">Obriši</button>
+              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
             }
           </div>
         </div>

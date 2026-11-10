@@ -2,17 +2,19 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSign
 import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
+import { EXPANSION_IMPORTS } from '../../../theme/ui/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
+import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory } from './question.model';
 
 @Component({
   selector: 'app-questions',
-  imports: [FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, EXPANSION_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, ScrollArea],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .question-list {
@@ -63,14 +65,20 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
         </div>
 
         <div class="filters">
-          <div class="chip-row" role="group" aria-label="Oblast pitanja">
-            <button type="button" class="filter-chip" [class.filter-chip-on]="!category()" (click)="setCategory(null)">Sve</button>
-            @for (option of categories; track option) {
-              <button type="button" class="filter-chip" [class.filter-chip-on]="category() === option" [attr.aria-pressed]="category() === option" (click)="setCategory(option)">
-                {{ categoryLabels[option] }}
-              </button>
-            }
-          </div>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Oblast</mat-panel-title>
+              <mat-panel-description>{{ category() ? categoryLabels[category()!] : 'Sve oblasti' }}</mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="chip-row" role="group" aria-label="Oblast pitanja">
+              <button type="button" [matButton]="!category() ? 'filled' : 'outlined'" [theme]="!category() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!category()" (click)="setCategory(null)">Sve</button>
+              @for (option of categories; track option) {
+                <button type="button" [matButton]="category() === option ? 'filled' : 'outlined'" [theme]="category() === option ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="category() === option" (click)="setCategory(option)">
+                  {{ categoryLabels[option] }}
+                </button>
+              }
+            </div>
+          </mat-expansion-panel>
           <form class="search-form" (ngSubmit)="search()">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Pretraga pitanja i odgovora</mat-label>
@@ -87,28 +95,30 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
           <div class="empty-state"><h3>Pitanja trenutno nisu dostupna</h3></div>
         } @else {
           <p class="muted small result-count mb-2">Pronađeno: {{ items().length }}</p>
-          <div class="question-list">
-            @for (item of items(); track item.id) {
-              <article class="question-card">
-                <span class="post-meta">
-                  <span class="post-category">{{ categoryLabels[item.category] }}</span>
-                  @if (item.valid_on) {
-                    <span>važi na dan {{ date(item.valid_on) }}</span>
-                  }
-                </span>
-                <h2><a [routerLink]="['/pitanja', item.slug]">{{ item.title }}</a></h2>
-                <p class="muted">{{ item.excerpt }}</p>
-                <a class="inline-link" [routerLink]="['/pitanja', item.slug]">Ceo odgovor →</a>
-              </article>
-            } @empty {
-              @if (!resource.isLoading()) {
-                <div class="empty-state">
-                  <h3>Nema odgovora za ovaj izbor</h3>
-                  <p class="muted">Postavite pitanje — urednik odgovara i objavljuje odgovor bez vašeg imena.</p>
-                </div>
+          <app-scroll-area label="Odgovori" maxHeight="max(320px, calc(100dvh - 240px))" [resetOn]="[category(), pretraga()]">
+            <div class="question-list">
+              @for (item of items(); track item.id) {
+                <article class="question-card">
+                  <span class="post-meta">
+                    <span class="post-category">{{ categoryLabels[item.category] }}</span>
+                    @if (item.valid_on) {
+                      <span>važi na dan {{ date(item.valid_on) }}</span>
+                    }
+                  </span>
+                  <h2><a [routerLink]="['/pitanja', item.slug]">{{ item.title }}</a></h2>
+                  <p class="muted">{{ item.excerpt }}</p>
+                  <a class="inline-link" [routerLink]="['/pitanja', item.slug]">Ceo odgovor →</a>
+                </article>
+              } @empty {
+                @if (!resource.isLoading()) {
+                  <div class="empty-state">
+                    <h3>Nema odgovora za ovaj izbor</h3>
+                    <p class="muted">Postavite pitanje — urednik odgovara i objavljuje odgovor bez vašeg imena.</p>
+                  </div>
+                }
               }
-            }
-          </div>
+            </div>
+          </app-scroll-area>
         }
       </div>
     </section>

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Icon } from '../../shared/icon/icon';
 import { PORTAL_APPS } from '../../content/portal-content';
 
 @Component({
   selector: 'app-apps',
-  imports: [MatButtonModule, Icon],
+  imports: [BUTTON_IMPORTS, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

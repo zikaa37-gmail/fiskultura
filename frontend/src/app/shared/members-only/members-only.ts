@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { AuthService } from '../../core/auth/auth.service';
 import { SeoService } from '../../core/seo/seo.service';
 import { GateSection, MEMBERS_GATE } from '../../content/members-gate';
@@ -8,7 +8,7 @@ import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-members-only',
-  imports: [RouterLink, RouterOutlet, MatButtonModule, Icon],
+  imports: [RouterLink, RouterOutlet, BUTTON_IMPORTS, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { ngSkipHydration: 'true' },
   template: `

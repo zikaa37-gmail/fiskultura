@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, si
 import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -23,7 +23,7 @@ import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 
 @Component({
   selector: 'app-admin-regulation-form',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule, SimpleMarkdownPipe],
+  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, SimpleMarkdownPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="inline-link small" routerLink="/admin/propisi">← Svi propisi</a>

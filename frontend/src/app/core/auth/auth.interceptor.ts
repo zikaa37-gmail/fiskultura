@@ -5,7 +5,7 @@ import { catchError, switchMap, throwError } from 'rxjs';
 import { API_URL } from '../http/api';
 import { AuthService } from './auth.service';
 
-const PUBLIC_AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/verify-email', '/auth/resend-verification', '/auth/forgot-password', '/auth/reset-password', '/auth/refresh', '/auth/logout'];
+const PUBLIC_AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/verify-email', '/auth/resend-verification', '/auth/forgot-password', '/auth/reset-password', '/auth/invitation', '/auth/refresh', '/auth/logout'];
 
 function isProtectedApiRequest(request: HttpRequest<unknown>): boolean {
   return (

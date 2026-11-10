@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Injectable } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
 import { formatDate } from '../../core/content/content.model';
@@ -11,7 +11,7 @@ import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 
 @Component({
   selector: 'app-regulation-history',
-  imports: [MatDialogModule, MatButtonModule, MatProgressBarModule, DialogShell, SimpleMarkdownPipe],
+  imports: [MatDialogModule, BUTTON_IMPORTS, MatProgressBarModule, DialogShell, SimpleMarkdownPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell [title]="'Istorija izmena'">

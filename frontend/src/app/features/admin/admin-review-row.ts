@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { formatDate } from '../../core/content/content.model';
 import { RegulationReview } from '../../core/content/regulation.model';
 
 @Component({
   selector: 'app-admin-review-row',
-  imports: [RouterLink, MatButtonModule],
+  imports: [RouterLink, BUTTON_IMPORTS],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let item = regulation();
@@ -29,9 +29,9 @@ import { RegulationReview } from '../../core/content/regulation.model';
       </div>
       <div class="admin-row-actions">
         @if (item.url) {
-          <a mat-button class="btn-tertiary-text" [href]="item.url" target="_blank" rel="noopener">Tekst</a>
+          <a mat-button theme="tertiary" [href]="item.url" target="_blank" rel="noopener">Tekst</a>
         }
-        <button type="button" mat-flat-button class="btn-tertiary" (click)="checked.emit(item)">Provereno</button>
+        <button type="button" mat-flat-button theme="tertiary" (click)="checked.emit(item)">Provereno</button>
       </div>
     </div>
   `,

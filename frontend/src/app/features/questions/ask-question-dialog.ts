@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, Injectable, signal } from '
 import { HttpClient } from '@angular/common/http';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { DialogShell } from '../../shared/dialog-shell/dialog-shell';
@@ -11,7 +11,7 @@ import { LEGAL_DISCLAIMER } from './question.model';
 
 @Component({
   selector: 'app-ask-question-dialog',
-  imports: [RouterLink, MatButtonModule, MatDialogModule, DialogShell, QuestionFields],
+  imports: [RouterLink, BUTTON_IMPORTS, MatDialogModule, DialogShell, QuestionFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell title="Postavi pitanje">
@@ -30,7 +30,7 @@ import { LEGAL_DISCLAIMER } from './question.model';
       }
       <ng-container dialogActions>
         @if (sentMessage()) {
-          <a mat-button class="btn-tertiary-text" routerLink="/pitanja/postavi" mat-dialog-close>Moja pitanja</a>
+          <a mat-button theme="tertiary" routerLink="/pitanja/postavi" mat-dialog-close>Moja pitanja</a>
           <button type="button" mat-stroked-button (click)="askAnother()">Postavi još jedno</button>
           <button type="button" mat-flat-button mat-dialog-close>Zatvori</button>
         } @else {

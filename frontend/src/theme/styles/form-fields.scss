@@ -1,0 +1,26 @@
+@use 'sass:map';
+@use 'sizes';
+
+@mixin size($name) {
+  $size: map.get(sizes.$controls, $name);
+  $height: map.get($size, height);
+  $line-height: map.get($size, line-height);
+  --mat-form-field-container-height: #{$height};
+  --mat-form-field-container-vertical-padding: #{($height - $line-height) * 0.5};
+  --mat-form-field-container-text-size: #{map.get($size, font)};
+  --mat-form-field-container-text-line-height: #{$line-height};
+  --mat-form-field-outlined-label-text-size: #{map.get($size, font)};
+  --mat-select-trigger-text-size: #{map.get($size, font)};
+  --mat-select-trigger-text-line-height: #{$line-height};
+}
+
+.mat-mdc-form-field {
+  @include size(md);
+  --mat-form-field-outlined-container-shape: #{sizes.$radius};
+}
+
+@each $name, $size in sizes.$controls {
+  .mat-mdc-form-field.field-size-#{$name} {
+    @include size($name);
+  }
+}

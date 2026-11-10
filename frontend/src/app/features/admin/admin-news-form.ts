@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, si
 import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,7 +16,7 @@ import { AdminNews, AdminNewsPayload, AdminOrganization, newsState } from './adm
 
 @Component({
   selector: 'app-admin-news-form',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule],
+  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="inline-link small" routerLink="/admin/vesti">← Sve vesti</a>

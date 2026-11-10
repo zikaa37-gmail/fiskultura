@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { QUESTION_CATEGORY_LABELS, QuestionCategory } from './question.model';
@@ -26,7 +26,7 @@ export function questionPayload(form: QuestionForm): { category: QuestionCategor
 
 @Component({
   selector: 'app-question-fields',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host {

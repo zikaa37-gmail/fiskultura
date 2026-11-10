@@ -13,6 +13,8 @@ class UserToken extends Model
 
     public const RESET_PASSWORD = 'reset_password';
 
+    public const INVITATION = 'invitation';
+
     protected function casts(): array
     {
         return [

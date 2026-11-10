@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Injectable } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Observable } from 'rxjs';
 import { DialogShell } from '../dialog-shell/dialog-shell';
 
@@ -12,14 +12,14 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell [title]="data.title">
       <p>{{ data.message }}</p>
       <ng-container dialogActions>
         <button type="button" mat-button [mat-dialog-close]="false">Otkaži</button>
-        <button type="button" mat-flat-button class="danger-button" [mat-dialog-close]="true">{{ data.confirmLabel }}</button>
+        <button type="button" mat-flat-button theme="danger" [mat-dialog-close]="true">{{ data.confirmLabel }}</button>
       </ng-container>
     </app-dialog-shell>
   `,

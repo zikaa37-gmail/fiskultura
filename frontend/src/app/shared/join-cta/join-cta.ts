@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { AuthService } from '../../core/auth/auth.service';
 import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-join-cta',
-  imports: [RouterLink, MatButtonModule, Icon],
+  imports: [RouterLink, BUTTON_IMPORTS, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (!auth.isAuthenticated()) {

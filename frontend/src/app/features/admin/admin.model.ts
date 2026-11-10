@@ -46,6 +46,7 @@ export interface AdminUser {
   id: number;
   name: string;
   email: string;
+  phone: string | null;
   role: UserRole;
   member_status: MemberStatus | null;
   school: string | null;
@@ -54,6 +55,7 @@ export interface AdminUser {
   source: string | null;
   verified: boolean;
   blocked: boolean;
+  invited_at: string | null;
   created_at: string | null;
   last_active_at: string | null;
 }

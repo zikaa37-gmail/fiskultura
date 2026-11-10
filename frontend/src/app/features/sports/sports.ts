@@ -1,12 +1,12 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject } from '@angular/core';
 import { SPORT_GROUPS, SPORTS } from '../../content/sports-content';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Icon } from '../../shared/icon/icon';
 
 @Component({
   selector: 'app-sports',
-  imports: [Icon, RouterLink, MatButtonModule],
+  imports: [Icon, RouterLink, BUTTON_IMPORTS],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

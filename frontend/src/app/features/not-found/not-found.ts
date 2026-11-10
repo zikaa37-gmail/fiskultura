@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 
 @Component({
   selector: 'app-not-found',
-  imports: [RouterLink, MatButtonModule],
+  imports: [RouterLink, BUTTON_IMPORTS],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

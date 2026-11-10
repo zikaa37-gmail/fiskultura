@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL, isNotFound } from '../../core/http/api';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsDetail as NewsDetailModel, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
@@ -10,7 +10,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
 
 @Component({
   selector: 'app-news-detail',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule, NewsCard],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, NewsCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

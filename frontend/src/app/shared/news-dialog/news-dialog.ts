@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Injectable, signa
 import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
 import { formatDate, NEWS_CATEGORY_LABELS, NewsDetail, SOURCE_TYPE_LABELS } from '../../core/content/content.model';
@@ -10,7 +10,7 @@ import { DialogShell } from '../dialog-shell/dialog-shell';
 
 @Component({
   selector: 'app-news-dialog',
-  imports: [RouterLink, MatDialogModule, MatButtonModule, MatProgressBarModule, DialogShell],
+  imports: [RouterLink, MatDialogModule, BUTTON_IMPORTS, MatProgressBarModule, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell [title]="news()?.title ?? (resource.error() ? 'Vest nije pronađena' : 'Učitavanje…')">

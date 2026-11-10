@@ -3,10 +3,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
@@ -23,7 +23,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatSelectModule, Icon],
+  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -153,7 +153,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 <p class="small muted">Ako si se prijavio na tuđem računaru, odjavi se sa svih uređaja.</p>
                 <div class="profile-links">
                   <button type="button" mat-stroked-button [disabled]="busy()" (click)="logoutAll()">Odjavi se sa svih uređaja</button>
-                  <button type="button" mat-button class="btn-tertiary-text" [disabled]="busy()" (click)="exportData()">Preuzmi moje podatke</button>
+                  <button type="button" mat-button theme="tertiary" [disabled]="busy()" (click)="exportData()">Preuzmi moje podatke</button>
                 </div>
                 <details class="profile-delete">
                   <summary>Obriši nalog</summary>
@@ -163,7 +163,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                       <mat-label>Lozinka</mat-label>
                       <input matInput type="password" formControlName="password" autocomplete="current-password" />
                     </mat-form-field>
-                    <button type="submit" mat-flat-button class="danger-button" [disabled]="busy()">Obriši nalog</button>
+                    <button type="submit" mat-flat-button theme="danger" [disabled]="busy()">Obriši nalog</button>
                   </form>
                 </details>
               </div>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Injectable, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { ContactLine, InstitutionContact, SchoolAdministration, telHref } from '../../content/rules/contacts';
 import { DialogShell } from '../../shared/dialog-shell/dialog-shell';
 import { Icon } from '../../shared/icon/icon';
@@ -17,7 +17,7 @@ export interface ContactDialogData {
 
 @Component({
   selector: 'app-contact-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell, Icon],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell [title]="data.title" [class]="'accent-' + data.accent">
@@ -54,9 +54,9 @@ export interface ContactDialogData {
       }
       <div dialogActions>
         @if (data.url) {
-          <a mat-flat-button class="btn-tertiary" [href]="data.url" target="_blank" rel="noopener">{{ data.urlLabel ?? 'Sajt' }} <app-icon name="external" [size]="16" /></a>
+          <a mat-flat-button theme="tertiary" [href]="data.url" target="_blank" rel="noopener">{{ data.urlLabel ?? 'Sajt' }} <app-icon name="external" [size]="16" /></a>
         }
-        <button type="button" mat-button class="btn-tertiary-text" mat-dialog-close>Zatvori</button>
+        <button type="button" mat-button theme="tertiary" mat-dialog-close>Zatvori</button>
       </div>
     </app-dialog-shell>
   `,

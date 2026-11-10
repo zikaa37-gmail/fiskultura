@@ -6,6 +6,7 @@ import { AuthService } from '../core/auth/auth.service';
 import { NotificationsDialogService } from '../features/notifications/notifications-dialog';
 import { AskQuestionDialogService } from '../features/questions/ask-question-dialog';
 import { Icon } from '../shared/icon/icon';
+import { AdminNavService } from './admin-nav.service';
 
 @Component({
   selector: 'app-site-header',
@@ -15,6 +16,7 @@ import { Icon } from '../shared/icon/icon';
 })
 export class SiteHeader {
   protected readonly auth = inject(AuthService);
+  protected readonly adminNav = inject(AdminNavService);
   readonly #notificationsDialog = inject(NotificationsDialogService);
   readonly #questionDialog = inject(AskQuestionDialogService);
 
@@ -31,7 +33,13 @@ export class SiteHeader {
   ];
 
   protected toggleMenu(): void {
+    this.adminNav.close();
     this.menuOpen.update((open) => !open);
+  }
+
+  protected toggleAdminMenu(): void {
+    this.menuOpen.set(false);
+    this.adminNav.toggle();
   }
 
   protected closeMenu(): void {

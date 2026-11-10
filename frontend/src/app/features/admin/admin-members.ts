@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MEMBER_STATUS_LABELS, MemberStatus } from '../../core/auth/user.model';
 import { API_URL } from '../../core/http/api';
@@ -17,7 +17,7 @@ interface CountRow {
 
 @Component({
   selector: 'app-admin-members',
-  imports: [MatButtonModule, MatProgressBarModule],
+  imports: [BUTTON_IMPORTS, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (resource.isLoading()) {
@@ -76,7 +76,7 @@ interface CountRow {
               <span class="small muted">{{ campaignUrl(faculty.id) }}</span>
             </div>
             <div class="admin-row-actions">
-              <button type="button" mat-flat-button class="btn-tertiary" (click)="copy(faculty.id)">Kopiraj link</button>
+              <button type="button" mat-flat-button theme="tertiary" (click)="copy(faculty.id)">Kopiraj link</button>
             </div>
           </div>
         }

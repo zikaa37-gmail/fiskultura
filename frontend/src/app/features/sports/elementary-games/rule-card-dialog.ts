@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { DialogShell } from '../../../shared/dialog-shell/dialog-shell';
 import { Icon } from '../../../shared/icon/icon';
 import { ElementaryGamesRuleMedia } from './rule-media';
@@ -9,7 +9,7 @@ import { ElementaryGamesRulesProgress } from './rules-progress';
 
 @Component({
   selector: 'app-elementary-games-rule-card-dialog',
-  imports: [MatDialogModule, MatButtonModule, DialogShell, Icon, ElementaryGamesRuleMedia],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon, ElementaryGamesRuleMedia],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let card = current();

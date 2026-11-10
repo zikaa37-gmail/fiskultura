@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\AdminRegulationController;
 use App\Http\Controllers\Api\Admin\AdminSubscriptionController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
@@ -26,6 +27,8 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
     Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('/auth/reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/auth/invitation', [InvitationController::class, 'show']);
+    Route::post('/auth/invitation/complete', [InvitationController::class, 'complete']);
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 });
 Route::middleware('throttle:30,1')->group(function () {
@@ -84,16 +87,18 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/regulations/{regulation}', [AdminRegulationController::class, 'update']);
         Route::get('/regulations-review', [AdminRegulationController::class, 'review']);
         Route::post('/regulations/{regulation}/checked', [AdminRegulationController::class, 'checked']);
-
-        Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
-        Route::get('/members/stats', [MemberController::class, 'stats']);
     });
 
     Route::prefix('admin')->middleware('role:admin')->group(function () {
         Route::delete('/organizations/{organization}', [AdminOrganizationController::class, 'destroy']);
         Route::delete('/regulations/{regulation}', [AdminRegulationController::class, 'destroy']);
         Route::post('/users/list', [AdminUserController::class, 'list']);
-        Route::patch('/users/{user}', [AdminUserController::class, 'update']);
+        Route::post('/users', [AdminUserController::class, 'store'])->middleware('throttle:10,1');
+        Route::post('/users/invitations', [AdminUserController::class, 'invite'])->middleware('throttle:10,1');
+        Route::patch('/users/{user}', [AdminUserController::class, 'update'])->middleware('throttle:10,1');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
+        Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
+        Route::get('/members/stats', [MemberController::class, 'stats']);
         Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy']);
     });
 });

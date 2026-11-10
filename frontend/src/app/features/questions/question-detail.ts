@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL, isNotFound } from '../../core/http/api';
@@ -12,7 +12,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
 
 @Component({
   selector: 'app-question-detail',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule, SimpleMarkdownPipe, JoinCta],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, SimpleMarkdownPipe, JoinCta],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .small-heading {

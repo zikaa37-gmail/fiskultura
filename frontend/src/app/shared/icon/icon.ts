@@ -32,7 +32,12 @@ export type IconName =
   | 'pin'
   | 'logout'
   | 'user'
-  | 'chevron-down';
+  | 'chevron-down'
+  | 'more-vert'
+  | 'eye'
+  | 'edit'
+  | 'trash'
+  | 'ban';
 
 const ICON_PATHS: Record<IconName, string[]> = {
   dumbbell: ['M6.5 6.5l11 11', 'M3 10l7-7', 'M14 21l7-7', 'M5 12l7-7', 'M12 19l7-7'],
@@ -67,6 +72,11 @@ const ICON_PATHS: Record<IconName, string[]> = {
   'arrow-up': ['M12 19V5', 'M6 11l6-6l6 6'],
   star: ['M12 3l2.8 5.7l6.2.9l-4.5 4.4l1.1 6.2L12 17.3l-5.6 2.9l1.1-6.2L3 9.6l6.2-.9z'],
   help: ['M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0', 'M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6', 'M12 17h.01'],
+  'more-vert': ['M11 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0', 'M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0', 'M11 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0'],
+  eye: ['M2.5 12S6 5 12 5s9.5 7 9.5 7s-3.5 7-9.5 7s-9.5-7-9.5-7z', 'M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6z'],
+  edit: ['M4 20h4L19 9l-4-4L4 16z', 'M13.5 6.5l4 4'],
+  trash: ['M4 7h16', 'M10 3h4l1 4H9z', 'M6 7l1 14h10l1-14', 'M10 11v6', 'M14 11v6'],
+  ban: ['M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0', 'M5.7 5.7l12.6 12.6'],
 };
 
 @Component({

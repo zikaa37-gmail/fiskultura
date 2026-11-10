@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
@@ -18,7 +18,7 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-admin-regulations',
-  imports: [AdminReviewRow, FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressBarModule],
+  imports: [AdminReviewRow, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="admin-review">
@@ -86,7 +86,7 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
           <div class="admin-row-actions">
             <a mat-stroked-button [routerLink]="[item.key]">Izmeni</a>
             @if (auth.isAdmin()) {
-              <button type="button" mat-button class="danger-text" (click)="remove(item)">Obriši</button>
+              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
             }
           </div>
         </div>

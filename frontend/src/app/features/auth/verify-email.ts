@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
 import { apiErrorMessage } from '../../core/http/api';
@@ -9,7 +9,7 @@ type VerifyState = 'pending' | 'done' | 'failed';
 
 @Component({
   selector: 'app-verify-email',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

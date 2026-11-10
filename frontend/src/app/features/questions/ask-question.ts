@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { AuthService } from '../../core/auth/auth.service';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
@@ -11,7 +11,7 @@ import { LEGAL_DISCLAIMER, OwnQuestion, QUESTION_STATUS_LABELS } from './questio
 
 @Component({
   selector: 'app-ask-question',
-  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, QuestionFields],
+  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, QuestionFields],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     form {

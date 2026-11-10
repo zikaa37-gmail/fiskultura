@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input } f
 import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { OrgLinks } from '../../shared/org-links/org-links';
-import { MatButtonModule } from '@angular/material/button';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL, isNotFound } from '../../core/http/api';
 import { formatDate, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationDetail as OrganizationDetailModel } from '../../core/content/content.model';
@@ -11,7 +11,7 @@ import { NewsCard } from '../../shared/news-card/news-card';
 
 @Component({
   selector: 'app-organization-detail',
-  imports: [RouterLink, MatButtonModule, MatProgressBarModule, NewsCard, OrgLinks],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, NewsCard, OrgLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">

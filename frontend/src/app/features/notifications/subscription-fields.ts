@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, model } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { Organization } from '../../core/content/content.model';
@@ -11,7 +12,7 @@ import { FREQUENCY_OPTIONS, SubscriptionFrequency } from './subscription.model';
 
 @Component({
   selector: 'app-subscription-fields',
-  imports: [FormsModule, MatFormFieldModule, MatRadioModule, MatSelectModule],
+  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatRadioModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     :host {
@@ -54,9 +55,6 @@ import { FREQUENCY_OPTIONS, SubscriptionFrequency } from './subscription.model';
       margin: 0 0 16px;
       padding: 0;
     }
-    .filter-chip {
-      min-height: 44px;
-    }
   `,
   template: `
     <fieldset>
@@ -74,9 +72,9 @@ import { FREQUENCY_OPTIONS, SubscriptionFrequency } from './subscription.model';
     <fieldset>
       <legend>Šta pratite</legend>
       <div class="chip-row choice-chips">
-        <button type="button" class="filter-chip" [class.filter-chip-on]="categories().length === 0" [attr.aria-pressed]="categories().length === 0" (click)="categories.set([])">Sve</button>
+        <button type="button" [matButton]="categories().length === 0 ? 'filled' : 'outlined'" [theme]="categories().length === 0 ? 'primary' : 'tertiary'" size="md" [attr.aria-pressed]="categories().length === 0" (click)="categories.set([])">Sve</button>
         @for (category of categoryOptions; track category) {
-          <button type="button" class="filter-chip" [class.filter-chip-on]="categories().includes(category)" [attr.aria-pressed]="categories().includes(category)" (click)="toggleCategory(category)">
+          <button type="button" [matButton]="categories().includes(category) ? 'filled' : 'outlined'" [theme]="categories().includes(category) ? 'primary' : 'tertiary'" size="md" [attr.aria-pressed]="categories().includes(category)" (click)="toggleCategory(category)">
             {{ categoryLabels[category] }}
           </button>
         }
