@@ -10,12 +10,13 @@ import { AuthService } from '../../core/auth/auth.service';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS } from '../../core/content/content.model';
+import { ListHeader } from '../../shared/list-header/list-header';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { AdminOrganization } from './admin.model';
 
 @Component({
   selector: 'app-admin-organizations',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, ListHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="admin-toolbar">
@@ -23,12 +24,13 @@ import { AdminOrganization } from './admin.model';
         <mat-label>Pretraga (naziv, grad)</mat-label>
         <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
       </mat-form-field>
-      <a mat-flat-button routerLink="nova">Nova organizacija</a>
     </div>
+    <app-list-header [count]="filtered().length">
+      <a mat-flat-button routerLink="nova">Nova organizacija</a>
+    </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count mb-2">Ukupno: {{ filtered().length }}</p>
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
         <div class="admin-row">

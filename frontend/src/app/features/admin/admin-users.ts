@@ -15,6 +15,8 @@ import { formatDate } from '../../core/content/content.model';
 import { phoneHref } from '../../core/phone';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
+import { FilterPanel } from '../../shared/filter-panel/filter-panel';
+import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminUser, Page } from './admin.model';
 import { RoleDialog } from './role-dialog';
 import { Icon } from '../../shared/icon/icon';
@@ -24,10 +26,10 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, Icon],
+  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, Icon, FilterPanel, ListHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="admin-toolbar">
+    <app-filter-panel [summary]="filterSummary()">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Uloga</mat-label>
         <mat-select [value]="role()" (selectionChange)="role.set($event.value); page.set(1)">
@@ -50,18 +52,15 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
           <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
         </mat-form-field>
       </form>
+    </app-filter-panel>
+    <app-list-header [count]="meta()?.total ?? null">
+      @if (invitable().length) {
+        <button type="button" mat-flat-button theme="tertiary" [disabled]="sending()" [attr.aria-label]="'Pošalji poziv svima koji čekaju aktivaciju (' + invitable().length + ')'" (click)="inviteAll()">Pozovi sve ({{ invitable().length }})</button>
+      }
       <button type="button" mat-flat-button (click)="openForm(null)">Dodaj korisnika</button>
-    </div>
+    </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
-    }
-    @if (meta(); as info) {
-      <p class="muted small result-count">Ukupno: {{ info.total }}</p>
-    }
-    @if (invitable().length) {
-      <div class="admin-toolbar">
-        <button type="button" mat-flat-button theme="tertiary" [disabled]="sending()" (click)="inviteAll()">Pošalji poziv svima koji čekaju ({{ invitable().length }})</button>
-      </div>
     }
     <div class="admin-rows">
       @for (user of items(); track user.id) {
@@ -91,7 +90,7 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
               }
             </span>
             <strong>{{ user.name }}</strong>
-            <span class="muted small">{{ user.email }}@if (user.phone; as phone) { · <a [href]="phoneHref(phone)">{{ phone }}</a> }@if (user.school) { · {{ user.school }} }</span>
+            <span class="muted small">{{ user.email }}@if (user.phone; as phone) { · <a class="nowrap" [href]="phoneHref(phone)">{{ phone }}</a> }@if (user.school) { · {{ user.school }} }</span>
           </div>
           @if (!isSelf) {
             <app-options-menu [options]="menuFor(user)" [label]="'Opcije za: ' + user.name" (selected)="onAction(user, $event)" />
@@ -140,6 +139,11 @@ export class AdminUsers {
   protected readonly invitable = computed(() => this.items().filter((user) => !user.verified && !user.blocked));
 
   protected readonly phoneHref = phoneHref;
+  protected readonly filterSummary = computed(() => {
+    const role = this.role();
+    const parts = [role ? this.roleLabels[role] : '', this.pending() ? 'Čekaju aktivaciju' : '', this.search() ? `„${this.search()}”` : ''];
+    return parts.filter(Boolean).join(' · ') || 'Svi korisnici';
+  });
 
   protected date(value: string | null): string {
     return formatDate(value);

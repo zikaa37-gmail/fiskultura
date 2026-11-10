@@ -11,32 +11,35 @@ import { formatDate } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { FilterPanel } from '../../shared/filter-panel/filter-panel';
+import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionStatus } from '../questions/question.model';
 
 @Component({
   selector: 'app-admin-questions',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, FilterPanel, ListHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="admin-toolbar">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="admin-search">
+    <app-filter-panel [summary]="filterSummary()">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Pretraga (pitanje, odgovor)</mat-label>
         <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
       </mat-form-field>
+      <div class="chip-row" role="group" aria-label="Status">
+        <button type="button" [matButton]="!status() ? 'filled' : 'outlined'" [theme]="!status() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!status()" (click)="status.set(null)">Sva</button>
+        @for (option of statuses; track option) {
+          <button type="button" [matButton]="status() === option ? 'filled' : 'outlined'" [theme]="status() === option ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="status() === option" (click)="status.set(option)">
+            {{ statusLabels[option] }}{{ option === 'pending' && pending() ? ' (' + pending() + ')' : '' }}
+          </button>
+        }
+      </div>
+    </app-filter-panel>
+    <app-list-header [count]="items().length">
       <a mat-flat-button routerLink="novo">Novo pitanje i odgovor</a>
-    </div>
-    <div class="chip-row" role="group" aria-label="Status">
-      <button type="button" [matButton]="!status() ? 'filled' : 'outlined'" [theme]="!status() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!status()" (click)="status.set(null)">Sva</button>
-      @for (option of statuses; track option) {
-        <button type="button" [matButton]="status() === option ? 'filled' : 'outlined'" [theme]="status() === option ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="status() === option" (click)="status.set(option)">
-          {{ statusLabels[option] }}{{ option === 'pending' && pending() ? ' (' + pending() + ')' : '' }}
-        </button>
-      }
-    </div>
+    </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count mb-2">Ukupno: {{ items().length }}</p>
     <div class="admin-rows">
       @for (item of items(); track item.id) {
         <div class="admin-row">
@@ -79,6 +82,12 @@ export class AdminQuestions {
   protected readonly statuses = Object.keys(QUESTION_STATUS_LABELS) as QuestionStatus[];
   protected readonly status = signal<QuestionStatus | null>(null);
   protected readonly search = signal('');
+  protected readonly filterSummary = computed(() => {
+    const status = this.status();
+    const label = status ? this.statusLabels[status] : '';
+    const parts = [label.charAt(0).toUpperCase() + label.slice(1), this.search().trim() ? `„${this.search().trim()}”` : ''];
+    return parts.filter(Boolean).join(' · ') || 'Sva pitanja';
+  });
 
   protected readonly resource = httpResource<{ data: AdminQuestion[]; pending: number }>(() => ({
     url: `${API_URL}/admin/questions/list`,
