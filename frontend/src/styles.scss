@@ -916,6 +916,18 @@ app-sports .module {
   border: 1px solid var(--color-border);
 }
 
+.post-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.post-head app-options-menu {
+  margin: -10px -12px -10px 0;
+}
+
 .post h3 {
   font-size: 18px;
 }
@@ -1074,6 +1086,12 @@ app-sports .module {
   justify-self: start;
 }
 
+.filter-panel-grid > .clear-filters {
+  grid-column: 1 / -1;
+  justify-self: start;
+  width: auto;
+}
+
 .result-count {
   margin-bottom: 8px;
 }
@@ -1119,15 +1137,6 @@ a.post-title:hover {
 
 .source-chip:hover {
   text-decoration: underline;
-}
-
-.pager {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 24px;
 }
 
 .more-link {
@@ -1360,7 +1369,7 @@ a.post-title:hover {
 
 @media (min-width: 640px) {
   .filter-panel-grid {
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 }
 

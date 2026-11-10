@@ -13,6 +13,7 @@ import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { DISTRICTS } from '../../content/districts';
 import { Page } from '../admin/admin.model';
+import { Pagination } from '../../shared/pagination/pagination';
 
 interface Member {
   id: number;
@@ -25,7 +26,7 @@ interface Member {
 
 @Component({
   selector: 'app-directory',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule],
+  imports: [Pagination, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -109,13 +110,7 @@ interface Member {
             }
           </div>
           @if (meta(); as info) {
-            @if (info.last_page > 1) {
-              <nav class="pager" aria-label="Stranice">
-                <button type="button" mat-stroked-button [disabled]="info.page <= 1" (click)="page.set(info.page - 1)">← Prethodna</button>
-                <span class="muted">Strana {{ info.page }} od {{ info.last_page }}</span>
-                <button type="button" mat-stroked-button [disabled]="info.page >= info.last_page" (click)="page.set(info.page + 1)">Sledeća →</button>
-              </nav>
-            }
+            <app-pagination [(page)]="page" [lastPage]="info.last_page" />
           }
         }
       </div>

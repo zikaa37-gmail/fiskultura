@@ -17,16 +17,21 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     :host {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
       gap: 8px 12px;
       margin: 16px 0 12px;
-      padding: 0 16px;
+      padding: 0 16px 12px;
+      border-bottom: 1px solid var(--color-border);
     }
     @media (min-width: 900px) {
       :host {
-        padding: 0 24px;
+        padding: 0 24px 12px;
       }
+    }
+    p {
+      margin: 0;
+      line-height: 1.2;
     }
     .list-header-actions {
       display: flex;

@@ -262,7 +262,7 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/admin/admin-shell').then((m) => m.AdminShell),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'vesti' },
-      { path: 'vesti', title: 'Admin: vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-list').then((m) => m.AdminNewsList) },
+      { path: 'vesti', title: 'Admin: vesti — Fiskultura', data: { admin: true }, loadComponent: () => import('./features/news/news-list').then((m) => m.NewsList) },
       { path: 'vesti/nova', title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
       { path: 'vesti/:id', title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
       { path: 'pitanja', title: 'Admin: pitanja — Fiskultura', loadComponent: () => import('./features/admin/admin-questions').then((m) => m.AdminQuestions) },
