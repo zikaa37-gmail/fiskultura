@@ -21,6 +21,12 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       justify-content: space-between;
       gap: 8px 12px;
       margin: 16px 0 12px;
+      padding: 0 16px;
+    }
+    @media (min-width: 900px) {
+      :host {
+        padding: 0 24px;
+      }
     }
     .list-header-actions {
       display: flex;
