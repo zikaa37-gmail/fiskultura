@@ -128,6 +128,13 @@ class AdminApiTest extends TestCase
         $this->withJwt($this->editor)->postJson('/api/admin/news/list', ['status' => 'draft'])->assertJsonPath('meta.total', 1);
         $this->withJwt($this->editor)->postJson('/api/admin/news/list', ['status' => 'published'])->assertJsonPath('meta.total', 64);
         $this->assertNotEmpty($this->withJwt($this->editor)->postJson('/api/admin/news/list', ['search' => 'Zdravitas'])->json('data'));
+
+        foreach ([['organization' => 'bass'], ['umbrella' => 'sspfvs'], ['year' => 2025]] as $filter) {
+            $this->assertSame(
+                $this->postJson('/api/news/list', $filter)->json('meta.total'),
+                $this->withJwt($this->editor)->postJson('/api/admin/news/list', $filter + ['status' => 'published'])->json('meta.total'),
+            );
+        }
     }
 
     public function test_editor_creates_and_updates_organization_but_only_admin_deletes(): void

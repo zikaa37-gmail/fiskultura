@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { IsActiveMatchOptions, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { AdminNavService } from '../../layout/admin-nav.service';
 import { Icon, IconName } from '../../shared/icon/icon';
@@ -41,7 +41,7 @@ interface AdminGroup {
                       [routerLink]="link.route"
                       routerLinkActive="admin-nav-active"
                       ariaCurrentWhenActive="page"
-                      [routerLinkActiveOptions]="{ exact: !!link.exact }"
+                      [routerLinkActiveOptions]="link.exact ? exactPath : subsetPath"
                       (click)="adminNav.close()"
                     >
                       <app-icon [name]="link.icon" [size]="20" />
@@ -63,6 +63,8 @@ interface AdminGroup {
 export class AdminShell {
   readonly #auth = inject(AuthService);
   protected readonly adminNav = inject(AdminNavService);
+  protected readonly exactPath: IsActiveMatchOptions = { paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' };
+  protected readonly subsetPath: IsActiveMatchOptions = { paths: 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' };
   readonly #groups: AdminGroup[] = [
     {
       title: 'Vesti',

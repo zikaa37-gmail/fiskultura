@@ -17,6 +17,9 @@ class AdminNewsController extends Controller
             'status' => ['nullable', Rule::in([News::DRAFT, News::PUBLISHED, 'scheduled'])],
             'category' => ['nullable', Rule::in(News::CATEGORIES)],
             'organization_id' => ['nullable', 'integer'],
+            'organization' => ['nullable', 'string', 'max:100'],
+            'umbrella' => ['nullable', 'string', 'max:100'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
             'search' => ['nullable', 'string', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
@@ -30,6 +33,11 @@ class AdminNewsController extends Controller
             })
             ->when($filters['category'] ?? null, fn (Builder $query, string $category) => $query->where('category', $category))
             ->when($filters['organization_id'] ?? null, fn (Builder $query, int $id) => $query->where('organization_id', $id))
+            ->when($filters['organization'] ?? null, fn (Builder $query, string $slug) => $query->whereHas('organization', fn (Builder $organization) => $organization->where('slug', $slug)))
+            ->when($filters['umbrella'] ?? null, fn (Builder $query, string $slug) => $query->whereHas('organization', fn (Builder $organization) => $organization
+                ->where('slug', $slug)
+                ->orWhereHas('parent', fn (Builder $parent) => $parent->where('slug', $slug))))
+            ->when($filters['year'] ?? null, fn (Builder $query, int $year) => $query->whereYear('published_at', $year))
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query->where(fn (Builder $inner) => $inner
                 ->where('title', 'like', "%{$search}%")
                 ->orWhere('summary', 'like', "%{$search}%")))
