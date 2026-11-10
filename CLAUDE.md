@@ -61,7 +61,9 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Liste sa filterima: filteri idu u `app-filter-panel` (`shared/filter-panel`, sklopiv panel sa sažetkom
   izabranog u zaglavlju; na telefonu sklopljen i polja preko cele širine, na desktopu otvoren i polja u redu),
   a ispod njega `app-list-header` (`Ukupno: N` levo, glavna akcija desno). Duga lista koja treba da se skroluje
-  ispod filtera ide u `app-scroll-area`.
+  ispod filtera ide u `app-scroll-area` (`[fill]="true"` zauzme ostatak ekrana, pa filteri i paginacija ostaju
+  vidljivi). Paginacija je uvek `app-pagination` (`shared/pagination`, strelice i brojevi strana; na telefonu
+  strelice i „Strana N / M”).
 - Svaki modal koristi `app-dialog-shell` (`shared/dialog-shell`): zaglavlje sa naslovom i X, telo (jedino se
   skroluje) i podnožje sa dugmadima (`dialogActions`); panel klasa `app-dialog-panel`, ne `mat-dialog-content`.
 - Liste vesti otvaraju vest u modalu (`NewsDialogService`); `/vesti/:slug` ostaje stalni link (deljenje, SEO).
