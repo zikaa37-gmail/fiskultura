@@ -251,6 +251,15 @@ class AdminApiTest extends TestCase
             ->assertCreated()->assertJsonPath('role', 'editor');
     }
 
+    public function test_admin_adds_user_without_invitation(): void
+    {
+        Mail::fake();
+
+        $this->withJwt($this->admin)->postJson('/api/admin/users', ['name' => 'Bez Poziva', 'email' => 'bez@example.com', 'role' => 'user', 'phone' => '060 3355531', 'invite' => false])
+            ->assertCreated()->assertJsonPath('phone', '+381 60 3355531')->assertJsonPath('invited_at', null);
+        Mail::assertNothingSent();
+    }
+
     public function test_admin_edits_profile_and_email_follows_subscription(): void
     {
         $this->user->forceFill(['email_verified_at' => now()])->save();

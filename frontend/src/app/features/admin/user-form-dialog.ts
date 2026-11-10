@@ -31,9 +31,6 @@ import { AdminUser } from './admin.model';
   template: `
     <app-dialog-shell [title]="user ? 'Izmena korisnika' : 'Novi korisnik'">
       <div class="user-form">
-        @if (!user) {
-          <p class="muted small">Korisnik dobija lični poziv mejlom da završi registraciju.</p>
-        }
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Ime i prezime</mat-label>
           <input matInput cdkFocusInitial maxlength="120" [ngModel]="name()" (ngModelChange)="name.set($event)" />
@@ -98,7 +95,7 @@ import { AdminUser } from './admin.model';
 })
 export class UserFormDialog {
   readonly #http = inject(HttpClient);
-  readonly #dialogRef = inject<MatDialogRef<UserFormDialog, boolean>>(MatDialogRef);
+  readonly #dialogRef = inject<MatDialogRef<UserFormDialog, AdminUser>>(MatDialogRef);
 
   protected readonly user = inject<AdminUser | null>(MAT_DIALOG_DATA);
   protected readonly roleLabels = ROLE_LABELS;
@@ -137,11 +134,11 @@ export class UserFormDialog {
     };
     const request = this.user
       ? this.#http.patch<AdminUser>(`${API_URL}/admin/users/${this.user.id}`, profile)
-      : this.#http.post<AdminUser>(`${API_URL}/admin/users`, { ...profile, role: this.role(), password: this.adminPassword() || null });
+      : this.#http.post<AdminUser>(`${API_URL}/admin/users`, { ...profile, role: this.role(), password: this.adminPassword() || null, invite: false });
     this.saving.set(true);
     this.error.set('');
     request.subscribe({
-      next: () => this.#dialogRef.close(true),
+      next: (saved) => this.#dialogRef.close(saved),
       error: (error) => {
         this.saving.set(false);
         this.error.set(apiErrorMessage(error));
