@@ -68,13 +68,7 @@
           </div>
         }
       </div>
-      @if (info.last_page > 1) {
-        <nav class="pager" aria-label="Stranice">
-          <button type="button" mat-stroked-button [disabled]="info.page <= 1" (click)="goToPage(info.page - 1)">← Novije</button>
-          <span class="muted">Strana {{ info.page }} od {{ info.last_page }}</span>
-          <button type="button" mat-stroked-button [disabled]="info.page >= info.last_page" (click)="goToPage(info.page + 1)">Starije →</button>
-        </nav>
-      }
+      <app-pagination [page]="info.page" [lastPage]="info.last_page" previousLabel="Novije objave" nextLabel="Starije objave" (pageChange)="goToPage($event)" />
     }
   </div>
 </section>

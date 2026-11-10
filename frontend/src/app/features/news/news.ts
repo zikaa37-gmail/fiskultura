@@ -11,13 +11,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { API_URL } from '../../core/http/api';
 import { NEWS_CATEGORY_LABELS, NewsCategory, NewsPage, Organization, organizationLabel } from '../../core/content/content.model';
 import { NewsCard } from '../../shared/news-card/news-card';
+import { Pagination } from '../../shared/pagination/pagination';
 
 const PER_PAGE = 12;
 const UMBRELLA_FILTER = 'sspfvs-mreza';
 
 @Component({
   selector: 'app-news',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, NewsCard, Pagination],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './news.html',
 })

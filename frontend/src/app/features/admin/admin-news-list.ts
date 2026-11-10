@@ -15,6 +15,8 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { FilterPanel } from '../../shared/filter-panel/filter-panel';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminNews, AdminOrganization, newsState, Page } from './admin.model';
+import { ScrollArea } from '../../shared/scroll-area/scroll-area';
+import { Pagination } from '../../shared/pagination/pagination';
 
 type StatusFilter = '' | 'draft' | 'published' | 'scheduled';
 
@@ -22,7 +24,7 @@ type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-news-list',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, FilterPanel, ListHeader],
+  imports: [Pagination, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, FilterPanel, ListHeader, ScrollArea],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-filter-panel [summary]="filterSummary()">
@@ -67,40 +69,36 @@ type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <div class="admin-rows">
-      @for (item of items(); track item.id) {
-        @let state = stateOf(item);
-        <div class="admin-row admin-row-compact">
-          <div class="admin-row-main">
-            <span class="admin-row-meta">
-              <span class="state-chip" [class]="'state-' + state.tone">{{ state.label }}</span>
-              <span>{{ date(item.published_at) }}</span>
-              <span>{{ categoryLabels[item.category] }}</span>
-              @if (item.organization; as organization) {
-                <span>· {{ label(organization) }}</span>
-              }
-              @if (item.featured) {
-                <span class="state-chip state-ok">Istaknuto</span>
-              }
-            </span>
-            <a class="post-title" [routerLink]="[item.id]">{{ item.title }}</a>
+    <app-scroll-area label="Vesti" [fill]="true" [resetOn]="[page(), status(), category(), organizationId()]">
+      <div class="admin-rows">
+        @for (item of items(); track item.id) {
+          @let state = stateOf(item);
+          <div class="admin-row admin-row-compact">
+            <div class="admin-row-main">
+              <span class="admin-row-meta">
+                <span class="state-chip" [class]="'state-' + state.tone">{{ state.label }}</span>
+                <span>{{ date(item.published_at) }}</span>
+                <span>{{ categoryLabels[item.category] }}</span>
+                @if (item.organization; as organization) {
+                  <span>· {{ label(organization) }}</span>
+                }
+                @if (item.featured) {
+                  <span class="state-chip state-ok">Istaknuto</span>
+                }
+              </span>
+              <a class="post-title" [routerLink]="[item.id]">{{ item.title }}</a>
+            </div>
+            <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
           </div>
-          <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
-        </div>
-      } @empty {
-        @if (!resource.isLoading()) {
-          <div class="empty-state"><p class="muted">Nema vesti za izabrane filtere.</p></div>
+        } @empty {
+          @if (!resource.isLoading()) {
+            <div class="empty-state"><p class="muted">Nema vesti za izabrane filtere.</p></div>
+          }
         }
-      }
-    </div>
+      </div>
+    </app-scroll-area>
     @if (meta(); as info) {
-      @if (info.last_page > 1) {
-        <nav class="pager" aria-label="Stranice">
-          <button type="button" mat-stroked-button [disabled]="info.page <= 1" (click)="page.set(info.page - 1)">← Prethodna</button>
-          <span class="muted">Strana {{ info.page }} od {{ info.last_page }}</span>
-          <button type="button" mat-stroked-button [disabled]="info.page >= info.last_page" (click)="page.set(info.page + 1)">Sledeća →</button>
-        </nav>
-      }
+      <app-pagination [(page)]="page" [lastPage]="info.last_page" />
     }
   `,
 })

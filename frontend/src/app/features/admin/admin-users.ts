@@ -21,12 +21,13 @@ import { AdminUser, Page } from './admin.model';
 import { RoleDialog } from './role-dialog';
 import { Icon } from '../../shared/icon/icon';
 import { UserFormDialog } from './user-form-dialog';
+import { Pagination } from '../../shared/pagination/pagination';
 
 type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, Icon, FilterPanel, ListHeader],
+  imports: [Pagination, FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, OptionsMenu, Icon, FilterPanel, ListHeader],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-filter-panel [summary]="filterSummary()">
@@ -99,13 +100,7 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
       }
     </div>
     @if (meta(); as info) {
-      @if (info.last_page > 1) {
-        <nav class="pager" aria-label="Stranice">
-          <button type="button" mat-stroked-button [disabled]="info.page <= 1" (click)="page.set(info.page - 1)">← Prethodna</button>
-          <span class="muted">Strana {{ info.page }} od {{ info.last_page }}</span>
-          <button type="button" mat-stroked-button [disabled]="info.page >= info.last_page" (click)="page.set(info.page + 1)">Sledeća →</button>
-        </nav>
-      }
+      <app-pagination [(page)]="page" [lastPage]="info.last_page" />
     }
   `,
 })
