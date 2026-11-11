@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PORTAL_APPS } from '../content/portal-content';
+import { AuthService } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-site-footer',
@@ -24,9 +25,13 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/vesti">Vesti</a>
           <a class="footer-link" routerLink="/udruzenja">Udruženja</a>
           <a class="footer-link" routerLink="/propisi">Propisi</a>
-          <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
+          @if (auth.isAuthenticated()) {
+            <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
+          }
           <a class="footer-link" routerLink="/sportovi">Sportovi i pravila</a>
-          <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
+          @if (auth.isAuthenticated()) {
+            <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
+          }
           <a class="footer-link" routerLink="/novi-nastavnici">Za nove nastavnike i studente</a>
           <a class="footer-link" routerLink="/literatura">Literatura i izvori</a>
           <a class="footer-link" routerLink="/obavestenja">Obaveštenja mejlom</a>
@@ -41,6 +46,7 @@ import { PORTAL_APPS } from '../content/portal-content';
   `,
 })
 export class SiteFooter {
+  protected readonly auth = inject(AuthService);
   protected readonly apps = PORTAL_APPS;
   protected readonly year = new Date().getFullYear();
 }

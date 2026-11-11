@@ -88,6 +88,7 @@ export class AdminShell {
       adminOnly: true,
       links: [
         { route: 'korisnici', label: 'Korisnici', icon: 'user' },
+        { route: 'moderatori', label: 'Moderatori', icon: 'people' },
         { route: 'clanstvo', label: 'Članstvo', icon: 'people' },
         { route: 'obavestenja', label: 'Obaveštenja', icon: 'mail' },
       ],

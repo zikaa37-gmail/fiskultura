@@ -10,6 +10,7 @@ use App\Models\RefreshToken;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserToken;
+use App\Services\Inbox;
 use App\Services\JwtService;
 use App\Services\UserTokenService;
 use Illuminate\Http\Request;
@@ -154,6 +155,7 @@ class AuthController extends Controller
         if ($user && ! $user->isBlocked()) {
             $token = $this->tokens->issue($user, UserToken::RESET_PASSWORD, self::RESET_TTL_MINUTES);
             Mail::to($user->email)->send(new PasswordResetMail($user, $this->frontendUrl('nova-lozinka', $token)));
+            app(Inbox::class)->record($user, 'password_reset', 'Zatražena je nova lozinka', 'Link za novu lozinku je poslat mejlom. Ako to niste bili vi, slobodno zanemarite mejl; lozinka ostaje ista.');
         }
 
         return response()->json(['message' => 'Ako nalog postoji, poslali smo link za novu lozinku.']);

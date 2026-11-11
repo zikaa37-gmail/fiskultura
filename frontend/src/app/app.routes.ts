@@ -181,6 +181,13 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/debates/debate-detail').then((m) => m.DebateDetail),
   },
   {
+    path: 'notifikacije',
+    title: 'Notifikacije — Fiskultura',
+    canActivate: [authGuard],
+    data: { seo: { noindex: true } },
+    loadComponent: () => import('./features/inbox/notifications-page').then((m) => m.NotificationsPage),
+  },
+  {
     path: 'obavestenja',
     title: 'Obaveštenja mejlom — Fiskultura',
     data: { seo: { description: 'Primajte mejlom vesti, seminare, takmičenja i konkurse iz fizičkog vaspitanja: odmah ili kao nedeljni pregled, uz odjavu jednim klikom.' } },
@@ -291,6 +298,7 @@ const allRoutes: Routes = [
       { path: 'debate', canActivate: [editorGuard], title: 'Admin: stručne debate — Fiskultura', loadComponent: () => import('./features/admin/admin-debates').then((m) => m.AdminDebates) },
       { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
       { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
+      { path: 'moderatori', title: 'Admin: moderatori — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-moderators').then((m) => m.AdminModerators) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],
   },
@@ -302,7 +310,7 @@ const allRoutes: Routes = [
   },
 ];
 
-const MEMBERS_ONLY: GateSection[] = ['sportovi', 'propisi', 'pitanja', 'debate'];
+const MEMBERS_ONLY: GateSection[] = ['sportovi', 'propisi', 'pitanja', 'debate', 'ishodi'];
 
 function membersOnly(route: Route): Route {
   const section = MEMBERS_ONLY.find((prefix) => route.path === prefix || route.path?.startsWith(`${prefix}/`));

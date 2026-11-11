@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, li
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
@@ -18,6 +19,7 @@ import { DebateDetail as Detail, DEBATE_STATUS_LABELS, DebatePost, POST_KIND_ICO
 import { DebateModeration } from './debate-moderation';
 import { DebatePostCard, PostAction } from './debate-post-card';
 import { DebateSummaryCard } from './debate-summary';
+import { ReopenRequestDialog } from './reopen-request-dialog';
 
 interface PostsPage {
   data: DebatePost[];
@@ -90,7 +92,21 @@ const SORTS = ['new', 'top', 'old'];
                 <button type="button" mat-flat-button class="mb-4 say-button" (click)="composing.set(true)">Hoću da kažem</button>
               }
             } @else if (item.status === 'closed') {
-              <p class="small muted mb-3">Tema je zatvorena: prilozi i sažetak ostaju za čitanje.</p>
+              <div class="frozen-note mb-4">
+                <p class="small mb-2">
+                  <strong>Tema je zatvorena i zamrznuta.</strong> Prilozi, lajkovi, sažetak i zaključci ostaju kakvi jesu.
+                </p>
+                @if (item.my_reopen_request?.status === 'pending') {
+                  <p class="small muted">Tvoj zahtev da se tema ponovo otvori čeka odluku moderatora. Javićemo ti mejlom.</p>
+                } @else {
+                  @if (item.my_reopen_request?.status === 'rejected') {
+                    <p class="small muted mb-2">
+                      Moderator nije odobrio tvoj prethodni zahtev{{ item.my_reopen_request?.decision_note ? ': „' + item.my_reopen_request?.decision_note + '“' : '.' }}
+                    </p>
+                  }
+                  <button type="button" mat-stroked-button (click)="requestReopen(item)">Zatraži ponovno otvaranje</button>
+                }
+              </div>
             }
 
             <app-list-filters [fields]="fields" [values]="filterValues()" emptySummary="Svi prilozi" (filterChange)="setFilter($event)" (clearAll)="clearFilters()" />
@@ -100,7 +116,7 @@ const SORTS = ['new', 'top', 'old'];
             <app-list-header [count]="meta()?.total ?? null" label="Priloga" />
             <div class="debate-posts">
               @for (post of items(); track post.id) {
-                <app-debate-post-card [post]="post" [moderating]="item.can_moderate" (like)="like(post)" (moderate)="moderate(post, $event)" />
+                <app-debate-post-card [post]="post" [moderating]="item.can_moderate && item.status === 'open'" [frozen]="item.status !== 'open'" (like)="like(post)" (moderate)="moderate(post, $event)" />
               } @empty {
                 @if (!posts.isLoading()) {
                   <p class="muted">{{ hasFilters() ? 'Nema priloga za ovaj izbor.' : 'Još nema priloga. Budi prvi koji će reći šta misli.' }}</p>
@@ -151,6 +167,14 @@ const SORTS = ['new', 'top', 'old'];
     .say-button {
       width: 100%;
     }
+    .frozen-note {
+      padding: 12px 16px;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius);
+    }
+    .frozen-note p {
+      margin: 0;
+    }
     .debate-posts {
       display: grid;
       gap: 12px;
@@ -173,6 +197,7 @@ export class DebateDetail {
   readonly #router = inject(Router);
   readonly #notifications = inject(NotificationService);
   readonly #seo = inject(SeoService);
+  readonly #dialog = inject(MatDialog);
 
   protected readonly statusLabels = DEBATE_STATUS_LABELS;
   protected readonly kindLabels = POST_KIND_LABELS;
@@ -294,6 +319,18 @@ export class DebateDetail {
       },
       error: (error) => this.#notifications.show(apiErrorMessage(error)),
     });
+  }
+
+  protected requestReopen(item: Detail): void {
+    this.#dialog
+      .open<ReopenRequestDialog, Detail, string>(ReopenRequestDialog, { data: item, width: '640px', maxWidth: '100vw', panelClass: 'app-dialog-panel', autoFocus: false })
+      .afterClosed()
+      .subscribe((message) => {
+        if (message) {
+          this.#notifications.show(message);
+          this.detail.reload();
+        }
+      });
   }
 
   protected date(value: string): string {

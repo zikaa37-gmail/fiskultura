@@ -53,6 +53,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'blocked_at' => 'datetime',
+            'moderator_pool' => 'boolean',
             'invited_at' => 'datetime',
             'directory_consent_at' => 'datetime',
             'surveys_consent_at' => 'datetime',

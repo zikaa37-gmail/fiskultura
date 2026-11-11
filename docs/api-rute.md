@@ -148,13 +148,30 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | POST | `/admin/debates` | editor, admin | nova otvorena tema; `moderator_id` samo admin |
 | PATCH | `/admin/debates/{id}` | editor, admin | `title`, `description`, `status` (odobri / odbij / zatvori); `moderator_id` (bilo koji neblokiran korisnik) samo admin |
 | DELETE | `/admin/debates/{id}` | admin | brisanje teme sa prilozima |
+| POST | `/debates/{slug}/reopen-requests` | prijavljen (3 za 10 min), tema `closed` | `kind`, `body`; jedan zahtev na čekanju po članu; moderator dobija mejl i notifikaciju |
+| POST | `/debate-reopen-requests/{id}/decision` | moderator teme, admin | `approve`, `note`; odobreno → tema `open` i prilog se objavljuje; član dobija mejl i notifikaciju |
+| GET | `/admin/moderators` | admin | moderatori (rotacija, urednici, svi koji moderiraju) sa opterećenjem; `next` = ko dobija sledeću temu |
+| PATCH | `/admin/moderators/{user}` | admin | `in_pool` (rotacija za automatsku dodelu) |
+| GET | `/admin/moderators/log` | admin | evidencija dodela: tema, moderator, prethodni, ko je dodelio, `auto` / `manual` / `creator` |
 | GET | `/admin/debates/{id}/promotion` | admin | `recipients` (aktivne prijave na obaveštenja), `last` (poslednji poziv), `hourly_limit` |
 | POST | `/admin/debates/{id}/promotions` | admin (5 za 10 min), tema `open` | `message` (teaser); poziv šalje `notifications:send` postepeno, u okviru limita po satu, svakome jednom, sa linkom za odjavu |
 
 Moderator teme je automatski urednik sa najmanje aktivnih tema (urednik koji sam otvori temu postaje njen moderator);
 ako urednika nema, admin. AI (`App\Services\Ai\ClaudeAssistant`, model `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY`)
 dobija priloge kao podatke i vraća JSON po šemi; ID-jevi priloga koji ne postoje se odbacuju. Ograničenja broja
-zahteva (`throttle`) računaju se po korisniku, ne po IP adresi.
+zahteva (`throttle`) računaju se po korisniku, ne po IP adresi. Zatvorena tema je zamrznuta: prilozi, lajkovi,
+isticanje i analiza vraćaju 422.
+
+## Notifikacije (#51)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/me/notifications` | prijavljen | `page`, `unread`; 20 po strani, `unread` = broj nepročitanih |
+| GET | `/me/notifications/unread` | prijavljen | `unread` (zvonce u meniju) |
+| POST | `/me/notifications/read` | prijavljen | `ids` ili `all: true` |
+
+Sve što portal pošalje korisniku upisuje se preko `App\Services\Inbox` (`kind`, `title`, `body`, `url`, `channels`).
+Bez upisa su samo mejlovi pre nego što nalog postoji (potvrda naloga, poziv za registraciju).
 
 ## Obaveštenja mejlom (#16b, #16c)
 

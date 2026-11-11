@@ -14,7 +14,9 @@
 
     <nav class="topnav" [class.topnav-open]="menuOpen()" aria-label="Glavna navigacija">
       @for (item of navItems; track item.route) {
+        @if (!item.members || auth.isAuthenticated()) {
         <a [routerLink]="item.route" routerLinkActive="topnav-active" [class.topnav-active]="!!item.also && url().startsWith(item.also)" (click)="closeMenu()">{{ item.label }}</a>
+        }
       }
       @if (auth.isAuthenticated()) {
         <a routerLink="/imenik" routerLinkActive="topnav-active" (click)="closeMenu()">Imenik</a>
@@ -26,6 +28,19 @@
 
     <div class="topbar-actions">
       @if (auth.currentUser(); as user) {
+        <a
+          class="bell-button"
+          routerLink="/notifikacije"
+          routerLinkActive="bell-button-active"
+          [attr.aria-label]="inbox.unread() ? 'Notifikacije, nepročitanih: ' + inbox.unread() : 'Notifikacije'"
+          [title]="inbox.unread() ? 'Nepročitanih: ' + inbox.unread() : 'Notifikacije'"
+          (click)="closeMenu()"
+        >
+          <app-icon name="bell" [size]="20" />
+          @if (inbox.unread()) {
+            <span class="bell-dot" aria-hidden="true"></span>
+          }
+        </a>
         <button type="button" class="account-button" [matMenuTriggerFor]="accountMenu" aria-label="Moj nalog" (click)="closeMenu()">
           <app-icon name="user" [size]="20" />
           <span class="account-name">{{ firstName() }}</span>
@@ -37,7 +52,8 @@
             <span class="small muted">{{ user.email }}</span>
           </div>
           <a mat-menu-item routerLink="/profil"><app-icon name="user" [size]="20" /> Moj profil</a>
-          <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Moja obaveštenja</button>
+          <a mat-menu-item routerLink="/notifikacije"><app-icon name="bell" [size]="20" /> Notifikacije{{ inbox.unread() ? ' (' + inbox.unread() + ')' : '' }}</a>
+          <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Obaveštenja mejlom</button>
           <button type="button" mat-menu-item (click)="askQuestion()"><app-icon name="help" [size]="20" /> Postavi pitanje</button>
           <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik struke</a>
           @if (auth.isStaff()) {

@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../core/auth/auth.service';
+import { InboxService } from '../core/inbox/inbox.service';
 import { NotificationsDialogService } from '../features/notifications/notifications-dialog';
 import { AskQuestionDialogService } from '../features/questions/ask-question-dialog';
 import { Icon } from '../shared/icon/icon';
@@ -19,6 +20,7 @@ import { AdminNavService } from './admin-nav.service';
 export class SiteHeader {
   protected readonly auth = inject(AuthService);
   protected readonly adminNav = inject(AdminNavService);
+  protected readonly inbox = inject(InboxService);
   readonly #notificationsDialog = inject(NotificationsDialogService);
   readonly #questionDialog = inject(AskQuestionDialogService);
 
@@ -26,12 +28,12 @@ export class SiteHeader {
   protected readonly url = toSignal(this.#router.events.pipe(filter((event) => event instanceof NavigationEnd), map(() => this.#router.url)), { initialValue: this.#router.url });
   protected readonly menuOpen = signal(false);
   protected readonly firstName = computed(() => (this.auth.currentUser()?.name ?? '').trim().split(/\s+/)[0] || 'Nalog');
-  protected readonly navItems: { route: string; label: string; also?: string }[] = [
+  protected readonly navItems: { route: string; label: string; also?: string; members?: boolean }[] = [
     { route: '/vesti', label: 'Vesti' },
     { route: '/udruzenja', label: 'Udruženja' },
     { route: '/propisi', label: 'Propisi' },
-    { route: '/ishodi', label: 'Ishodi' },
-    { route: '/pitanja', label: 'Pitanja', also: '/debate' },
+    { route: '/ishodi', label: 'Ishodi', members: true },
+    { route: '/pitanja', label: 'Pitanja', also: '/debate', members: true },
     { route: '/sportovi', label: 'Sportovi' },
     { route: '/aplikacije', label: 'Aplikacije' },
   ];

@@ -8,7 +8,7 @@ import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
-import { DebateDetail } from './debate.model';
+import { DebateDetail, POST_KIND_LABELS } from './debate.model';
 import { DebateSummaryCard } from './debate-summary';
 
 @Component({
@@ -17,9 +17,34 @@ import { DebateSummaryCard } from './debate-summary';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let item = debate();
-    <details class="moderation" [open]="!!item.summary_draft">
+    <details class="moderation" [open]="!!item.summary_draft || !!item.reopen_requests?.length">
       <summary>Moderator teme: analiza i podešavanja</summary>
       <div class="moderation-body">
+        @if (item.reopen_requests?.length) {
+          <section class="reopen-requests" aria-label="Zahtevi za ponovno otvaranje">
+            <strong>Zahtevi da se tema ponovo otvori ({{ item.reopen_requests?.length }})</strong>
+            @for (request of item.reopen_requests; track request.id) {
+              <div class="reopen-request">
+                <p class="small muted">{{ request.author }} · {{ kindLabels[request.kind] }}</p>
+                <p class="reopen-body">{{ request.body }}</p>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Poruka članu (nije obavezno)</mat-label>
+                  <input matInput maxlength="1000" [ngModel]="notes()[request.id] ?? ''" (ngModelChange)="setNote(request.id, $event)" />
+                </mat-form-field>
+                <div class="moderation-actions">
+                  <button type="button" mat-flat-button [disabled]="busy()" (click)="decide(request.id, true)">Odobri i otvori temu</button>
+                  <button type="button" mat-stroked-button [disabled]="busy()" (click)="decide(request.id, false)">Odbij</button>
+                </div>
+              </div>
+            }
+          </section>
+        }
+        @if (item.status === 'closed') {
+          <p class="small muted">Tema je zatvorena i zamrznuta: nema novih priloga, lajkova, isticanja ni nove analize.</p>
+          <div class="moderation-actions">
+            <button type="button" mat-stroked-button [disabled]="busy()" (click)="toggleStatus()">Ponovo otvori temu</button>
+          </div>
+        } @else {
         <p class="small muted">
           AI pročita sve vidljive priloge sa lajkovima i istaknutima i napravi nacrt sažetka. Članovi ga vide tek kad ga odobriš. Ako nešto
           ne valja, napiši smernice i traži novu verziju.
@@ -43,6 +68,7 @@ import { DebateSummaryCard } from './debate-summary';
         }
         @if (item.summary_draft; as draft) {
           <app-debate-summary [summary]="draft" [draft]="true" />
+        }
         }
       </div>
     </details>
@@ -69,6 +95,25 @@ import { DebateSummaryCard } from './debate-summary';
       flex-wrap: wrap;
       gap: 8px;
     }
+    .reopen-requests {
+      display: grid;
+      gap: 12px;
+    }
+    .reopen-request {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background: var(--color-surface);
+    }
+    .reopen-request p {
+      margin: 0;
+    }
+    .reopen-body {
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
   `,
 })
 export class DebateModeration {
@@ -81,6 +126,20 @@ export class DebateModeration {
 
   protected readonly guidance = linkedSignal(() => this.debate().summary_guidance ?? '');
   protected readonly busy = signal(false);
+  protected readonly notes = signal<Record<number, string>>({});
+  protected readonly kindLabels = POST_KIND_LABELS;
+
+  protected setNote(id: number, value: string): void {
+    this.notes.update((all) => ({ ...all, [id]: value }));
+  }
+
+  protected decide(id: number, approve: boolean): void {
+    const note = (this.notes()[id] ?? '').trim() || null;
+    this.#run(
+      this.#http.post(`${API_URL}/debate-reopen-requests/${id}/decision`, { approve, note }),
+      approve ? 'Tema je ponovo otvorena i prilog je objavljen. Član dobija mejl.' : 'Zahtev je odbijen. Član dobija mejl.',
+    );
+  }
 
   protected analyze(): void {
     this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/analysis`, { guidance: this.guidance().trim() || null }), 'Nacrt analize je spreman. Pročitaj ga pre objave.');
@@ -95,7 +154,7 @@ export class DebateModeration {
     this.#confirm
       .confirm({
         title: closing ? 'Zatvaranje teme' : 'Ponovo otvori temu',
-        message: closing ? 'Posle zatvaranja niko ne može da doda prilog, ali tema i sažetak ostaju za čitanje.' : 'Članovi ponovo mogu da pišu priloge.',
+        message: closing ? 'Tema se zamrzava: niko ne može da doda prilog ni lajk, a sažetak i zaključci ostaju kakvi jesu. Ako nacrt analize još nije odobren, odobri ga pre zatvaranja. Članovi mogu da zatraže ponovno otvaranje.' : 'Članovi ponovo mogu da pišu priloge.',
         confirmLabel: closing ? 'Zatvori temu' : 'Otvori',
         theme: 'primary',
       })

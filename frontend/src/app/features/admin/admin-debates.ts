@@ -15,7 +15,7 @@ import { ListHeader } from '../../shared/list-header/list-header';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { AdminDebate, DEBATE_STATUS_LABELS, DebateStatus } from '../debates/debate.model';
 import { ProposeTopicDialogService } from '../debates/propose-topic-dialog';
-import { ModeratorDialog } from './moderator-dialog';
+import { UserPickerData, UserPickerDialog } from './user-picker-dialog';
 import { PromoteDebateDialog } from './promote-debate-dialog';
 
 type RowAction = 'view' | 'approve' | 'reject' | 'close' | 'open' | 'promote' | 'moderator' | 'remove';
@@ -157,7 +157,14 @@ export class AdminDebates {
         break;
       case 'moderator':
         this.#dialog
-          .open<ModeratorDialog, AdminDebate, number>(ModeratorDialog, { data: item, width: '560px', maxWidth: '100vw', panelClass: 'app-dialog-panel', autoFocus: false })
+          .open<UserPickerDialog, UserPickerData, number>(UserPickerDialog, {
+            data: {
+              title: 'Moderator teme',
+              intro: `Tema: „${item.title}“. Sada: ${item.moderator?.name ?? 'nije dodeljen'}. Moderator može da bude bilo koji član: ističe i skriva priloge, zatvara temu, odlučuje o ponovnom otvaranju i odobrava AI sažetak. Promena se upisuje u evidenciju moderatora.`,
+              confirmLabel: 'Postavi za moderatora',
+              exclude: item.moderator ? [item.moderator.id] : [],
+            },
+            width: '560px', maxWidth: '100vw', panelClass: 'app-dialog-panel', autoFocus: false })
           .afterClosed()
           .subscribe((id) => id && this.#update(item, { moderator_id: id }, 'Moderator je promenjen.'));
         break;

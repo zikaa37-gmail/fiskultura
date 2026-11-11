@@ -4,6 +4,7 @@ use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
 use App\Models\Regulation;
 use App\Models\User;
+use App\Services\Inbox;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
 use App\Services\Notifications\DebatePromoter;
@@ -120,6 +121,7 @@ Artisan::command('regulations:check {--key=} {--no-mail}', function (PisChecker 
     $recipients = User::query()->whereIn('role', [User::EDITOR, User::ADMIN])->whereNull('blocked_at')->whereNotNull('email_verified_at')->pluck('email');
     if ($lines && $recipients->isNotEmpty() && ! $this->option('no-mail')) {
         Mail::to($recipients->all())->send(new RegulationChangesMail($lines));
+        app(Inbox::class)->recordForEmails($recipients, 'regulation_changes', 'Nove izmene propisa u PIS-u ('.count($lines).')', implode("\n", array_slice($lines, 0, 10)), '/admin/propisi');
     }
 
     return 0;

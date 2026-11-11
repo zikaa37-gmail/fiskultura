@@ -417,6 +417,34 @@ samo u `.env`; bez ključa AI dugmad javljaju da AI nije podešen, a sve ostalo 
 - [x] Prva tema: „Koliko nam vođenje administracije u nastavi FV oduzima vremena…” (predložio Rade Kraljević, moderator Igor Živanović; pravi je migracija)
 - [ ] Mejl dodeljenom uredniku/autoru kad stigne pitanje i uredniku kad stigne predlog teme
 
+### #51 Moderatori, zamrznute teme, ponovno otvaranje i notifikacije (faza-1b)
+Moderatori:
+- admin u adminu („Moderatori”) određuje ko je u rotaciji; automatska dodela bira člana rotacije sa najmanje
+  aktivnih tema (ako je rotacija prazna, urednika, pa admina);
+- za svakog moderatora vidi se opterećenje (aktivne, na čekanju, zatvorene teme, prilozi, zahtevi) i ko je
+  sledeći na redu; evidencija beleži svaku dodelu (automatska, ručna, ko je dodelio, ko je bio pre).
+
+Zatvorena tema je zamrznuta: nema novih priloga, lajkova, isticanja ni nove analize; sažetak i zaključci ostaju
+kakvi jesu. Član može da zatraži ponovno otvaranje: u modalu napiše šta je hteo da kaže, moderator dobija mejl;
+kad moderator odobri, tema se otvara, prilog se objavljuje, a član dobija mejl (isto i kad odbije).
+
+Notifikacije: zvonce u meniju sa tačkom kad ima nepročitanih, stranica `/notifikacije`. Sve što portal pošalje
+korisniku (mejlom, kasnije WhatsApp / Viber / SMS) upisuje se i tu, sa kanalom kojim je poslato. Izuzetak su
+mejlovi pre nego što nalog postoji (potvrda naloga, poziv za registraciju).
+- [x] Rotacija i evidencija moderatora, stranica „Moderatori”
+- [x] Zamrzavanje zatvorene teme, zahtev za ponovno otvaranje sa mejlovima
+- [x] `fk_user_notifications`, zvonce i `/notifikacije`, upis za sve postojeće mejlove
+
+### #52 Instagram i Facebook portala (faza-1b)
+Nalozi portala na Instagramu (`fiskultura_rs`) i Facebooku: ikonice u footeru i na naslovnoj; admin/urednik iz
+admina objavljuje na obe mreže (tekst, slika, link na vest ili debatu), sa evidencijom objava.
+Za objavljivanje treba: Facebook stranica portala i Instagram nalog tipa Business/Creator povezan sa njom, Meta
+aplikacija sa dozvolama `pages_manage_posts`, `pages_read_engagement`, `instagram_basic`,
+`instagram_content_publish` (prolazi Meta proveru), trajni Page access token u `.env`. Instagram objava mora da ima
+sliku dostupnu na javnom URL-u.
+- [ ] Ikonice i linkovi (Instagram `fiskultura_rs`; tačan Facebook link čeka)
+- [ ] Meta aplikacija, token u `.env`, objava iz admina i evidencija objava
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)

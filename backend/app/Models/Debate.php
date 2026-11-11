@@ -55,6 +55,11 @@ class Debate extends Model
         return $this->hasMany(DebatePost::class);
     }
 
+    public function reopenRequests(): HasMany
+    {
+        return $this->hasMany(DebateReopenRequest::class);
+    }
+
     public function promotions(): HasMany
     {
         return $this->hasMany(DebatePromotion::class);

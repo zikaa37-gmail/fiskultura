@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Api\DebateController;
 use App\Http\Controllers\Controller;
 use App\Models\Debate;
+use App\Models\DebateModeratorLog;
 use App\Models\User;
 use App\Services\Assignments;
 use App\Services\Notifications\DebatePromoter;
@@ -39,14 +40,20 @@ class AdminDebateController extends Controller
         $data = $this->validated($request);
         $user = $request->user();
 
+        $chosen = $this->moderatorFor($request, $data);
+        $moderator = $chosen ?? ($user->hasRole(User::EDITOR) ? $user->id : $assignments->moderator()?->id);
         $debate = Debate::create([
             'slug' => Debate::uniqueSlug($data['title']),
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
             'status' => Debate::OPEN,
-            'moderator_id' => $this->moderatorFor($request, $data) ?? ($user->hasRole(User::EDITOR) ? $user->id : $assignments->moderator()?->id),
+            'moderator_id' => $moderator,
             'created_by' => $user->id,
         ]);
+        if ($moderator) {
+            $reason = $chosen ? DebateModeratorLog::MANUAL : ($moderator === $user->id ? DebateModeratorLog::CREATOR : DebateModeratorLog::AUTO);
+            $assignments->logModerator($debate, null, $reason === DebateModeratorLog::AUTO ? null : $user, $reason);
+        }
 
         return response()->json($this->present($debate->load(['moderator', 'creator'])), 201);
     }
@@ -54,18 +61,25 @@ class AdminDebateController extends Controller
     public function update(Request $request, Debate $debate, Assignments $assignments)
     {
         $data = $this->validated($request, partial: true);
+        $previous = $debate->moderator_id;
+        $reason = null;
 
         $debate->fill(array_intersect_key($data, array_flip(['title', 'description', 'status'])));
         if (isset($data['status'])) {
             $debate->closed_at = $data['status'] === Debate::CLOSED ? ($debate->closed_at ?? now()) : null;
             if ($data['status'] === Debate::OPEN && ! $debate->moderator_id) {
                 $debate->moderator_id = $assignments->moderator()?->id;
+                $reason = DebateModeratorLog::AUTO;
             }
         }
         if (array_key_exists('moderator_id', $data)) {
             $debate->moderator_id = $this->moderatorFor($request, $data);
+            $reason = DebateModeratorLog::MANUAL;
         }
         $debate->save();
+        if ($reason && $debate->moderator_id !== $previous) {
+            $assignments->logModerator($debate, $previous, $reason === DebateModeratorLog::MANUAL ? $request->user() : null, $reason);
+        }
 
         return response()->json($this->present($debate->fresh(['moderator', 'creator'])));
     }

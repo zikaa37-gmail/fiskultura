@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\DebatePostMail;
+use App\Mail\DebateReopenDecisionMail;
+use App\Mail\DebateReopenRequestMail;
 use App\Models\Debate;
+use App\Models\DebateModeratorLog;
 use App\Models\DebatePost;
+use App\Models\DebateReopenRequest;
 use App\Models\User;
 use App\Services\Ai\DebateAnalyst;
 use App\Services\Assignments;
+use App\Services\Inbox;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,9 +65,12 @@ class DebateController extends Controller
             ...self::present($debate->load('moderator')),
             'can_moderate' => $moderating,
             'summary' => self::presentSummary($debate->summary, $debate->summary_approved_at, $debate->summary_posts),
+            'my_reopen_request' => $debate->reopenRequests()->where('user_id', $user->id)->latest('id')->first()?->present(),
             ...($moderating ? [
                 'summary_draft' => self::presentSummary($debate->summary_draft, $debate->summary_draft_at, $debate->summary_draft_posts),
                 'summary_guidance' => $debate->summary_guidance,
+                'reopen_requests' => $debate->reopenRequests()->with('user')->where('status', DebateReopenRequest::PENDING)->orderBy('id')->get()
+                    ->map(fn (DebateReopenRequest $item) => $item->present())->values(),
             ] : []),
         ]);
     }
@@ -123,6 +131,10 @@ class DebateController extends Controller
             'moderator_id' => $user->hasRole(User::EDITOR) ? $user->id : $assignments->moderator()?->id,
             'created_by' => $user->id,
         ]);
+        if ($debate->moderator_id) {
+            $self = $debate->moderator_id === $user->id;
+            $assignments->logModerator($debate, null, $self ? $user : null, $self ? DebateModeratorLog::CREATOR : DebateModeratorLog::AUTO);
+        }
 
         return response()->json([
             ...self::present($debate->load('moderator')),
@@ -157,6 +169,7 @@ class DebateController extends Controller
         if (! in_array($debate->status, Debate::PUBLIC_STATUSES, true) || $post->hidden_at) {
             abort(404);
         }
+        $this->ensureOpen($debate);
         $userId = $request->user()->id;
 
         $liked = DB::transaction(function () use ($post, $userId) {
@@ -178,6 +191,7 @@ class DebateController extends Controller
         if (! $debate->canModerate($request->user())) {
             abort(403, 'Samo moderator teme može da ističe i skriva priloge.');
         }
+        $this->ensureOpen($debate);
 
         $data = $request->validate([
             'highlighted' => ['sometimes', 'boolean'],
@@ -221,6 +235,7 @@ class DebateController extends Controller
         if (! $debate->canModerate($request->user())) {
             abort(403, 'Samo moderator teme može da traži analizu.');
         }
+        $this->ensureOpen($debate);
 
         $data = $request->validate(['guidance' => ['nullable', 'string', 'max:2000']]);
         $guidance = trim((string) ($data['guidance'] ?? '')) ?: null;
@@ -245,6 +260,7 @@ class DebateController extends Controller
         if (! $debate->canModerate($request->user())) {
             abort(403, 'Samo moderator teme može da odobri analizu.');
         }
+        $this->ensureOpen($debate);
         if (! $debate->summary_draft) {
             abort(422, 'Nema nacrta analize za odobravanje.');
         }
@@ -265,6 +281,100 @@ class DebateController extends Controller
         ]);
     }
 
+    public function requestReopen(Request $request, string $slug, Inbox $inbox)
+    {
+        $debate = $this->visible($request, $slug);
+        if ($debate->status !== Debate::CLOSED) {
+            abort(422, 'Tema nije zatvorena.');
+        }
+        $user = $request->user();
+        if ($debate->reopenRequests()->where('user_id', $user->id)->where('status', DebateReopenRequest::PENDING)->exists()) {
+            abort(422, 'Vaš zahtev za ovu temu već čeka odgovor moderatora.');
+        }
+
+        $data = $request->validate([
+            'kind' => ['required', Rule::in(DebatePost::KINDS)],
+            'body' => ['required', 'string', 'min:10', 'max:5000'],
+        ], [
+            'body.min' => 'Napišite šta želite da kažete (bar 10 znakova).',
+        ]);
+
+        $reopen = $debate->reopenRequests()->create([...$data, 'user_id' => $user->id]);
+        $reopen->setRelation('debate', $debate->load('moderator'))->setRelation('user', $user);
+
+        $moderator = $debate->moderator;
+        if ($moderator && ! $moderator->isBlocked()) {
+            try {
+                Mail::to($moderator->email)->send(new DebateReopenRequestMail($reopen));
+            } catch (Throwable $error) {
+                report($error);
+            }
+            $inbox->record($moderator, 'debate_reopen_request', "Zahtev da se ponovo otvori tema: {$debate->title}", "Zahtev od: {$user->name}. ".Str::limit($reopen->body, 300), "/debate/{$debate->slug}");
+        }
+
+        return response()->json([...$reopen->present(), 'message' => 'Zahtev je poslat moderatoru. Javićemo vam mejlom kad odluči.'], 201);
+    }
+
+    public function decideReopen(Request $request, DebateReopenRequest $reopen, Inbox $inbox)
+    {
+        $debate = $reopen->debate;
+        if (! $debate->canModerate($request->user())) {
+            abort(403, 'Samo moderator teme odlučuje o ponovnom otvaranju.');
+        }
+        if ($reopen->status !== DebateReopenRequest::PENDING) {
+            abort(422, 'O ovom zahtevu je već odlučeno.');
+        }
+
+        $data = $request->validate([
+            'approve' => ['required', 'boolean'],
+            'note' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        DB::transaction(function () use ($reopen, $debate, $data, $request) {
+            $reopen->forceFill([
+                'status' => $data['approve'] ? DebateReopenRequest::APPROVED : DebateReopenRequest::REJECTED,
+                'decided_by' => $request->user()->id,
+                'decided_at' => now(),
+                'decision_note' => trim((string) ($data['note'] ?? '')) ?: null,
+            ])->save();
+
+            if ($data['approve']) {
+                $debate->forceFill(['status' => Debate::OPEN, 'closed_at' => null])->save();
+                $debate->posts()->create(['user_id' => $reopen->user_id, 'kind' => $reopen->kind, 'body' => $reopen->body]);
+                $debate->refreshCounters();
+            }
+        });
+
+        $reopen->load('user', 'debate');
+        if ($reopen->user && ! $reopen->user->isBlocked()) {
+            try {
+                Mail::to($reopen->user->email)->send(new DebateReopenDecisionMail($reopen));
+            } catch (Throwable $error) {
+                report($error);
+            }
+            $approved = $reopen->status === DebateReopenRequest::APPROVED;
+            $inbox->record(
+                $reopen->user,
+                'debate_reopen_decision',
+                $approved ? "Tema je ponovo otvorena: {$debate->title}" : "Tema „{$debate->title}“ ostaje zatvorena",
+                $approved ? 'Moderator je odobrio vaš zahtev i vaš prilog je objavljen.' : ($reopen->decision_note ? "Poruka moderatora: {$reopen->decision_note}" : 'Moderator nije odobrio ponovno otvaranje.'),
+                "/debate/{$debate->slug}",
+            );
+        }
+
+        return response()->json([
+            ...$reopen->present(),
+            'message' => $data['approve'] ? 'Tema je ponovo otvorena i prilog je objavljen.' : 'Zahtev je odbijen. Član dobija mejl.',
+        ]);
+    }
+
+    private function ensureOpen(Debate $debate): void
+    {
+        if ($debate->status === Debate::CLOSED) {
+            abort(422, 'Tema je zatvorena i zamrznuta: prilozi, lajkovi i sažetak ostaju kakvi jesu.');
+        }
+    }
+
     private function notifyModerator(DebatePost $post): void
     {
         $moderator = $post->debate->moderator;
@@ -277,6 +387,7 @@ class DebateController extends Controller
         } catch (Throwable $error) {
             report($error);
         }
+        app(Inbox::class)->record($moderator, 'debate_post', "Novi prilog u debati: {$post->debate->title}", ($post->author?->name ?? 'Član').': '.Str::limit($post->body, 300), "/debate/{$post->debate->slug}");
     }
 
     private function visible(Request $request, string $slug): Debate

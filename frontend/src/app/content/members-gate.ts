@@ -1,4 +1,4 @@
-export type GateSection = 'sportovi' | 'propisi' | 'pitanja' | 'debate';
+export type GateSection = 'sportovi' | 'propisi' | 'pitanja' | 'debate' | 'ishodi';
 
 export interface GateContent {
   title: string;
@@ -25,6 +25,12 @@ export const MEMBERS_GATE: Record<GateSection, GateContent> = {
     intro: 'Odgovori uredništva na pitanja kolega, uvek uz poziv na propis. Kao član možeš i sam da postaviš pitanje.',
     topics: ['Norma', 'Ocenjivanje', 'Oslobađanje', 'Bezbednost na času', 'Takmičenja', 'Dežurstva'],
     path: '/pitanja',
+  },
+  ishodi: {
+    title: 'Ishodi po razredima',
+    intro: 'Ishodi, teme, sadržaji i fond časova fizičkog i zdravstvenog vaspitanja za svaki razred osnovne i srednje škole, prema važećim pravilnicima i sa linkom na zvanični tekst.',
+    topics: ['Mlađi razredi OŠ', 'Stariji razredi OŠ', 'Srednja škola', 'Teme i sadržaji', 'Fond časova'],
+    path: '/ishodi',
   },
   debate: {
     title: 'Stručne debate',

@@ -5,6 +5,7 @@ namespace App\Services\Notifications;
 use App\Models\DebatePromotion;
 use App\Models\NotificationLog;
 use App\Models\Subscription;
+use App\Services\Inbox;
 use Illuminate\Database\Eloquent\Builder;
 use Throwable;
 
@@ -58,8 +59,10 @@ class DebatePromoter
         $error = null;
         try {
             $channel = $this->channels[$subscription->channel] ?? throw new \RuntimeException("Kanal {$subscription->channel} ne postoji.");
-            $channel->send($subscription, Notice::forDebate($subscription, $promotion));
+            $notice = Notice::forDebate($subscription, $promotion);
+            $channel->send($subscription, $notice);
             $result['sent']++;
+            app(Inbox::class)->recordNotice($subscription, $notice);
         } catch (Throwable $caught) {
             $error = $caught;
             $result['failed']++;

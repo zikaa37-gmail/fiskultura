@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\Regulation;
 use App\Models\User;
 use App\Services\Ai\AnswerDrafter;
+use App\Services\Inbox;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -143,6 +144,7 @@ class AdminQuestionController extends Controller
         } catch (Throwable $error) {
             report($error);
         }
+        app(Inbox::class)->record($question->asker, 'question_answered', 'Objavljen je odgovor na vaše pitanje', "„{$question->title}“", "/pitanja/{$question->slug}");
     }
 
     private function validated(Request $request, ?Question $question = null): array

@@ -23,6 +23,7 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   AI (sažetak debate, nacrt odgovora): `App\Services\Ai\Assistant` → `ClaudeAssistant` (Anthropic PHP SDK,
   `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY` samo u `.env`); AI uvek pravi nacrt koji urednik ili moderator
   odobrava, u testovima se `Assistant` zamenjuje lažnim. Autor u adminu vidi samo pitanja dodeljena njemu.
+  Svaki mejl korisniku prati upis u notifikacije (`App\Services\Inbox::record`, stranica `/notifikacije`, zvonce u meniju).
   Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `korisnik@fiskultura.test`, lozinka `lozinka123`.
 
 Isti obrasci kao `D:\Playground\Angular\evidencija-fv` (auth, kontroleri, deploy) i

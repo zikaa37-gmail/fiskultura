@@ -38,7 +38,7 @@ export type PostAction = 'highlight' | 'hide';
       [class.like-button-on]="item.liked"
       [attr.aria-pressed]="item.liked"
       [attr.aria-label]="(item.liked ? 'Povuci lajk' : 'Lajkuj') + ', ukupno ' + item.likes_count"
-      [disabled]="item.mine || item.hidden"
+      [disabled]="item.mine || item.hidden || frozen()"
       (click)="like.emit()"
     >
       <app-icon name="heart" [size]="18" />
@@ -111,6 +111,7 @@ export type PostAction = 'highlight' | 'hide';
 export class DebatePostCard {
   readonly post = input.required<DebatePost>();
   readonly moderating = input(false);
+  readonly frozen = input(false);
   readonly like = output<void>();
   readonly moderate = output<PostAction>();
 

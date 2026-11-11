@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\Admin\AdminModeratorController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\DebateController;
 use App\Http\Controllers\Api\RegulationController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\UserNotificationController;
 use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,6 +68,11 @@ Route::middleware('jwt')->group(function () {
     Route::post('/debates/{slug}/analysis/approve', [DebateController::class, 'approve']);
     Route::post('/debate-posts/{post}/like', [DebateController::class, 'like'])->middleware('throttle:60,1');
     Route::patch('/debate-posts/{post}', [DebateController::class, 'moderatePost']);
+    Route::post('/debates/{slug}/reopen-requests', [DebateController::class, 'requestReopen'])->middleware('throttle:3,10');
+    Route::post('/debate-reopen-requests/{reopen}/decision', [DebateController::class, 'decideReopen']);
+    Route::get('/me/notifications', [UserNotificationController::class, 'index']);
+    Route::get('/me/notifications/unread', [UserNotificationController::class, 'unread']);
+    Route::post('/me/notifications/read', [UserNotificationController::class, 'read']);
 
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
@@ -124,6 +131,9 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/questions/{question}/assignee', [AdminQuestionController::class, 'assign']);
         Route::delete('/debates/{debate}', [AdminDebateController::class, 'destroy']);
         Route::get('/debates/{debate}/promotion', [AdminDebateController::class, 'promotion']);
+        Route::get('/moderators', [AdminModeratorController::class, 'index']);
+        Route::get('/moderators/log', [AdminModeratorController::class, 'log']);
+        Route::patch('/moderators/{user}', [AdminModeratorController::class, 'update']);
         Route::post('/debates/{debate}/promotions', [AdminDebateController::class, 'promote'])->middleware('throttle:5,10');
     });
 });

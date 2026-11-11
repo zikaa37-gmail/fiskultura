@@ -45,11 +45,24 @@ export interface DebateSummary {
   posts_analyzed: number | null;
 }
 
+export interface ReopenRequest {
+  id: number;
+  kind: PostKind;
+  body: string;
+  status: 'pending' | 'approved' | 'rejected';
+  author: string;
+  decision_note: string | null;
+  created_at: string | null;
+  decided_at: string | null;
+}
+
 export interface DebateDetail extends Debate {
   can_moderate: boolean;
   summary: DebateSummary | null;
+  my_reopen_request: ReopenRequest | null;
   summary_draft?: DebateSummary | null;
   summary_guidance?: string | null;
+  reopen_requests?: ReopenRequest[];
 }
 
 export interface DebatePost {

@@ -10,19 +10,22 @@ import { ROLE_LABELS } from '../../core/auth/user.model';
 import { API_URL } from '../../core/http/api';
 import { DialogShell } from '../../shared/dialog-shell/dialog-shell';
 import { debouncedSearch } from '../../shared/list-filters/search-input';
-import { AdminDebate } from '../debates/debate.model';
 import { AdminUser, Page } from './admin.model';
 
+export interface UserPickerData {
+  title: string;
+  intro: string;
+  confirmLabel: string;
+  exclude?: number[];
+}
+
 @Component({
-  selector: 'app-moderator-dialog',
+  selector: 'app-user-picker-dialog',
   imports: [FormsModule, MatDialogModule, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-dialog-shell title="Moderator teme">
-      <p class="muted mb-3">
-        Tema: <strong>{{ debate.title }}</strong>. Sada: {{ debate.moderator?.name ?? 'nije dodeljen' }}. Moderator može da bude bilo koji član;
-        on ističe i skriva priloge, zatvara temu i odobrava AI sažetak.
-      </p>
+    <app-dialog-shell [title]="data.title">
+      <p class="muted mb-3">{{ data.intro }}</p>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Ime, mejl ili škola</mat-label>
         <input matInput type="search" enterkeyhint="search" [ngModel]="text()" (ngModelChange)="text.set($event); searchInput.schedule($event)" />
@@ -44,7 +47,7 @@ import { AdminUser, Page } from './admin.model';
       </div>
       <ng-container dialogActions>
         <button type="button" mat-stroked-button mat-dialog-close>Odustani</button>
-        <button type="button" mat-flat-button [disabled]="!selected()" (click)="ref.close(selected()!.id)">Postavi za moderatora</button>
+        <button type="button" mat-flat-button [disabled]="!selected()" (click)="ref.close(selected()!.id)">{{ data.confirmLabel }}</button>
       </ng-container>
     </app-dialog-shell>
   `,
@@ -77,9 +80,9 @@ import { AdminUser, Page } from './admin.model';
     }
   `,
 })
-export class ModeratorDialog {
-  protected readonly ref = inject(MatDialogRef<ModeratorDialog, number>);
-  protected readonly debate = inject<AdminDebate>(MAT_DIALOG_DATA);
+export class UserPickerDialog {
+  protected readonly ref = inject(MatDialogRef<UserPickerDialog, number>);
+  protected readonly data = inject<UserPickerData>(MAT_DIALOG_DATA);
   protected readonly roleLabels = ROLE_LABELS;
   protected readonly text = signal('');
   readonly #search = signal('');
@@ -91,5 +94,5 @@ export class ModeratorDialog {
     method: 'POST',
     body: { search: this.#search() || null, page: 1 },
   }));
-  protected readonly results = computed(() => (this.users.hasValue() ? this.users.value().data.filter((user) => !user.blocked) : []));
+  protected readonly results = computed(() => (this.users.hasValue() ? this.users.value().data.filter((user) => !user.blocked && !(this.data.exclude ?? []).includes(user.id)) : []));
 }

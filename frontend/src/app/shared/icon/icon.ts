@@ -39,7 +39,8 @@ export type IconName =
   | 'eye'
   | 'edit'
   | 'trash'
-  | 'ban';
+  | 'ban'
+  | 'bell';
 
 const ICON_PATHS: Record<IconName, string[]> = {
   dumbbell: ['M6.5 6.5l11 11', 'M3 10l7-7', 'M14 21l7-7', 'M5 12l7-7', 'M12 19l7-7'],
@@ -79,6 +80,7 @@ const ICON_PATHS: Record<IconName, string[]> = {
   'more-vert': ['M11 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0', 'M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0', 'M11 19a1 1 0 1 0 2 0a1 1 0 1 0 -2 0'],
   eye: ['M2.5 12S6 5 12 5s9.5 7 9.5 7s-3.5 7-9.5 7s-9.5-7-9.5-7z', 'M12 9a3 3 0 1 0 0 6a3 3 0 0 0 0-6z'],
   edit: ['M4 20h4L19 9l-4-4L4 16z', 'M13.5 6.5l4 4'],
+  bell: ['M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2-3v-3a7 7 0 0 1 4-6', 'M9 17v1a3 3 0 0 0 6 0v-1'],
   trash: ['M4 7h16', 'M10 3h4l1 4H9z', 'M6 7l1 14h10l1-14', 'M10 11v6', 'M14 11v6'],
   ban: ['M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0', 'M5.7 5.7l12.6 12.6'],
 };
