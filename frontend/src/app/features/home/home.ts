@@ -10,12 +10,13 @@ import { API_URL } from '../../core/http/api';
 import { NewsPage } from '../../core/content/content.model';
 import { EXERCISES, PORTAL_MODULES } from '../../content/portal-content';
 import { RULE_TOPICS } from '../../content/rules/rule-topics';
+import { PortalSocialLinks } from '../../shared/portal-social/portal-social';
 
 const DAY_MS = 86_400_000;
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, BUTTON_IMPORTS, ModuleCard, NewsCard, Icon, JoinCta],
+  imports: [RouterLink, BUTTON_IMPORTS, ModuleCard, NewsCard, Icon, JoinCta, PortalSocialLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
 })

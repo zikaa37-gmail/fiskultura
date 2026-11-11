@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PORTAL_APPS } from '../content/portal-content';
 import { AuthService } from '../core/auth/auth.service';
+import { PortalSocialLinks } from '../shared/portal-social/portal-social';
 
 @Component({
   selector: 'app-site-footer',
-  imports: [RouterLink],
+  imports: [RouterLink, PortalSocialLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
@@ -13,6 +14,7 @@ import { AuthService } from '../core/auth/auth.service';
         <div class="footer-col">
           <strong>Fiskultura</strong>
           <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi</span>
+          <app-portal-social label="Pratite nas" />
         </div>
         <nav class="footer-col" aria-label="Aplikacije">
           <strong>Aplikacije</strong>

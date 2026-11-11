@@ -260,3 +260,14 @@ export const EXERCISES: Exercise[] = [
     ],
   },
 ];
+
+export interface PortalSocial {
+  id: 'instagram' | 'facebook';
+  label: string;
+  handle: string;
+  url: string;
+}
+
+export const PORTAL_SOCIAL: PortalSocial[] = [
+  { id: 'instagram', label: 'Instagram', handle: '@fiskultura_rs', url: 'https://www.instagram.com/fiskultura_rs/' },
+];
