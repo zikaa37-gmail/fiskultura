@@ -51,7 +51,9 @@ python deploy/deploy-staticna.py            # stara statična naslovna (samo za 
    `_prerendered.txt`, zip `-web.zip`; FTP: zip, `index.php`, `.htaccess` (uvek) i novi `_deploy-*.php`.
 3. HTTPS poziv tog fajla (zaštićen `DEPLOY_SECRET`-om): raspakivanje, brisanje starih JS/CSS i keša,
    `migrate --force`, `db:seed --force` uz `--seed` (u produkciji bez probnih naloga), `app:admin`
-   ako je admin popunjen; fajl briše sam sebe. Organizacije i vesti iz `backend/database/data/*.json`
+   ako je admin popunjen; fajl briše sam sebe. U rezultatu su i `php` (verzija), `php_missing` (potrebne PHP
+   ekstenzije koje nedostaju; treba da bude prazno) i `mailbox` (izlaz `mailbox:check`: prijava na IMAP i SMTP za
+   poštu u adminu, ništa se ne šalje). Organizacije i vesti iz `backend/database/data/*.json`
    uvozi `--seed` (`ContentSeeder`); ponovni uvoz preskače ono što već postoji.
 4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/pitanja`, `/sitemap.xml`, `/robots.txt`, `/api/organizations`,
    `/portfolio/` → 200, `/api/auth/me` → 401.

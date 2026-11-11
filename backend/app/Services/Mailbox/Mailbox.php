@@ -6,6 +6,8 @@ interface Mailbox
 {
     public function address(): string;
 
+    public function check(): array;
+
     public function folders(): array;
 
     public function messages(string $folder, int $page, int $perPage, ?string $search = null): array;

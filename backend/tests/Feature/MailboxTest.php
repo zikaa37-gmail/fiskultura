@@ -70,6 +70,21 @@ class MailboxTest extends TestCase
         $this->assertSame([['ana@primer.rs'], ['marko@primer.rs'], 'Re: Prijava za seminar', 'Hvala, prijava je primljena.', '<abc@primer.rs>', null], $this->mailbox->calls['send']);
     }
 
+    public function test_check_command_reports_imap_and_smtp(): void
+    {
+        $this->artisan('mailbox:check')
+            ->expectsOutput('Nalog: admin@fiskultura.rs')
+            ->expectsOutput('IMAP: radi, foldera 5, nepročitano u INBOX 2, Sent: INBOX.Sent')
+            ->expectsOutput('SMTP: prijava radi')
+            ->assertExitCode(0);
+
+        $this->mailbox->checkResult = ['imap' => false, 'imap_error' => 'AUTHENTICATIONFAILED', 'folders' => 0, 'inbox_unread' => null, 'sent_folder' => null, 'smtp' => true];
+        $this->artisan('mailbox:check')->expectsOutput('IMAP: NE RADI: AUTHENTICATIONFAILED')->assertExitCode(1);
+
+        $this->app->instance(Mailbox::class, new ImapMailbox(['host' => null, 'username' => null, 'password' => null]));
+        $this->artisan('mailbox:check')->expectsOutput('Pošta nije podešena na serveru (MAILBOX_HOST, MAILBOX_USERNAME, MAILBOX_PASSWORD u .env).')->assertExitCode(0);
+    }
+
     public function test_missing_configuration_gives_clear_message(): void
     {
         $this->app->instance(Mailbox::class, new ImapMailbox(['host' => null, 'username' => null, 'password' => null]));
@@ -87,6 +102,13 @@ class FakeMailbox implements Mailbox
     public function address(): string
     {
         return 'admin@fiskultura.rs';
+    }
+
+    public array $checkResult = ['imap' => true, 'folders' => 5, 'inbox_unread' => 2, 'sent_folder' => 'INBOX.Sent', 'smtp' => true];
+
+    public function check(): array
+    {
+        return $this->checkResult;
     }
 
     public function folders(): array

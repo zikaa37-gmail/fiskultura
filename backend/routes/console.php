@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Services\Inbox;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
+use App\Services\Mailbox\Mailbox;
+use App\Services\Mailbox\MailboxUnavailableException;
 use App\Services\Notifications\DebatePromoter;
 use App\Services\Notifications\NewsNotifier;
 use Illuminate\Support\Facades\Artisan;
@@ -76,6 +78,22 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 })->purpose('Proverava sajtove i mreže organizacija i pamti koji ne rade');
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
+
+Artisan::command('mailbox:check', function (Mailbox $mailbox) {
+    try {
+        $result = $mailbox->check();
+    } catch (MailboxUnavailableException $error) {
+        $this->warn($error->getMessage());
+
+        return 0;
+    }
+
+    $this->line('Nalog: '.$mailbox->address());
+    $this->line('IMAP: '.($result['imap'] ? "radi, foldera {$result['folders']}, nepročitano u INBOX {$result['inbox_unread']}, Sent: ".($result['sent_folder'] ?? 'nije pronađen') : 'NE RADI: '.($result['imap_error'] ?? '')));
+    $this->line('SMTP: '.($result['smtp'] ? 'prijava radi' : 'NE RADI: '.($result['smtp_error'] ?? '')));
+
+    return $result['imap'] && $result['smtp'] ? 0 : 1;
+})->purpose('Proverava prijavu na IMAP i SMTP naloga za poštu u adminu (ništa ne šalje)');
 
 Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier, DebatePromoter $promoter) {
     $dry = (bool) $this->option('dry-run');

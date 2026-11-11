@@ -27,6 +27,35 @@ class ImapMailbox implements Mailbox
         return (string) ($this->config['username'] ?? '');
     }
 
+    public function check(): array
+    {
+        $this->ensureConfigured();
+        $result = ['imap' => false, 'folders' => 0, 'inbox_unread' => null, 'sent_folder' => null, 'smtp' => false];
+
+        try {
+            $folders = $this->client()->getFolders(false);
+            $result['imap'] = true;
+            $result['folders'] = $folders->count();
+            $result['inbox_unread'] = $this->folder('INBOX')->query()->whereUnseen()->setFetchBody(false)->leaveUnread()->count();
+            $result['sent_folder'] = $this->sentFolder()?->path;
+        } catch (Throwable $error) {
+            $result['imap_error'] = $error->getMessage();
+        }
+
+        try {
+            $transport = Transport::fromDsn($this->smtpDsn());
+            if (method_exists($transport, 'start')) {
+                $transport->start();
+                $transport->stop();
+            }
+            $result['smtp'] = true;
+        } catch (Throwable $error) {
+            $result['smtp_error'] = $error->getMessage();
+        }
+
+        return $result;
+    }
+
     public function folders(): array
     {
         return $this->guard(function () {
@@ -126,8 +155,7 @@ class ImapMailbox implements Mailbox
         }
 
         try {
-            $dsn = sprintf('smtps://%s:%s@%s:%d', rawurlencode($this->address()), rawurlencode((string) $this->config['password']), $this->config['host'], (int) ($this->config['smtp_port'] ?? 465));
-            (new Mailer(Transport::fromDsn($dsn)))->send($email);
+            (new Mailer(Transport::fromDsn($this->smtpDsn())))->send($email);
         } catch (Throwable $error) {
             report($error);
             throw new MailboxUnavailableException('Slanje nije uspelo: SMTP server nije prihvatio poruku. Proverite adresu primaoca i podešavanja naloga.');
@@ -138,6 +166,11 @@ class ImapMailbox implements Mailbox
         } catch (Throwable $error) {
             report($error);
         }
+    }
+
+    private function smtpDsn(): string
+    {
+        return sprintf('smtps://%s:%s@%s:%d', rawurlencode($this->address()), rawurlencode((string) $this->config['password']), $this->config['host'], (int) ($this->config['smtp_port'] ?? 465));
     }
 
     private function summary(Message $message): array
