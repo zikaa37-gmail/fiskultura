@@ -10,14 +10,17 @@ import { AuthService } from '../../core/auth/auth.service';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
+import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { FilterPanel } from '../../shared/filter-panel/filter-panel';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionStatus } from '../questions/question.model';
 
+type RowAction = 'view' | 'edit' | 'remove';
+
 @Component({
   selector: 'app-admin-questions',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, FilterPanel, ListHeader],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, FilterPanel, ListHeader, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-filter-panel [summary]="filterSummary()">
@@ -42,7 +45,7 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
     }
     <div class="admin-rows">
       @for (item of items(); track item.id) {
-        <div class="admin-row">
+        <div class="admin-row admin-row-compact">
           <div class="admin-row-main">
             <span class="admin-row-meta">
               <span class="state-chip" [class]="item.status === 'pending' ? 'state-warn' : item.status === 'published' ? 'state-ok' : 'state-muted'">{{ statusLabels[item.status] }}</span>
@@ -56,12 +59,7 @@ import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, Questi
             </span>
             <a class="post-title" [routerLink]="[item.id]">{{ item.title }}</a>
           </div>
-          <div class="admin-row-actions">
-            <a mat-stroked-button [routerLink]="[item.id]">{{ item.status === 'pending' ? 'Odgovori' : 'Izmeni' }}</a>
-            @if (auth.isAdmin()) {
-              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
-            }
-          </div>
+          <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
         </div>
       } @empty {
         @if (!resource.isLoading()) {
@@ -103,6 +101,24 @@ export class AdminQuestions {
 
   protected date(value: string): string {
     return formatDate(value);
+  }
+
+  protected menuFor(item: AdminQuestion): MenuOption<RowAction>[] {
+    const options: MenuOption<RowAction>[] = [];
+    if (item.status === 'published' && item.slug) {
+      options.push({ value: 'view', label: 'Pogledaj', icon: 'eye', link: ['/pitanja', item.slug], newTab: true });
+    }
+    options.push({ value: 'edit', label: item.status === 'pending' ? 'Odgovori' : 'Izmeni', icon: 'edit', link: ['/admin/pitanja', item.id] });
+    if (this.auth.isAdmin()) {
+      options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
+    }
+    return options;
+  }
+
+  protected onAction(item: AdminQuestion, action: RowAction): void {
+    if (action === 'remove') {
+      this.remove(item);
+    }
   }
 
   protected remove(item: AdminQuestion): void {

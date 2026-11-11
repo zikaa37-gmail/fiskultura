@@ -11,12 +11,15 @@ import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS } from '../../core/content/content.model';
 import { ListHeader } from '../../shared/list-header/list-header';
+import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { AdminOrganization } from './admin.model';
 
+type RowAction = 'view' | 'edit' | 'remove';
+
 @Component({
   selector: 'app-admin-organizations',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, ListHeader],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, ListHeader, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="admin-toolbar">
@@ -33,7 +36,7 @@ import { AdminOrganization } from './admin.model';
     }
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
-        <div class="admin-row">
+        <div class="admin-row admin-row-compact">
           <div class="admin-row-main">
             <span class="admin-row-meta">
               <span class="state-chip" [class]="item.status === 'aktivno' ? 'state-ok' : 'state-muted'">{{ item.status }}</span>
@@ -51,13 +54,7 @@ import { AdminOrganization } from './admin.model';
               <span class="small warn-text">Nema sajta, mejla ni Facebook-a</span>
             }
           </div>
-          <div class="admin-row-actions">
-            <a mat-button [routerLink]="['/udruzenja', item.slug]" target="_blank">Pogledaj</a>
-            <a mat-stroked-button [routerLink]="[item.id]">Izmeni</a>
-            @if (auth.isAdmin()) {
-              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
-            }
-          </div>
+          <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.name" (selected)="onAction(item, $event)" />
         </div>
       }
     </div>
@@ -78,6 +75,23 @@ export class AdminOrganizations {
     const items = this.resource.hasValue() ? this.resource.value() : [];
     return term ? items.filter((item) => [item.name, item.short_name, item.city].some((value) => value?.toLowerCase().includes(term))) : items;
   });
+
+  protected menuFor(item: AdminOrganization): MenuOption<RowAction>[] {
+    const options: MenuOption<RowAction>[] = [
+      { value: 'view', label: 'Pogledaj', icon: 'eye', link: ['/udruzenja', item.slug], newTab: true },
+      { value: 'edit', label: 'Izmeni', icon: 'edit', link: ['/admin/udruzenja', item.id] },
+    ];
+    if (this.auth.isAdmin()) {
+      options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
+    }
+    return options;
+  }
+
+  protected onAction(item: AdminOrganization, action: RowAction): void {
+    if (action === 'remove') {
+      this.remove(item);
+    }
+  }
 
   protected remove(item: AdminOrganization): void {
     this.#confirm
