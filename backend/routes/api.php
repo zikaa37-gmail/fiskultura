@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
@@ -134,6 +135,12 @@ Route::middleware('jwt')->group(function () {
         Route::get('/moderators', [AdminModeratorController::class, 'index']);
         Route::get('/moderators/log', [AdminModeratorController::class, 'log']);
         Route::patch('/moderators/{user}', [AdminModeratorController::class, 'update']);
+        Route::get('/mailbox/folders', [AdminMailboxController::class, 'folders']);
+        Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
+        Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');
+        Route::patch('/mailbox/messages/{uid}', [AdminMailboxController::class, 'seen'])->whereNumber('uid');
+        Route::get('/mailbox/messages/{uid}/attachments/{index}', [AdminMailboxController::class, 'attachment'])->whereNumber(['uid', 'index']);
+        Route::post('/mailbox/send', [AdminMailboxController::class, 'send'])->middleware('throttle:20,10');
         Route::post('/debates/{debate}/promotions', [AdminDebateController::class, 'promote'])->middleware('throttle:5,10');
     });
 });

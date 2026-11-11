@@ -39,4 +39,13 @@ return [
         'key' => env('ANTHROPIC_API_KEY'),
     ],
 
+    'mailbox' => [
+        'host' => env('MAILBOX_HOST'),
+        'imap_port' => (int) env('MAILBOX_IMAP_PORT', 993),
+        'smtp_port' => (int) env('MAILBOX_SMTP_PORT', 465),
+        'username' => env('MAILBOX_USERNAME'),
+        'password' => env('MAILBOX_PASSWORD'),
+        'from_name' => env('MAILBOX_FROM_NAME', 'Fiskultura'),
+    ],
+
 ];

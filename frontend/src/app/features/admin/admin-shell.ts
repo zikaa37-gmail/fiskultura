@@ -89,6 +89,7 @@ export class AdminShell {
       links: [
         { route: 'korisnici', label: 'Korisnici', icon: 'user' },
         { route: 'moderatori', label: 'Moderatori', icon: 'people' },
+        { route: 'posta', label: 'Pošta (admin@)', icon: 'mail' },
         { route: 'clanstvo', label: 'Članstvo', icon: 'people' },
         { route: 'obavestenja', label: 'Obaveštenja', icon: 'mail' },
       ],

@@ -298,6 +298,8 @@ const allRoutes: Routes = [
       { path: 'debate', canActivate: [editorGuard], title: 'Admin: stručne debate — Fiskultura', loadComponent: () => import('./features/admin/admin-debates').then((m) => m.AdminDebates) },
       { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
       { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
+      { path: 'posta', title: 'Admin: pošta — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/mailbox/admin-mailbox').then((m) => m.AdminMailbox) },
+      { path: 'posta/:uid', title: 'Admin: mejl — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/mailbox/admin-mail-message').then((m) => m.AdminMailMessage) },
       { path: 'moderatori', title: 'Admin: moderatori — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-moderators').then((m) => m.AdminModerators) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
     ],

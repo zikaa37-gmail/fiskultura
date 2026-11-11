@@ -162,6 +162,21 @@ dobija priloge kao podatke i vraća JSON po šemi; ID-jevi priloga koji ne posto
 zahteva (`throttle`) računaju se po korisniku, ne po IP adresi. Zatvorena tema je zamrznuta: prilozi, lajkovi,
 isticanje i analiza vraćaju 422.
 
+## Pošta admin@fiskultura.rs (#53, samo admin)
+
+| Metod | Ruta | Opis |
+|---|---|---|
+| GET | `/admin/mailbox/folders` | `address`, folderi (`path`, `name`, `total`, `unread` za INBOX) |
+| GET | `/admin/mailbox/messages` | `folder` (podrazumevano `INBOX`), `page`, `q`; 25 po strani, najnoviji prvi, ne menja „pročitano” |
+| GET | `/admin/mailbox/messages/{uid}` | ceo mejl (`text`, `html`, `cc`, `reply_to`, `message_id`, `attachments`); označava kao pročitan |
+| PATCH | `/admin/mailbox/messages/{uid}` | `folder`, `seen` |
+| GET | `/admin/mailbox/messages/{uid}/attachments/{index}` | preuzimanje priloga (uvek `application/octet-stream`, `attachment`) |
+| POST | `/admin/mailbox/send` | `to[]`, `cc[]`, `subject`, `body` (tekst), `in_reply_to`, `references` (20 za 10 min); kopija ide u folder „Sent” |
+
+IMAP 993 i SMTP 465 (SSL) preko `App\Services\Mailbox\ImapMailbox` (`webklex/php-imap`, Symfony Mailer), podešavanja
+`MAILBOX_*` samo u `.env`. Bez podešavanja ili kad server ne odgovara: 503 sa porukom. HTML mejl se prikazuje u
+`iframe` sa `sandbox` i CSP-om (bez skripti, slike sa interneta tek na dugme).
+
 ## Notifikacije (#51)
 
 | Metod | Ruta | Pristup | Opis |

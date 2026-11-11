@@ -445,6 +445,14 @@ sliku dostupnu na javnom URL-u.
 - [ ] Ikonice i linkovi (Instagram `fiskultura_rs`; tačan Facebook link čeka)
 - [ ] Meta aplikacija, token u `.env`, objava iz admina i evidencija objava
 
+### #53 Pošta admin@fiskultura.rs u adminu (faza-1b)
+Admin u adminu („Pošta”) čita i piše mejlove naloga `admin@fiskultura.rs`: folderi, pretraga, čitanje (HTML u
+izolovanom okviru, slike tek na zahtev), prilozi, odgovor, odgovor svima, prosleđivanje, nov mejl; poslato ostaje u
+folderu „Sent” (vidi se i u Roundcube-u). IMAP 993 / SMTP 465, lozinka samo u `.env`.
+- [x] Čitanje, slanje i stranica „Pošta” (proverena sa probnim podacima)
+- [ ] Lozinka u `backend/.env` i `deploy/.env`, provera sa pravim sandučetom
+- [ ] Nacrti, brisanje u otpad i premeštanje u folder (ako zatreba)
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
