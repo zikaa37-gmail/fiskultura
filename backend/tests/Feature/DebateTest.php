@@ -87,7 +87,12 @@ class DebateTest extends TestCase
             ->assertOk()->assertJsonPath('moderator.id', $this->user->id);
 
         $this->withJwt($this->user)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('can_moderate', true);
-        $this->withJwt($this->editor)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('can_moderate', false);
+        $this->withJwt($this->editor)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('can_moderate', true);
+        $this->withJwt($this->author)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('can_moderate', false);
+
+        $this->author->forceFill(['moderator_pool' => true])->save();
+        $this->withJwt($this->author)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('can_moderate', true);
+        $this->withJwt($this->user)->getJson('/api/debates')->assertOk();
     }
 
     public function test_members_post_like_and_search(): void

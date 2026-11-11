@@ -137,19 +137,19 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | GET | `/debates` | prijavljen | otvorene i zatvorene teme (`status`, `q`); `proposals` = moji predlozi na čekanju ili odbijeni |
 | POST | `/debates` | prijavljen (5 za 10 min) | predlog teme: `title`, `description`; član → `proposed` (najviše 3 na čekanju), urednik/admin → `open`; moderator se dodeljuje automatski |
 | GET | `/debates/{slug}` | prijavljen | tema, odobren `summary`, `can_moderate`; moderator dobija i `summary_draft` i `summary_guidance` |
-| PATCH | `/debates/{slug}` | moderator teme, admin | `status` (`open` / `closed`), `description` |
+| PATCH | `/debates/{slug}` | moderatori (admin, urednici, rotacija, dodeljeni) | `status` (`open` / `closed`), `description` |
 | GET | `/debates/{slug}/posts` | prijavljen | `q`, `kind`, `sort` (`new`, `top`, `old`), `highlighted`, `page`; 30 po strani, `liked` za mene; moderator vidi i sakrivene |
 | POST | `/debates/{slug}/posts` | prijavljen (10/min), tema `open` | `kind` (`question`, `criticism`, `statement`, `suggestion`), `body`; moderator teme dobija mejl (osim za svoj prilog) |
 | POST | `/debate-posts/{id}/like` | prijavljen (60/min) | lajk ili povlačenje lajka: `liked`, `likes_count` |
-| PATCH | `/debate-posts/{id}` | moderator teme, admin | `highlighted`, `hidden` |
-| POST | `/debates/{slug}/analysis` | moderator teme, admin (5 za 10 min) | AI nacrt sažetka (`guidance` nije obavezno); 503 sa porukom ako AI nije podešen |
-| POST | `/debates/{slug}/analysis/approve` | moderator teme, admin | nacrt postaje javni `summary` |
+| PATCH | `/debate-posts/{id}` | moderatori (admin, urednici, rotacija, dodeljeni) | `highlighted`, `hidden` |
+| POST | `/debates/{slug}/analysis` | moderatori (admin, urednici, rotacija, dodeljeni; 5 za 10 min) | AI nacrt sažetka (`guidance` nije obavezno); 503 sa porukom ako AI nije podešen |
+| POST | `/debates/{slug}/analysis/approve` | moderatori (admin, urednici, rotacija, dodeljeni) | nacrt postaje javni `summary` |
 | POST | `/admin/debates/list` | editor, admin | sve teme (`status`, `search`); `proposed` = broj predloga |
 | POST | `/admin/debates` | editor, admin | nova otvorena tema; `moderator_id` samo admin |
 | PATCH | `/admin/debates/{id}` | editor, admin | `title`, `description`, `status` (odobri / odbij / zatvori); `moderator_id` (bilo koji neblokiran korisnik) samo admin |
 | DELETE | `/admin/debates/{id}` | admin | brisanje teme sa prilozima |
 | POST | `/debates/{slug}/reopen-requests` | prijavljen (3 za 10 min), tema `closed` | `kind`, `body`; jedan zahtev na čekanju po članu; moderator dobija mejl i notifikaciju |
-| POST | `/debate-reopen-requests/{id}/decision` | moderator teme, admin | `approve`, `note`; odobreno → tema `open` i prilog se objavljuje; član dobija mejl i notifikaciju |
+| POST | `/debate-reopen-requests/{id}/decision` | moderatori (admin, urednici, rotacija, dodeljeni) | `approve`, `note`; odobreno → tema `open` i prilog se objavljuje; član dobija mejl i notifikaciju |
 | GET | `/admin/moderators` | admin | moderatori (rotacija, urednici, svi koji moderiraju) sa opterećenjem; `next` = ko dobija sledeću temu |
 | PATCH | `/admin/moderators/{user}` | admin | `in_pool` (rotacija za automatsku dodelu) |
 | GET | `/admin/moderators/log` | admin | evidencija dodela: tema, moderator, prethodni, ko je dodelio, `auto` / `manual` / `creator` |

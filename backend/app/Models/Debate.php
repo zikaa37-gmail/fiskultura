@@ -77,7 +77,7 @@ class Debate extends Model
 
     public function canModerate(?User $user): bool
     {
-        return $user !== null && ($user->isAdmin() || $this->moderator_id === $user->id);
+        return $user !== null && ! $user->isBlocked() && ($user->hasRole(User::ADMIN, User::EDITOR) || $user->moderator_pool || $this->moderator_id === $user->id);
     }
 
     public function refreshCounters(): void
