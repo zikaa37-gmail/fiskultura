@@ -28,7 +28,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
             <div class="empty-state"><h3>Pitanja trenutno nisu dostupna</h3></div>
           } @else {
             <app-list-header [count]="items().length" label="Pronađeno" />
-            <app-scroll-area label="Odgovori" maxHeight="max(320px, calc(100dvh - 240px))" [resetOn]="[category(), pretraga()]">
+            <app-scroll-area label="Odgovori" [fill]="true" [resetOn]="[category(), pretraga()]">
               <div class="qa-list">
                 @for (item of items(); track item.id) {
                   <article class="qa-card">

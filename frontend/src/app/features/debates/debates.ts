@@ -8,12 +8,13 @@ import { FilterField, ListFilters } from '../../shared/list-filters/list-filters
 import { queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Icon } from '../../shared/icon/icon';
+import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { QaTabs } from '../questions/qa-tabs';
 import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
 
 @Component({
   selector: 'app-debates',
-  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, Icon, QaTabs],
+  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, Icon, QaTabs, ScrollArea],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -44,6 +45,7 @@ import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
             <div class="empty-state"><h3>Debate trenutno nisu dostupne</h3></div>
           } @else {
             <app-list-header [count]="items().length" />
+            <app-scroll-area label="Teme" [fill]="true" [resetOn]="filters.values()">
             <div class="qa-list">
               @for (item of items(); track item.id) {
                 <article class="qa-card">
@@ -72,6 +74,7 @@ import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
                 }
               }
             </div>
+            </app-scroll-area>
           }
         </app-qa-tabs>
       </div>

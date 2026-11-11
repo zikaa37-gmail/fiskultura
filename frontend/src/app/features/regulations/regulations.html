@@ -188,50 +188,25 @@
         }
       }
       @if (showsList()) {
-        <div class="filters rules-filters">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Oblast</mat-label>
-            <mat-select [value]="area()" (selectionChange)="setArea($event.value)">
-              <mat-option [value]="null">Sve oblasti</mat-option>
-              @for (option of areas; track option) {
-                <mat-option [value]="option">{{ areaLabels[option] }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>Vrsta</mat-label>
-            <mat-select [value]="kind()" (selectionChange)="setKind($event.value)">
-              <mat-option [value]="null">Sve vrste</mat-option>
-              @for (option of kinds; track option) {
-                <mat-option [value]="option">{{ kindLabels[option] }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <form class="search-form" (ngSubmit)="search()">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Pretraga</mat-label>
-              <input
-                matInput
-                name="search"
-                [ngModel]="searchText()"
-                (ngModelChange)="searchText.set($event)"
-              />
-            </mat-form-field>
-            <button type="submit" mat-flat-button theme="tertiary">Traži</button>
-          </form>
-        </div>
-        @if (hasFilters()) {
-          <button type="button" mat-button class="clear-filters" (click)="clearFilters()">
-            Poništi filtere
-          </button>
-        }
+        <app-list-filters
+          [fields]="fields"
+          [values]="filterValues()"
+          emptySummary="Svi propisi"
+          (filterChange)="setFilter($event)"
+          (clearAll)="clearFilters()"
+        />
         @if (isLoading()) {
           <mat-progress-bar mode="indeterminate" />
         }
         @if (hasError()) {
           <div class="empty-state"><h3>Propisi trenutno nisu dostupni</h3></div>
         } @else {
-          <p class="muted small result-count mb-2">Pronađeno: {{ shown().length }}</p>
+          <app-list-header [count]="shown().length" label="Pronađeno" />
+          <app-scroll-area
+            label="Propisi"
+            maxHeight="max(360px, calc(100dvh - 220px))"
+            [resetOn]="[activeTab(), filterValues()]"
+          >
           <div class="regulation-list">
             @for (item of shown(); track item.id) {
               <article class="regulation" [class.regulation-expired]="item.status === 'prestao'">
@@ -333,6 +308,7 @@
               }
             }
           </div>
+          </app-scroll-area>
         }
       }
     </mat-tab-nav-panel>

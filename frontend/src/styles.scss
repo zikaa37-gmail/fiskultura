@@ -2189,11 +2189,6 @@ a.org-link:hover {
   gap: 6px;
 }
 
-.rules-filters {
-  display: grid;
-  gap: 8px;
-}
-
 .reg-label {
   display: inline-flex;
   align-items: center;
@@ -2530,11 +2525,6 @@ button.contact-card .small {
 
   .contact-cities {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .rules-filters {
-    grid-template-columns: 1fr 1fr 2fr;
-    align-items: center;
   }
 
   .contact-administrations {
