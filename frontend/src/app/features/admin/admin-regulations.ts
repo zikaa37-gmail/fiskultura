@@ -14,11 +14,14 @@ import { Regulation, REGULATION_KIND_LABELS, REGULATION_STATUS_LABELS, Regulatio
 import { RULE_TOPICS, reviewDue } from '../../content/rules/rule-topics';
 import { CONTACTS_CHECKED_AT } from '../../content/rules/contacts';
 import { AdminReviewRow } from './admin-review-row';
+import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+
+type RowAction = 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-regulations',
-  imports: [AdminReviewRow, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule],
+  imports: [AdminReviewRow, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="admin-review">
@@ -73,7 +76,7 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
     <p class="muted small result-count mb-2">Ukupno: {{ filtered().length }}</p>
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
-        <div class="admin-row">
+        <div class="admin-row admin-row-compact">
           <div class="admin-row-main">
             <span class="admin-row-meta">
               <span class="state-chip state-muted">{{ kindLabels[item.kind] }}</span>
@@ -83,12 +86,7 @@ import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
             </span>
             <a class="post-title" [routerLink]="[item.key]">{{ item.title }}</a>
           </div>
-          <div class="admin-row-actions">
-            <a mat-stroked-button [routerLink]="[item.key]">Izmeni</a>
-            @if (auth.isAdmin()) {
-              <button type="button" mat-button theme="danger" (click)="remove(item)">Obriši</button>
-            }
-          </div>
+          <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
         </div>
       }
     </div>
@@ -130,6 +128,20 @@ export class AdminRegulations {
       },
       error: (error) => this.#notifications.show(apiErrorMessage(error)),
     });
+  }
+
+  protected menuFor(item: Regulation): MenuOption<RowAction>[] {
+    const options: MenuOption<RowAction>[] = [{ value: 'edit', label: 'Izmeni', icon: 'edit', link: ['/admin/propisi', item.key] }];
+    if (this.auth.isAdmin()) {
+      options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
+    }
+    return options;
+  }
+
+  protected onAction(item: Regulation, action: RowAction): void {
+    if (action === 'remove') {
+      this.remove(item);
+    }
   }
 
   protected remove(item: Regulation): void {
