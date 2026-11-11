@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminDebateController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\DebateController;
 use App\Http\Controllers\Api\RegulationController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\SeoController;
@@ -54,6 +56,16 @@ Route::middleware('jwt')->group(function () {
     Route::get('/me/questions', [QuestionController::class, 'mine']);
     Route::get('/questions', [QuestionController::class, 'index']);
     Route::get('/questions/{slug}', [QuestionController::class, 'show']);
+    Route::get('/debates', [DebateController::class, 'index']);
+    Route::post('/debates', [DebateController::class, 'propose'])->middleware('throttle:5,10');
+    Route::get('/debates/{slug}', [DebateController::class, 'show']);
+    Route::patch('/debates/{slug}', [DebateController::class, 'update']);
+    Route::get('/debates/{slug}/posts', [DebateController::class, 'posts']);
+    Route::post('/debates/{slug}/posts', [DebateController::class, 'storePost'])->middleware('throttle:10,1');
+    Route::post('/debates/{slug}/analysis', [DebateController::class, 'analyze'])->middleware('throttle:5,10');
+    Route::post('/debates/{slug}/analysis/approve', [DebateController::class, 'approve']);
+    Route::post('/debate-posts/{post}/like', [DebateController::class, 'like'])->middleware('throttle:60,1');
+    Route::patch('/debate-posts/{post}', [DebateController::class, 'moderatePost']);
 
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
@@ -65,6 +77,13 @@ Route::middleware('jwt')->group(function () {
     Route::get('/me/subscription', [SubscriptionController::class, 'mine']);
     Route::put('/me/subscription', [SubscriptionController::class, 'updateMine']);
 
+    Route::prefix('admin')->middleware('role:author,editor,admin')->group(function () {
+        Route::post('/questions/list', [AdminQuestionController::class, 'list']);
+        Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
+        Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
+        Route::post('/questions/{question}/draft', [AdminQuestionController::class, 'draft'])->middleware('throttle:10,10');
+    });
+
     Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
         Route::post('/news/list', [AdminNewsController::class, 'list']);
         Route::get('/news/{news}', [AdminNewsController::class, 'show']);
@@ -73,10 +92,12 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/news/{news}/featured', [AdminNewsController::class, 'feature']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
 
-        Route::post('/questions/list', [AdminQuestionController::class, 'list']);
-        Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
         Route::post('/questions', [AdminQuestionController::class, 'store']);
-        Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
+        Route::get('/staff', [AdminQuestionController::class, 'staff']);
+
+        Route::post('/debates/list', [AdminDebateController::class, 'list']);
+        Route::post('/debates', [AdminDebateController::class, 'store']);
+        Route::patch('/debates/{debate}', [AdminDebateController::class, 'update']);
 
         Route::get('/organizations', [AdminOrganizationController::class, 'index']);
         Route::get('/organizations/{organization}', [AdminOrganizationController::class, 'show']);
@@ -100,5 +121,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
         Route::get('/members/stats', [MemberController::class, 'stats']);
         Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy']);
+        Route::patch('/questions/{question}/assignee', [AdminQuestionController::class, 'assign']);
+        Route::delete('/debates/{debate}', [AdminDebateController::class, 'destroy']);
     });
 });

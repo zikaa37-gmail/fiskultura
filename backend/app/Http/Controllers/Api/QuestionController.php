@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Question;
 use App\Models\Regulation;
+use App\Services\Assignments;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -39,7 +40,7 @@ class QuestionController extends Controller
         return response()->json(self::present(Question::visible()->where('slug', $slug)->firstOrFail()));
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Assignments $assignments)
     {
         $data = $request->validate([
             'category' => ['required', Rule::in(Question::CATEGORIES)],
@@ -60,6 +61,7 @@ class QuestionController extends Controller
             'original' => trim($data['title']."\n\n".($data['body'] ?? '')),
             'status' => Question::PENDING,
             'asked_by' => $user->id,
+            'assigned_to' => $assignments->answerer()?->id,
         ]);
 
         return response()->json([...self::presentOwn($question), 'message' => 'Pitanje je poslato uredniku. Kad odgovor bude objavljen, javićemo vam mejlom.'], 201);

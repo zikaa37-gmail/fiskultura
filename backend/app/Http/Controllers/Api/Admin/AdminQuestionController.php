@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\QuestionAnsweredMail;
 use App\Models\Question;
 use App\Models\Regulation;
+use App\Models\User;
+use App\Services\Ai\AnswerDrafter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -20,9 +22,14 @@ class AdminQuestionController extends Controller
         $filters = $request->validate([
             'status' => ['nullable', Rule::in(Question::STATUSES)],
             'search' => ['nullable', 'string', 'max:100'],
+            'mine' => ['nullable', 'boolean'],
         ]);
 
-        $questions = Question::with(['asker', 'answerer'])
+        $user = $request->user();
+        $onlyAssigned = $user->hasRole(User::AUTHOR) || ($filters['mine'] ?? false);
+
+        $questions = Question::with(['asker', 'answerer', 'assignee'])
+            ->when($onlyAssigned, fn (Builder $query) => $query->where('assigned_to', $user->id))
             ->when($filters['status'] ?? null, fn (Builder $query, string $status) => $query->where('status', $status))
             ->when($filters['search'] ?? null, fn (Builder $query, string $term) => $query->where(fn (Builder $inner) => $inner
                 ->where('title', 'like', "%{$term}%")
@@ -34,13 +41,53 @@ class AdminQuestionController extends Controller
 
         return response()->json([
             'data' => $questions->map(fn (Question $question) => $this->present($question))->values(),
-            'pending' => Question::where('status', Question::PENDING)->count(),
+            'pending' => Question::where('status', Question::PENDING)
+                ->when($onlyAssigned, fn (Builder $query) => $query->where('assigned_to', $user->id))
+                ->count(),
         ]);
     }
 
-    public function show(Question $question)
+    public function show(Request $request, Question $question)
     {
-        return response()->json($this->present($question->load(['asker', 'answerer'])));
+        $this->authorizeAssigned($request, $question);
+
+        return response()->json($this->present($question->load(['asker', 'answerer', 'assignee'])));
+    }
+
+    public function assign(Request $request, Question $question)
+    {
+        $data = $request->validate([
+            'user_id' => ['nullable', 'integer', Rule::exists(User::class, 'id')->whereIn('role', [User::AUTHOR, User::EDITOR, User::ADMIN])->whereNull('blocked_at')],
+        ], [
+            'user_id.exists' => 'Pitanje može da se dodeli samo autoru, uredniku ili administratoru.',
+        ]);
+
+        $question->forceFill(['assigned_to' => $data['user_id'] ?? null])->save();
+
+        return response()->json($this->present($question->fresh(['asker', 'answerer', 'assignee'])));
+    }
+
+    public function draft(Request $request, Question $question, AnswerDrafter $drafter)
+    {
+        $this->authorizeAssigned($request, $question);
+
+        return response()->json($drafter->draft($question));
+    }
+
+    public function staff()
+    {
+        return response()->json(User::whereIn('role', [User::AUTHOR, User::EDITOR, User::ADMIN])
+            ->whereNull('blocked_at')
+            ->orderBy('name')
+            ->get(['id', 'name', 'role']));
+    }
+
+    private function authorizeAssigned(Request $request, Question $question): void
+    {
+        $user = $request->user();
+        if ($user->hasRole(User::AUTHOR) && $question->assigned_to !== $user->id) {
+            abort(403, 'Ovo pitanje nije dodeljeno vama.');
+        }
     }
 
     public function store(Request $request)
@@ -59,6 +106,7 @@ class AdminQuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
+        $this->authorizeAssigned($request, $question);
         $data = $this->validated($request, $question);
 
         $question->fill([
@@ -73,7 +121,7 @@ class AdminQuestionController extends Controller
 
         $this->notifyAsker($question);
 
-        return response()->json($this->present($question->fresh(['asker', 'answerer'])));
+        return response()->json($this->present($question->fresh(['asker', 'answerer', 'assignee'])));
     }
 
     public function destroy(Question $question)
@@ -129,6 +177,7 @@ class AdminQuestionController extends Controller
             'editor_note' => $question->editor_note,
             'asker' => $question->asker ? ['name' => $question->asker->name, 'email' => $question->asker->email] : null,
             'answerer' => $question->answerer?->name,
+            'assignee' => $question->assignee ? ['id' => $question->assignee->id, 'name' => $question->assignee->name] : null,
             'asker_notified_at' => $question->asker_notified_at?->toIso8601String(),
             'created_at' => $question->created_at?->toIso8601String(),
         ];

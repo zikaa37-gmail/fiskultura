@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-#[Fillable(['slug', 'category', 'title', 'body', 'original', 'answer', 'regulation_keys', 'valid_on', 'status', 'editor_note', 'asked_by', 'answered_by', 'published_at'])]
+#[Fillable(['slug', 'category', 'title', 'body', 'original', 'answer', 'regulation_keys', 'valid_on', 'status', 'editor_note', 'asked_by', 'answered_by', 'assigned_to', 'published_at'])]
 class Question extends Model
 {
     public const CATEGORIES = ['norma', 'ocenjivanje', 'oslobadjanje', 'bezbednost', 'takmicenja', 'zdravitas', 'es-dnevnik', 'planiranje', 'ostalo'];
@@ -44,6 +44,11 @@ class Question extends Model
     public function answerer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'answered_by');
+    }
+
+    public function assignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function scopeVisible(Builder $query): Builder

@@ -6,7 +6,12 @@ import { AuthService } from './auth.service';
 export const authGuard: CanActivateFn = (_route, state) =>
   inject(AuthService).isAuthenticated() || inject(Router).createUrlTree(['/prijava'], { queryParams: { povratak: state.url } });
 
-export const editorGuard: CanActivateFn = () => inject(AuthService).isEditor() || inject(Router).createUrlTree(['/']);
+export const staffGuard: CanActivateFn = () => inject(AuthService).isStaff() || inject(Router).createUrlTree(['/']);
+
+export const editorGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  return auth.isEditor() || inject(Router).createUrlTree([auth.isStaff() ? '/admin/pitanja' : '/']);
+};
 
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);

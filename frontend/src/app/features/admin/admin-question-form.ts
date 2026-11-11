@@ -10,6 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Regulation } from '../../core/content/regulation.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
+import { AuthService } from '../../core/auth/auth.service';
+import { ROLE_LABELS, UserRole } from '../../core/auth/user.model';
+import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import {
   AdminQuestion,
@@ -20,11 +23,42 @@ import {
   QuestionStatus,
 } from '../questions/question.model';
 
+interface StaffMember {
+  id: number;
+  name: string;
+  role: UserRole;
+}
+
+interface AnswerDraft {
+  title: string;
+  answer: string;
+  regulation_keys: string[];
+  confidence: string;
+  editor_note: string;
+}
+
 @Component({
   selector: 'app-admin-question-form',
   imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, SimpleMarkdownPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
+    .assignee-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+    .assignee-row mat-form-field {
+      flex: 1 1 240px;
+    }
+    .ai-note {
+      padding: 12px 16px;
+      border: 1px dashed var(--color-orange);
+      border-radius: var(--radius);
+    }
+    .ai-note p {
+      margin: 6px 0 0;
+    }
     .original {
       margin: 0 0 16px;
       padding: 12px 16px;
@@ -50,6 +84,34 @@ import {
         @if (item.original) {
           <p class="muted small">Originalno pitanje{{ item.asker ? ' — ' + item.asker.name + ' (' + item.asker.email + ')' : '' }}; vidi ga samo urednik:</p>
           <p class="original">{{ item.original }}</p>
+        }
+        <div class="assignee-row mb-3">
+          @if (auth.isAdmin()) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Dodeljeno</mat-label>
+              <mat-select [value]="item.assignee?.id ?? null" (selectionChange)="assign($event.value)">
+                <mat-option [value]="null">Niko</mat-option>
+                @for (person of staff(); track person.id) {
+                  <mat-option [value]="person.id">{{ person.name }} · {{ roleLabels[person.role] }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          } @else {
+            <p class="small">Dodeljeno: <strong>{{ item.assignee?.name ?? 'niko' }}</strong></p>
+          }
+          <button type="button" mat-flat-button theme="tertiary" [disabled]="drafting()" (click)="aiDraft()">Predlog odgovora (AI)</button>
+        </div>
+        @if (drafting()) {
+          <mat-progress-bar mode="indeterminate" />
+          <p class="small muted" role="status">AI piše nacrt uz propise sa portala…</p>
+        }
+        @if (aiNote(); as note) {
+          <div class="ai-note mb-3" role="status">
+            <strong>AI nacrt je upisan u formu (sigurnost: {{ note.confidence }}).</strong> Ništa nije sačuvano: pročitaj, ispravi i tek onda sačuvaj.
+            @if (note.editor_note) {
+              <p class="small">Proveri: {{ note.editor_note }}</p>
+            }
+          </div>
         }
         @if (item.asker_notified_at) {
           <p class="muted small">Pitalac je obavešten mejlom o odgovoru.</p>
@@ -138,6 +200,13 @@ export class AdminQuestionForm {
   readonly #http = inject(HttpClient);
   readonly #router = inject(Router);
   readonly #notifications = inject(NotificationService);
+  readonly #confirm = inject(ConfirmService);
+  protected readonly auth = inject(AuthService);
+  protected readonly roleLabels = ROLE_LABELS;
+  readonly #staff = httpResource<StaffMember[]>(() => (this.auth.isAdmin() && this.id() ? `${API_URL}/admin/staff` : undefined));
+  protected readonly staff = computed(() => (this.#staff.hasValue() ? this.#staff.value() : []));
+  protected readonly drafting = signal(false);
+  protected readonly aiNote = signal<{ confidence: string; editor_note: string } | null>(null);
 
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly categories = Object.keys(QUESTION_CATEGORY_LABELS) as QuestionCategory[];
@@ -180,6 +249,55 @@ export class AdminQuestionForm {
           editor_note: item.editor_note ?? '',
         });
       }
+    });
+  }
+
+  protected assign(userId: number | null): void {
+    const item = this.loaded();
+    if (!item) {
+      return;
+    }
+    this.#http.patch<AdminQuestion>(`${API_URL}/admin/questions/${item.id}/assignee`, { user_id: userId }).subscribe({
+      next: (saved) => {
+        this.resource.set(saved);
+        this.#notifications.show(saved.assignee ? `Pitanje je dodeljeno: ${saved.assignee.name}.` : 'Pitanje više nije dodeljeno nikome.');
+      },
+      error: (error) => this.#notifications.show(apiErrorMessage(error)),
+    });
+  }
+
+  protected aiDraft(): void {
+    const item = this.loaded();
+    if (!item) {
+      return;
+    }
+    if (!this.form.controls.answer.value.trim()) {
+      this.#requestDraft(item);
+      return;
+    }
+    this.#confirm
+      .confirm({ title: 'Predlog odgovora (AI)', message: 'Odgovor već postoji. AI nacrt će zameniti tekst odgovora i propise u formi (ništa se ne čuva dok ne klikneš Sačuvaj).', confirmLabel: 'Zameni', theme: 'primary' })
+      .subscribe((confirmed) => confirmed && this.#requestDraft(item));
+  }
+
+  #requestDraft(item: AdminQuestion): void {
+    this.drafting.set(true);
+    this.aiNote.set(null);
+    this.#http.post<AnswerDraft>(`${API_URL}/admin/questions/${item.id}/draft`, {}).subscribe({
+      next: (draft) => {
+        this.drafting.set(false);
+        this.form.patchValue({
+          ...(item.status === 'pending' && draft.title ? { title: draft.title } : {}),
+          answer: draft.answer,
+          regulation_keys: draft.regulation_keys,
+        });
+        this.form.markAsDirty();
+        this.aiNote.set({ confidence: draft.confidence, editor_note: draft.editor_note });
+      },
+      error: (error) => {
+        this.drafting.set(false);
+        this.#notifications.show(apiErrorMessage(error));
+      },
     });
   }
 

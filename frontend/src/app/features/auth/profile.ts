@@ -56,7 +56,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 <strong>Postavi pitanje</strong>
                 <span class="small">Urednik odgovara uz poziv na propis.</span>
               </button>
-              @if (auth.isEditor()) {
+              @if (auth.isStaff()) {
                 <a class="rule-topic-card accent-sky" routerLink="/admin">
                   <span class="tint-icon"><app-icon name="clipboard" [size]="18" /></span>
                   <strong>Admin</strong>

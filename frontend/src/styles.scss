@@ -2869,3 +2869,35 @@ button.rule-topic-card {
   padding: 6px 0;
   border-bottom: 1px solid var(--color-border);
 }
+
+.qa-list {
+  display: grid;
+  gap: 12px;
+}
+
+.qa-card {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.qa-card h2 {
+  font-size: 19px;
+  line-height: 1.3;
+}
+
+.qa-card h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.qa-card h2 a:hover {
+  color: var(--color-primary);
+}
+
+.qa-section {
+  padding-top: 16px;
+}

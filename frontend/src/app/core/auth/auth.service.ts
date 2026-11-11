@@ -26,6 +26,7 @@ export class AuthService {
   readonly isAuthenticated = computed(() => this.#currentUser() !== null);
   readonly isAdmin = computed(() => this.#currentUser()?.role === 'admin');
   readonly isEditor = computed(() => ['editor', 'admin'].includes(this.#currentUser()?.role ?? ''));
+  readonly isStaff = computed(() => ['author', 'editor', 'admin'].includes(this.#currentUser()?.role ?? ''));
   readonly homeUrl = computed(() => (this.isEditor() ? '/admin' : '/'));
 
   login(email: string, password: string): Observable<TokenResponse> {

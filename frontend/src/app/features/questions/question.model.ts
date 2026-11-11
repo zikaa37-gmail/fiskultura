@@ -40,6 +40,7 @@ export interface AdminQuestion extends Question {
   editor_note: string | null;
   asker: { name: string; email: string } | null;
   answerer: string | null;
+  assignee: { id: number; name: string } | null;
   asker_notified_at: string | null;
   created_at: string | null;
 }

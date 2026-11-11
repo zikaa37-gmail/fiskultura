@@ -1,6 +1,8 @@
+import { inject } from '@angular/core';
 import { Route, Routes } from '@angular/router';
 import { GateSection } from './content/members-gate';
-import { adminGuard, authGuard, editorGuard, guestGuard } from './core/auth/auth.guards';
+import { adminGuard, authGuard, editorGuard, guestGuard, staffGuard } from './core/auth/auth.guards';
+import { AuthService } from './core/auth/auth.service';
 import { SITE_ORGANIZATION, SITE_WEBSITE } from './core/seo/seo.service';
 
 const allRoutes: Routes = [
@@ -167,6 +169,18 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/questions/question-detail').then((m) => m.QuestionDetail),
   },
   {
+    path: 'debate',
+    title: 'Debate — Fiskultura',
+    data: { seo: { description: 'Debate nastavnika fizičkog vaspitanja: teme struke, mišljenja kolega, predlozi i sažetak rasprave.' } },
+    loadComponent: () => import('./features/debates/debates').then((m) => m.Debates),
+  },
+  {
+    path: 'debate/:slug',
+    title: 'Debata — Fiskultura',
+    data: { dynamicSeo: true },
+    loadComponent: () => import('./features/debates/debate-detail').then((m) => m.DebateDetail),
+  },
+  {
     path: 'obavestenja',
     title: 'Obaveštenja mejlom — Fiskultura',
     data: { seo: { description: 'Primajte mejlom vesti, seminare, takmičenja i konkurse iz fizičkog vaspitanja: odmah ili kao nedeljni pregled, uz odjavu jednim klikom.' } },
@@ -258,22 +272,23 @@ const allRoutes: Routes = [
     path: 'admin',
     title: 'Admin — Fiskultura',
     data: { seo: { noindex: true } },
-    canActivate: [authGuard, editorGuard],
+    canActivate: [authGuard, staffGuard],
     loadComponent: () => import('./features/admin/admin-shell').then((m) => m.AdminShell),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'vesti' },
-      { path: 'vesti', title: 'Admin: vesti — Fiskultura', data: { admin: true }, loadComponent: () => import('./features/news/news-list').then((m) => m.NewsList) },
-      { path: 'vesti/nova', title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
-      { path: 'vesti/:id', title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: '', pathMatch: 'full', redirectTo: () => (inject(AuthService).isEditor() ? 'vesti' : 'pitanja') },
+      { path: 'vesti', canActivate: [editorGuard], title: 'Admin: vesti — Fiskultura', data: { admin: true }, loadComponent: () => import('./features/news/news-list').then((m) => m.NewsList) },
+      { path: 'vesti/nova', canActivate: [editorGuard], title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: 'vesti/:id', canActivate: [editorGuard], title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
       { path: 'pitanja', title: 'Admin: pitanja — Fiskultura', loadComponent: () => import('./features/admin/admin-questions').then((m) => m.AdminQuestions) },
-      { path: 'pitanja/novo', title: 'Novo pitanje — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
+      { path: 'pitanja/novo', canActivate: [editorGuard], title: 'Novo pitanje — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
       { path: 'pitanja/:id', title: 'Pitanje i odgovor — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
-      { path: 'udruzenja', title: 'Admin: udruženja — Fiskultura', loadComponent: () => import('./features/admin/admin-organizations').then((m) => m.AdminOrganizations) },
-      { path: 'udruzenja/nova', title: 'Nova organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
-      { path: 'udruzenja/:id', title: 'Izmena organizacije — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
-      { path: 'propisi', title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
-      { path: 'propisi/novi', title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
-      { path: 'propisi/:key', title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
+      { path: 'udruzenja', canActivate: [editorGuard], title: 'Admin: udruženja — Fiskultura', loadComponent: () => import('./features/admin/admin-organizations').then((m) => m.AdminOrganizations) },
+      { path: 'udruzenja/nova', canActivate: [editorGuard], title: 'Nova organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
+      { path: 'udruzenja/:id', canActivate: [editorGuard], title: 'Izmena organizacije — Fiskultura', loadComponent: () => import('./features/admin/admin-organization-form').then((m) => m.AdminOrganizationForm) },
+      { path: 'propisi', canActivate: [editorGuard], title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
+      { path: 'propisi/novi', canActivate: [editorGuard], title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
+      { path: 'propisi/:key', canActivate: [editorGuard], title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
+      { path: 'debate', canActivate: [editorGuard], title: 'Admin: debate — Fiskultura', loadComponent: () => import('./features/admin/admin-debates').then((m) => m.AdminDebates) },
       { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
       { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },
@@ -287,7 +302,7 @@ const allRoutes: Routes = [
   },
 ];
 
-const MEMBERS_ONLY: GateSection[] = ['sportovi', 'propisi', 'pitanja'];
+const MEMBERS_ONLY: GateSection[] = ['sportovi', 'propisi', 'pitanja', 'debate'];
 
 function membersOnly(route: Route): Route {
   const section = MEMBERS_ONLY.find((prefix) => route.path === prefix || route.path?.startsWith(`${prefix}/`));

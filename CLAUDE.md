@@ -20,6 +20,9 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   `MAIL_MAILER=log`, za probu slanja `smtp`). Auth: JWT access (60 min) + refresh sa rotacijom kao u
   evidencija-fv, uloge `user` / `author` / `editor` / `admin`, middleware `jwt` i `role:...`,
   potvrda mejla i nova lozinka preko `UserTokenService` (u bazi samo hash). Rute: `docs/api-rute.md`.
+  AI (sažetak debate, nacrt odgovora): `App\Services\Ai\Assistant` → `ClaudeAssistant` (Anthropic PHP SDK,
+  `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY` samo u `.env`); AI uvek pravi nacrt koji urednik ili moderator
+  odobrava, u testovima se `Assistant` zamenjuje lažnim. Autor u adminu vidi samo pitanja dodeljena njemu.
   Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `korisnik@fiskultura.test`, lozinka `lozinka123`.
 
 Isti obrasci kao `D:\Playground\Angular\evidencija-fv` (auth, kontroleri, deploy) i

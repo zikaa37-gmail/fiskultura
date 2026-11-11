@@ -116,16 +116,43 @@ imaju datum provere; posle 6 meseci, i leti ako nisu provereni od juna, stoje u 
 |---|---|---|---|
 | GET | `/questions` | javno | objavljena pitanja; `category`, `q`; bez teksta odgovora (`excerpt`) |
 | GET | `/questions/{slug}` | javno | pitanje, odgovor (markdown), `valid_on` („važi na dan“), `regulations` (`key`, `title`, `gazette`, `url`) |
-| POST | `/questions` | prijavljen (5/min) | `category`, `title`, `body`; status `pending`, najviše 5 na čekanju po korisniku |
+| POST | `/questions` | prijavljen (5/min) | `category`, `title`, `body`; status `pending`, najviše 5 na čekanju po korisniku; automatski se dodeljuje autoru ili uredniku sa najmanje otvorenih pitanja (`assigned_to`) |
 | GET | `/me/questions` | prijavljen | moja pitanja sa statusom; `slug` tek kad je objavljeno |
-| POST | `/admin/questions/list` | editor, admin | `status`, `search`; prvo ona na čekanju, `pending` = broj na čekanju |
-| GET / PATCH | `/admin/questions/{id}` | editor, admin | i `original` (tekst pitaoca, samo za urednika) i `asker`; za `published` su obavezni `answer` i `valid_on` |
+| POST | `/admin/questions/list` | author, editor, admin | `status`, `search`, `mine`; autor vidi samo pitanja dodeljena njemu; prvo ona na čekanju, `pending` = broj na čekanju |
+| GET / PATCH | `/admin/questions/{id}` | author (samo dodeljena), editor, admin | i `original` (tekst pitaoca, samo za urednika) i `asker`; za `published` su obavezni `answer` i `valid_on` |
 | POST | `/admin/questions` | editor, admin | urednik sam piše pitanje i odgovor |
 | DELETE | `/admin/questions/{id}` | admin | brisanje |
+| POST | `/admin/questions/{id}/draft` | author (samo dodeljena), editor, admin (10 za 10 min) | AI nacrt odgovora: `title`, `answer`, `regulation_keys` (samo postojeći ključevi), `confidence`, `editor_note`; ništa ne čuva |
+| PATCH | `/admin/questions/{id}/assignee` | admin | `user_id` (autor, urednik ili admin) ili `null` |
+| GET | `/admin/staff` | editor, admin | autori, urednici i admini za izbor kome se pitanje dodeljuje |
 
 Javni tekst pitanja urednik prepravlja bez imena i škole; pitalac nikad nije javan. Kad se pitanje prvi put objavi,
 pitalac dobija mejl sa linkom (`asker_notified_at`). `regulation_keys` su ključevi iz `/regulations`. Početni
 odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja samo zapise koje urednik nije dirao).
+
+## Debate (#50)
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/debates` | prijavljen | otvorene i zatvorene teme (`status`, `q`); `proposals` = moji predlozi na čekanju ili odbijeni |
+| POST | `/debates` | prijavljen (5 za 10 min) | predlog teme: `title`, `description`; član → `proposed` (najviše 3 na čekanju), urednik/admin → `open`; moderator se dodeljuje automatski |
+| GET | `/debates/{slug}` | prijavljen | tema, odobren `summary`, `can_moderate`; moderator dobija i `summary_draft` i `summary_guidance` |
+| PATCH | `/debates/{slug}` | moderator teme, admin | `status` (`open` / `closed`), `description` |
+| GET | `/debates/{slug}/posts` | prijavljen | `q`, `kind`, `sort` (`new`, `top`, `old`), `highlighted`, `page`; 30 po strani, `liked` za mene; moderator vidi i sakrivene |
+| POST | `/debates/{slug}/posts` | prijavljen (10/min), tema `open` | `kind` (`question`, `criticism`, `statement`, `suggestion`), `body` |
+| POST | `/debate-posts/{id}/like` | prijavljen (60/min) | lajk ili povlačenje lajka: `liked`, `likes_count` |
+| PATCH | `/debate-posts/{id}` | moderator teme, admin | `highlighted`, `hidden` |
+| POST | `/debates/{slug}/analysis` | moderator teme, admin (5 za 10 min) | AI nacrt sažetka (`guidance` nije obavezno); 503 sa porukom ako AI nije podešen |
+| POST | `/debates/{slug}/analysis/approve` | moderator teme, admin | nacrt postaje javni `summary` |
+| POST | `/admin/debates/list` | editor, admin | sve teme (`status`, `search`); `proposed` = broj predloga |
+| POST | `/admin/debates` | editor, admin | nova otvorena tema; `moderator_id` samo admin |
+| PATCH | `/admin/debates/{id}` | editor, admin | `title`, `description`, `status` (odobri / odbij / zatvori); `moderator_id` (bilo koji neblokiran korisnik) samo admin |
+| DELETE | `/admin/debates/{id}` | admin | brisanje teme sa prilozima |
+
+Moderator teme je automatski urednik sa najmanje aktivnih tema (urednik koji sam otvori temu postaje njen moderator);
+ako urednika nema, admin. AI (`App\Services\Ai\ClaudeAssistant`, model `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY`)
+dobija priloge kao podatke i vraća JSON po šemi; ID-jevi priloga koji ne postoje se odbacuju. Ograničenja broja
+zahteva (`throttle`) računaju se po korisniku, ne po IP adresi.
 
 ## Obaveštenja mejlom (#16b, #16c)
 
