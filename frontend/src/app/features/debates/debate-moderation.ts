@@ -25,7 +25,13 @@ import { DebateIntroCard } from './debate-intro';
           <strong>Uvodni pregled</strong>
           <p class="small muted">
             @switch (item.intro_status) {
-              @case ('pending') { AI čeka na red da pretraži internet i napiše pregled. Stranica se sama osvežava. }
+              @case ('pending') {
+                @if (item.intro_busy) {
+                  AI čeka na red da pretraži internet i napiše pregled. Stranica se sama osvežava.
+                } @else {
+                  Pregled čeka na obradu. Klikni „Napravi uvodni pregled” da AI počne odmah.
+                }
+              }
               @case ('generating') { AI upravo pretražuje internet i piše pregled (minut-dva). Stranica se sama osvežava. }
               @case ('draft') { Nacrt je spreman: pročitaj ga, proveri izvore i odobri. }
               @case ('approved') { Pregled je objavljen. Ako treba, napravi novu verziju sa smernicama. }
@@ -39,7 +45,7 @@ import { DebateIntroCard } from './debate-intro';
               <textarea matInput rows="3" maxlength="2000" [ngModel]="introGuidance()" (ngModelChange)="introGuidance.set($event)"></textarea>
             </mat-form-field>
             <div class="moderation-actions">
-              <button type="button" mat-flat-button theme="tertiary" [disabled]="busy() || item.intro_status === 'pending' || item.intro_status === 'generating'" (click)="requestIntro()">
+              <button type="button" mat-flat-button theme="tertiary" [disabled]="busy() || !!item.intro_busy" (click)="requestIntro()">
                 {{ item.intro_status ? 'Napravi novi pregled' : 'Napravi uvodni pregled' }}
               </button>
               @if (item.intro_draft) {

@@ -74,6 +74,7 @@ class DebateController extends Controller
                 'intro_status' => $debate->intro_status,
                 'intro_guidance' => $debate->intro_guidance,
                 'intro_error' => $debate->intro_error,
+                'intro_busy' => self::introBusy($debate),
                 'intro_draft' => self::presentIntro($debate->intro_draft, $debate->intro_generated_at),
                 'reopen_requests' => $debate->reopenRequests()->with('user')->where('status', DebateReopenRequest::PENDING)->orderBy('id')->get()
                     ->map(fn (DebateReopenRequest $item) => $item->present())->values(),
@@ -384,7 +385,7 @@ class DebateController extends Controller
             abort(403, 'Samo moderator teme traži uvodni pregled.');
         }
         $this->ensureOpen($debate);
-        if (in_array($debate->intro_status, [DebateIntroWriter::PENDING, DebateIntroWriter::GENERATING], true) && $debate->intro_requested_at?->gt(now()->subMinutes(15))) {
+        if (self::introBusy($debate)) {
             abort(422, 'Uvodni pregled se već pravi. Javićemo kad bude spreman.');
         }
 
@@ -413,6 +414,15 @@ class DebateController extends Controller
         ])->save();
 
         return response()->json(['intro' => self::presentIntro($debate->intro, $debate->intro_approved_at), 'message' => 'Uvodni pregled je objavljen.']);
+    }
+
+    public static function introBusy(Debate $debate): bool
+    {
+        return match ($debate->intro_status) {
+            DebateIntroWriter::PENDING => (bool) $debate->intro_requested_at?->gt(now()->subMinutes(2)),
+            DebateIntroWriter::GENERATING => $debate->updated_at?->gt(now()->subMinutes(15)) ?? false,
+            default => false,
+        };
     }
 
     public static function presentIntro(?array $intro, $at): ?array

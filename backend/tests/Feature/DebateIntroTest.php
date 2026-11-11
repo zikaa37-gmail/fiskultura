@@ -80,6 +80,20 @@ class DebateIntroTest extends TestCase
         $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/intro")->assertUnprocessable();
     }
 
+    public function test_stale_pending_intro_can_be_started_by_moderator(): void
+    {
+        $debate = Debate::create(['slug' => 'administracija', 'title' => 'Administracija', 'status' => Debate::OPEN, 'moderator_id' => $this->editor->id, 'intro_status' => DebateIntroWriter::PENDING, 'intro_guidance' => 'ES dnevnik', 'intro_requested_at' => now()]);
+
+        $this->withJwt($this->editor)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('intro_busy', true);
+        $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/intro")->assertUnprocessable();
+
+        $this->travel(3)->minutes();
+        $this->withJwt($this->editor)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('intro_busy', false);
+        $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/intro")->assertStatus(202);
+        $this->assertSame(DebateIntroWriter::DRAFT, $debate->fresh()->intro_status);
+        $this->assertStringContainsString('<smernice_moderatora>ES dnevnik</smernice_moderatora>', $this->ai->prompt);
+    }
+
     public function test_without_ai_key_intro_fails_with_message_and_command_retries_pending(): void
     {
         $this->app->instance(Assistant::class, new ClaudeAssistant(null));

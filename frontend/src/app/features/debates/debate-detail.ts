@@ -262,8 +262,7 @@ export class DebateDetail {
       this.#overrides.set({});
     });
     effect((onCleanup) => {
-      const status = this.debate()?.intro_status;
-      if (status === 'pending' || status === 'generating') {
+      if (this.debate()?.intro_busy) {
         const timer = setTimeout(() => this.detail.reload(), 15000);
         onCleanup(() => clearTimeout(timer));
       }

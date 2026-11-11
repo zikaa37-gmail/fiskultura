@@ -180,7 +180,7 @@ class AuthController extends Controller
         ])->save();
         $user->refreshTokens()->update(['revoked_at' => now()]);
 
-        return response()->json(['message' => 'Lozinka je promenjena. Prijavite se novom lozinkom.']);
+        return response()->json(['message' => 'Lozinka je promenjena. Prijavite se novom lozinkom.', 'email' => $user->email]);
     }
 
     public function me(Request $request)
