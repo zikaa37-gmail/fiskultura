@@ -159,7 +159,7 @@ export class NewsList {
   });
 
   protected setFilter(change: FilterChange): void {
-    this.#navigate({ [change.key]: change.value || null, strana: null });
+    this.#router.navigate([], { queryParams: { [change.key]: change.value || null, strana: null }, queryParamsHandling: 'merge', replaceUrl: true });
   }
 
   protected goToPage(page: number): void {

@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { FilterPanel } from '../filter-panel/filter-panel';
+import { debouncedSearch } from './search-input';
 
 export interface FilterOption {
   value: string;
@@ -75,7 +76,18 @@ export class ListFilters {
 
   protected readonly hasValues = computed(() => this.fields().some((field) => !!this.values()[field.key]));
 
-  protected readonly drafts = linkedSignal<FilterValues>(() => ({ ...this.values() }));
+  protected readonly drafts = linkedSignal<FilterValues, FilterValues>({
+    source: () => this.values(),
+    computation: (values, previous) =>
+      Object.fromEntries(
+        Object.entries(values).map(([key, value]) => {
+          const draft = previous?.value[key];
+          return [key, draft !== undefined && draft.trim() === value ? draft : value];
+        }),
+      ),
+  });
+  #searchKey = '';
+  readonly #search = debouncedSearch((value) => this.#emitSearch(this.#searchKey, value));
 
   protected readonly summary = computed(() => {
     const values = this.values();
@@ -96,9 +108,18 @@ export class ListFilters {
 
   protected setDraft(key: string, value: string): void {
     this.drafts.update((drafts) => ({ ...drafts, [key]: value }));
+    this.#searchKey = key;
+    this.#search.schedule(value);
   }
 
   protected submitSearch(key: string): void {
-    this.filterChange.emit({ key, value: (this.drafts()[key] ?? '').trim() });
+    this.#searchKey = key;
+    this.#search.flush(this.drafts()[key] ?? '');
+  }
+
+  #emitSearch(key: string, value: string): void {
+    if (value !== (this.values()[key] ?? '')) {
+      this.filterChange.emit({ key, value });
+    }
   }
 }

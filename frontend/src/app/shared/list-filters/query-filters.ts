@@ -14,7 +14,7 @@ export function queryFilters(keys: readonly string[]): QueryFilters {
   const query = toSignal(inject(ActivatedRoute).queryParamMap);
   return {
     values: computed(() => Object.fromEntries(keys.map((key) => [key, query()?.get(key) ?? '']))),
-    set: (change) => router.navigate([], { queryParams: { [change.key]: change.value || null }, queryParamsHandling: 'merge' }),
+    set: (change) => router.navigate([], { queryParams: { [change.key]: change.value || null }, queryParamsHandling: 'merge', replaceUrl: true }),
     clear: () => router.navigate([], { queryParams: {} }),
   };
 }

@@ -13,6 +13,7 @@ import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { DISTRICTS } from '../../content/districts';
 import { Page } from '../admin/admin.model';
+import { debouncedSearch, searchDraft } from '../../shared/list-filters/search-input';
 import { Pagination } from '../../shared/pagination/pagination';
 
 interface Member {
@@ -72,10 +73,10 @@ interface Member {
                 }
               </mat-select>
             </mat-form-field>
-            <form (ngSubmit)="search.set(searchText().trim()); page.set(1)">
+            <form (ngSubmit)="searchInput.flush(searchText())">
               <mat-form-field appearance="outline" subscriptSizing="dynamic">
                 <mat-label>Ime, škola ili opština</mat-label>
-                <input matInput name="q" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+                <input matInput name="q" type="search" enterkeyhint="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event); searchInput.schedule($event)" />
               </mat-form-field>
             </form>
           </div>
@@ -127,7 +128,13 @@ export class Directory {
   protected readonly status = signal<MemberStatus | ''>('');
   protected readonly district = signal('');
   protected readonly search = signal('');
-  protected readonly searchText = linkedSignal(() => this.search());
+  protected readonly searchText = searchDraft(() => this.search());
+  protected readonly searchInput = debouncedSearch((value) => {
+    if (value !== this.search()) {
+      this.search.set(value);
+      this.page.set(1);
+    }
+  });
   protected readonly page = signal(1);
   protected readonly busy = signal(false);
 

@@ -14,6 +14,7 @@ import { NotificationService } from '../../core/notification.service';
 import { formatDate } from '../../core/content/content.model';
 import { phoneHref } from '../../core/phone';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { debouncedSearch, searchDraft } from '../../shared/list-filters/search-input';
 import { DeleteService } from '../../core/delete.service';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { FilterPanel } from '../../shared/filter-panel/filter-panel';
@@ -48,10 +49,10 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
           <mat-option [value]="true">Čekaju aktivaciju</mat-option>
         </mat-select>
       </mat-form-field>
-      <form class="search-form" (ngSubmit)="search.set(searchText().trim()); page.set(1)">
+      <form class="search-form" (ngSubmit)="searchInput.flush(searchText())">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Pretraga (ime, mejl, škola, opština)</mat-label>
-          <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+          <input matInput name="search" type="search" enterkeyhint="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event); searchInput.schedule($event)" />
         </mat-form-field>
       </form>
     </app-filter-panel>
@@ -119,7 +120,13 @@ export class AdminUsers {
   protected readonly pending = signal(false);
   protected readonly sending = signal(false);
   protected readonly search = signal('');
-  protected readonly searchText = linkedSignal(() => this.search());
+  protected readonly searchText = searchDraft(() => this.search());
+  protected readonly searchInput = debouncedSearch((value) => {
+    if (value !== this.search()) {
+      this.search.set(value);
+      this.page.set(1);
+    }
+  });
   protected readonly page = signal(1);
 
   protected readonly resource = httpResource<Page<AdminUser>>(() => ({

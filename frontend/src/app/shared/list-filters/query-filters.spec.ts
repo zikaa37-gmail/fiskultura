@@ -7,7 +7,9 @@ import { of } from 'rxjs';
 import { DeleteService } from '../../core/delete.service';
 import { NotificationService } from '../../core/notification.service';
 import { ConfirmService } from '../confirm-dialog/confirm-dialog';
+import { ListFilters } from './list-filters';
 import { matchesSearch, queryFilters } from './query-filters';
+import { SEARCH_DELAY } from './search-input';
 
 describe('Filteri u adresi i brisanje', () => {
   beforeEach(() => {
@@ -55,5 +57,40 @@ describe('Filteri u adresi i brisanje', () => {
     http.expectOne({ method: 'DELETE', url: '/api/admin/x/1' }).flush({ message: 'Obrisano sa servera.' });
     expect(notifications.show).toHaveBeenCalledWith('Obrisano sa servera.');
     expect(done).toHaveBeenCalledTimes(1);
+  });
+
+  it('pretraga se šalje sama posle pauze u kucanju, a Enter odmah', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('matchMedia', () => ({ matches: false }));
+    try {
+      const fixture = TestBed.createComponent(ListFilters);
+      fixture.componentRef.setInput('fields', [{ key: 'pretraga', label: 'Pretraga', type: 'search' }]);
+      const changes: string[] = [];
+      fixture.componentInstance.filterChange.subscribe((change) => {
+        changes.push(change.value);
+        fixture.componentRef.setInput('values', { pretraga: change.value });
+      });
+      fixture.detectChanges();
+      const list = fixture.componentInstance as unknown as { setDraft(key: string, value: string): void; submitSearch(key: string): void; drafts(): Record<string, string> };
+
+      list.setDraft('pretraga', 'beo');
+      vi.advanceTimersByTime(SEARCH_DELAY - 50);
+      list.setDraft('pretraga', 'beo ');
+      vi.advanceTimersByTime(SEARCH_DELAY - 50);
+      expect(changes).toEqual([]);
+      vi.advanceTimersByTime(50);
+      expect(changes).toEqual(['beo']);
+      fixture.detectChanges();
+      expect(list.drafts()['pretraga']).toBe('beo ');
+
+      list.setDraft('pretraga', 'beo grad');
+      list.submitSearch('pretraga');
+      expect(changes).toEqual(['beo', 'beo grad']);
+      vi.advanceTimersByTime(SEARCH_DELAY);
+      expect(changes).toEqual(['beo', 'beo grad']);
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+    }
   });
 });
