@@ -38,13 +38,9 @@ export type QaTab = 'pitanja' | 'debate';
       border-bottom: 1px solid var(--color-border);
     }
     .qa-action {
-      display: grid;
+      display: flex;
+      justify-content: flex-end;
       margin-bottom: 16px;
-    }
-    @media (min-width: 720px) {
-      .qa-action {
-        display: flex;
-      }
     }
   `,
 })

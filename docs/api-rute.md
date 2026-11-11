@@ -139,7 +139,7 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | GET | `/debates/{slug}` | prijavljen | tema, odobren `summary`, `can_moderate`; moderator dobija i `summary_draft` i `summary_guidance` |
 | PATCH | `/debates/{slug}` | moderator teme, admin | `status` (`open` / `closed`), `description` |
 | GET | `/debates/{slug}/posts` | prijavljen | `q`, `kind`, `sort` (`new`, `top`, `old`), `highlighted`, `page`; 30 po strani, `liked` za mene; moderator vidi i sakrivene |
-| POST | `/debates/{slug}/posts` | prijavljen (10/min), tema `open` | `kind` (`question`, `criticism`, `statement`, `suggestion`), `body` |
+| POST | `/debates/{slug}/posts` | prijavljen (10/min), tema `open` | `kind` (`question`, `criticism`, `statement`, `suggestion`), `body`; moderator teme dobija mejl (osim za svoj prilog) |
 | POST | `/debate-posts/{id}/like` | prijavljen (60/min) | lajk ili povlačenje lajka: `liked`, `likes_count` |
 | PATCH | `/debate-posts/{id}` | moderator teme, admin | `highlighted`, `hidden` |
 | POST | `/debates/{slug}/analysis` | moderator teme, admin (5 za 10 min) | AI nacrt sažetka (`guidance` nije obavezno); 503 sa porukom ako AI nije podešen |
@@ -148,6 +148,8 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | POST | `/admin/debates` | editor, admin | nova otvorena tema; `moderator_id` samo admin |
 | PATCH | `/admin/debates/{id}` | editor, admin | `title`, `description`, `status` (odobri / odbij / zatvori); `moderator_id` (bilo koji neblokiran korisnik) samo admin |
 | DELETE | `/admin/debates/{id}` | admin | brisanje teme sa prilozima |
+| GET | `/admin/debates/{id}/promotion` | admin | `recipients` (aktivne prijave na obaveštenja), `last` (poslednji poziv), `hourly_limit` |
+| POST | `/admin/debates/{id}/promotions` | admin (5 za 10 min), tema `open` | `message` (teaser); poziv šalje `notifications:send` postepeno, u okviru limita po satu, svakome jednom, sa linkom za odjavu |
 
 Moderator teme je automatski urednik sa najmanje aktivnih tema (urednik koji sam otvori temu postaje njen moderator);
 ako urednika nema, admin. AI (`App\Services\Ai\ClaudeAssistant`, model `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY`)

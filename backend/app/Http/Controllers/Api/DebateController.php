@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\DebatePostMail;
 use App\Models\Debate;
 use App\Models\DebatePost;
 use App\Models\User;
@@ -11,9 +12,11 @@ use App\Services\Assignments;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class DebateController extends Controller
 {
@@ -143,6 +146,7 @@ class DebateController extends Controller
 
         $post = $debate->posts()->create([...$data, 'user_id' => $request->user()->id]);
         $debate->refreshCounters();
+        $this->notifyModerator($post->setRelation('debate', $debate->load('moderator')));
 
         return response()->json(self::presentPost($post->load('author'), $request->user(), $debate->canModerate($request->user())), 201);
     }
@@ -259,6 +263,20 @@ class DebateController extends Controller
             'summary_draft' => null,
             'message' => 'Analiza je objavljena.',
         ]);
+    }
+
+    private function notifyModerator(DebatePost $post): void
+    {
+        $moderator = $post->debate->moderator;
+        if (! $moderator || $moderator->id === $post->user_id || $moderator->isBlocked()) {
+            return;
+        }
+
+        try {
+            Mail::to($moderator->email)->send(new DebatePostMail($post->load('author')));
+        } catch (Throwable $error) {
+            report($error);
+        }
     }
 
     private function visible(Request $request, string $slug): Debate

@@ -2,13 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Mail\DebatePostMail;
+use App\Mail\NoticeMail;
 use App\Models\Debate;
 use App\Models\DebatePost;
+use App\Models\DebatePromotion;
+use App\Models\Subscription;
 use App\Models\Question;
 use App\Models\User;
 use App\Services\Ai\Assistant;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\Concerns\AuthenticatesWithJwt;
 use Tests\TestCase;
 
@@ -106,6 +111,73 @@ class DebateTest extends TestCase
         $this->withJwt($this->author)->getJson("/api/debates/{$debate->slug}/posts?q=priznaju")->assertJsonPath('meta.total', 1);
         $this->withJwt($this->author)->getJson("/api/debates/{$debate->slug}/posts?kind=suggestion")->assertJsonPath('meta.total', 1);
         $this->assertSame(2, $debate->fresh()->posts_count);
+    }
+
+    public function test_moderator_gets_mail_for_every_post_except_own(): void
+    {
+        Mail::fake();
+        $debate = $this->openDebate();
+
+        $this->withJwt($this->user)->postJson("/api/debates/{$debate->slug}/posts", ['kind' => 'criticism', 'body' => 'Previše papira, premalo časa.'])->assertCreated();
+        $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/posts", ['kind' => 'statement', 'body' => 'Moderator piše sam.'])->assertCreated();
+
+        Mail::assertSent(DebatePostMail::class, 1);
+        Mail::assertSent(DebatePostMail::class, fn (DebatePostMail $mail) => $mail->hasTo($this->editor->email)
+            && str_contains($mail->render(), 'Previše papira, premalo časa.')
+            && str_contains($mail->render(), '/debate/norma-i-sekcije'));
+    }
+
+    public function test_admin_promotes_debate_to_active_subscribers_within_hourly_limit(): void
+    {
+        Mail::fake();
+        config(['notifications.hourly_limit' => 2]);
+        Subscription::query()->delete();
+        $debate = $this->openDebate();
+        foreach (['a@primer.rs', 'b@primer.rs', 'c@primer.rs'] as $email) {
+            Subscription::forceCreate(['email' => $email, 'frequency' => Subscription::INSTANT, 'channel' => 'mail', 'confirmed_at' => now()]);
+        }
+        Subscription::forceCreate(['email' => 'odjavljen@primer.rs', 'frequency' => Subscription::INSTANT, 'channel' => 'mail', 'confirmed_at' => now(), 'unsubscribed_at' => now()]);
+        Subscription::forceCreate(['email' => 'nepotvrden@primer.rs', 'frequency' => Subscription::INSTANT, 'channel' => 'mail']);
+        $message = ['message' => 'Kolege, koliko vam papiri oduzimaju vremena? Napišite, moderator objavljuje sažetak.'];
+
+        $this->withJwt($this->editor)->postJson("/api/admin/debates/{$debate->id}/promotions", $message)->assertForbidden();
+        $this->withJwt($this->admin)->getJson("/api/admin/debates/{$debate->id}/promotion")->assertOk()->assertJsonPath('recipients', 3);
+        $this->withJwt($this->admin)->postJson("/api/admin/debates/{$debate->id}/promotions", $message)->assertCreated()->assertJsonPath('recipients', 3);
+        $this->withJwt($this->admin)->postJson("/api/admin/debates/{$debate->id}/promotions", $message)->assertUnprocessable();
+
+        $this->artisan('notifications:send')->assertSuccessful();
+        Mail::assertSent(NoticeMail::class, 2);
+        $this->assertNull(DebatePromotion::firstOrFail()->finished_at);
+
+        $this->travel(61)->minutes();
+        $this->artisan('notifications:send')->assertSuccessful();
+        $this->artisan('notifications:send')->assertSuccessful();
+        Mail::assertSent(NoticeMail::class, 3);
+        Mail::assertNotSent(NoticeMail::class, fn (NoticeMail $mail) => $mail->hasTo('odjavljen@primer.rs') || $mail->hasTo('nepotvrden@primer.rs'));
+        Mail::assertSent(NoticeMail::class, fn (NoticeMail $mail) => $mail->notice->kind === 'debate'
+            && $mail->notice->intro === $message['message']
+            && str_contains($mail->render(), 'Uključi se u raspravu'));
+        $promotion = DebatePromotion::firstOrFail();
+        $this->assertSame(3, $promotion->sent);
+        $this->assertNotNull($promotion->finished_at);
+
+        $debate->update(['status' => Debate::CLOSED]);
+        $this->withJwt($this->admin)->postJson("/api/admin/debates/{$debate->id}/promotions", $message)->assertUnprocessable();
+    }
+
+    public function test_migration_opens_administration_debate_with_named_moderator_and_author(): void
+    {
+        $igor = User::forceCreate(['name' => 'Igor Živanović', 'email' => 'igor@primer.rs', 'password' => 'x', 'role' => User::ADMIN]);
+        $rade = User::forceCreate(['name' => 'Rade Kraljevic', 'email' => 'rade@primer.rs', 'password' => 'x', 'role' => User::USER]);
+        $migration = require database_path('migrations/2026_11_11_000003_open_administration_debate.php');
+
+        $migration->up();
+        $migration->up();
+
+        $debate = Debate::where('slug', 'koliko-nam-administracija-u-nastavi-fv-oduzima-vremena')->sole();
+        $this->assertSame(Debate::OPEN, $debate->status);
+        $this->assertSame($igor->id, $debate->moderator_id);
+        $this->assertSame($rade->id, $debate->created_by);
     }
 
     public function test_rate_limit_counts_per_member_not_per_address(): void

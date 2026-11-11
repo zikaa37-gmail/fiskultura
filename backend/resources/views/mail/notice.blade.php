@@ -10,7 +10,7 @@
       @endif
       <p style="margin:0 0 6px;font-size:18px;font-weight:700;line-height:1.3;"><a href="{{ $item['url'] }}" style="color:#0b1736;text-decoration:none;">{{ $item['title'] }}</a></p>
       <p style="margin:0 0 8px;">{{ $item['summary'] }}</p>
-      <a href="{{ $item['url'] }}" style="color:#1d4ed8;font-weight:700;">Pročitaj na portalu</a>
+      <a href="{{ $item['url'] }}" style="color:#1d4ed8;font-weight:700;">{{ $notice->actionLabel }}</a>
     </div>
   @endforeach
   <p style="margin:0;font-size:13px;color:#55617a;">

@@ -16,8 +16,9 @@ import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu'
 import { AdminDebate, DEBATE_STATUS_LABELS, DebateStatus } from '../debates/debate.model';
 import { ProposeTopicDialogService } from '../debates/propose-topic-dialog';
 import { ModeratorDialog } from './moderator-dialog';
+import { PromoteDebateDialog } from './promote-debate-dialog';
 
-type RowAction = 'view' | 'approve' | 'reject' | 'close' | 'open' | 'moderator' | 'remove';
+type RowAction = 'view' | 'approve' | 'reject' | 'close' | 'open' | 'promote' | 'moderator' | 'remove';
 
 @Component({
   selector: 'app-admin-debates',
@@ -47,6 +48,9 @@ type RowAction = 'view' | 'approve' | 'reject' | 'close' | 'open' | 'moderator' 
               }
               @if (item.summary_pending) {
                 <span class="state-chip state-warn">nacrt sažetka</span>
+              }
+              @if (item.last_promotion; as promotion) {
+                <span class="state-chip" [class]="promotion.finished ? 'state-muted' : 'state-warn'">poziv {{ promotion.finished ? 'poslat' : 'se šalje' }} {{ promotion.sent }}/{{ promotion.recipients }}</span>
               }
             </span>
             <a class="post-title" [routerLink]="['/debate', item.slug]">{{ item.title }}</a>
@@ -118,6 +122,9 @@ export class AdminDebates {
     if (item.status === 'closed') {
       options.push({ value: 'open', label: 'Ponovo otvori', icon: 'check' });
     }
+    if (this.auth.isAdmin() && item.status === 'open') {
+      options.push({ value: 'promote', label: 'Pošalji poziv članovima', icon: 'mail', disabled: !!item.last_promotion && !item.last_promotion.finished });
+    }
     if (this.auth.isAdmin()) {
       options.push({ value: 'moderator', label: 'Promeni moderatora', icon: 'user' });
       options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
@@ -136,6 +143,17 @@ export class AdminDebates {
         break;
       case 'close':
         this.#update(item, { status: 'closed' }, 'Tema je zatvorena.');
+        break;
+      case 'promote':
+        this.#dialog
+          .open<PromoteDebateDialog, AdminDebate, string>(PromoteDebateDialog, { data: item, width: '640px', maxWidth: '100vw', panelClass: 'app-dialog-panel', autoFocus: false })
+          .afterClosed()
+          .subscribe((message) => {
+            if (message) {
+              this.#notifications.show(message);
+              this.resource.reload();
+            }
+          });
         break;
       case 'moderator':
         this.#dialog

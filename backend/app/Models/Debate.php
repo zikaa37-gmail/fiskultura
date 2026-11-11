@@ -55,6 +55,11 @@ class Debate extends Model
         return $this->hasMany(DebatePost::class);
     }
 
+    public function promotions(): HasMany
+    {
+        return $this->hasMany(DebatePromotion::class);
+    }
+
     public function scopePublic(Builder $query): Builder
     {
         return $query->whereIn('status', self::PUBLIC_STATUSES);

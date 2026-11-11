@@ -123,5 +123,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy']);
         Route::patch('/questions/{question}/assignee', [AdminQuestionController::class, 'assign']);
         Route::delete('/debates/{debate}', [AdminDebateController::class, 'destroy']);
+        Route::get('/debates/{debate}/promotion', [AdminDebateController::class, 'promotion']);
+        Route::post('/debates/{debate}/promotions', [AdminDebateController::class, 'promote'])->middleware('throttle:5,10');
     });
 });

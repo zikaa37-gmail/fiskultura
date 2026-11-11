@@ -49,6 +49,9 @@ import { AdminUser, Page } from './admin.model';
     </app-dialog-shell>
   `,
   styles: `
+    mat-form-field {
+      width: 100%;
+    }
     .moderator-options {
       display: grid;
       gap: 6px;

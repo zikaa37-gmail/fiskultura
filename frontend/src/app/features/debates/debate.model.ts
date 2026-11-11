@@ -18,9 +18,20 @@ export interface Debate {
   closed_at: string | null;
 }
 
+export interface DebatePromotion {
+  id: number;
+  message: string;
+  recipients: number;
+  sent: number;
+  failed: number;
+  finished: boolean;
+  created_at: string | null;
+}
+
 export interface AdminDebate extends Debate {
   creator: { id: number; name: string } | null;
   summary_pending: boolean;
+  last_promotion: DebatePromotion | null;
 }
 
 export interface DebateSummary {

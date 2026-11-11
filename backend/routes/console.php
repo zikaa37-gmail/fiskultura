@@ -6,6 +6,7 @@ use App\Models\Regulation;
 use App\Models\User;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
+use App\Services\Notifications\DebatePromoter;
 use App\Services\Notifications\NewsNotifier;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -75,12 +76,14 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
 
-Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier) {
+Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier, DebatePromoter $promoter) {
     $dry = (bool) $this->option('dry-run');
     $result = $notifier->run($dry);
+    $budget = $result['limited'] ? 0 : $notifier->remainingBudget(now()) - ($dry ? $result['instant'] + $result['weekly'] : 0);
+    $debates = $promoter->run(max(0, $budget), $dry);
 
-    $this->info(($dry ? 'Probno: ' : '')."Vesti za odmah: {$result['news']}, poslato odmah: {$result['instant']}, nedeljnih pregleda: {$result['weekly']}, neuspelih: {$result['failed']}.");
-    if ($result['limited']) {
+    $this->info(($dry ? 'Probno: ' : '')."Vesti za odmah: {$result['news']}, poslato odmah: {$result['instant']}, nedeljnih pregleda: {$result['weekly']}, poziva na debatu: {$debates['sent']}, neuspelih: ".($result['failed'] + $debates['failed']).'.');
+    if ($result['limited'] || $debates['limited']) {
         $this->warn('Dostignut je limit po satu; ostatak ide u sledećem pokretanju.');
     }
 

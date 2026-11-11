@@ -2,6 +2,7 @@
 
 namespace App\Services\Notifications;
 
+use App\Models\DebatePromotion;
 use App\Models\News;
 use App\Models\Subscription;
 use Illuminate\Support\Collection;
@@ -17,6 +18,7 @@ final readonly class Notice
         public string $manageUrl,
         public string $unsubscribeUrl,
         public string $oneClickUnsubscribeUrl,
+        public string $actionLabel = 'Pročitaj na portalu',
     ) {}
 
     public static function forNews(Subscription $subscription, string $kind, Collection $news): self
@@ -39,6 +41,28 @@ final readonly class Notice
             manageUrl: $subscription->link('obavestenja', Subscription::MANAGE),
             unsubscribeUrl: $subscription->link('obavestenja/odjava', Subscription::UNSUBSCRIBE),
             oneClickUnsubscribeUrl: rtrim((string) config('app.url'), '/')."/api/subscriptions/unsubscribe?id={$subscription->id}&token={$subscription->token(Subscription::UNSUBSCRIBE)}",
+        );
+    }
+
+    public static function forDebate(Subscription $subscription, DebatePromotion $promotion): self
+    {
+        $debate = $promotion->debate;
+
+        return new self(
+            kind: 'debate',
+            subject: "Stručna debata: {$debate->title}",
+            heading: 'Kolege, recite šta mislite',
+            intro: $promotion->message,
+            items: [[
+                'title' => $debate->title,
+                'summary' => (string) $debate->description,
+                'meta' => trim(($debate->posts_count ? "{$debate->posts_count} priloga do sada" : 'Rasprava je tek počela').($debate->moderator ? " · moderator {$debate->moderator->name}" : '')),
+                'url' => rtrim((string) config('app.frontend_url'), '/')."/debate/{$debate->slug}",
+            ]],
+            manageUrl: $subscription->link('obavestenja', Subscription::MANAGE),
+            unsubscribeUrl: $subscription->link('obavestenja/odjava', Subscription::UNSUBSCRIBE),
+            oneClickUnsubscribeUrl: rtrim((string) config('app.url'), '/')."/api/subscriptions/unsubscribe?id={$subscription->id}&token={$subscription->token(Subscription::UNSUBSCRIBE)}",
+            actionLabel: 'Uključi se u raspravu',
         );
     }
 }

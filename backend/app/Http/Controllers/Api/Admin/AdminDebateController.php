@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Debate;
 use App\Models\User;
 use App\Services\Assignments;
+use App\Services\Notifications\DebatePromoter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -69,6 +70,41 @@ class AdminDebateController extends Controller
         return response()->json($this->present($debate->fresh(['moderator', 'creator'])));
     }
 
+    public function promotion(Debate $debate)
+    {
+        return response()->json([
+            'recipients' => DebatePromoter::recipients()->count(),
+            'last' => $debate->promotions()->latest('id')->first()?->present(),
+            'hourly_limit' => (int) config('notifications.hourly_limit'),
+        ]);
+    }
+
+    public function promote(Request $request, Debate $debate)
+    {
+        $data = $request->validate([
+            'message' => ['required', 'string', 'min:20', 'max:1500'],
+        ], [
+            'message.min' => 'Poruka treba da ima bar jednu rečenicu (20 znakova).',
+        ]);
+        if ($debate->status !== Debate::OPEN) {
+            abort(422, 'Poziv može da se pošalje samo za otvorenu temu.');
+        }
+        if ($debate->promotions()->whereNull('finished_at')->exists()) {
+            abort(422, 'Prethodni poziv za ovu temu se još šalje.');
+        }
+
+        $promotion = $debate->promotions()->create([
+            'message' => $data['message'],
+            'sent_by' => $request->user()->id,
+            'recipients' => DebatePromoter::recipients()->count(),
+        ]);
+
+        return response()->json([
+            ...$promotion->present(),
+            'message_text' => "Poziv kreće ka {$promotion->recipients} primalaca. Šalje se postepeno, najviše ".config('notifications.hourly_limit').' mejlova na sat.',
+        ], 201);
+    }
+
     public function destroy(Debate $debate)
     {
         $debate->delete();
@@ -106,6 +142,7 @@ class AdminDebateController extends Controller
             ...DebateController::present($debate),
             'creator' => $debate->creator ? ['id' => $debate->creator->id, 'name' => $debate->creator->name] : null,
             'summary_pending' => $debate->summary_draft !== null,
+            'last_promotion' => $debate->promotions()->latest('id')->first()?->present(),
         ];
     }
 }

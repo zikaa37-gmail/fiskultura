@@ -412,7 +412,10 @@ samo u `.env`; bez ključa AI dugmad javljaju da AI nije podešen, a sve ostalo 
 - [x] Dodela pitanja uredniku / autoru i AI predlog odgovora
 - [x] Admin „Debate” (predlozi tema, moderatori, zatvaranje), testovi, provera na 360 px
 - [ ] `ANTHROPIC_API_KEY` u `deploy/.env` i probna AI analiza na pravoj debati (moderator proveri kvalitet)
-- [ ] Mejl dodeljenom uredniku/autoru kad stigne pitanje i moderatoru kad stigne predlog teme
+- [x] Mejl moderatoru za svaki novi prilog u njegovoj temi
+- [x] Poziv u raspravu (teaser) mejlom svim članovima sa uključenim obaveštenjima, iz admina
+- [x] Prva tema: „Koliko nam vođenje administracije u nastavi FV oduzima vremena…” (predložio Rade Kraljević, moderator Igor Živanović; pravi je migracija)
+- [ ] Mejl dodeljenom uredniku/autoru kad stigne pitanje i uredniku kad stigne predlog teme
 
 ## Faza 2 — sportske igre i PDF uputstva
 
