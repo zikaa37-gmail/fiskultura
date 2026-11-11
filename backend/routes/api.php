@@ -72,6 +72,10 @@ Route::middleware('jwt')->group(function () {
     Route::patch('/debates/{slug}/intro', [DebateController::class, 'updateIntro'])->middleware('throttle:30,1');
     Route::post('/debate-posts/{post}/like', [DebateController::class, 'like'])->middleware('throttle:60,1');
     Route::patch('/debate-posts/{post}', [DebateController::class, 'moderatePost']);
+    Route::post('/debate-posts/{post}/react', [DebateController::class, 'react'])->middleware('throttle:60,1');
+    Route::post('/debate-posts/{post}/ban', [DebateController::class, 'ban'])->middleware('throttle:20,1');
+    Route::get('/debates/{slug}/bans', [DebateController::class, 'bans']);
+    Route::delete('/debate-bans/{ban}', [DebateController::class, 'liftBan']);
     Route::post('/debates/{slug}/reopen-requests', [DebateController::class, 'requestReopen'])->middleware('throttle:3,10');
     Route::post('/debate-reopen-requests/{reopen}/decision', [DebateController::class, 'decideReopen']);
     Route::get('/me/notifications', [UserNotificationController::class, 'index']);

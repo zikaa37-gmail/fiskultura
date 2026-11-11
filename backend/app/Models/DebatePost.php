@@ -12,6 +12,8 @@ class DebatePost extends Model
 {
     public const KINDS = ['question', 'criticism', 'statement', 'suggestion'];
 
+    public const REACTIONS = ['like', 'agree', 'disagree', 'useful'];
+
     protected function casts(): array
     {
         return [
@@ -32,6 +34,6 @@ class DebatePost extends Model
 
     public function likers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'debate_post_likes', 'debate_post_id', 'user_id');
+        return $this->belongsToMany(User::class, 'debate_post_likes', 'debate_post_id', 'user_id')->withPivot('type');
     }
 }

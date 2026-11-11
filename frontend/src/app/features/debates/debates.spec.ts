@@ -19,7 +19,7 @@ const debate = {
   closed_at: null,
 };
 
-const post = { id: 7, kind: 'suggestion', body: 'Dva časa za sekciju.', likes_count: 2, liked: false, highlighted: true, author: 'Ana', mine: false, created_at: '2026-11-10T10:00:00Z' };
+const post = { id: 7, kind: 'suggestion', body: 'Dva časa za sekciju.', likes_count: 2, liked: false, reaction: null, reactions: { agree: 2 }, highlighted: true, author: 'Ana', mine: false, created_at: '2026-11-10T10:00:00Z' };
 
 describe('Debate', () => {
   let http: HttpTestingController;
@@ -62,6 +62,7 @@ describe('Debate', () => {
     http.expectOne('/api/debates/norma-i-sekcije').flush({
       ...debate,
       can_moderate: false,
+      my_ban: null,
       summary: {
         overview: 'Većina traži da se sekcije priznaju.',
         positions: [{ title: 'Priznati sekcije', summary: 'Dva časa.', support: 'jaka', post_ids: [7] }],
@@ -81,11 +82,15 @@ describe('Debate', () => {
     expect(element.textContent).toContain('jaka podrška');
     expect(element.querySelector('app-debate-moderation')).toBeNull();
 
-    (element.querySelector('.like-button') as HTMLButtonElement).click();
-    http.expectOne('/api/debate-posts/7/like').flush({ liked: true, likes_count: 3 });
+    const agree = element.querySelector('.reaction[title="Slažem se"]') as HTMLButtonElement;
+    expect(agree.textContent).toContain('2');
+    agree.click();
+    const reaction = http.expectOne('/api/debate-posts/7/react');
+    expect(reaction.request.body).toEqual({ type: 'agree' });
+    reaction.flush({ reaction: 'agree', liked: true, likes_count: 3, reactions: { agree: 3 } });
     await fixture.whenStable();
-    expect(element.querySelector('.like-button')?.textContent?.trim()).toBe('3');
-    expect(element.querySelector('.like-button')?.getAttribute('aria-pressed')).toBe('true');
+    expect(element.querySelector('.reaction[title="Slažem se"] .reaction-count')?.textContent?.trim()).toBe('3');
+    expect(element.querySelector('.reaction[title="Slažem se"]')?.getAttribute('aria-pressed')).toBe('true');
 
     (element.querySelector('.say-button') as HTMLButtonElement).click();
     await fixture.whenStable();

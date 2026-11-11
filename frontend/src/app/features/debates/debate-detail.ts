@@ -15,12 +15,13 @@ import { Icon } from '../../shared/icon/icon';
 import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Pagination } from '../../shared/pagination/pagination';
-import { DebateDetail as Detail, DEBATE_STATUS_LABELS, DebatePost, POST_KIND_ICONS, POST_KIND_LABELS, PostKind } from './debate.model';
+import { DebateDetail as Detail, DEBATE_STATUS_LABELS, DebatePost, POST_KIND_ICONS, POST_KIND_LABELS, PostKind, ReactionType } from './debate.model';
 import { DebateModeration } from './debate-moderation';
 import { DebatePostCard, PostAction } from './debate-post-card';
 import { DebateSummaryCard } from './debate-summary';
 import { DebateIntroCard } from './debate-intro';
 import { ReopenRequestDialog } from './reopen-request-dialog';
+import { BanDialog } from './ban-dialog';
 
 interface PostsPage {
   data: DebatePost[];
@@ -73,7 +74,11 @@ const SORTS = ['new', 'top', 'old'];
 
           <section aria-labelledby="posts-title">
             <h2 id="posts-title" class="mb-3">Prilozi</h2>
-            @if (item.status === 'open') {
+            @if (item.my_ban; as ban) {
+              <div class="frozen-note mb-4" role="status">
+                <p class="small"><strong>Ne možeš da pišeš priloge.</strong> {{ ban.message }}</p>
+              </div>
+            } @else if (item.status === 'open') {
               @if (composing()) {
                 <form class="composer mb-4" (ngSubmit)="send()">
                   <div class="chip-row" role="group" aria-label="Vrsta priloga">
@@ -121,7 +126,7 @@ const SORTS = ['new', 'top', 'old'];
             <app-list-header [count]="meta()?.total ?? null" label="Priloga" />
             <div class="debate-posts">
               @for (post of items(); track post.id) {
-                <app-debate-post-card [post]="post" [moderating]="item.can_moderate && item.status === 'open'" [frozen]="item.status !== 'open'" (like)="like(post)" (moderate)="moderate(post, $event)" />
+                <app-debate-post-card [post]="post" [moderating]="item.can_moderate && item.status === 'open'" [frozen]="item.status !== 'open'" (react)="react(post, $event)" (moderate)="moderate(post, $event)" />
               } @empty {
                 @if (!posts.isLoading()) {
                   <p class="muted">{{ hasFilters() ? 'Nema priloga za ovaj izbor.' : 'Još nema priloga. Budi prvi koji će reći šta misli.' }}</p>
@@ -311,14 +316,29 @@ export class DebateDetail {
     });
   }
 
-  protected like(post: DebatePost): void {
-    this.#http.post<{ liked: boolean; likes_count: number }>(`${API_URL}/debate-posts/${post.id}/like`, {}).subscribe({
-      next: ({ liked, likes_count }) => this.#overrides.update((all) => ({ ...all, [post.id]: { ...all[post.id], liked, likes_count } })),
-      error: (error) => this.#notifications.show(apiErrorMessage(error)),
-    });
+  protected react(post: DebatePost, type: ReactionType): void {
+    this.#http
+      .post<{ reaction: ReactionType | null; liked: boolean; likes_count: number; reactions: DebatePost['reactions'] }>(`${API_URL}/debate-posts/${post.id}/react`, { type })
+      .subscribe({
+        next: ({ reaction, liked, likes_count, reactions }) =>
+          this.#overrides.update((all) => ({ ...all, [post.id]: { ...all[post.id], reaction, liked, likes_count, reactions } })),
+        error: (error) => this.#notifications.show(apiErrorMessage(error)),
+      });
   }
 
   protected moderate(post: DebatePost, action: PostAction): void {
+    if (action === 'ban') {
+      this.#dialog
+        .open<BanDialog, DebatePost, string>(BanDialog, { data: post, width: '560px', maxWidth: '100vw', panelClass: 'app-dialog-panel', autoFocus: false })
+        .afterClosed()
+        .subscribe((message) => {
+          if (message) {
+            this.#notifications.show(message);
+            this.refresh();
+          }
+        });
+      return;
+    }
     const change = action === 'highlight' ? { highlighted: !post.highlighted } : { hidden: !post.hidden };
     this.#http.patch<DebatePost>(`${API_URL}/debate-posts/${post.id}`, change).subscribe({
       next: (saved) => {

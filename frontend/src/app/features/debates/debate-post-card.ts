@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { formatDate } from '../../core/content/content.model';
 import { Icon } from '../../shared/icon/icon';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
-import { DebatePost, POST_KIND_ICONS, POST_KIND_LABELS } from './debate.model';
+import { DebatePost, POST_KIND_ICONS, POST_KIND_LABELS, REACTIONS, ReactionType } from './debate.model';
 
-export type PostAction = 'highlight' | 'hide';
+export type PostAction = 'highlight' | 'hide' | 'ban';
 
 @Component({
   selector: 'app-debate-post-card',
@@ -32,18 +32,23 @@ export type PostAction = 'highlight' | 'hide';
       }
     </div>
     <p class="debate-post-body">{{ item.body }}</p>
-    <button
-      type="button"
-      class="like-button"
-      [class.like-button-on]="item.liked"
-      [attr.aria-pressed]="item.liked"
-      [attr.aria-label]="(item.liked ? 'Povuci lajk' : 'Lajkuj') + ', ukupno ' + item.likes_count"
-      [disabled]="item.mine || item.hidden || frozen()"
-      (click)="like.emit()"
-    >
-      <app-icon name="heart" [size]="18" />
-      <span>{{ item.likes_count }}</span>
-    </button>
+    <div class="reactions" role="group" aria-label="Reakcije">
+      @for (option of reactionOptions; track option.type) {
+        <button
+          type="button"
+          class="reaction"
+          [class.reaction-on]="item.reaction === option.type"
+          [attr.aria-pressed]="item.reaction === option.type"
+          [attr.aria-label]="option.label + ', ' + (item.reactions[option.type] ?? 0)"
+          [title]="option.label"
+          [disabled]="item.mine || item.hidden || frozen()"
+          (click)="react.emit(option.type)"
+        >
+          <span aria-hidden="true">{{ option.emoji }}</span>
+          <span class="reaction-count">{{ item.reactions[option.type] ?? 0 }}</span>
+        </button>
+      }
+    </div>
   `,
   styles: `
     :host {
@@ -84,10 +89,14 @@ export type PostAction = 'highlight' | 'hide';
     .debate-kind-suggestion {
       color: var(--color-primary);
     }
-    .like-button {
+    .reactions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .reaction {
       display: inline-flex;
       align-items: center;
-      justify-self: start;
       gap: 6px;
       min-width: 44px;
       min-height: 44px;
@@ -99,11 +108,13 @@ export type PostAction = 'highlight' | 'hide';
       font: inherit;
       cursor: pointer;
     }
-    .like-button-on {
-      border-color: var(--color-rose);
-      color: var(--color-rose);
+    .reaction-on {
+      border-color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-text);
+      font-weight: 700;
     }
-    .like-button:disabled {
+    .reaction:disabled {
       cursor: default;
     }
   `,
@@ -112,14 +123,16 @@ export class DebatePostCard {
   readonly post = input.required<DebatePost>();
   readonly moderating = input(false);
   readonly frozen = input(false);
-  readonly like = output<void>();
+  readonly react = output<ReactionType>();
   readonly moderate = output<PostAction>();
 
   protected readonly kindLabels = POST_KIND_LABELS;
   protected readonly kindIcons = POST_KIND_ICONS;
+  protected readonly reactionOptions = REACTIONS;
   protected readonly options = computed<MenuOption<PostAction>[]>(() => [
     { value: 'highlight', label: this.post().highlighted ? 'Ukloni isticanje' : 'Istakni kao vredan', icon: 'star' },
     { value: 'hide', label: this.post().hidden ? 'Vrati prilog' : 'Sakrij prilog', icon: this.post().hidden ? 'eye' : 'ban', danger: !this.post().hidden },
+    ...(this.post().can_ban ? [{ value: 'ban' as const, label: 'Zabrani autoru pisanje', icon: 'ban' as const, danger: true, dividerBefore: true }] : []),
   ]);
 
   protected date(value: string): string {

@@ -60,7 +60,7 @@ interface InboxPage {
                   <span class="small muted">
                     {{ item.created_at ? date(item.created_at) : '' }}
                     @for (channel of item.channels; track channel) {
-                      · <app-icon name="mail" [size]="14" /> {{ channelLabels[channel] ?? channel }}
+                      · <app-icon [name]="channel === 'site' ? 'bell' : 'mail'" [size]="14" /> {{ channelLabels[channel] ?? channel }}
                     }
                   </span>
                 </button>

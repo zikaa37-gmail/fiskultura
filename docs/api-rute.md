@@ -140,7 +140,11 @@ odgovori: `backend/database/data/questions.json` (uvoz kao kod propisa: menja sa
 | PATCH | `/debates/{slug}` | moderatori (admin, urednici, rotacija, dodeljeni) | `status` (`open` / `closed`), `description` |
 | GET | `/debates/{slug}/posts` | prijavljen | `q`, `kind`, `sort` (`new`, `top`, `old`), `highlighted`, `page`; 30 po strani, `liked` za mene; moderator vidi i sakrivene |
 | POST | `/debates/{slug}/posts` | prijavljen (10/min), tema `open` | `kind` (`question`, `criticism`, `statement`, `suggestion`), `body`; moderator teme dobija mejl (osim za svoj prilog) |
-| POST | `/debate-posts/{id}/like` | prijavljen (60/min) | lajk ili povlačenje lajka: `liked`, `likes_count` |
+| POST | `/debate-posts/{id}/react` | prijavljen (60/min) | `type` (`like`, `agree`, `disagree`, `useful`); jedna reakcija po članu, ista povlači, druga menja; ne na svoj prilog; autor dobija notifikaciju na sajtu |
+| POST | `/debate-posts/{id}/like` | prijavljen (60/min) | isto što i `react` sa `type: like` (stari klijenti) |
+| POST | `/debate-posts/{id}/ban` | moderatori | `reason`, `days` (1, 7, 30 ili `null` = trajno), `scope` (`debate` / `all`), `hide_post`; korisnik dobija mejl i notifikaciju; ne može adminu ni sebi |
+| GET | `/debates/{slug}/bans` | moderatori | aktivne zabrane za temu (i one za sve teme) |
+| DELETE | `/debate-bans/{id}` | moderatori | ukidanje zabrane, korisnik dobija notifikaciju |
 | PATCH | `/debate-posts/{id}` | moderatori (admin, urednici, rotacija, dodeljeni) | `highlighted`, `hidden` |
 | POST | `/debates/{slug}/analysis` | moderatori (admin, urednici, rotacija, dodeljeni; 5 za 10 min) | AI nacrt sažetka (`guidance` nije obavezno); 503 sa porukom ako AI nije podešen |
 | POST | `/debates/{slug}/analysis/approve` | moderatori (admin, urednici, rotacija, dodeljeni) | nacrt postaje javni `summary` |
@@ -160,7 +164,8 @@ Moderator teme je automatski urednik sa najmanje aktivnih tema (urednik koji sam
 ako urednika nema, admin. AI (`App\Services\Ai\ClaudeAssistant`, model `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY`)
 dobija priloge kao podatke i vraća JSON po šemi; ID-jevi priloga koji ne postoje se odbacuju. Ograničenja broja
 zahteva (`throttle`) računaju se po korisniku, ne po IP adresi. Zatvorena tema je zamrznuta: prilozi, lajkovi,
-isticanje i analiza vraćaju 422.
+isticanje i analiza vraćaju 422. Korisnik sa zabranom (`my_ban` na temi) ne piše priloge, zahteve ni predloge tema
+(403 sa razlogom), ali čita i reaguje.
 
 ## Pošta admin@fiskultura.rs (#53, samo admin)
 

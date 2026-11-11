@@ -17,6 +17,7 @@ export interface InboxItem {
 
 export const CHANNEL_LABELS: Record<string, string> = {
   mail: 'mejl',
+  site: 'na sajtu',
   whatsapp: 'WhatsApp',
   viber: 'Viber',
   sms: 'SMS',

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, linkedSignal, output, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -8,7 +8,7 @@ import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
-import { DebateDetail, POST_KIND_LABELS } from './debate.model';
+import { DebateBan, DebateDetail, POST_KIND_LABELS } from './debate.model';
 import { DebateSummaryCard } from './debate-summary';
 import { DebateIntroCard } from './debate-intro';
 
@@ -23,6 +23,9 @@ import { DebateIntroCard } from './debate-intro';
       <div class="moderation-body">
         <section class="intro-panel" aria-label="Uvodni pregled">
           <strong>Uvodni pregled</strong>
+          @if (item.intro_busy) {
+            <mat-progress-bar mode="indeterminate" />
+          }
           <p class="small muted">
             @switch (item.intro_status) {
               @case ('pending') {
@@ -87,6 +90,20 @@ import { DebateIntroCard } from './debate-intro';
             }
           }
         </section>
+        @if (bans.value()?.length) {
+          <section class="reopen-requests" aria-label="Zabrane pisanja">
+            <strong>Zabrane pisanja ({{ bans.value()?.length }})</strong>
+            @for (ban of bans.value(); track ban.id) {
+              <div class="reopen-request">
+                <p class="small"><strong>{{ ban.user?.name }}</strong> · {{ ban.scope === 'all' ? 'sve teme' : 'ova tema' }} · {{ ban.until ? 'do ' + time(ban.until) : 'trajno' }}{{ ban.moderator ? ' · ' + ban.moderator : '' }}</p>
+                <p class="small muted">{{ ban.reason }}</p>
+                <div class="moderation-actions">
+                  <button type="button" mat-stroked-button [disabled]="busy()" (click)="liftBan(ban.id)">Ukini zabranu</button>
+                </div>
+              </div>
+            }
+          </section>
+        }
         @if (item.reopen_requests?.length) {
           <section class="reopen-requests" aria-label="Zahtevi za ponovno otvaranje">
             <strong>Zahtevi da se tema ponovo otvori ({{ item.reopen_requests?.length }})</strong>
@@ -219,6 +236,22 @@ export class DebateModeration {
 
   protected readonly guidance = linkedSignal(() => this.debate().summary_guidance ?? '');
   protected readonly busy = signal(false);
+  protected readonly bans = httpResource<DebateBan[]>(() => `${API_URL}/debates/${this.debate().slug}/bans`);
+
+  protected liftBan(id: number): void {
+    this.busy.set(true);
+    this.#http.delete(`${API_URL}/debate-bans/${id}`).subscribe({
+      next: () => {
+        this.busy.set(false);
+        this.#notifications.show('Zabrana je ukinuta. Korisnik dobija notifikaciju.');
+        this.bans.reload();
+      },
+      error: (error) => {
+        this.busy.set(false);
+        this.#notifications.show(apiErrorMessage(error));
+      },
+    });
+  }
   protected readonly introGuidance = linkedSignal(() => this.debate().intro_guidance ?? '');
 
   protected requestIntro(): void {

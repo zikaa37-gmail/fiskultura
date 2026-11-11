@@ -76,9 +76,31 @@ export interface DebateDetail extends Debate {
   intro_requested_at?: string | null;
   intro_draft?: DebateIntro | null;
   my_reopen_request: ReopenRequest | null;
+  my_ban: DebateBan | null;
   summary_draft?: DebateSummary | null;
   summary_guidance?: string | null;
   reopen_requests?: ReopenRequest[];
+}
+
+export type ReactionType = 'like' | 'agree' | 'disagree' | 'useful';
+
+export const REACTIONS: { type: ReactionType; emoji: string; label: string }[] = [
+  { type: 'agree', emoji: '✅', label: 'Slažem se' },
+  { type: 'disagree', emoji: '❌', label: 'Ne slažem se' },
+  { type: 'useful', emoji: '💡', label: 'Korisno' },
+  { type: 'like', emoji: '👍', label: 'Sviđa mi se' },
+];
+
+export interface DebateBan {
+  id: number;
+  user: { id: number; name: string } | null;
+  scope: 'debate' | 'all';
+  debate: { slug: string; title: string } | null;
+  reason: string;
+  until: string | null;
+  moderator: string | null;
+  created_at: string | null;
+  message?: string;
 }
 
 export interface DebatePost {
@@ -87,6 +109,10 @@ export interface DebatePost {
   body: string;
   likes_count: number;
   liked: boolean;
+  reaction: ReactionType | null;
+  reactions: Partial<Record<ReactionType, number>>;
+  author_id?: number;
+  can_ban?: boolean;
   highlighted: boolean;
   author: string;
   mine: boolean;

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\DebateBanMail;
 use App\Mail\DebatePostMail;
 use App\Mail\DebateReopenDecisionMail;
 use App\Mail\DebateReopenRequestMail;
 use App\Models\Debate;
+use App\Models\DebateBan;
 use App\Models\DebateModeratorLog;
 use App\Models\DebatePost;
 use App\Models\DebateReopenRequest;
@@ -67,6 +69,7 @@ class DebateController extends Controller
             'can_moderate' => $moderating,
             'summary' => self::presentSummary($debate->summary, $debate->summary_approved_at, $debate->summary_posts),
             'intro' => self::presentIntro($debate->intro, $debate->intro_approved_at, false),
+            'my_ban' => ($ban = DebateBan::activeFor($user, $debate)) ? [...$ban->present(), 'message' => $ban->message()] : null,
             'my_reopen_request' => $debate->reopenRequests()->where('user_id', $user->id)->latest('id')->first()?->present(),
             ...($moderating ? [
                 'summary_draft' => self::presentSummary($debate->summary_draft, $debate->summary_draft_at, $debate->summary_draft_posts),
@@ -98,7 +101,6 @@ class DebateController extends Controller
 
         $posts = $debate->posts()
             ->with('author')
-            ->withExists(['likers as liked' => fn (Builder $query) => $query->where('users.id', $user->id)])
             ->when(! $moderating, fn (Builder $query) => $query->whereNull('hidden_at'))
             ->when($filters['kind'] ?? null, fn (Builder $query, string $kind) => $query->where('kind', $kind))
             ->when($filters['highlighted'] ?? false, fn (Builder $query) => $query->whereNotNull('highlighted_at'))
@@ -109,8 +111,10 @@ class DebateController extends Controller
             ->orderByDesc('id')
             ->paginate(30, page: $filters['page'] ?? 1);
 
+        $reactions = self::reactionsFor(collect($posts->items())->pluck('id')->all(), $user);
+
         return response()->json([
-            'data' => collect($posts->items())->map(fn (DebatePost $post) => self::presentPost($post, $user, $moderating))->values(),
+            'data' => collect($posts->items())->map(fn (DebatePost $post) => self::presentPost($post, $user, $moderating, $reactions))->values(),
             'meta' => ['current_page' => $posts->currentPage(), 'last_page' => $posts->lastPage(), 'total' => $posts->total()],
         ]);
     }
@@ -125,6 +129,7 @@ class DebateController extends Controller
             'description.min' => 'Opišite temu u bar jednoj rečenici (20 znakova).',
         ]);
         $user = $request->user();
+        $this->ensureNotBanned($user, null);
         $staff = $user->hasRole(User::EDITOR, User::ADMIN);
 
         if (! $staff && Debate::where('created_by', $user->id)->where('status', Debate::PROPOSED)->count() >= self::MAX_PROPOSALS) {
@@ -159,6 +164,7 @@ class DebateController extends Controller
         if ($debate->status !== Debate::OPEN) {
             abort(422, 'Tema je zatvorena za nove priloge.');
         }
+        $this->ensureNotBanned($request->user(), $debate);
 
         $data = $request->validate([
             'kind' => ['required', Rule::in(DebatePost::KINDS)],
@@ -174,26 +180,80 @@ class DebateController extends Controller
         return response()->json(self::presentPost($post->load('author'), $request->user(), $debate->canModerate($request->user())), 201);
     }
 
-    public function like(Request $request, DebatePost $post)
+    public function like(Request $request, DebatePost $post, Inbox $inbox)
+    {
+        $request->merge(['type' => $request->input('type', 'like')]);
+
+        return $this->react($request, $post, $inbox);
+    }
+
+    public function react(Request $request, DebatePost $post, Inbox $inbox)
     {
         $debate = $post->debate;
         if (! in_array($debate->status, Debate::PUBLIC_STATUSES, true) || $post->hidden_at) {
             abort(404);
         }
         $this->ensureOpen($debate);
-        $userId = $request->user()->id;
+        $type = $request->validate(['type' => ['required', Rule::in(DebatePost::REACTIONS)]])['type'];
+        $user = $request->user();
+        if ($post->user_id === $user->id) {
+            abort(422, 'Na svoj prilog ne možete da reagujete.');
+        }
 
-        $liked = DB::transaction(function () use ($post, $userId) {
-            $removed = $post->likers()->detach($userId);
-            if (! $removed) {
-                $post->likers()->attach($userId, ['created_at' => now()]);
+        $previous = DB::table('debate_post_likes')->where('debate_post_id', $post->id)->where('user_id', $user->id)->value('type');
+        $mine = DB::transaction(function () use ($post, $user, $type, $previous) {
+            if ($previous === $type) {
+                $post->likers()->detach($user->id);
+                $mine = null;
+            } elseif ($previous) {
+                $post->likers()->updateExistingPivot($user->id, ['type' => $type]);
+                $mine = $type;
+            } else {
+                $post->likers()->attach($user->id, ['type' => $type, 'created_at' => now()]);
+                $mine = $type;
             }
             $post->forceFill(['likes_count' => $post->likers()->count()])->save();
 
-            return ! $removed;
+            return $mine;
         });
 
-        return response()->json(['liked' => $liked, 'likes_count' => $post->likes_count]);
+        if ($mine && $mine !== $previous && $post->author && ! $post->author->isBlocked()) {
+            $inbox->record(
+                $post->author,
+                'debate_reaction',
+                'Nova reakcija na vaš prilog: '.self::REACTION_LABELS[$mine],
+                "{$user->name} · tema „{$debate->title}“: ".Str::limit($post->body, 160),
+                "/debate/{$debate->slug}",
+                ['site'],
+            );
+        }
+
+        $counts = self::reactionsFor([$post->id], $user);
+
+        return response()->json([
+            'reaction' => $mine,
+            'liked' => $mine !== null,
+            'likes_count' => $post->likes_count,
+            'reactions' => $counts['counts'][$post->id] ?? [],
+        ]);
+    }
+
+    public const REACTION_LABELS = ['like' => 'sviđa mi se', 'agree' => 'slažem se', 'disagree' => 'ne slažem se', 'useful' => 'korisno'];
+
+    public static function reactionsFor(array $postIds, ?User $viewer): array
+    {
+        if (! $postIds) {
+            return ['counts' => [], 'mine' => []];
+        }
+        $counts = [];
+        DB::table('debate_post_likes')->whereIn('debate_post_id', $postIds)
+            ->selectRaw('debate_post_id, type, count(*) as total')->groupBy('debate_post_id', 'type')->get()
+            ->each(function (object $row) use (&$counts) {
+                $counts[$row->debate_post_id][$row->type] = (int) $row->total;
+            });
+        $mine = $viewer ? DB::table('debate_post_likes')->whereIn('debate_post_id', $postIds)->where('user_id', $viewer->id)->pluck('type', 'debate_post_id')->all() : [];
+
+        return ['counts' => $counts, 'mine' => $mine];
     }
 
     public function moderatePost(Request $request, DebatePost $post)
@@ -299,6 +359,7 @@ class DebateController extends Controller
             abort(422, 'Tema nije zatvorena.');
         }
         $user = $request->user();
+        $this->ensureNotBanned($user, $debate);
         if ($debate->reopenRequests()->where('user_id', $user->id)->where('status', DebateReopenRequest::PENDING)->exists()) {
             abort(422, 'Vaš zahtev za ovu temu već čeka odgovor moderatora.');
         }
@@ -468,6 +529,87 @@ class DebateController extends Controller
         ];
     }
 
+    public function ban(Request $request, DebatePost $post, Inbox $inbox)
+    {
+        $debate = $post->debate;
+        $moderator = $request->user();
+        if (! $debate->canModerate($moderator)) {
+            abort(403, 'Samo moderator zabranjuje pisanje.');
+        }
+        $target = $post->author ?? abort(422, 'Autor priloga više nema nalog.');
+        if ($target->id === $moderator->id || $target->isAdmin()) {
+            abort(422, 'Ovom korisniku ne može da se zabrani pisanje.');
+        }
+
+        $data = $request->validate([
+            'reason' => ['required', 'string', 'min:5', 'max:500'],
+            'days' => ['nullable', Rule::in([1, 7, 30])],
+            'scope' => ['required', Rule::in(['debate', 'all'])],
+            'hide_post' => ['sometimes', 'boolean'],
+        ], [
+            'reason.required' => 'Upišite razlog; korisnik ga dobija mejlom.',
+            'reason.min' => 'Razlog treba da ima bar 5 znakova.',
+        ]);
+
+        $ban = DebateBan::create([
+            'user_id' => $target->id,
+            'debate_id' => $data['scope'] === 'debate' ? $debate->id : null,
+            'banned_by' => $moderator->id,
+            'reason' => trim($data['reason']),
+            'until' => isset($data['days']) ? now()->addDays((int) $data['days']) : null,
+        ])->load(['user', 'debate', 'moderator']);
+
+        if ($data['hide_post'] ?? false) {
+            $post->forceFill(['hidden_at' => $post->hidden_at ?? now()])->save();
+            $debate->refreshCounters();
+        }
+
+        if (! $target->isBlocked()) {
+            try {
+                Mail::to($target->email)->send(new DebateBanMail($ban));
+            } catch (Throwable $error) {
+                report($error);
+            }
+            $inbox->record($target, 'debate_ban', 'Zabrana pisanja u stručnim debatama', $ban->message(), $ban->debate ? "/debate/{$ban->debate->slug}" : '/debate');
+        }
+
+        return response()->json([...$ban->present(), 'message' => "{$target->name} više ne može da piše ".($ban->debate_id ? 'u ovoj temi' : 'u debatama').'. Dobija mejl sa razlogom.'], 201);
+    }
+
+    public function bans(Request $request, string $slug)
+    {
+        $debate = Debate::where('slug', $slug)->firstOrFail();
+        if (! $debate->canModerate($request->user())) {
+            abort(403);
+        }
+
+        return response()->json(DebateBan::active()->affecting($debate)->with(['user', 'debate', 'moderator'])->orderByDesc('id')->get()
+            ->map(fn (DebateBan $ban) => $ban->present())->values());
+    }
+
+    public function liftBan(Request $request, DebateBan $ban, Inbox $inbox)
+    {
+        $user = $request->user();
+        $allowed = $ban->debate ? $ban->debate->canModerate($user) : ($user->hasRole(User::ADMIN, User::EDITOR) || $user->moderator_pool);
+        if (! $allowed) {
+            abort(403, 'Samo moderator ukida zabranu.');
+        }
+
+        $ban->forceFill(['lifted_at' => now(), 'lifted_by' => $user->id])->save();
+        if ($ban->user && ! $ban->user->isBlocked()) {
+            $inbox->record($ban->user, 'debate_ban_lifted', 'Zabrana pisanja je ukinuta', 'Ponovo možete da pišete priloge u stručnim debatama.', $ban->debate ? "/debate/{$ban->debate->slug}" : '/debate');
+        }
+
+        return response()->json(['message' => 'Zabrana je ukinuta.']);
+    }
+
+    private function ensureNotBanned(User $user, ?Debate $debate): void
+    {
+        if ($ban = DebateBan::activeFor($user, $debate)) {
+            abort(403, $ban->message());
+        }
+    }
+
     private function ensureOpen(Debate $debate): void
     {
         if ($debate->status === Debate::CLOSED) {
@@ -548,19 +690,27 @@ class DebateController extends Controller
         ];
     }
 
-    public static function presentPost(DebatePost $post, ?User $viewer, bool $moderating): array
+    public static function presentPost(DebatePost $post, ?User $viewer, bool $moderating, array $reactions = ['counts' => [], 'mine' => []]): array
     {
+        $mine = $reactions['mine'][$post->id] ?? null;
+
         return [
             'id' => $post->id,
             'kind' => $post->kind,
             'body' => $post->body,
             'likes_count' => $post->likes_count,
-            'liked' => (bool) ($post->liked ?? false),
+            'liked' => $mine !== null,
+            'reaction' => $mine,
+            'reactions' => $reactions['counts'][$post->id] ?? (object) [],
             'highlighted' => $post->highlighted_at !== null,
             'author' => $post->author?->name ?? 'Bivši član',
             'mine' => $viewer !== null && $post->user_id === $viewer->id,
             'created_at' => $post->created_at?->toIso8601String(),
-            ...($moderating ? ['hidden' => $post->hidden_at !== null] : []),
+            ...($moderating ? [
+                'hidden' => $post->hidden_at !== null,
+                'author_id' => $post->user_id,
+                'can_ban' => $post->author !== null && $post->user_id !== $viewer?->id && ! $post->author->isAdmin(),
+            ] : []),
         ];
     }
 }

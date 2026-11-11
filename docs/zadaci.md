@@ -453,6 +453,13 @@ folderu „Sent” (vidi se i u Roundcube-u). IMAP 993 / SMTP 465, lozinka samo 
 - [ ] Lozinka u `backend/.env` i `deploy/.env`, provera sa pravim sandučetom
 - [ ] Nacrti, brisanje u otpad i premeštanje u folder (ako zatreba)
 
+### #54 Reakcije, zabrane pisanja i notifikacije u realnom vremenu (faza-1b)
+- [x] Reakcije na prilog: slažem se, ne slažem se, korisno, sviđa mi se (jedna po članu); autoru notifikacija na sajtu; AI analiza dobija raspodelu
+- [x] Moderator zabranjuje autoru pisanje (razlog, 1/7/30 dana ili trajno, tema ili sve teme), mejl i notifikacija, ukidanje
+- [x] Uvodni pregled: loader dok AI radi, napomene odvojene, izmena teksta nacrta i objavljenog
+- [ ] Web soketi (notifikacije i novi prilozi bez osvežavanja); na deljenom hostingu nema trajnog procesa, pa treba spoljni servis (npr. Pusher / Ably) ili VPS sa Laravel Reverb-om
+- [ ] Odgovor na prilog (niti) i pominjanje kolege
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
