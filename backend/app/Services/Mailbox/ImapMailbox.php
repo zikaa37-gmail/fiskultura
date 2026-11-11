@@ -18,6 +18,18 @@ class ImapMailbox implements Mailbox
 {
     private const SENT_FOLDERS = ['INBOX.Sent', 'Sent', 'INBOX.Sent Messages', 'Sent Messages', 'INBOX.Sent Items', 'Sent Items'];
 
+    private const ROLE_NAMES = [
+        'sent' => ['sent', 'sent messages', 'sent items'],
+        'trash' => ['trash', 'deleted', 'deleted messages', 'deleted items'],
+        'archive' => ['archive', 'archives'],
+        'junk' => ['junk', 'spam'],
+        'drafts' => ['drafts'],
+    ];
+
+    private const ROLE_DEFAULTS = ['trash' => 'INBOX.Trash', 'archive' => 'INBOX.Archive', 'junk' => 'INBOX.Junk'];
+
+    public const ACTIONS = ['delete', 'archive', 'spam', 'inbox', 'move'];
+
     private ?Client $client = null;
 
     public function __construct(private readonly array $config) {}
@@ -65,6 +77,7 @@ class ImapMailbox implements Mailbox
                 $folders[] = [
                     'path' => $folder->path,
                     'name' => $folder->name,
+                    'role' => $this->role($folder),
                     'total' => (int) ($status['exists'] ?? 0),
                     'unread' => $folder->path === 'INBOX' ? $folder->query()->whereUnseen()->setFetchBody(false)->leaveUnread()->count() : null,
                 ];
@@ -83,7 +96,7 @@ class ImapMailbox implements Mailbox
             $paginator = $query->paginate($perPage, $page);
 
             return [
-                'data' => collect($paginator->items())->map(fn (Message $message) => $this->summary($message))->values()->all(),
+                'data' => collect($paginator->items())->map(fn (Message $message) => $this->summary($message))->sortByDesc('uid')->values()->all(),
                 'meta' => ['current_page' => $paginator->currentPage(), 'last_page' => max(1, $paginator->lastPage()), 'total' => $paginator->total()],
             ];
         });
@@ -138,6 +151,42 @@ class ImapMailbox implements Mailbox
         });
     }
 
+    public function act(string $folder, int $uid, string $action, ?string $target = null): string
+    {
+        return $this->guard(function () use ($folder, $uid, $action, $target) {
+            $source = $this->folder($folder);
+            $message = $source->query()->setFetchBody(false)->leaveUnread()->getMessageByUid($uid);
+            $sourceRole = $this->role($source);
+
+            if ($action === 'delete' && $sourceRole === 'trash') {
+                $message->delete(true);
+
+                return 'Mejl je trajno obrisan.';
+            }
+
+            $destination = match ($action) {
+                'delete' => $this->roleFolder('trash'),
+                'archive' => $this->roleFolder('archive'),
+                'spam' => $this->roleFolder('junk'),
+                'inbox' => $this->folder('INBOX'),
+                'move' => $this->folder((string) $target),
+                default => throw new MailboxUnavailableException('Nepoznata radnja.'),
+            };
+            if ($destination->path === $source->path) {
+                throw new MailboxUnavailableException('Mejl je već u tom folderu.');
+            }
+            $message->move($destination->path);
+
+            return match ($action) {
+                'delete' => 'Mejl je premešten u Otpad.',
+                'archive' => 'Mejl je arhiviran.',
+                'spam' => 'Mejl je premešten u Neželjeno.',
+                'inbox' => 'Mejl je vraćen u Primljeno.',
+                default => "Mejl je premešten u {$destination->name}.",
+            };
+        });
+    }
+
     public function send(array $to, array $cc, string $subject, string $body, ?string $inReplyTo = null, ?string $references = null): void
     {
         $this->ensureConfigured();
@@ -179,7 +228,7 @@ class ImapMailbox implements Mailbox
 
         return [
             'uid' => (int) $message->getUid(),
-            'subject' => trim((string) $message->getSubject()->toString()) ?: '(bez naslova)',
+            'subject' => trim($this->decoded((string) $message->getSubject()->toString())) ?: '(bez naslova)',
             'from' => $from[0] ?? null,
             'to' => $this->addresses($message->getTo()),
             'date' => $this->date($message),
@@ -193,7 +242,7 @@ class ImapMailbox implements Mailbox
 
         return collect($items)
             ->filter(fn ($item) => $item instanceof Address && $item->mail)
-            ->map(fn (Address $address) => ['name' => $address->personal ?: null, 'email' => $address->mail])
+            ->map(fn (Address $address) => ['name' => $address->personal ? $this->decoded($address->personal) : null, 'email' => $address->mail])
             ->values()
             ->all();
     }
@@ -225,7 +274,46 @@ class ImapMailbox implements Mailbox
 
     private function folder(string $path): Folder
     {
-        return $this->client()->getFolderByPath($path) ?? throw new MailboxUnavailableException('Folder ne postoji.');
+        $folder = $this->client()->getFolderByPath($path) ?? throw new MailboxUnavailableException('Folder ne postoji.');
+        $this->client()->openFolder($folder->path, true);
+
+        return $folder;
+    }
+
+    private function decoded(string $value): string
+    {
+        if (! str_contains($value, '=?')) {
+            return $value;
+        }
+        $decoded = @iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+
+        return $decoded !== false && $decoded !== '' ? $decoded : mb_decode_mimeheader($value);
+    }
+
+    private function role(Folder $folder): ?string
+    {
+        if ($folder->path === 'INBOX') {
+            return 'inbox';
+        }
+        $name = mb_strtolower($folder->name);
+        foreach (self::ROLE_NAMES as $role => $names) {
+            if (in_array($name, $names, true)) {
+                return $role;
+            }
+        }
+
+        return null;
+    }
+
+    private function roleFolder(string $role): Folder
+    {
+        foreach ($this->client()->getFolders(false) as $folder) {
+            if ($this->role($folder) === $role) {
+                return $folder;
+            }
+        }
+
+        return $this->client()->createFolder(self::ROLE_DEFAULTS[$role], false);
     }
 
     private function sentFolder(): ?Folder
@@ -244,7 +332,7 @@ class ImapMailbox implements Mailbox
     {
         $this->ensureConfigured();
         if (! $this->client) {
-            $this->client = (new ClientManager)->make([
+            $this->client = (new ClientManager(['decoding' => ['options' => ['header' => 'iconv', 'message' => 'utf-8', 'attachment' => 'utf-8']]]))->make([
                 'host' => $this->config['host'],
                 'port' => (int) ($this->config['imap_port'] ?? 993),
                 'protocol' => 'imap',

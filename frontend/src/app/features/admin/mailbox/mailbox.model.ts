@@ -3,9 +3,14 @@ export interface MailAddress {
   email: string;
 }
 
+export type FolderRole = 'inbox' | 'sent' | 'trash' | 'archive' | 'junk' | 'drafts' | null;
+
+export type MailAction = 'open' | 'read' | 'unread' | 'archive' | 'move' | 'spam' | 'inbox' | 'delete';
+
 export interface MailFolder {
   path: string;
   name: string;
+  role: FolderRole;
   total: number;
   unread: number | null;
 }
@@ -45,6 +50,14 @@ export interface ComposeData {
   references?: string | null;
 }
 
+const ROLE_LABELS: Record<string, string> = {
+  sent: 'Poslato',
+  trash: 'Otpad',
+  archive: 'Arhiva',
+  junk: 'Neželjeno',
+  drafts: 'Nacrti',
+};
+
 const FOLDER_LABELS: Record<string, string> = {
   INBOX: 'Primljeno',
   sent: 'Poslato',
@@ -53,13 +66,16 @@ const FOLDER_LABELS: Record<string, string> = {
   drafts: 'Nacrti',
   trash: 'Otpad',
   junk: 'Neželjeno',
-  spam: 'Neželjeno',
+  spam: 'Spam (filter servera)',
   archive: 'Arhiva',
 };
 
 export function folderLabel(folder: MailFolder): string {
   if (folder.path === 'INBOX') {
     return FOLDER_LABELS['INBOX'];
+  }
+  if (folder.role && ROLE_LABELS[folder.role] && folder.name.toLowerCase() !== 'spam') {
+    return ROLE_LABELS[folder.role];
   }
   return FOLDER_LABELS[folder.name.toLowerCase()] ?? folder.name;
 }

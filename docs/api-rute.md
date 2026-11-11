@@ -170,6 +170,7 @@ isticanje i analiza vraćaju 422.
 | GET | `/admin/mailbox/messages` | `folder` (podrazumevano `INBOX`), `page`, `q`; 25 po strani, najnoviji prvi, ne menja „pročitano” |
 | GET | `/admin/mailbox/messages/{uid}` | ceo mejl (`text`, `html`, `cc`, `reply_to`, `message_id`, `attachments`); označava kao pročitan |
 | PATCH | `/admin/mailbox/messages/{uid}` | `folder`, `seen` |
+| POST | `/admin/mailbox/messages/{uid}/action` | `folder`, `action` (`delete`, `archive`, `spam`, `inbox`, `move` + `target`); brisanje iz Otpada je trajno, arhiva/neželjeno se prave ako ne postoje |
 | GET | `/admin/mailbox/messages/{uid}/attachments/{index}` | preuzimanje priloga (uvek `application/octet-stream`, `attachment`) |
 | POST | `/admin/mailbox/send` | `to[]`, `cc[]`, `subject`, `body` (tekst), `in_reply_to`, `references` (20 za 10 min); kopija ide u folder „Sent” |
 

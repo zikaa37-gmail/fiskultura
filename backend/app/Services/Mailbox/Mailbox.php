@@ -18,5 +18,7 @@ interface Mailbox
 
     public function markSeen(string $folder, int $uid, bool $seen): void;
 
+    public function act(string $folder, int $uid, string $action, ?string $target = null): string;
+
     public function send(array $to, array $cc, string $subject, string $body, ?string $inReplyTo = null, ?string $references = null): void;
 }

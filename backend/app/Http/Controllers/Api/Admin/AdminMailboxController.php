@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Mailbox\ImapMailbox;
 use App\Services\Mailbox\Mailbox;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class AdminMailboxController extends Controller
@@ -40,6 +42,17 @@ class AdminMailboxController extends Controller
         $this->mailbox->markSeen($data['folder'] ?? 'INBOX', $uid, $data['seen']);
 
         return response()->json(['seen' => $data['seen']]);
+    }
+
+    public function act(Request $request, int $uid)
+    {
+        $data = $request->validate([
+            'folder' => ['nullable', 'string', 'max:200'],
+            'action' => ['required', Rule::in(ImapMailbox::ACTIONS)],
+            'target' => ['required_if:action,move', 'nullable', 'string', 'max:200'],
+        ]);
+
+        return response()->json(['message' => $this->mailbox->act($data['folder'] ?? 'INBOX', $uid, $data['action'], $data['target'] ?? null)]);
     }
 
     public function attachment(Request $request, int $uid, int $index)

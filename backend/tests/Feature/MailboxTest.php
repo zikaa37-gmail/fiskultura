@@ -70,6 +70,18 @@ class MailboxTest extends TestCase
         $this->assertSame([['ana@primer.rs'], ['marko@primer.rs'], 'Re: Prijava za seminar', 'Hvala, prijava je primljena.', '<abc@primer.rs>', null], $this->mailbox->calls['send']);
     }
 
+    public function test_message_actions_are_validated_and_forwarded(): void
+    {
+        $this->withJwt($this->admin)->postJson('/api/admin/mailbox/messages/7/action', ['folder' => 'INBOX', 'action' => 'archive'])
+            ->assertOk()->assertJsonPath('message', 'Mejl je arhiviran.');
+        $this->assertSame(['INBOX', 7, 'archive', null], $this->mailbox->calls['act']);
+
+        $this->withJwt($this->admin)->postJson('/api/admin/mailbox/messages/7/action', ['action' => 'move'])->assertUnprocessable()->assertJsonValidationErrors('target');
+        $this->withJwt($this->admin)->postJson('/api/admin/mailbox/messages/7/action', ['action' => 'nuke'])->assertUnprocessable();
+        $this->withJwt($this->admin)->postJson('/api/admin/mailbox/messages/7/action', ['action' => 'move', 'target' => 'INBOX.Projekti'])->assertOk();
+        $this->assertSame(['INBOX', 7, 'move', 'INBOX.Projekti'], $this->mailbox->calls['act']);
+    }
+
     public function test_check_command_reports_imap_and_smtp(): void
     {
         $this->artisan('mailbox:check')
@@ -134,6 +146,13 @@ class FakeMailbox implements Mailbox
     }
 
     public function markSeen(string $folder, int $uid, bool $seen): void {}
+
+    public function act(string $folder, int $uid, string $action, ?string $target = null): string
+    {
+        $this->calls['act'] = [$folder, $uid, $action, $target];
+
+        return 'Mejl je arhiviran.';
+    }
 
     public function send(array $to, array $cc, string $subject, string $body, ?string $inReplyTo = null, ?string $references = null): void
     {

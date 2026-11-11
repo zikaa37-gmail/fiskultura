@@ -141,6 +141,7 @@ Route::middleware('jwt')->group(function () {
         Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
         Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');
         Route::patch('/mailbox/messages/{uid}', [AdminMailboxController::class, 'seen'])->whereNumber('uid');
+        Route::post('/mailbox/messages/{uid}/action', [AdminMailboxController::class, 'act'])->whereNumber('uid')->middleware('throttle:120,1');
         Route::get('/mailbox/messages/{uid}/attachments/{index}', [AdminMailboxController::class, 'attachment'])->whereNumber(['uid', 'index']);
         Route::post('/mailbox/send', [AdminMailboxController::class, 'send'])->middleware('throttle:20,10');
         Route::post('/debates/{debate}/promotions', [AdminDebateController::class, 'promote'])->middleware('throttle:5,10');

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BUTTON_IMPORTS } from '../../../../theme/ui/button';
 import { API_URL, apiErrorMessage } from '../../../core/http/api';
@@ -9,8 +10,11 @@ import { FilterChange, FilterField, ListFilters } from '../../../shared/list-fil
 import { ListHeader } from '../../../shared/list-header/list-header';
 import { Pagination } from '../../../shared/pagination/pagination';
 import { ScrollArea } from '../../../shared/scroll-area/scroll-area';
+import { MenuOption, OptionsMenu } from '../../../shared/options-menu/options-menu';
+import { MailActionsService, mailOptions } from './mail-actions';
+import { MailMessageData, MailMessageDialog } from './mail-message-dialog';
 import { ComposeDialogService } from './compose-dialog';
-import { addressLabel, folderLabel, MailFolder, mailDate, MailSummary } from './mailbox.model';
+import { addressLabel, folderLabel, MailAction, MailFolder, mailDate, MailSummary } from './mailbox.model';
 
 interface MessagesPage {
   data: MailSummary[];
@@ -19,7 +23,7 @@ interface MessagesPage {
 
 @Component({
   selector: 'app-admin-mailbox',
-  imports: [RouterLink, MatProgressBarModule, BUTTON_IMPORTS, ListFilters, ListHeader, Pagination, ScrollArea],
+  imports: [MatProgressBarModule, BUTTON_IMPORTS, ListFilters, ListHeader, Pagination, ScrollArea, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (folders.error(); as error) {
@@ -42,13 +46,16 @@ interface MessagesPage {
       <app-scroll-area label="Mejlovi" [fill]="true" [resetOn]="[current(), pretraga(), page()]">
         <div class="mail-list">
           @for (item of items(); track item.uid) {
-            <a class="mail-row" [class.mail-row-unread]="!item.seen" [routerLink]="[item.uid]" [queryParams]="{ folder: current() }">
-              <span class="mail-row-head">
-                <span class="mail-from">{{ isSent() ? 'Za: ' + (item.to[0] ? label(item.to[0]) : '—') : label(item.from) }}</span>
-                <span class="small muted">{{ date(item.date) }}</span>
-              </span>
-              <span class="mail-subject">{{ item.subject }}</span>
-            </a>
+            <div class="mail-row" [class.mail-row-unread]="!item.seen">
+              <button type="button" class="mail-row-main" (click)="open(item)">
+                <span class="mail-row-head">
+                  <span class="mail-from">{{ isSent() ? 'Za: ' + (item.to[0] ? label(item.to[0]) : '—') : label(item.from) }}</span>
+                  <span class="small muted">{{ date(item.date) }}</span>
+                </span>
+                <span class="mail-subject">{{ item.subject }}</span>
+              </button>
+              <app-options-menu [options]="options(item)" [label]="'Opcije za: ' + item.subject" (selected)="act(item, $event)" />
+            </div>
           } @empty {
             @if (!messages.isLoading() && !messages.error()) {
               <p class="muted">{{ pretraga() ? 'Nema mejlova za ovu pretragu.' : 'Folder je prazan.' }}</p>
@@ -67,15 +74,27 @@ interface MessagesPage {
       gap: 6px;
     }
     .mail-row {
-      display: grid;
-      gap: 2px;
-      min-height: 44px;
-      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-right: 4px;
       border: 1px solid var(--color-border);
       border-radius: 10px;
       background: var(--color-surface);
+    }
+    .mail-row-main {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+      min-width: 0;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 0;
+      background: transparent;
       color: var(--color-text);
-      text-decoration: none;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
       overflow-wrap: anywhere;
     }
     .mail-row:hover {
@@ -114,6 +133,8 @@ export class AdminMailbox {
   readonly #router = inject(Router);
   readonly #compose = inject(ComposeDialogService);
   readonly #notifications = inject(NotificationService);
+  readonly #dialog = inject(MatDialog);
+  readonly #actions = inject(MailActionsService);
 
   protected readonly folders = httpResource<{ address: string; folders: MailFolder[] }>(() => `${API_URL}/admin/mailbox/folders`);
   protected readonly address = computed(() => this.folders.value()?.address ?? '');
@@ -142,7 +163,7 @@ export class AdminMailbox {
     source: () => (this.messages.hasValue() ? this.messages.value() : undefined),
     computation: (value, previous) => value ?? previous?.value ?? null,
   });
-  protected readonly items = computed(() => this.#last()?.data ?? []);
+  protected readonly items = computed(() => (this.#last()?.data ?? []).map((item) => (this.#seen()[item.uid] ? { ...item, seen: true } : item)));
   protected readonly meta = computed(() => this.#last()?.meta ?? null);
 
   protected setFilter(change: FilterChange): void {
@@ -155,6 +176,49 @@ export class AdminMailbox {
 
   protected clear(): void {
     this.#router.navigate([], { queryParams: {} });
+  }
+
+  readonly #seen = signal<Record<number, boolean>>({});
+  protected readonly role = computed(() => (this.folders.value()?.folders ?? []).find((item) => item.path === this.current())?.role ?? null);
+
+  protected options(item: MailSummary): MenuOption<MailAction>[] {
+    return mailOptions(item, this.role());
+  }
+
+  protected open(item: MailSummary): void {
+    this.#seen.update((all) => ({ ...all, [item.uid]: true }));
+    this.#dialog
+      .open<MailMessageDialog, MailMessageData, boolean>(MailMessageDialog, {
+        data: { uid: item.uid, folder: this.current(), folders: this.folders.value()?.folders ?? [] },
+        width: '860px',
+        maxWidth: '100vw',
+        panelClass: 'app-dialog-panel',
+        autoFocus: false,
+      })
+      .afterClosed()
+      .subscribe((changed) => changed && this.#refresh());
+  }
+
+  protected act(item: MailSummary, action: MailAction): void {
+    if (action === 'open') {
+      this.open(item);
+      return;
+    }
+    this.#actions.run(item.uid, this.current(), action, this.folders.value()?.folders ?? [], this.role()).subscribe({
+      next: (message) => {
+        if (message) {
+          this.#notifications.show(message);
+          this.#refresh();
+        }
+      },
+      error: (error) => this.#notifications.show(apiErrorMessage(error)),
+    });
+  }
+
+  #refresh(): void {
+    this.#seen.set({});
+    this.messages.reload();
+    this.folders.reload();
   }
 
   protected compose(): void {
