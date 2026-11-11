@@ -1,33 +1,32 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { HttpClient, httpResource } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
-import { API_URL, apiErrorMessage } from '../../core/http/api';
-import { NotificationService } from '../../core/notification.service';
+import { DeleteService } from '../../core/delete.service';
+import { API_URL } from '../../core/http/api';
 import { ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS } from '../../core/content/content.model';
+import { FilterField, ListFilters } from '../../shared/list-filters/list-filters';
+import { matchesSearch, queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
-import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { AdminOrganization } from './admin.model';
 
 type RowAction = 'view' | 'edit' | 'remove';
 
+const STATUS_OPTIONS = [
+  { value: 'aktivno', label: 'Aktivno' },
+  { value: 'neaktivno', label: 'Neaktivno' },
+  { value: 'nepoznato', label: 'Nepoznato' },
+];
+
 @Component({
   selector: 'app-admin-organizations',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, ListHeader, OptionsMenu],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="admin-toolbar">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Pretraga (naziv, grad)</mat-label>
-        <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
-      </mat-form-field>
-    </div>
+    <app-list-filters [fields]="fields" [values]="filters.values()" emptySummary="Sve organizacije" (filterChange)="filters.set($event)" (clearAll)="filters.clear()" />
     <app-list-header [count]="filtered().length">
       <a mat-flat-button routerLink="nova">Nova organizacija</a>
     </app-list-header>
@@ -56,24 +55,38 @@ type RowAction = 'view' | 'edit' | 'remove';
           </div>
           <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.name" (selected)="onAction(item, $event)" />
         </div>
+      } @empty {
+        @if (!resource.isLoading()) {
+          <p class="muted">Nema organizacija za ovaj izbor.</p>
+        }
       }
     </div>
   `,
 })
 export class AdminOrganizations {
   protected readonly auth = inject(AuthService);
-  readonly #http = inject(HttpClient);
-  readonly #notifications = inject(NotificationService);
-  readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
 
   protected readonly typeLabels = ORGANIZATION_TYPE_LABELS;
   protected readonly levelLabels = ORGANIZATION_LEVEL_LABELS;
-  protected readonly search = signal('');
+  protected readonly filters = queryFilters(['vrsta', 'nivo', 'status', 'pretraga']);
+  protected readonly fields: FilterField[] = [
+    { key: 'vrsta', label: 'Vrsta', allLabel: 'Sve vrste', options: Object.entries(ORGANIZATION_TYPE_LABELS).map(([value, label]) => ({ value, label })) },
+    { key: 'nivo', label: 'Nivo', allLabel: 'Svi nivoi', options: Object.entries(ORGANIZATION_LEVEL_LABELS).map(([value, label]) => ({ value, label })) },
+    { key: 'status', label: 'Status', allLabel: 'Svi', options: STATUS_OPTIONS },
+    { key: 'pretraga', label: 'Pretraga (naziv, grad)', type: 'search' },
+  ];
   protected readonly resource = httpResource<AdminOrganization[]>(() => `${API_URL}/admin/organizations`);
   protected readonly filtered = computed(() => {
-    const term = this.search().trim().toLowerCase();
+    const { vrsta, nivo, status, pretraga } = this.filters.values();
     const items = this.resource.hasValue() ? this.resource.value() : [];
-    return term ? items.filter((item) => [item.name, item.short_name, item.city].some((value) => value?.toLowerCase().includes(term))) : items;
+    return items.filter(
+      (item) =>
+        (!vrsta || item.type === vrsta) &&
+        (!nivo || item.level === nivo) &&
+        (!status || item.status === status) &&
+        matchesSearch(pretraga, [item.name, item.short_name, item.city]),
+    );
   });
 
   protected menuFor(item: AdminOrganization): MenuOption<RowAction>[] {
@@ -89,28 +102,14 @@ export class AdminOrganizations {
 
   protected onAction(item: AdminOrganization, action: RowAction): void {
     if (action === 'remove') {
-      this.remove(item);
+      this.#delete.confirmDelete(
+        {
+          title: 'Brisanje organizacije',
+          message: `Obrisati „${item.name}“? Njene vesti ostaju, ali bez oznake organizacije${item.news_count ? ` (${item.news_count})` : ''}.`,
+          url: `${API_URL}/admin/organizations/${item.id}`,
+        },
+        () => this.resource.reload(),
+      );
     }
-  }
-
-  protected remove(item: AdminOrganization): void {
-    this.#confirm
-      .confirm({
-        title: 'Brisanje organizacije',
-        message: `Obrisati „${item.name}“? Njene vesti ostaju, ali bez oznake organizacije${item.news_count ? ` (${item.news_count})` : ''}.`,
-        confirmLabel: 'Obriši',
-      })
-      .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
-        }
-        this.#http.delete<{ message: string }>(`${API_URL}/admin/organizations/${item.id}`).subscribe({
-          next: (response) => {
-            this.#notifications.show(response.message);
-            this.resource.reload();
-          },
-          error: (error) => this.#notifications.show(apiErrorMessage(error)),
-        });
-      });
   }
 }

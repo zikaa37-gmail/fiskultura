@@ -7,7 +7,7 @@ import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { NEWS_CATEGORY_LABELS, NewsCategory, NewsItem, NewsPage, Organization, organizationLabel } from '../../core/content/content.model';
-import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { DeleteService } from '../../core/delete.service';
 import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { NewsCard, NewsCardState } from '../../shared/news-card/news-card';
@@ -84,7 +84,7 @@ export class NewsList {
   readonly #http = inject(HttpClient);
   readonly #router = inject(Router);
   readonly #notifications = inject(NotificationService);
-  readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
   readonly #query = toSignal(inject(ActivatedRoute).queryParamMap);
 
   protected readonly filters = computed(() => {
@@ -202,18 +202,10 @@ export class NewsList {
   }
 
   #remove(item: AdminNews): void {
-    this.#confirm.confirm({ title: 'Brisanje vesti', message: `Obrisati „${item.title}“? Ovo ne može da se vrati.`, confirmLabel: 'Obriši' }).subscribe((confirmed) => {
-      if (!confirmed) {
-        return;
-      }
-      this.#http.delete(`${API_URL}/admin/news/${item.id}`).subscribe({
-        next: () => {
-          this.#notifications.show('Vest je obrisana.');
-          this.reload();
-        },
-        error: (error) => this.#notifications.show(apiErrorMessage(error)),
-      });
-    });
+    this.#delete.confirmDelete(
+      { title: 'Brisanje vesti', message: `Obrisati „${item.title}“? Ovo ne može da se vrati.`, url: `${API_URL}/admin/news/${item.id}`, success: 'Vest je obrisana.' },
+      () => this.reload(),
+    );
   }
 
   #navigate(queryParams: Record<string, string | number | null>): void {

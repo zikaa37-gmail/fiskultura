@@ -14,6 +14,7 @@ import { NotificationService } from '../../core/notification.service';
 import { formatDate } from '../../core/content/content.model';
 import { phoneHref } from '../../core/phone';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { DeleteService } from '../../core/delete.service';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { FilterPanel } from '../../shared/filter-panel/filter-panel';
 import { ListHeader } from '../../shared/list-header/list-header';
@@ -109,6 +110,7 @@ export class AdminUsers {
   readonly #http = inject(HttpClient);
   readonly #notifications = inject(NotificationService);
   readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
   readonly #dialog = inject(MatDialog);
 
   protected readonly roleLabels = ROLE_LABELS;
@@ -237,20 +239,15 @@ export class AdminUsers {
   }
 
   #remove(user: AdminUser): void {
-    this.#confirm
-      .confirm({ title: 'Brisanje korisnika', message: `Trajno obrisati ${user.name} (${user.email})? Briše se nalog i prijava na obaveštenja i to ne može da se vrati.`, confirmLabel: 'Obriši' })
-      .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
-        }
-        this.#http.delete(`${API_URL}/admin/users/${user.id}`).subscribe({
-          next: () => {
-            this.#notifications.show(`${user.name} je obrisan.`);
-            this.resource.reload();
-          },
-          error: (error) => this.#notifications.show(apiErrorMessage(error)),
-        });
-      });
+    this.#delete.confirmDelete(
+      {
+        title: 'Brisanje korisnika',
+        message: `Trajno obrisati ${user.name} (${user.email})? Briše se nalog i prijava na obaveštenja i to ne može da se vrati.`,
+        url: `${API_URL}/admin/users/${user.id}`,
+        success: `${user.name} je obrisan.`,
+      },
+      () => this.resource.reload(),
+    );
   }
 
   #toggleBlock(user: AdminUser): void {

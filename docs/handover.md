@@ -53,12 +53,12 @@ SCSS. Svaki sport se posle proveri na 360 px.
 
 ### 3.2 Admin liste: isti obrazac svuda
 
-- **Udruženja** i **Propisi** još koriste stari `admin-toolbar` sa pretragom i ručnim „Ukupno”, umesto
-  `app-filter-panel` + `app-list-header` (pravilo iz `CLAUDE.md`). Pitanja koriste `chip-row` za status umesto
-  `app-list-filters`.
-- Brisanje (`confirm` → `http.delete` → poruka → `reload`) je prepisano 6 puta (pitanja, udruženja, propisi,
-  korisnici, vesti, profil). Predlog: `AdminActions.confirmDelete({ title, message, url, success })` u
-  `core/` koji vraća `Observable<boolean>`.
+- Urađeno (grana `feat-admin-liste`): Pitanja, Udruženja i Propisi koriste `app-list-filters` +
+  `app-list-header`, a filteri su u query parametrima (`queryFilters()` i `matchesSearch()` iz
+  `shared/list-filters/query-filters.ts`). Brisanje u admin listama ide kroz `DeleteService.confirmDelete`
+  (`core/delete.service.ts`). Brisanje naloga u profilu ostaje posebno (lozinka i odjava).
+- Ostalo: `news-list` još ima svoj kod za query parametre (zbog strane `strana`); može da pređe na
+  `queryFilters` kad on dobije ključeve koje izmena filtera resetuje.
 - Red admin liste (`admin-row` → `admin-row-main` sa meta oznakama i naslovom → meni) ponavlja se u 5 lista.
   Predlog: `app-admin-row` sa `meta`, `title`, `link`, `options` i slotom za dodatni sadržaj.
 - `state-chip` sa mapiranjem statusa u klasu (`state-ok`, `state-warn`, `state-muted`) ponavlja se u 10
