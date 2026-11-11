@@ -79,7 +79,7 @@ const REASON_LABELS: Record<LogEntry['reason'], string> = {
                 <span class="state-chip state-warn">blokiran</span>
               }
             </span>
-            <strong>{{ row.name }}</strong>
+            <span class="moderator-name"><strong>{{ row.name }}</strong> <span class="small muted">{{ row.email }}</span></span>
             <div class="load" [attr.aria-label]="'Opterećenje: ' + (row.open + row.proposed) + ' aktivnih tema'">
               <span class="load-bar"><span [style.width.%]="share(row)"></span></span>
               <span class="small">
@@ -128,6 +128,9 @@ const REASON_LABELS: Record<LogEntry['reason'], string> = {
       border-left: 4px solid var(--color-lime);
       border-radius: var(--radius);
       background: var(--color-surface);
+    }
+    .moderator-name {
+      overflow-wrap: anywhere;
     }
     .load {
       display: grid;
