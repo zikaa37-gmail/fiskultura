@@ -10,16 +10,47 @@ import { NotificationService } from '../../core/notification.service';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { DebateDetail, POST_KIND_LABELS } from './debate.model';
 import { DebateSummaryCard } from './debate-summary';
+import { DebateIntroCard } from './debate-intro';
 
 @Component({
   selector: 'app-debate-moderation',
-  imports: [FormsModule, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, DebateSummaryCard],
+  imports: [FormsModule, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, DebateSummaryCard, DebateIntroCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let item = debate();
-    <details class="moderation" [open]="!!item.summary_draft || !!item.reopen_requests?.length">
+    <details class="moderation" [open]="!!item.summary_draft || !!item.reopen_requests?.length || item.intro_status === 'draft' || item.intro_status === 'failed'">
       <summary>Moderator teme: analiza i podešavanja</summary>
       <div class="moderation-body">
+        <section class="intro-panel" aria-label="Uvodni pregled">
+          <strong>Uvodni pregled</strong>
+          <p class="small muted">
+            @switch (item.intro_status) {
+              @case ('pending') { AI čeka na red da pretraži internet i napiše pregled. Stranica se sama osvežava. }
+              @case ('generating') { AI upravo pretražuje internet i piše pregled (minut-dva). Stranica se sama osvežava. }
+              @case ('draft') { Nacrt je spreman: pročitaj ga, proveri izvore i odobri. }
+              @case ('approved') { Pregled je objavljen. Ako treba, napravi novu verziju sa smernicama. }
+              @case ('failed') { <span class="warn-text">Pregled nije napravljen: {{ item.intro_error }}</span> }
+              @default { Pregled još nije napravljen. }
+            }
+          </p>
+          @if (item.status === 'open') {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Smernice za pregled (šta da AI potraži)</mat-label>
+              <textarea matInput rows="3" maxlength="2000" [ngModel]="introGuidance()" (ngModelChange)="introGuidance.set($event)"></textarea>
+            </mat-form-field>
+            <div class="moderation-actions">
+              <button type="button" mat-flat-button theme="tertiary" [disabled]="busy() || item.intro_status === 'pending' || item.intro_status === 'generating'" (click)="requestIntro()">
+                {{ item.intro_status ? 'Napravi novi pregled' : 'Napravi uvodni pregled' }}
+              </button>
+              @if (item.intro_draft) {
+                <button type="button" mat-flat-button theme="secondary" [disabled]="busy()" (click)="approveIntro()">Odobri i objavi pregled</button>
+              }
+            </div>
+          }
+          @if (item.intro_draft; as draft) {
+            <app-debate-intro [intro]="draft" [draft]="true" />
+          }
+        </section>
         @if (item.reopen_requests?.length) {
           <section class="reopen-requests" aria-label="Zahtevi za ponovno otvaranje">
             <strong>Zahtevi da se tema ponovo otvori ({{ item.reopen_requests?.length }})</strong>
@@ -95,6 +126,15 @@ import { DebateSummaryCard } from './debate-summary';
       flex-wrap: wrap;
       gap: 8px;
     }
+    .intro-panel {
+      display: grid;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .intro-panel p {
+      margin: 0;
+    }
     .reopen-requests {
       display: grid;
       gap: 12px;
@@ -126,6 +166,15 @@ export class DebateModeration {
 
   protected readonly guidance = linkedSignal(() => this.debate().summary_guidance ?? '');
   protected readonly busy = signal(false);
+  protected readonly introGuidance = linkedSignal(() => this.debate().intro_guidance ?? '');
+
+  protected requestIntro(): void {
+    this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/intro`, { guidance: this.introGuidance().trim() || null }), 'AI pretražuje internet i piše pregled. Stiže notifikacija kad bude spreman.');
+  }
+
+  protected approveIntro(): void {
+    this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/intro/approve`, {}), 'Uvodni pregled je objavljen.');
+  }
   protected readonly notes = signal<Record<number, string>>({});
   protected readonly kindLabels = POST_KIND_LABELS;
 

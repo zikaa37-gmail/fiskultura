@@ -306,4 +306,16 @@ class FakeAssistant implements Assistant
 
         return $this->response;
     }
+
+    public array $research = ['text' => 'Nastavnici se najčešće žale na dupli unos podataka.', 'sources' => [['title' => 'Sindikat', 'url' => 'https://primer.rs/es-dnevnik']]];
+
+    public int $researchCalls = 0;
+
+    public function research(string $system, string $prompt): array
+    {
+        $this->prompt = $prompt;
+        $this->researchCalls++;
+
+        return $this->research;
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Debate;
 use App\Models\DebateModeratorLog;
 use App\Models\User;
+use App\Services\Ai\DebateIntroWriter;
 use App\Services\Assignments;
 use App\Services\Notifications\DebatePromoter;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,7 @@ class AdminDebateController extends Controller
         ]);
     }
 
-    public function store(Request $request, Assignments $assignments)
+    public function store(Request $request, Assignments $assignments, DebateIntroWriter $intro)
     {
         $data = $this->validated($request);
         $user = $request->user();
@@ -50,6 +51,7 @@ class AdminDebateController extends Controller
             'moderator_id' => $moderator,
             'created_by' => $user->id,
         ]);
+        $intro->queue($debate);
         if ($moderator) {
             $reason = $chosen ? DebateModeratorLog::MANUAL : ($moderator === $user->id ? DebateModeratorLog::CREATOR : DebateModeratorLog::AUTO);
             $assignments->logModerator($debate, null, $reason === DebateModeratorLog::AUTO ? null : $user, $reason);
@@ -58,10 +60,11 @@ class AdminDebateController extends Controller
         return response()->json($this->present($debate->load(['moderator', 'creator'])), 201);
     }
 
-    public function update(Request $request, Debate $debate, Assignments $assignments)
+    public function update(Request $request, Debate $debate, Assignments $assignments, DebateIntroWriter $intro)
     {
         $data = $this->validated($request, partial: true);
         $previous = $debate->moderator_id;
+        $wasOpen = $debate->status === Debate::OPEN;
         $reason = null;
 
         $debate->fill(array_intersect_key($data, array_flip(['title', 'description', 'status'])));
@@ -77,6 +80,9 @@ class AdminDebateController extends Controller
             $reason = DebateModeratorLog::MANUAL;
         }
         $debate->save();
+        if (! $wasOpen && $debate->status === Debate::OPEN && ! $debate->intro_status) {
+            $intro->queue($debate);
+        }
         if ($reason && $debate->moderator_id !== $previous) {
             $assignments->logModerator($debate, $previous, $reason === DebateModeratorLog::MANUAL ? $request->user() : null, $reason);
         }

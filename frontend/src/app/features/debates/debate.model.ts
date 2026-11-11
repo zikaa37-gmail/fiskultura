@@ -56,9 +56,22 @@ export interface ReopenRequest {
   decided_at: string | null;
 }
 
+export interface DebateIntro {
+  text: string;
+  sources: { title: string; url: string }[];
+  at: string | null;
+}
+
+export type IntroStatus = 'pending' | 'generating' | 'draft' | 'approved' | 'failed';
+
 export interface DebateDetail extends Debate {
   can_moderate: boolean;
   summary: DebateSummary | null;
+  intro: DebateIntro | null;
+  intro_status?: IntroStatus | null;
+  intro_guidance?: string | null;
+  intro_error?: string | null;
+  intro_draft?: DebateIntro | null;
   my_reopen_request: ReopenRequest | null;
   summary_draft?: DebateSummary | null;
   summary_guidance?: string | null;

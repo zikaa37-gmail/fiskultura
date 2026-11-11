@@ -4,6 +4,7 @@ use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
 use App\Models\Regulation;
 use App\Models\User;
+use App\Services\Ai\DebateIntroWriter;
 use App\Services\Inbox;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
@@ -78,6 +79,15 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 })->purpose('Proverava sajtove i mreže organizacija i pamti koji ne rade');
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
+
+Artisan::command('debates:intros {--limit=2}', function (DebateIntroWriter $writer) {
+    $done = $writer->runPending((int) $this->option('limit'));
+    $this->info("Uvodni pregledi: obrađeno {$done}.");
+
+    return 0;
+})->purpose('Pravi uvodne preglede tema koji čekaju (AI sa pretragom interneta)');
+
+Schedule::command('debates:intros')->everyFiveMinutes()->withoutOverlapping(20);
 
 Artisan::command('mailbox:check', function (Mailbox $mailbox) {
     try {

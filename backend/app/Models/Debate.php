@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-#[Fillable(['slug', 'title', 'description', 'status', 'moderator_id', 'created_by', 'summary_draft', 'summary_draft_at', 'summary_draft_posts', 'summary', 'summary_approved_at', 'summary_posts', 'summary_guidance', 'posts_count', 'last_post_at', 'closed_at'])]
+#[Fillable(['slug', 'title', 'description', 'status', 'moderator_id', 'created_by', 'summary_draft', 'summary_draft_at', 'summary_draft_posts', 'summary', 'summary_approved_at', 'summary_posts', 'summary_guidance', 'intro_status', 'intro_guidance', 'intro_draft', 'intro_generated_at', 'intro', 'intro_approved_at', 'intro_error', 'intro_requested_at', 'posts_count', 'last_post_at', 'closed_at'])]
 class Debate extends Model
 {
     public const PROPOSED = 'proposed';
@@ -37,6 +37,11 @@ class Debate extends Model
             'summary_approved_at' => 'datetime',
             'last_post_at' => 'datetime',
             'closed_at' => 'datetime',
+            'intro_draft' => 'array',
+            'intro' => 'array',
+            'intro_generated_at' => 'datetime',
+            'intro_approved_at' => 'datetime',
+            'intro_requested_at' => 'datetime',
         ];
     }
 

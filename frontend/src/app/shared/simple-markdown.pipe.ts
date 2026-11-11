@@ -7,11 +7,19 @@ export class SimpleMarkdownPipe implements PipeTransform {
       return '';
     }
     return value.replace(/\r\n/g, '\n').split(/\n{2,}/).map(block => {
-      const lines = block.split('\n').filter(l => l.trim());
-      if (lines.length && lines.every(l => /^\s*- /.test(l))) {
-        return '<ul>' + lines.map(l => `<li>${inline(l.replace(/^\s*- /, ''))}</li>`).join('') + '</ul>';
+      const runs: { list: boolean; lines: string[] }[] = [];
+      for (const line of block.split('\n').filter(l => l.trim())) {
+        const list = /^\s*- /.test(line);
+        const last = runs[runs.length - 1];
+        if (last && last.list === list) {
+          last.lines.push(line);
+        } else {
+          runs.push({ list, lines: [line] });
+        }
       }
-      return `<p>${lines.map(inline).join('<br>')}</p>`;
+      return runs.map(run => run.list
+        ? '<ul>' + run.lines.map(l => `<li>${inline(l.replace(/^\s*- /, ''))}</li>`).join('') + '</ul>'
+        : `<p>${run.lines.map(inline).join('<br>')}</p>`).join('');
     }).join('');
   }
 }

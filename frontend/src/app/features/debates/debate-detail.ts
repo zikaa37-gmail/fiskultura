@@ -19,6 +19,7 @@ import { DebateDetail as Detail, DEBATE_STATUS_LABELS, DebatePost, POST_KIND_ICO
 import { DebateModeration } from './debate-moderation';
 import { DebatePostCard, PostAction } from './debate-post-card';
 import { DebateSummaryCard } from './debate-summary';
+import { DebateIntroCard } from './debate-intro';
 import { ReopenRequestDialog } from './reopen-request-dialog';
 
 interface PostsPage {
@@ -31,7 +32,7 @@ const SORTS = ['new', 'top', 'old'];
 
 @Component({
   selector: 'app-debate-detail',
-  imports: [FormsModule, RouterLink, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, Icon, ListFilters, ListHeader, Pagination, DebatePostCard, DebateSummaryCard, DebateModeration],
+  imports: [FormsModule, RouterLink, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, Icon, ListFilters, ListHeader, Pagination, DebatePostCard, DebateSummaryCard, DebateModeration, DebateIntroCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -55,6 +56,10 @@ const SORTS = ['new', 'top', 'old'];
               <p class="lead">{{ item.description }}</p>
             }
           </header>
+
+          @if (item.intro; as intro) {
+            <app-debate-intro [intro]="intro" />
+          }
 
           @if (item.can_moderate) {
             <app-debate-moderation [debate]="item" (changed)="refresh()" />
@@ -255,6 +260,13 @@ export class DebateDetail {
     effect(() => {
       this.posts.value();
       this.#overrides.set({});
+    });
+    effect((onCleanup) => {
+      const status = this.debate()?.intro_status;
+      if (status === 'pending' || status === 'generating') {
+        const timer = setTimeout(() => this.detail.reload(), 15000);
+        onCleanup(() => clearTimeout(timer));
+      }
     });
   }
 

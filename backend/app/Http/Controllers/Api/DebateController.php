@@ -12,6 +12,7 @@ use App\Models\DebatePost;
 use App\Models\DebateReopenRequest;
 use App\Models\User;
 use App\Services\Ai\DebateAnalyst;
+use App\Services\Ai\DebateIntroWriter;
 use App\Services\Assignments;
 use App\Services\Inbox;
 use Illuminate\Database\Eloquent\Builder;
@@ -65,10 +66,15 @@ class DebateController extends Controller
             ...self::present($debate->load('moderator')),
             'can_moderate' => $moderating,
             'summary' => self::presentSummary($debate->summary, $debate->summary_approved_at, $debate->summary_posts),
+            'intro' => self::presentIntro($debate->intro, $debate->intro_approved_at),
             'my_reopen_request' => $debate->reopenRequests()->where('user_id', $user->id)->latest('id')->first()?->present(),
             ...($moderating ? [
                 'summary_draft' => self::presentSummary($debate->summary_draft, $debate->summary_draft_at, $debate->summary_draft_posts),
                 'summary_guidance' => $debate->summary_guidance,
+                'intro_status' => $debate->intro_status,
+                'intro_guidance' => $debate->intro_guidance,
+                'intro_error' => $debate->intro_error,
+                'intro_draft' => self::presentIntro($debate->intro_draft, $debate->intro_generated_at),
                 'reopen_requests' => $debate->reopenRequests()->with('user')->where('status', DebateReopenRequest::PENDING)->orderBy('id')->get()
                     ->map(fn (DebateReopenRequest $item) => $item->present())->values(),
             ] : []),
@@ -107,7 +113,7 @@ class DebateController extends Controller
         ]);
     }
 
-    public function propose(Request $request, Assignments $assignments)
+    public function propose(Request $request, Assignments $assignments, DebateIntroWriter $intro)
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'min:10', 'max:200'],
@@ -131,6 +137,9 @@ class DebateController extends Controller
             'moderator_id' => $user->hasRole(User::EDITOR) ? $user->id : $assignments->moderator()?->id,
             'created_by' => $user->id,
         ]);
+        if ($debate->status === Debate::OPEN) {
+            $intro->queue($debate);
+        }
         if ($debate->moderator_id) {
             $self = $debate->moderator_id === $user->id;
             $assignments->logModerator($debate, null, $self ? $user : null, $self ? DebateModeratorLog::CREATOR : DebateModeratorLog::AUTO);
@@ -366,6 +375,49 @@ class DebateController extends Controller
             ...$reopen->present(),
             'message' => $data['approve'] ? 'Tema je ponovo otvorena i prilog je objavljen.' : 'Zahtev je odbijen. Član dobija mejl.',
         ]);
+    }
+
+    public function requestIntro(Request $request, string $slug, DebateIntroWriter $intro)
+    {
+        $debate = Debate::where('slug', $slug)->firstOrFail();
+        if (! $debate->canModerate($request->user())) {
+            abort(403, 'Samo moderator teme traži uvodni pregled.');
+        }
+        $this->ensureOpen($debate);
+        if (in_array($debate->intro_status, [DebateIntroWriter::PENDING, DebateIntroWriter::GENERATING], true) && $debate->intro_requested_at?->gt(now()->subMinutes(15))) {
+            abort(422, 'Uvodni pregled se već pravi. Javićemo kad bude spreman.');
+        }
+
+        $data = $request->validate(['guidance' => ['nullable', 'string', 'max:2000']]);
+        $intro->queue($debate, trim((string) ($data['guidance'] ?? '')) ?: null);
+
+        return response()->json(['intro_status' => DebateIntroWriter::PENDING, 'message' => 'AI pretražuje internet i piše pregled. To traje minut-dva; dobićete notifikaciju kad bude spreman.'], 202);
+    }
+
+    public function approveIntro(Request $request, string $slug)
+    {
+        $debate = Debate::where('slug', $slug)->firstOrFail();
+        if (! $debate->canModerate($request->user())) {
+            abort(403, 'Samo moderator teme odobrava uvodni pregled.');
+        }
+        $this->ensureOpen($debate);
+        if (! $debate->intro_draft) {
+            abort(422, 'Nema nacrta uvodnog pregleda.');
+        }
+
+        $debate->forceFill([
+            'intro' => $debate->intro_draft,
+            'intro_approved_at' => now(),
+            'intro_draft' => null,
+            'intro_status' => DebateIntroWriter::APPROVED,
+        ])->save();
+
+        return response()->json(['intro' => self::presentIntro($debate->intro, $debate->intro_approved_at), 'message' => 'Uvodni pregled je objavljen.']);
+    }
+
+    public static function presentIntro(?array $intro, $at): ?array
+    {
+        return $intro ? [...$intro, 'at' => $at?->toIso8601String()] : null;
     }
 
     private function ensureOpen(Debate $debate): void

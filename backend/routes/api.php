@@ -67,6 +67,8 @@ Route::middleware('jwt')->group(function () {
     Route::post('/debates/{slug}/posts', [DebateController::class, 'storePost'])->middleware('throttle:10,1');
     Route::post('/debates/{slug}/analysis', [DebateController::class, 'analyze'])->middleware('throttle:5,10');
     Route::post('/debates/{slug}/analysis/approve', [DebateController::class, 'approve']);
+    Route::post('/debates/{slug}/intro', [DebateController::class, 'requestIntro'])->middleware('throttle:5,10');
+    Route::post('/debates/{slug}/intro/approve', [DebateController::class, 'approveIntro']);
     Route::post('/debate-posts/{post}/like', [DebateController::class, 'like'])->middleware('throttle:60,1');
     Route::patch('/debate-posts/{post}', [DebateController::class, 'moderatePost']);
     Route::post('/debates/{slug}/reopen-requests', [DebateController::class, 'requestReopen'])->middleware('throttle:3,10');
