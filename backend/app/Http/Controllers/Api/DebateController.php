@@ -66,7 +66,7 @@ class DebateController extends Controller
             ...self::present($debate->load('moderator')),
             'can_moderate' => $moderating,
             'summary' => self::presentSummary($debate->summary, $debate->summary_approved_at, $debate->summary_posts),
-            'intro' => self::presentIntro($debate->intro, $debate->intro_approved_at),
+            'intro' => self::presentIntro($debate->intro, $debate->intro_approved_at, false),
             'my_reopen_request' => $debate->reopenRequests()->where('user_id', $user->id)->latest('id')->first()?->present(),
             ...($moderating ? [
                 'summary_draft' => self::presentSummary($debate->summary_draft, $debate->summary_draft_at, $debate->summary_draft_posts),
@@ -407,13 +407,41 @@ class DebateController extends Controller
         }
 
         $debate->forceFill([
-            'intro' => $debate->intro_draft,
+            'intro' => ['text' => $debate->intro_draft['text'] ?? '', 'sources' => $debate->intro_draft['sources'] ?? []],
             'intro_approved_at' => now(),
             'intro_draft' => null,
             'intro_status' => DebateIntroWriter::APPROVED,
         ])->save();
 
-        return response()->json(['intro' => self::presentIntro($debate->intro, $debate->intro_approved_at), 'message' => 'Uvodni pregled je objavljen.']);
+        return response()->json(['intro' => self::presentIntro($debate->intro, $debate->intro_approved_at, false), 'message' => 'Uvodni pregled je objavljen.']);
+    }
+
+    public function updateIntro(Request $request, string $slug)
+    {
+        $debate = Debate::where('slug', $slug)->firstOrFail();
+        if (! $debate->canModerate($request->user())) {
+            abort(403, 'Samo moderator menja uvodni pregled.');
+        }
+        $this->ensureOpen($debate);
+
+        $data = $request->validate([
+            'which' => ['required', Rule::in(['draft', 'published'])],
+            'text' => ['required', 'string', 'min:20', 'max:20000'],
+        ], [
+            'text.min' => 'Pregled ne može da bude prazan.',
+        ]);
+        $field = $data['which'] === 'draft' ? 'intro_draft' : 'intro';
+        if (! $debate->{$field}) {
+            abort(422, $data['which'] === 'draft' ? 'Nema nacrta za izmenu.' : 'Pregled još nije objavljen.');
+        }
+
+        $debate->forceFill([$field => [...$debate->{$field}, 'text' => trim($data['text'])]])->save();
+
+        return response()->json([
+            'intro' => self::presentIntro($debate->intro, $debate->intro_approved_at, false),
+            'intro_draft' => self::presentIntro($debate->intro_draft, $debate->intro_generated_at),
+            'message' => $data['which'] === 'draft' ? 'Nacrt je izmenjen.' : 'Objavljeni pregled je izmenjen.',
+        ]);
     }
 
     public static function introBusy(Debate $debate): bool
@@ -425,9 +453,18 @@ class DebateController extends Controller
         };
     }
 
-    public static function presentIntro(?array $intro, $at): ?array
+    public static function presentIntro(?array $intro, $at, bool $withNotes = true): ?array
     {
-        return $intro ? [...$intro, 'at' => $at?->toIso8601String()] : null;
+        if (! $intro) {
+            return null;
+        }
+
+        return [
+            'text' => $intro['text'] ?? '',
+            'sources' => $intro['sources'] ?? [],
+            ...($withNotes ? ['notes' => $intro['notes'] ?? null] : []),
+            'at' => $at?->toIso8601String(),
+        ];
     }
 
     private function ensureOpen(Debate $debate): void

@@ -49,12 +49,37 @@ import { DebateIntroCard } from './debate-intro';
                 {{ item.intro_status ? 'Napravi novi pregled' : 'Napravi uvodni pregled' }}
               </button>
               @if (item.intro_draft) {
-                <button type="button" mat-flat-button theme="secondary" [disabled]="busy()" (click)="approveIntro()">Odobri i objavi pregled</button>
+                <button type="button" mat-flat-button theme="secondary" [disabled]="busy() || editing() !== null" (click)="approveIntro()">Odobri i objavi pregled</button>
+                <button type="button" mat-stroked-button [disabled]="busy()" (click)="startEdit('draft', item.intro_draft.text)">Izmeni tekst nacrta</button>
+              }
+              @if (item.intro) {
+                <button type="button" mat-stroked-button [disabled]="busy()" (click)="startEdit('published', item.intro.text)">Izmeni objavljeni pregled</button>
               }
             </div>
           }
+          @if (editing(); as which) {
+            <div class="intro-edit">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>{{ which === 'draft' ? 'Tekst nacrta' : 'Tekst objavljenog pregleda' }}</mat-label>
+                <textarea matInput rows="16" [ngModel]="editText()" (ngModelChange)="editText.set($event)"></textarea>
+              </mat-form-field>
+              <p class="small muted">„**tekst**” je podebljano, red koji počinje sa „- ” je stavka liste, prazan red je novi pasus.</p>
+              <div class="moderation-actions">
+                <button type="button" mat-stroked-button (click)="editing.set(null)">Odustani</button>
+                <button type="button" mat-flat-button [disabled]="busy() || editText().trim().length < 20" (click)="saveEdit()">Sačuvaj</button>
+              </div>
+            </div>
+          }
           @if (item.intro_draft; as draft) {
-            <app-debate-intro [intro]="draft" [draft]="true" />
+            @if (draft.notes) {
+              <div class="intro-notes small">
+                <strong>Napomene AI-ja za moderatora</strong> (članovi ovo ne vide)
+                <p>{{ draft.notes }}</p>
+              </div>
+            }
+            @if (editing() !== 'draft') {
+              <app-debate-intro [intro]="draft" [draft]="true" />
+            }
           }
         </section>
         @if (item.reopen_requests?.length) {
@@ -141,6 +166,23 @@ import { DebateIntroCard } from './debate-intro';
     .intro-panel p {
       margin: 0;
     }
+    .intro-edit {
+      display: grid;
+      gap: 8px;
+    }
+    .intro-edit mat-form-field {
+      width: 100%;
+    }
+    .intro-notes {
+      padding: 10px 12px;
+      border: 1px dashed var(--color-orange);
+      border-radius: 8px;
+      background: var(--color-surface);
+    }
+    .intro-notes p {
+      margin: 4px 0 0;
+      white-space: pre-line;
+    }
     .reopen-requests {
       display: grid;
       gap: 12px;
@@ -176,6 +218,23 @@ export class DebateModeration {
 
   protected requestIntro(): void {
     this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/intro`, { guidance: this.introGuidance().trim() || null }), 'AI pretražuje internet i piše pregled. Stiže notifikacija kad bude spreman.');
+  }
+
+  protected readonly editing = signal<'draft' | 'published' | null>(null);
+  protected readonly editText = signal('');
+
+  protected startEdit(which: 'draft' | 'published', text: string): void {
+    this.editing.set(which);
+    this.editText.set(text);
+  }
+
+  protected saveEdit(): void {
+    const which = this.editing();
+    if (!which) {
+      return;
+    }
+    this.#run(this.#http.patch(`${API_URL}/debates/${this.debate().slug}/intro`, { which, text: this.editText().trim() }), which === 'draft' ? 'Nacrt je izmenjen.' : 'Objavljeni pregled je izmenjen.');
+    this.editing.set(null);
   }
 
   protected approveIntro(): void {

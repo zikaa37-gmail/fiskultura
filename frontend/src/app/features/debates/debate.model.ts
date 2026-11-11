@@ -58,6 +58,7 @@ export interface ReopenRequest {
 
 export interface DebateIntro {
   text: string;
+  notes?: string | null;
   sources: { title: string; url: string }[];
   at: string | null;
 }

@@ -80,6 +80,42 @@ class DebateIntroTest extends TestCase
         $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/intro")->assertUnprocessable();
     }
 
+    public function test_notes_stay_with_moderator_and_text_can_be_edited_before_and_after_publishing(): void
+    {
+        $this->ai->research = ['text' => "Uvod o administraciji.\n\n**Pitanja za razgovor**\n1. Koliko vremena?\n@@@NAPOMENE@@@\nZdravitas sam izostavio.", 'sources' => []];
+        $this->withJwt($this->editor)->postJson('/api/admin/debates', ['title' => 'Administracija u nastavi FV'])->assertCreated();
+        $debate = Debate::firstOrFail();
+
+        $this->withJwt($this->editor)->getJson("/api/debates/{$debate->slug}")
+            ->assertJsonPath('intro_draft.notes', 'Zdravitas sam izostavio.')
+            ->assertJsonPath('intro_draft.text', "Uvod o administraciji.\n\n**Pitanja za razgovor**\n1. Koliko vremena?");
+
+        $this->withJwt($this->user)->patchJson("/api/debates/{$debate->slug}/intro", ['which' => 'draft', 'text' => 'Pokušaj člana da promeni tekst.'])->assertForbidden();
+        $this->withJwt($this->editor)->patchJson("/api/debates/{$debate->slug}/intro", ['which' => 'published', 'text' => 'Još nije objavljeno, ne sme.'])->assertUnprocessable();
+        $this->withJwt($this->editor)->patchJson("/api/debates/{$debate->slug}/intro", ['which' => 'draft', 'text' => 'Ispravljen uvod o administraciji, bez napomena.'])
+            ->assertOk()->assertJsonPath('intro_draft.text', 'Ispravljen uvod o administraciji, bez napomena.');
+
+        $this->withJwt($this->editor)->postJson("/api/debates/{$debate->slug}/intro/approve")->assertOk();
+        $this->withJwt($this->user)->getJson("/api/debates/{$debate->slug}")
+            ->assertJsonPath('intro.text', 'Ispravljen uvod o administraciji, bez napomena.')
+            ->assertJsonMissingPath('intro.notes');
+
+        $this->withJwt($this->editor)->patchJson("/api/debates/{$debate->slug}/intro", ['which' => 'published', 'text' => 'Objavljeni uvod, naknadno ispravljen.'])->assertOk();
+        $this->withJwt($this->user)->getJson("/api/debates/{$debate->slug}")->assertJsonPath('intro.text', 'Objavljeni uvod, naknadno ispravljen.');
+    }
+
+    public function test_migration_removes_published_moderator_notes(): void
+    {
+        $debate = Debate::create(['slug' => 'stara', 'title' => 'Stara tema', 'status' => Debate::OPEN, 'moderator_id' => $this->editor->id,
+            'intro' => ['text' => "Uvod.\n\n---\n*Napomene za moderatora:*\n\n*Proverite izvore.*", 'sources' => []]]);
+        $migration = require database_path('migrations/2026_11_12_000003_split_intro_notes.php');
+
+        $migration->up();
+
+        $this->assertSame('Uvod.', $debate->fresh()->intro['text']);
+        $this->assertArrayNotHasKey('notes', $debate->fresh()->intro);
+    }
+
     public function test_stale_pending_intro_can_be_started_by_moderator(): void
     {
         $debate = Debate::create(['slug' => 'administracija', 'title' => 'Administracija', 'status' => Debate::OPEN, 'moderator_id' => $this->editor->id, 'intro_status' => DebateIntroWriter::PENDING, 'intro_guidance' => 'ES dnevnik', 'intro_requested_at' => now()]);

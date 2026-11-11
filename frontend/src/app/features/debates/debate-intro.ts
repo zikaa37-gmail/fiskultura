@@ -10,7 +10,7 @@ import { DebateIntro } from './debate.model';
   host: { class: 'debate-intro', '[class.debate-intro-draft]': 'draft()' },
   template: `
     @let data = intro();
-    <p class="eyebrow mb-1">{{ draft() ? 'Nacrt uvodnog pregleda — vidi samo moderator' : 'Uvodni pregled' }}</p>
+    <p class="eyebrow mb-1">{{ draft() ? 'Nacrt uvodnog pregleda — ovako će izgledati posle objave' : 'Uvodni pregled' }}</p>
     <p class="small muted mb-3">
       AI uz proveru moderatora{{ data.at ? ' · ' + date(data.at) : '' }}{{ data.sources.length ? ' · izvora: ' + data.sources.length : '' }}
     </p>
