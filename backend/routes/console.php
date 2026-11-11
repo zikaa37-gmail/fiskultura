@@ -89,6 +89,26 @@ Artisan::command('debates:intros {--limit=2}', function (DebateIntroWriter $writ
 
 Schedule::command('debates:intros')->everyFiveMinutes()->withoutOverlapping(20);
 
+Artisan::command('ai:check', function () {
+    $key = (string) config('services.anthropic.key');
+    if ($key === '') {
+        $this->warn('AI: NEMA KLJUČA (ANTHROPIC_API_KEY nije u .env ili je config keširan bez njega).');
+
+        return 1;
+    }
+
+    try {
+        $model = (new Anthropic\Client(apiKey: $key))->models->retrieve('claude-opus-5-5');
+        $this->line("AI: ključ radi ({$model->id}).");
+
+        return 0;
+    } catch (Throwable $error) {
+        $this->warn('AI: ključ postoji, ali API ga odbija: '.mb_substr($error->getMessage(), 0, 200));
+
+        return 1;
+    }
+})->purpose('Proverava da li server ima Anthropic ključ i da li ga API prihvata (ne troši tokene)');
+
 Artisan::command('mailbox:check', function (Mailbox $mailbox) {
     try {
         $result = $mailbox->check();

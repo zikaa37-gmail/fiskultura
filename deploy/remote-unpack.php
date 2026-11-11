@@ -95,6 +95,12 @@ try {
         $result['php'] = PHP_VERSION;
         $result['php_missing'] = array_values(array_filter(['openssl', 'json', 'mbstring', 'iconv', 'libxml', 'zip', 'fileinfo', 'pdo_mysql'], fn (string $extension) => ! extension_loaded($extension)));
         try {
+            $console->call('ai:check');
+            $result['ai'] = trim($console->output()) ?: 'ok';
+        } catch (Throwable $exception) {
+            $result['ai'] = 'greška: '.$exception->getMessage();
+        }
+        try {
             $console->call('mailbox:check');
             $result['mailbox'] = trim($console->output()) ?: 'ok';
         } catch (Throwable $exception) {

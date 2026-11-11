@@ -35,7 +35,12 @@ import { DebateIntroCard } from './debate-intro';
               @case ('generating') { AI upravo pretražuje internet i piše pregled (minut-dva). Stranica se sama osvežava. }
               @case ('draft') { Nacrt je spreman: pročitaj ga, proveri izvore i odobri. }
               @case ('approved') { Pregled je objavljen. Ako treba, napravi novu verziju sa smernicama. }
-              @case ('failed') { <span class="warn-text">Pregled nije napravljen: {{ item.intro_error }}</span> }
+              @case ('failed') {
+                <span class="warn-text">Pregled nije napravljen: {{ item.intro_error }}</span>
+                @if (item.intro_requested_at) {
+                  (pokušaj: {{ time(item.intro_requested_at) }}). Klikni ponovo „Napravi uvodni pregled”.
+                }
+              }
               @default { Pregled još nije napravljen. }
             }
           </p>
@@ -218,6 +223,10 @@ export class DebateModeration {
 
   protected requestIntro(): void {
     this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/intro`, { guidance: this.introGuidance().trim() || null }), 'AI pretražuje internet i piše pregled. Stiže notifikacija kad bude spreman.');
+  }
+
+  protected time(value: string): string {
+    return new Date(value).toLocaleString('sr-Latn-RS', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
   protected readonly editing = signal<'draft' | 'published' | null>(null);

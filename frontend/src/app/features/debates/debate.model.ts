@@ -73,6 +73,7 @@ export interface DebateDetail extends Debate {
   intro_guidance?: string | null;
   intro_error?: string | null;
   intro_busy?: boolean;
+  intro_requested_at?: string | null;
   intro_draft?: DebateIntro | null;
   my_reopen_request: ReopenRequest | null;
   summary_draft?: DebateSummary | null;

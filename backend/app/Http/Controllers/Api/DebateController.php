@@ -75,6 +75,7 @@ class DebateController extends Controller
                 'intro_guidance' => $debate->intro_guidance,
                 'intro_error' => $debate->intro_error,
                 'intro_busy' => self::introBusy($debate),
+                'intro_requested_at' => $debate->intro_requested_at?->toIso8601String(),
                 'intro_draft' => self::presentIntro($debate->intro_draft, $debate->intro_generated_at),
                 'reopen_requests' => $debate->reopenRequests()->with('user')->where('status', DebateReopenRequest::PENDING)->orderBy('id')->get()
                     ->map(fn (DebateReopenRequest $item) => $item->present())->values(),
