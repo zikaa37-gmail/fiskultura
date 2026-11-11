@@ -51,6 +51,7 @@ describe('Debate', () => {
     expect(text).toContain('Tvoji predlozi tema');
     expect(text).toContain('čeka odobrenje');
     expect(text).toContain('Predloži temu za razgovor');
+    expect(text).not.toContain('Postavi pitanje');
   });
 
   it('tema prikazuje sažetak, lajk menja broj bez novog učitavanja, a „Hoću da kažem” šalje prilog', async () => {

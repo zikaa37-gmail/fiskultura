@@ -34,7 +34,7 @@ const SORTS = ['new', 'top', 'old'];
   template: `
     <section class="section qa-section">
       <div class="container debate-page">
-        <a class="inline-link back-link" routerLink="/debate"><app-icon name="arrow-left" [size]="16" /> Sve debate</a>
+        <a class="inline-link back-link" routerLink="/debate"><app-icon name="arrow-left" [size]="16" /> Sve stručne debate</a>
         @if (detail.isLoading() && !debate()) {
           <mat-progress-bar mode="indeterminate" />
         }

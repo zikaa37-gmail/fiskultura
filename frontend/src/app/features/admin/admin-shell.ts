@@ -78,7 +78,7 @@ export class AdminShell {
       title: 'Sadržaj portala',
       links: [
         { route: 'pitanja', label: 'Pitanja', icon: 'help' },
-        { route: 'debate', label: 'Debate', icon: 'people', editorOnly: true },
+        { route: 'debate', label: 'Stručne debate', icon: 'people', editorOnly: true },
         { route: 'udruzenja', label: 'Udruženja', icon: 'globe', editorOnly: true },
         { route: 'propisi', label: 'Propisi', icon: 'book', editorOnly: true },
       ],

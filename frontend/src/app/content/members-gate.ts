@@ -27,7 +27,7 @@ export const MEMBERS_GATE: Record<GateSection, GateContent> = {
     path: '/pitanja',
   },
   debate: {
-    title: 'Debate nastavnika fizičkog',
+    title: 'Stručne debate',
     intro: 'Teme o kojima struka razgovara: svako može da pita, kritikuje, predloži i lajkuje, a moderator objavljuje sažetak rasprave za one koji nemaju vremena da čitaju sve.',
     topics: ['Norma i sekcije', 'Ocenjivanje', 'Oprema i sala', 'Takmičenja', 'Programi', 'Predlozi struke'],
     path: '/debate',

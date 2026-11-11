@@ -170,8 +170,8 @@ const allRoutes: Routes = [
   },
   {
     path: 'debate',
-    title: 'Debate — Fiskultura',
-    data: { seo: { description: 'Debate nastavnika fizičkog vaspitanja: teme struke, mišljenja kolega, predlozi i sažetak rasprave.' } },
+    title: 'Stručne debate — Fiskultura',
+    data: { seo: { description: 'Stručne debate nastavnika fizičkog vaspitanja: teme struke, mišljenja kolega, predlozi i sažetak rasprave.' } },
     loadComponent: () => import('./features/debates/debates').then((m) => m.Debates),
   },
   {
@@ -288,7 +288,7 @@ const allRoutes: Routes = [
       { path: 'propisi', canActivate: [editorGuard], title: 'Admin: propisi — Fiskultura', loadComponent: () => import('./features/admin/admin-regulations').then((m) => m.AdminRegulations) },
       { path: 'propisi/novi', canActivate: [editorGuard], title: 'Novi propis — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
       { path: 'propisi/:key', canActivate: [editorGuard], title: 'Izmena propisa — Fiskultura', loadComponent: () => import('./features/admin/admin-regulation-form').then((m) => m.AdminRegulationForm) },
-      { path: 'debate', canActivate: [editorGuard], title: 'Admin: debate — Fiskultura', loadComponent: () => import('./features/admin/admin-debates').then((m) => m.AdminDebates) },
+      { path: 'debate', canActivate: [editorGuard], title: 'Admin: stručne debate — Fiskultura', loadComponent: () => import('./features/admin/admin-debates').then((m) => m.AdminDebates) },
       { path: 'obavestenja', title: 'Admin: obaveštenja — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-notifications').then((m) => m.AdminNotifications) },
       { path: 'clanstvo', title: 'Admin: članstvo — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-members').then((m) => m.AdminMembers) },
       { path: 'korisnici', title: 'Admin: korisnici — Fiskultura', canActivate: [adminGuard], loadComponent: () => import('./features/admin/admin-users').then((m) => m.AdminUsers) },

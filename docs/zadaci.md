@@ -379,9 +379,9 @@ Put ka komori (kasnije, posle dovoljnog broja članova):
 - [ ] Ankete i inicijative struke (#44) za članove sa saglasnošću
 
 ### #50 Pitanja i odgovori + Debate, uz AI pomoć (faza-1b, centralno)
-Sekcija „Pitanja i odgovori” dobija dva taba: **Pitanja i odgovori** (postojeći Q&A) i **Debate** (javne
+Sekcija „Pitanja i odgovori” dobija dva taba: **Pitanja i odgovori** (postojeći Q&A) i **Stručne debate** (javne
 rasprave o temama struke). Uvod „Administracija i propisi u praksi” se uklanja, stranica počinje tabovima.
-Na vrhu oba taba su dve akcije: „Postavi pitanje” i „Predloži temu za razgovor”.
+U tabu pitanja je dugme „Postavi pitanje”, u tabu debata „Predloži temu za razgovor”; ispod su filteri, pa rezultati.
 
 Pitanja i odgovori:
 - pitanje se pri prijemu automatski dodeljuje uredniku ili autoru (onom sa najmanje otvorenih pitanja);
