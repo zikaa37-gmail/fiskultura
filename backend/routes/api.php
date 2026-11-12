@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\Admin\AdminInstagramController;
 use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
+Route::get('/public/instagram-media/{token}.jpg', [AdminInstagramController::class, 'media'])->where('token', '[A-Za-z0-9]{40}');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
@@ -111,6 +113,11 @@ Route::middleware('jwt')->group(function () {
         Route::get('/staff', [AdminQuestionController::class, 'staff']);
 
         Route::post('/debates/list', [AdminDebateController::class, 'list']);
+        Route::get('/instagram', [AdminInstagramController::class, 'state']);
+        Route::get('/instagram/posts', [AdminInstagramController::class, 'index']);
+        Route::post('/instagram/posts', [AdminInstagramController::class, 'store'])->middleware('throttle:10,10');
+        Route::post('/instagram/posts/{post}/publish', [AdminInstagramController::class, 'publish'])->middleware('throttle:10,10');
+        Route::delete('/instagram/posts/{post}', [AdminInstagramController::class, 'destroy']);
         Route::post('/debates', [AdminDebateController::class, 'store']);
         Route::patch('/debates/{debate}', [AdminDebateController::class, 'update']);
 
@@ -142,6 +149,10 @@ Route::middleware('jwt')->group(function () {
         Route::get('/moderators', [AdminModeratorController::class, 'index']);
         Route::get('/moderators/log', [AdminModeratorController::class, 'log']);
         Route::patch('/moderators/{user}', [AdminModeratorController::class, 'update']);
+        Route::post('/instagram/connect', [AdminInstagramController::class, 'connect'])->middleware('throttle:10,10');
+        Route::delete('/instagram', [AdminInstagramController::class, 'disconnect']);
+        Route::post('/facebook/connect', [AdminInstagramController::class, 'connectFacebook'])->middleware('throttle:10,10');
+        Route::delete('/facebook', [AdminInstagramController::class, 'disconnectFacebook']);
         Route::get('/mailbox/folders', [AdminMailboxController::class, 'folders']);
         Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
         Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');

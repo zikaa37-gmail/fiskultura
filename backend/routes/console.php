@@ -6,6 +6,8 @@ use App\Models\Regulation;
 use App\Models\User;
 use App\Services\Ai\DebateIntroWriter;
 use App\Services\Inbox;
+use App\Services\Instagram\InstagramAccount;
+use App\Services\Instagram\InstagramPublisher;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
 use App\Services\Mailbox\Mailbox;
@@ -88,6 +90,22 @@ Artisan::command('debates:intros {--limit=2}', function (DebateIntroWriter $writ
 })->purpose('Pravi uvodne preglede tema koji čekaju (AI sa pretragom interneta)');
 
 Schedule::command('debates:intros')->everyFiveMinutes()->withoutOverlapping(20);
+
+Artisan::command('instagram:publish-scheduled', function (InstagramPublisher $publisher) {
+    $this->info('Instagram: objavljeno zakazanih '.$publisher->publishDue().'.');
+
+    return 0;
+})->purpose('Objavljuje zakazane Instagram objave kojima je došlo vreme');
+
+Schedule::command('instagram:publish-scheduled')->everyFiveMinutes()->withoutOverlapping(15);
+
+Artisan::command('instagram:refresh-token', function (InstagramAccount $account) {
+    $this->info($account->refresh() ? 'Instagram token je osvežen.' : 'Instagram token nije osvežen (nalog nije povezan ili token više ne važi).');
+
+    return 0;
+})->purpose('Osvežava dugotrajni Instagram token (važi 60 dana)');
+
+Schedule::command('instagram:refresh-token')->weeklyOn(1, '04:30');
 
 Artisan::command('ai:check', function () {
     $key = (string) config('services.anthropic.key');
