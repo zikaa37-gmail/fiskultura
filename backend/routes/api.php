@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
 Route::get('/public/instagram-media/{token}.jpg', [AdminInstagramController::class, 'media'])->where('token', '[A-Za-z0-9]{40}');
+Route::get('/public/social/{network}/callback', [AdminInstagramController::class, 'callback'])->whereIn('network', ['instagram', 'facebook'])->middleware('throttle:20,10');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
@@ -153,6 +154,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/instagram', [AdminInstagramController::class, 'disconnect']);
         Route::post('/facebook/connect', [AdminInstagramController::class, 'connectFacebook'])->middleware('throttle:10,10');
         Route::delete('/facebook', [AdminInstagramController::class, 'disconnectFacebook']);
+        Route::post('/social/{network}/authorize', [AdminInstagramController::class, 'authorize'])->whereIn('network', ['instagram', 'facebook']);
         Route::get('/mailbox/folders', [AdminMailboxController::class, 'folders']);
         Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
         Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');

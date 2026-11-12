@@ -11,8 +11,6 @@ use RuntimeException;
 
 class InstagramPublisher
 {
-    private const API = InstagramAccount::API;
-
     private const STATUS_CHECKS = 10;
 
     public function __construct(private readonly int $pollSeconds = 3) {}
@@ -55,6 +53,7 @@ class InstagramPublisher
                 throw new RuntimeException('Instagram nije povezan.');
             }
             $token = $account->token;
+            $api = $account->apiBase();
             $userId = $this->userId($account);
 
             $params = ['image_url' => $post->imageUrl(), 'access_token' => $token];
@@ -64,10 +63,10 @@ class InstagramPublisher
                 $params['caption'] = $post->caption;
             }
 
-            $containerId = $this->expect(Http::asForm()->timeout(60)->post(self::API."/{$userId}/media", $params), 'id');
-            $this->waitUntilReady($containerId, $token);
-            $mediaId = $this->expect(Http::asForm()->timeout(60)->post(self::API."/{$userId}/media_publish", ['creation_id' => $containerId, 'access_token' => $token]), 'id');
-            $permalink = Http::timeout(15)->get(self::API."/{$mediaId}", ['fields' => 'permalink', 'access_token' => $token])->json('permalink');
+            $containerId = $this->expect(Http::asForm()->timeout(60)->post("{$api}/{$userId}/media", $params), 'id');
+            $this->waitUntilReady($api, $containerId, $token);
+            $mediaId = $this->expect(Http::asForm()->timeout(60)->post("{$api}/{$userId}/media_publish", ['creation_id' => $containerId, 'access_token' => $token]), 'id');
+            $permalink = Http::timeout(15)->get("{$api}/{$mediaId}", ['fields' => 'permalink', 'access_token' => $token])->json('permalink');
 
             $post->update(['media_id' => $mediaId, 'permalink' => $permalink]);
         } catch (RuntimeException $error) {
@@ -95,7 +94,7 @@ class InstagramPublisher
             return $account->external_id;
         }
 
-        $id = (string) Http::timeout(15)->get(self::API.'/me', ['fields' => 'user_id', 'access_token' => $account->token])->json('user_id');
+        $id = (string) Http::timeout(15)->get(InstagramAccount::API.'/me', ['fields' => 'user_id', 'access_token' => $account->token])->json('user_id');
         if ($id === '') {
             throw new RuntimeException('Instagram nije vratio podatke o nalogu. Povežite nalog ponovo.');
         }
@@ -104,10 +103,10 @@ class InstagramPublisher
         return $id;
     }
 
-    private function waitUntilReady(string $containerId, string $token): void
+    private function waitUntilReady(string $api, string $containerId, string $token): void
     {
         for ($i = 0; $i < self::STATUS_CHECKS; $i++) {
-            $status = Http::timeout(15)->get(self::API."/{$containerId}", ['fields' => 'status_code', 'access_token' => $token])->json('status_code');
+            $status = Http::timeout(15)->get("{$api}/{$containerId}", ['fields' => 'status_code', 'access_token' => $token])->json('status_code');
             if ($status === 'FINISHED' || $status === null) {
                 return;
             }

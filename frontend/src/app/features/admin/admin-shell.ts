@@ -81,6 +81,7 @@ export class AdminShell {
         { route: 'debate', label: 'Stručne debate', icon: 'people', editorOnly: true },
         { route: 'udruzenja', label: 'Udruženja', icon: 'globe', editorOnly: true },
         { route: 'propisi', label: 'Propisi', icon: 'book', editorOnly: true },
+        { route: 'drustvene-mreze', label: 'Društvene mreže', icon: 'instagram', editorOnly: true },
       ],
     },
     {

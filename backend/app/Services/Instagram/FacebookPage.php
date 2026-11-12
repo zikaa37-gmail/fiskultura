@@ -16,16 +16,35 @@ class FacebookPage
 
     public function connect(string $pageId, string $token, ?User $by = null): SocialAccount
     {
-        $response = Http::timeout(15)->get(self::API."/{$pageId}", ['fields' => 'id,name,access_token', 'access_token' => $token]);
+        $response = Http::timeout(15)->get(self::API."/{$pageId}", ['fields' => 'id,name,access_token,instagram_business_account{id,username}', 'access_token' => $token]);
         if (! $response->successful() || ! $response->json('id')) {
             throw ValidationException::withMessages(['token' => ['Facebook nije prihvatio ID stranice i token. Treba token stranice (Page access token) sa dozvolom pages_manage_posts.']]);
         }
 
+        $pageToken = $response->json('access_token') ?: $token;
+        $page = $this->store((string) $response->json('id'), (string) $response->json('name'), $pageToken, $by);
+
+        if ($instagramId = $response->json('instagram_business_account.id')) {
+            SocialAccount::instagram()->fill([
+                'api' => 'facebook',
+                'username' => $response->json('instagram_business_account.username'),
+                'external_id' => (string) $instagramId,
+                'token' => $pageToken,
+                'token_expires_at' => null,
+                'connected_by' => $by?->id,
+            ])->save();
+        }
+
+        return $page;
+    }
+
+    public function store(string $pageId, string $name, string $token, ?User $by = null): SocialAccount
+    {
         $account = SocialAccount::facebook();
         $account->fill([
-            'username' => $response->json('name'),
-            'external_id' => (string) $response->json('id'),
-            'token' => $response->json('access_token') ?: $token,
+            'username' => $name ?: null,
+            'external_id' => $pageId,
+            'token' => $token,
             'token_expires_at' => null,
             'connected_by' => $by?->id,
         ])->save();

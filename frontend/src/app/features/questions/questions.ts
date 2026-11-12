@@ -8,6 +8,8 @@ import { FilterChange, FilterField, ListFilters } from '../../shared/list-filter
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Pagination } from '../../shared/pagination/pagination';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
+import { questionShare } from '../../shared/social-share/share-data';
+import { ShareMenu } from '../../shared/social-share/share-menu';
 import { QaTabs } from './qa-tabs';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory } from './question.model';
 
@@ -15,7 +17,7 @@ const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-questions',
-  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, ScrollArea, Pagination, QaTabs],
+  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, ScrollArea, Pagination, QaTabs, ShareMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -30,17 +32,20 @@ const PAGE_SIZE = 10;
           @if (resource.error()) {
             <div class="empty-state"><h3>Pitanja trenutno nisu dostupna</h3></div>
           } @else {
-            <app-list-header [count]="items().length" label="Pronađeno" />
+            <app-list-header [count]="items().length" [page]="page()" [lastPage]="lastPage()" label="Pronađeno" />
             <app-scroll-area label="Odgovori" [fill]="true" [minHeight]="560" [resetOn]="[category(), pretraga(), page()]">
               <div class="qa-list">
                 @for (item of pageItems(); track item.id) {
                   <article class="qa-card">
-                    <span class="post-meta">
-                      <span class="post-category">{{ categoryLabels[item.category] }}</span>
-                      @if (item.valid_on) {
-                        <span>važi na dan {{ date(item.valid_on) }}</span>
-                      }
-                    </span>
+                    <div class="post-head">
+                      <span class="post-meta">
+                        <span class="post-category">{{ categoryLabels[item.category] }}</span>
+                        @if (item.valid_on) {
+                          <span>važi na dan {{ date(item.valid_on) }}</span>
+                        }
+                      </span>
+                      <app-share-menu [data]="share(item)" />
+                    </div>
                     <h2><a [routerLink]="['/pitanja', item.slug]">{{ item.title }}</a></h2>
                     <p class="muted">{{ item.excerpt }}</p>
                     <a class="inline-link" [routerLink]="['/pitanja', item.slug]">Ceo odgovor →</a>
@@ -72,6 +77,7 @@ export class Questions {
   readonly #router = inject(Router);
 
   protected readonly disclaimer = LEGAL_DISCLAIMER;
+  protected readonly share = questionShare;
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly categories = Object.keys(QUESTION_CATEGORY_LABELS) as QuestionCategory[];
   protected readonly fields: FilterField[] = [

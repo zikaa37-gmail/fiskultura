@@ -8,6 +8,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       @if (count() !== null) {
         {{ label() }}: {{ count() }}
       }
+      @if (page() && (lastPage() ?? 0) > 1) {
+        <span class="list-header-page">· Strana {{ page() }} / {{ lastPage() }}</span>
+      }
     </p>
     <div class="list-header-actions">
       <ng-content />
@@ -33,6 +36,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       margin: 0;
       line-height: 1.2;
     }
+    .list-header-page {
+      margin-left: 4px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
     .list-header-actions {
       display: flex;
       flex-wrap: nowrap;
@@ -44,4 +52,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 export class ListHeader {
   readonly count = input<number | null>(null);
   readonly label = input('Ukupno');
+  readonly page = input<number | null>(null);
+  readonly lastPage = input<number | null>(null);
 }

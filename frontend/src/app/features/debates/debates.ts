@@ -11,10 +11,12 @@ import { Icon } from '../../shared/icon/icon';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { QaTabs } from '../questions/qa-tabs';
 import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
+import { debateShare } from '../../shared/social-share/share-data';
+import { ShareMenu } from '../../shared/social-share/share-menu';
 
 @Component({
   selector: 'app-debates',
-  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, Icon, QaTabs, ScrollArea],
+  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, Icon, QaTabs, ScrollArea, ShareMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -49,16 +51,19 @@ import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
             <div class="qa-list">
               @for (item of items(); track item.id) {
                 <article class="qa-card">
-                  <span class="post-meta">
-                    <span class="state-chip" [class]="item.status === 'open' ? 'state-ok' : 'state-muted'">{{ statusLabels[item.status] }}</span>
-                    <span>{{ item.posts_count }} {{ item.posts_count === 1 ? 'prilog' : 'priloga' }}</span>
-                    @if (item.last_post_at) {
-                      <span>poslednji {{ date(item.last_post_at) }}</span>
-                    }
-                    @if (item.has_summary) {
-                      <span class="debate-badge"><app-icon name="checklist" [size]="16" /> sažetak</span>
-                    }
-                  </span>
+                  <div class="post-head">
+                    <span class="post-meta">
+                      <span class="state-chip" [class]="item.status === 'open' ? 'state-ok' : 'state-muted'">{{ statusLabels[item.status] }}</span>
+                      <span>{{ item.posts_count }} {{ item.posts_count === 1 ? 'prilog' : 'priloga' }}</span>
+                      @if (item.last_post_at) {
+                        <span>poslednji {{ date(item.last_post_at) }}</span>
+                      }
+                      @if (item.has_summary) {
+                        <span class="debate-badge"><app-icon name="checklist" [size]="16" /> sažetak</span>
+                      }
+                    </span>
+                    <app-share-menu [data]="share(item)" />
+                  </div>
                   <h2><a [routerLink]="['/debate', item.slug]">{{ item.title }}</a></h2>
                   @if (item.description) {
                     <p class="muted debate-excerpt">{{ item.description }}</p>
@@ -103,6 +108,7 @@ import { Debate, DEBATE_STATUS_LABELS } from './debate.model';
   `,
 })
 export class Debates {
+  protected readonly share = debateShare;
   protected readonly statusLabels = DEBATE_STATUS_LABELS;
   protected readonly filters = queryFilters(['status', 'pretraga']);
   protected readonly fields: FilterField[] = [

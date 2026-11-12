@@ -35,7 +35,7 @@ interface InboxPage {
             Nepročitane{{ inbox.unread() ? ' (' + inbox.unread() + ')' : '' }}
           </button>
         </div>
-        <app-list-header [count]="meta()?.total ?? null">
+        <app-list-header [count]="meta()?.total ?? null" [page]="page()" [lastPage]="meta()?.last_page ?? null">
           @if (inbox.unread()) {
             <button type="button" mat-flat-button theme="tertiary" (click)="readAll()">Označi sve kao pročitano</button>
           }

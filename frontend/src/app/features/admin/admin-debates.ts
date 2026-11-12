@@ -17,8 +17,10 @@ import { AdminDebate, DEBATE_STATUS_LABELS, DebateStatus } from '../debates/deba
 import { ProposeTopicDialogService } from '../debates/propose-topic-dialog';
 import { UserPickerData, UserPickerDialog } from './user-picker-dialog';
 import { PromoteDebateDialog } from './promote-debate-dialog';
+import { debateShare } from '../../shared/social-share/share-data';
+import { ShareAction, SocialShareService } from '../../shared/social-share/social-share.service';
 
-type RowAction = 'view' | 'approve' | 'reject' | 'close' | 'open' | 'promote' | 'moderator' | 'remove';
+type RowAction = ShareAction | 'view' | 'approve' | 'reject' | 'close' | 'open' | 'promote' | 'moderator' | 'remove';
 
 @Component({
   selector: 'app-admin-debates',
@@ -74,6 +76,7 @@ export class AdminDebates {
   readonly #dialog = inject(MatDialog);
   readonly #notifications = inject(NotificationService);
   readonly #delete = inject(DeleteService);
+  readonly #share = inject(SocialShareService);
   readonly #propose = inject(ProposeTopicDialogService);
 
   protected readonly statusLabels = DEBATE_STATUS_LABELS;
@@ -129,10 +132,16 @@ export class AdminDebates {
       options.push({ value: 'moderator', label: 'Promeni moderatora', icon: 'user' });
       options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
     }
+    if (item.status === 'open' || item.status === 'closed') {
+      options.push(...this.#share.options(true));
+    }
     return options;
   }
 
   protected onAction(item: AdminDebate, action: RowAction): void {
+    if (this.#share.handle(action, debateShare(item))) {
+      return;
+    }
     switch (action) {
       case 'approve':
       case 'open':

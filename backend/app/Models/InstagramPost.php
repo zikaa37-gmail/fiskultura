@@ -28,7 +28,7 @@ class InstagramPost extends Model
 
     public const FAILED = 'failed';
 
-    public const SOURCES = ['news', 'debate'];
+    public const SOURCES = ['news', 'debate', 'question'];
 
     public const NETWORKS = ['instagram', 'facebook'];
 

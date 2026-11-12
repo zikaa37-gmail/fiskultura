@@ -11,9 +11,11 @@ import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu'
 import { FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { matchesSearch, queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
+import { questionShare } from '../../shared/social-share/share-data';
+import { ShareAction, SocialShareService } from '../../shared/social-share/social-share.service';
 import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionStatus } from '../questions/question.model';
 
-type RowAction = 'view' | 'edit' | 'remove';
+type RowAction = ShareAction | 'view' | 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-questions',
@@ -59,6 +61,7 @@ type RowAction = 'view' | 'edit' | 'remove';
 export class AdminQuestions {
   protected readonly auth = inject(AuthService);
   readonly #delete = inject(DeleteService);
+  readonly #share = inject(SocialShareService);
 
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly statusLabels = QUESTION_STATUS_LABELS;
@@ -107,10 +110,16 @@ export class AdminQuestions {
     if (this.auth.isAdmin()) {
       options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
     }
+    if (item.status === 'published' && item.slug) {
+      options.push(...this.#share.options(true));
+    }
     return options;
   }
 
   protected onAction(item: AdminQuestion, action: RowAction): void {
+    if (this.#share.handle(action, questionShare(item))) {
+      return;
+    }
     if (action === 'remove') {
       this.#delete.confirmDelete(
         { title: 'Brisanje pitanja', message: `Obrisati „${item.title}“?`, url: `${API_URL}/admin/questions/${item.id}`, success: 'Pitanje je obrisano.' },

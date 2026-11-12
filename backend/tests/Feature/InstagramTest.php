@@ -167,4 +167,54 @@ class InstagramTest extends TestCase
         $this->withJwt($this->editor)->postJson("/api/admin/instagram/posts/{$post->id}/publish")->assertOk()->assertJsonPath('status', InstagramPost::PUBLISHED);
         $this->assertCount(1, Http::recorded(fn (HttpRequest $request) => str_ends_with($request->url(), '/1784/media_publish')));
     }
+
+    public function test_oauth_connects_instagram_and_facebook_page(): void
+    {
+        config([
+            'social.instagram.app_id' => 'ig-app', 'social.instagram.app_secret' => 'ig-secret',
+            'social.facebook.app_id' => 'fb-app', 'social.facebook.app_secret' => 'fb-secret', 'social.facebook.page_id' => '61596639594353',
+            'app.frontend_url' => 'https://fiskultura.rs',
+        ]);
+        $this->fakeInstagram();
+        Http::fake([
+            'api.instagram.com/oauth/access_token' => Http::response(['access_token' => 'kratki-ig-token-0123456789']),
+            'graph.instagram.com/access_token*' => Http::response(['access_token' => 'dugi-ig-token-0123456789', 'expires_in' => 5184000]),
+            'graph.facebook.com/v23.0/oauth/access_token*' => Http::response(['access_token' => 'fb-korisnik-token-0123456789']),
+            'graph.facebook.com/61596639594353/photos' => Http::response(['id' => 'ph-2', 'post_id' => '61596639594353_9']),
+            'graph.facebook.com/61596639594353_9*' => Http::response(['permalink_url' => 'https://www.facebook.com/p/9']),
+            'graph.facebook.com/61596639594353*' => Http::response(['id' => '61596639594353', 'name' => 'Fiskultura RS', 'access_token' => 'stranica-token-0123456789', 'instagram_business_account' => ['id' => '1784', 'username' => 'fiskultura_rs']]),
+            'graph.facebook.com/1784/media_publish' => Http::response(['id' => 'm-fb']),
+            'graph.facebook.com/1784/media' => Http::response(['id' => 'c-fb']),
+            'graph.facebook.com/c-fb*' => Http::response(['status_code' => 'FINISHED']),
+            'graph.facebook.com/m-fb*' => Http::response(['permalink' => 'https://www.instagram.com/p/fb/']),
+            'graph.facebook.com/v23.0/me/accounts*' => Http::response(['data' => [
+                ['id' => '111', 'name' => 'Druga', 'access_token' => 'druga-0123456789'],
+                ['id' => '61596639594353', 'name' => 'Fiskultura RS', 'access_token' => 'stranica-token-0123456789'],
+            ]]),
+        ]);
+
+        $this->withJwt($this->editor)->postJson('/api/admin/social/instagram/authorize')->assertForbidden();
+        $state = $this->withJwt($this->admin)->getJson('/api/admin/instagram')->assertOk()
+            ->assertJsonPath('oauth.instagram', true)->assertJsonPath('facebook.page_id', '61596639594353');
+
+        foreach (['instagram', 'facebook'] as $network) {
+            $url = $this->withJwt($this->admin)->postJson("/api/admin/social/{$network}/authorize")->assertOk()->json('url');
+            parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
+            $this->assertStringEndsWith("/api/public/social/{$network}/callback", $query['redirect_uri']);
+            $this->get("/api/public/social/{$network}/callback?code=abc&state=".urlencode($query['state']))
+                ->assertRedirect("https://fiskultura.rs/admin/drustvene-mreze?povezano={$network}");
+        }
+
+        Http::assertSent(fn (HttpRequest $request) => str_contains($request->url(), 'refresh_access_token') && str_contains($request->url(), 'dugi-ig-token'));
+        $this->assertSame('stranica-token-0123456789', SocialAccount::facebook()->token);
+        $this->assertSame('Fiskultura RS', SocialAccount::facebook()->username);
+        $instagram = SocialAccount::instagram();
+        $this->assertTrue($instagram->viaFacebook());
+        $this->assertSame(['1784', 'fiskultura_rs', 'stranica-token-0123456789'], [$instagram->external_id, $instagram->username, $instagram->token]);
+
+        $this->withJwt($this->editor)->postJson('/api/admin/instagram/posts', ['kind' => 'post', 'caption' => 'Jedan token', 'image' => self::IMAGE, 'networks' => ['instagram', 'facebook']])
+            ->assertCreated()->assertJsonPath('status', InstagramPost::PUBLISHED)->assertJsonPath('permalink', 'https://www.instagram.com/p/fb/');
+        Http::assertSent(fn (HttpRequest $request) => $request->url() === 'https://graph.facebook.com/1784/media' && $request['access_token'] === 'stranica-token-0123456789');
+        $this->get('/api/public/social/facebook/callback?code=abc&state=los')->assertRedirectContains('greska=');
+    }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['provider', 'username', 'external_id', 'token', 'token_expires_at', 'connected_by'])]
+#[Fillable(['provider', 'api', 'username', 'external_id', 'token', 'token_expires_at', 'connected_by'])]
 #[Hidden(['token'])]
 class SocialAccount extends Model
 {
@@ -32,6 +32,16 @@ class SocialAccount extends Model
         return self::firstOrNew(['provider' => self::FACEBOOK]);
     }
 
+    public function viaFacebook(): bool
+    {
+        return $this->api === 'facebook';
+    }
+
+    public function apiBase(): string
+    {
+        return $this->viaFacebook() ? 'https://graph.facebook.com' : 'https://graph.instagram.com';
+    }
+
     public function connected(): bool
     {
         return (bool) $this->token;
@@ -43,6 +53,7 @@ class SocialAccount extends Model
             'connected' => $this->connected(),
             'username' => $this->username,
             'token_expires_at' => $this->token_expires_at?->toIso8601String(),
+            'via_facebook' => $this->viaFacebook(),
         ];
     }
 }

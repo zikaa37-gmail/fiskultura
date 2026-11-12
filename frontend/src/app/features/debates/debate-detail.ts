@@ -11,6 +11,8 @@ import { formatDate } from '../../core/content/content.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { SeoService } from '../../core/seo/seo.service';
+import { debateShare } from '../../shared/social-share/share-data';
+import { ShareMenu } from '../../shared/social-share/share-menu';
 import { Icon } from '../../shared/icon/icon';
 import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
@@ -33,7 +35,7 @@ const SORTS = ['new', 'top', 'old'];
 
 @Component({
   selector: 'app-debate-detail',
-  imports: [FormsModule, RouterLink, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, Icon, ListFilters, ListHeader, Pagination, DebatePostCard, DebateSummaryCard, DebateModeration, DebateIntroCard],
+  imports: [FormsModule, RouterLink, MatInputModule, MatProgressBarModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, Icon, ListFilters, ListHeader, Pagination, DebatePostCard, DebateSummaryCard, DebateModeration, DebateIntroCard, ShareMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -47,11 +49,16 @@ const SORTS = ['new', 'top', 'old'];
         }
         @if (debate(); as item) {
           <header class="debate-head">
-            <span class="post-meta">
-              <span class="state-chip" [class]="item.status === 'open' ? 'state-ok' : item.status === 'proposed' ? 'state-warn' : 'state-muted'">{{ statusLabels[item.status] }}</span>
-              <span>{{ item.posts_count }} priloga</span>
-              <span>moderator: {{ item.moderator?.name ?? 'nije dodeljen' }}</span>
-            </span>
+            <div class="post-head">
+              <span class="post-meta">
+                <span class="state-chip" [class]="item.status === 'open' ? 'state-ok' : item.status === 'proposed' ? 'state-warn' : 'state-muted'">{{ statusLabels[item.status] }}</span>
+                <span>{{ item.posts_count }} priloga</span>
+                <span>moderator: {{ item.moderator?.name ?? 'nije dodeljen' }}</span>
+              </span>
+              @if (item.status === 'open' || item.status === 'closed') {
+                <app-share-menu [data]="share(item)" />
+              }
+            </div>
             <h1>{{ item.title }}</h1>
             @if (item.description) {
               <p class="lead">{{ item.description }}</p>
@@ -123,7 +130,7 @@ const SORTS = ['new', 'top', 'old'];
             @if (posts.isLoading()) {
               <mat-progress-bar mode="indeterminate" />
             }
-            <app-list-header [count]="meta()?.total ?? null" label="Priloga" />
+            <app-list-header [count]="meta()?.total ?? null" [page]="page()" [lastPage]="meta()?.last_page ?? null" label="Priloga" />
             <div class="debate-posts">
               @for (post of items(); track post.id) {
                 <app-debate-post-card [post]="post" [moderating]="item.can_moderate && item.status === 'open'" [frozen]="item.status !== 'open'" (react)="react(post, $event)" (moderate)="moderate(post, $event)" />
@@ -229,6 +236,8 @@ export class DebateDetail {
 
   protected readonly detail = httpResource<Detail>(() => `${API_URL}/debates/${this.slug()}`);
   protected readonly debate = computed(() => (this.detail.hasValue() ? this.detail.value() : null));
+
+  protected readonly share = debateShare;
 
   readonly #kind = computed(() => (KINDS.includes(this.vrsta() as PostKind) ? (this.vrsta() as PostKind) : ''));
   readonly #sort = computed(() => (SORTS.includes(this.redosled() ?? '') ? this.redosled()! : ''));

@@ -7,12 +7,14 @@ import { formatDate } from '../../core/content/content.model';
 import { API_URL, isNotFound } from '../../core/http/api';
 import { breadcrumbs, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { JoinCta } from '../../shared/join-cta/join-cta';
+import { questionShare } from '../../shared/social-share/share-data';
+import { ShareMenu } from '../../shared/social-share/share-menu';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question.model';
 
 @Component({
   selector: 'app-question-detail',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, SimpleMarkdownPipe, JoinCta],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, SimpleMarkdownPipe, JoinCta, ShareMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .small-heading {
@@ -75,12 +77,17 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS } from './question
           </div>
         } @else if (question(); as item) {
           <article class="article-body">
-            <span class="post-meta">
-              <span class="post-category">{{ categoryLabels[item.category] }}</span>
-              @if (item.valid_on) {
-                <span>važi na dan {{ date(item.valid_on) }}</span>
+            <div class="post-head">
+              <span class="post-meta">
+                <span class="post-category">{{ categoryLabels[item.category] }}</span>
+                @if (item.valid_on) {
+                  <span>važi na dan {{ date(item.valid_on) }}</span>
+                }
+              </span>
+              @if (shareData(); as share) {
+                <app-share-menu [data]="share" />
               }
-            </span>
+            </div>
             <h1>{{ item.title }}</h1>
             @if (item.body) {
               <p class="question-text">{{ item.body }}</p>
@@ -131,6 +138,10 @@ export class QuestionDetail {
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly resource = httpResource<Question>(() => `${API_URL}/questions/${encodeURIComponent(this.slug())}`);
   protected readonly question = computed(() => (this.resource.hasValue() ? this.resource.value() : null));
+  protected readonly shareData = computed(() => {
+    const item = this.question();
+    return item ? questionShare(item) : null;
+  });
 
   constructor() {
     effect(() => {

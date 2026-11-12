@@ -20,6 +20,7 @@ class InstagramAccount
 
         $account = SocialAccount::instagram();
         $account->fill([
+            'api' => null,
             'username' => $response->json('username'),
             'external_id' => $response->json('user_id') ? (string) $response->json('user_id') : null,
             'token' => $token,
@@ -45,7 +46,7 @@ class InstagramAccount
     public function refresh(): bool
     {
         $account = SocialAccount::instagram();
-        if (! $account->connected()) {
+        if (! $account->connected() || $account->viaFacebook()) {
             return false;
         }
 

@@ -8,6 +8,8 @@ use App\Models\SocialAccount;
 use App\Services\Instagram\FacebookPage;
 use App\Services\Instagram\InstagramAccount;
 use App\Services\Instagram\InstagramPublisher;
+use App\Services\Instagram\SocialOAuth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -18,7 +20,38 @@ class AdminInstagramController extends Controller
 
     public function state()
     {
-        return response()->json(SocialAccount::instagram()->present() + ['facebook' => SocialAccount::facebook()->present()]);
+        $oauth = app(SocialOAuth::class);
+        $facebook = SocialAccount::facebook();
+
+        return response()->json(SocialAccount::instagram()->present() + [
+            'facebook' => $facebook->present() + ['page_id' => $facebook->external_id ?: (string) config('social.facebook.page_id')],
+            'oauth' => ['instagram' => $oauth->available('instagram'), 'facebook' => $oauth->available('facebook')],
+        ]);
+    }
+
+    public function authorize(Request $request, SocialOAuth $oauth, string $network)
+    {
+        abort_unless(in_array($network, SocialOAuth::NETWORKS, true), 404);
+        abort_unless($oauth->available($network), 422, 'Povezivanje preko '.($network === 'instagram' ? 'Instagrama' : 'Facebooka').' nije podešeno na serveru (ID i tajna Meta aplikacije u .env).');
+
+        return response()->json(['url' => $oauth->authorizeUrl($network, $request->user())]);
+    }
+
+    public function callback(Request $request, SocialOAuth $oauth, string $network)
+    {
+        abort_unless(in_array($network, SocialOAuth::NETWORKS, true), 404);
+        $target = rtrim((string) config('app.frontend_url'), '/').'/admin/drustvene-mreze';
+        if ($request->filled('error')) {
+            return redirect($target.'?greska='.rawurlencode('Povezivanje je otkazano.'));
+        }
+
+        try {
+            $oauth->callback($network, $request->query('code'), $request->query('state'));
+        } catch (ValidationException $error) {
+            return redirect($target.'?greska='.rawurlencode((string) collect($error->errors())->flatten()->first()));
+        }
+
+        return redirect($target.'?povezano='.$network);
     }
 
     public function connectFacebook(Request $request, FacebookPage $page)

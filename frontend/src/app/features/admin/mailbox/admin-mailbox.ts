@@ -34,7 +34,7 @@ interface MessagesPage {
     } @else {
       <p class="small muted mb-2">{{ address() }}</p>
       <app-list-filters [fields]="fields()" [values]="filterValues()" emptySummary="Primljeno" (filterChange)="setFilter($event)" (clearAll)="clear()" />
-      <app-list-header [count]="meta()?.total ?? null" label="Mejlova">
+      <app-list-header [count]="meta()?.total ?? null" [page]="page()" [lastPage]="meta()?.last_page ?? null" label="Mejlova">
         <button type="button" mat-flat-button (click)="compose()">Nov mejl</button>
       </app-list-header>
       @if (messages.isLoading() || folders.isLoading()) {

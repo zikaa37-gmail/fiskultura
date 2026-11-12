@@ -1536,6 +1536,11 @@ a.post-title:hover {
   color: var(--color-muted);
 }
 
+.state-danger {
+  background: color-mix(in srgb, var(--mat-sys-error) 14%, var(--color-surface));
+  color: var(--mat-sys-error);
+}
+
 .danger-text {
   color: var(--mat-sys-error) !important;
 }
