@@ -20,7 +20,7 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
   imports: [FormsModule, RouterLink, MatDialogModule, MatCheckboxModule, MatInputModule, MatProgressBarModule, MatButtonToggleModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, DialogShell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-dialog-shell title="Objavi na Instagram i Facebook">
+    <app-dialog-shell title="Objavi na Instagram i Facebook" [closable]="!busy()">
       @if (state.isLoading()) {
         <mat-progress-bar mode="indeterminate" />
       } @else if (!anyConnected()) {
@@ -31,7 +31,14 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
           <p class="muted">Administrator ih povezuje na stranici Društvene mreže.</p>
         }
       } @else {
-        <div class="share-layout">
+        @if (busy()) {
+          <div class="share-busy" role="status" aria-live="polite">
+            <mat-progress-bar mode="indeterminate" />
+            <strong>{{ scheduled() ? 'Zakazujem objavu…' : 'Objavljujem na mreže…' }}</strong>
+            <span class="small muted">Instagram prvo obradi sliku, ovo traje do pola minuta. Ne zatvarajte prozor.</span>
+          </div>
+        }
+        <div class="share-layout" [class.share-dimmed]="busy()" [attr.inert]="busy() ? '' : null">
           <div class="share-preview">
             @if (image(); as src) {
               <img [src]="src" alt="Slika za objavu" [class.story]="kind() === 'story'" />
@@ -88,7 +95,7 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
         </div>
       }
       <ng-container dialogActions>
-        <button type="button" mat-stroked-button mat-dialog-close>Odustani</button>
+        <button type="button" mat-stroked-button mat-dialog-close [disabled]="busy()">Odustani</button>
         @if (anyConnected()) {
           <button type="button" mat-flat-button [disabled]="!canSubmit()" (click)="submit()">
             {{ busy() ? 'Objavljujem…' : scheduled() ? 'Zakaži' : 'Objavi sada' }}
@@ -101,6 +108,18 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
     .share-layout {
       display: grid;
       gap: 16px;
+    }
+    .share-busy {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+    }
+    .share-dimmed {
+      opacity: 0.5;
+      pointer-events: none;
     }
     .share-preview {
       display: grid;
@@ -211,6 +230,7 @@ export class SocialShareDialog {
 
   protected submit(): void {
     this.busy.set(true);
+    this.#ref.disableClose = true;
     this.error.set(null);
     this.#http
       .post<SocialPost>(`${API_URL}/admin/instagram/posts`, {
@@ -226,6 +246,7 @@ export class SocialShareDialog {
         next: (post) => this.#ref.close(post),
         error: (error) => {
           this.busy.set(false);
+          this.#ref.disableClose = false;
           this.error.set(apiErrorMessage(error));
         },
       });

@@ -73,7 +73,7 @@ type PostAction = 'instagram' | 'facebook' | 'retry' | 'remove';
       @if (state.value(); as current) {
         @if (!current.oauth.instagram || !current.oauth.facebook) {
           <p class="small muted mb-3">
-            Dugme „Poveži” radi kad su na serveru upisani ID i tajna Meta aplikacije. Do tada nalepite token sistemskog korisnika ispod.
+            Dugme „Poveži” radi kad su na serveru upisani ID i tajna Meta aplikacije. Do tada nalepite token ispod.
           </p>
         }
       }
@@ -83,8 +83,9 @@ type PostAction = 'instagram' | 'facebook' | 'retry' | 'remove';
           <form class="social-connect-form" (ngSubmit)="connectFacebook()">
             <strong>Facebook stranica i Instagram (jedan token)</strong>
             <p class="small muted">
-              business.facebook.com → Settings → Users → System users → izaberite korisnika → Generate new token (aplikacija Portal Fiskultura,
-              trajanje „Never”, dozvole pages_show_list, pages_read_engagement, pages_manage_posts, instagram_basic, instagram_content_publish).
+              developers.facebook.com/tools/explorer → aplikacija Portal Fiskultura → Get User Access Token (dozvole pages_show_list,
+              pages_read_engagement, pages_manage_posts, business_management, instagram_basic, instagram_content_publish) → ⓘ → Open in Access
+              Token Tool → Extend Access Token. Nalepite produženi token; portal od njega napravi token stranice koji ne ističe.
               Portal sam pronađe Instagram nalog povezan sa stranicom.
             </p>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -92,7 +93,7 @@ type PostAction = 'instagram' | 'facebook' | 'retry' | 'remove';
               <input matInput name="fbPage" inputmode="numeric" autocomplete="off" [ngModel]="fbPage()" (ngModelChange)="fbPage.set($event)" />
             </mat-form-field>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Token sistemskog korisnika</mat-label>
+              <mat-label>Produženi token</mat-label>
               <input matInput name="fbToken" type="password" autocomplete="off" [ngModel]="fbToken()" (ngModelChange)="fbToken.set($event)" />
             </mat-form-field>
             <button type="submit" mat-flat-button [disabled]="busy() || !fbPage().trim() || fbToken().trim().length < 20">Poveži</button>
