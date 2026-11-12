@@ -13,7 +13,7 @@ import { Icon } from '../icon/icon';
     }
     @for (item of links; track item.id) {
       <a class="portal-social-link" [href]="item.url" target="_blank" rel="noopener" [attr.aria-label]="item.label + ' ' + item.handle" [title]="item.label + ' ' + item.handle">
-        <app-icon [name]="item.id" [size]="20" />
+        <app-icon [name]="item.id" [size]="16" />
       </a>
     }
   `,
@@ -22,15 +22,15 @@ import { Icon } from '../icon/icon';
       display: inline-flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .portal-social-link {
       display: inline-grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border: 1px solid var(--color-border);
-      border-radius: 12px;
+      border-radius: 8px;
       background: var(--color-surface);
       color: var(--color-text);
     }

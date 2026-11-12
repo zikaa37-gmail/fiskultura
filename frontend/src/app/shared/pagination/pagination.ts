@@ -80,7 +80,7 @@ export function pageItems(page: number, lastPage: number): number[] {
       font-weight: 700;
     }
     .pagination-btn app-icon {
-      display: block;
+      vertical-align: top;
     }
     .pagination-compact {
       flex: 1;
@@ -111,7 +111,8 @@ export function pageItems(page: number, lastPage: number): number[] {
         display: none;
       }
       .pagination .pagination-btn {
-        min-width: 36px;
+        min-width: 32px;
+        padding-inline: 8px;
       }
       .pagination-pages {
         display: flex;
@@ -131,7 +132,7 @@ export class Pagination {
   protected readonly size = toSignal(
     inject(BreakpointObserver)
       .observe('(min-width: 600px)')
-      .pipe(map((state) => (state.matches ? 'sm' : 'md'))),
+      .pipe(map((state) => (state.matches ? 'xs' : 'md'))),
     { initialValue: 'md' as const },
   );
 

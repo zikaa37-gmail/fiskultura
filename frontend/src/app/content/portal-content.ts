@@ -270,4 +270,5 @@ export interface PortalSocial {
 
 export const PORTAL_SOCIAL: PortalSocial[] = [
   { id: 'instagram', label: 'Instagram', handle: '@fiskultura_rs', url: 'https://www.instagram.com/fiskultura_rs/' },
+  { id: 'facebook', label: 'Facebook', handle: 'Fiskultura RS', url: 'https://www.facebook.com/profile.php?id=61596171552146' },
 ];

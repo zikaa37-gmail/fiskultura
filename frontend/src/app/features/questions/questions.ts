@@ -6,13 +6,16 @@ import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
 import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
+import { Pagination } from '../../shared/pagination/pagination';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { QaTabs } from './qa-tabs';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory } from './question.model';
 
+const PAGE_SIZE = 10;
+
 @Component({
   selector: 'app-questions',
-  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, ScrollArea, QaTabs],
+  imports: [RouterLink, MatProgressBarModule, ListFilters, ListHeader, ScrollArea, Pagination, QaTabs],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
@@ -28,9 +31,9 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
             <div class="empty-state"><h3>Pitanja trenutno nisu dostupna</h3></div>
           } @else {
             <app-list-header [count]="items().length" label="Pronađeno" />
-            <app-scroll-area label="Odgovori" [fill]="true" [resetOn]="[category(), pretraga()]">
+            <app-scroll-area label="Odgovori" [fill]="true" [minHeight]="560" [resetOn]="[category(), pretraga(), page()]">
               <div class="qa-list">
-                @for (item of items(); track item.id) {
+                @for (item of pageItems(); track item.id) {
                   <article class="qa-card">
                     <span class="post-meta">
                       <span class="post-category">{{ categoryLabels[item.category] }}</span>
@@ -52,6 +55,9 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
                 }
               </div>
             </app-scroll-area>
+            @if (lastPage() > 1) {
+              <app-pagination [page]="page()" [lastPage]="lastPage()" (pageChange)="goToPage($event)" />
+            }
           }
         </app-qa-tabs>
       </div>
@@ -61,6 +67,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
 export class Questions {
   readonly oblast = input<string>();
   readonly pretraga = input<string>();
+  readonly strana = input<string>();
 
   readonly #router = inject(Router);
 
@@ -82,9 +89,16 @@ export class Questions {
     return `${API_URL}/questions${query ? `?${query}` : ''}`;
   });
   protected readonly items = computed(() => (this.resource.hasValue() ? this.resource.value() : []));
+  protected readonly lastPage = computed(() => Math.max(1, Math.ceil(this.items().length / PAGE_SIZE)));
+  protected readonly page = computed(() => Math.min(this.lastPage(), Math.max(1, Number(this.strana()) || 1)));
+  protected readonly pageItems = computed(() => this.items().slice((this.page() - 1) * PAGE_SIZE, this.page() * PAGE_SIZE));
 
   protected setFilter(change: FilterChange): void {
-    this.#router.navigate([], { queryParams: { [change.key]: change.value || null }, queryParamsHandling: 'merge', replaceUrl: true });
+    this.#router.navigate([], { queryParams: { [change.key]: change.value || null, strana: null }, queryParamsHandling: 'merge', replaceUrl: true });
+  }
+
+  protected goToPage(page: number): void {
+    this.#router.navigate([], { queryParams: { strana: page > 1 ? page : null }, queryParamsHandling: 'merge' });
   }
 
   protected clearFilters(): void {
