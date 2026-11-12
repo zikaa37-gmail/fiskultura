@@ -35,6 +35,8 @@ export type IconName =
   | 'chevron-down'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevrons-left'
+  | 'chevrons-right'
   | 'more-vert'
   | 'eye'
   | 'edit'
@@ -66,6 +68,8 @@ const ICON_PATHS: Record<IconName, string[]> = {
   'chevron-down': ['M6 9l6 6l6-6'],
   'chevron-left': ['M15 6l-6 6l6 6'],
   'chevron-right': ['M9 6l6 6l-6 6'],
+  'chevrons-left': ['M11 7l-5 5l5 5', 'M17 7l-5 5l5 5'],
+  'chevrons-right': ['M7 7l5 5l-5 5', 'M13 7l5 5l-5 5'],
   web: ['M3 5h18v14H3z', 'M3 9h18', 'M6 7h.01', 'M8.5 7h.01', 'M8 13h8', 'M8 16h5'],
   facebook: ['M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V9H7v3h2v9h3v-9h2.5l.5-3h-3V7a1 1 0 0 1 1-1h2z'],
   instagram: ['M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z', 'M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z', 'M17.5 6.5h.01'],

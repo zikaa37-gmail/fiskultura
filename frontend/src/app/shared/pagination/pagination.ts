@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Icon } from '../icon/icon';
 
@@ -25,7 +28,10 @@ export function pageItems(page: number, lastPage: number): number[] {
   template: `
     @if (lastPage() > 1) {
       <nav class="pagination" [attr.aria-label]="label()">
-        <button type="button" mat-stroked-button theme="tertiary" class="pagination-btn" [disabled]="page() <= 1" [attr.aria-label]="previousLabel()" [title]="previousLabel()" (click)="go(page() - 1)">
+        <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn" [disabled]="page() <= 1" [attr.aria-label]="firstLabel()" [title]="firstLabel()" (click)="go(1)">
+          <app-icon name="chevrons-left" [size]="20" />
+        </button>
+        <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn" [disabled]="page() <= 1" [attr.aria-label]="previousLabel()" [title]="previousLabel()" (click)="go(page() - 1)">
           <app-icon name="chevron-left" [size]="20" />
         </button>
         <span class="pagination-compact" aria-live="polite">Strana {{ page() }} / {{ lastPage() }}</span>
@@ -35,15 +41,18 @@ export function pageItems(page: number, lastPage: number): number[] {
               @if (item === 0) {
                 <span class="pagination-gap" aria-hidden="true">…</span>
               } @else if (item === page()) {
-                <button type="button" mat-flat-button class="pagination-btn" aria-current="page" [attr.aria-label]="'Strana ' + item">{{ item }}</button>
+                <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn pagination-current" aria-current="page" [attr.aria-label]="'Strana ' + item">{{ item }}</button>
               } @else {
-                <button type="button" mat-stroked-button theme="tertiary" class="pagination-btn" [attr.aria-label]="'Strana ' + item" (click)="go(item)">{{ item }}</button>
+                <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn" [attr.aria-label]="'Strana ' + item" (click)="go(item)">{{ item }}</button>
               }
             </li>
           }
         </ul>
-        <button type="button" mat-stroked-button theme="tertiary" class="pagination-btn" [disabled]="page() >= lastPage()" [attr.aria-label]="nextLabel()" [title]="nextLabel()" (click)="go(page() + 1)">
+        <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn" [disabled]="page() >= lastPage()" [attr.aria-label]="nextLabel()" [title]="nextLabel()" (click)="go(page() + 1)">
           <app-icon name="chevron-right" [size]="20" />
+        </button>
+        <button type="button" mat-stroked-button theme="tertiary" [size]="size()" class="pagination-btn" [disabled]="page() >= lastPage()" [attr.aria-label]="lastLabel()" [title]="lastLabel()" (click)="go(lastPage())">
+          <app-icon name="chevrons-right" [size]="20" />
         </button>
       </nav>
     }
@@ -62,13 +71,20 @@ export function pageItems(page: number, lastPage: number): number[] {
     .pagination .pagination-btn {
       min-width: 44px;
       width: auto;
-      padding: 0 10px;
       font-variant-numeric: tabular-nums;
+    }
+    .pagination .pagination-current {
+      border-color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-text);
+      font-weight: 700;
     }
     .pagination-btn app-icon {
       display: block;
     }
     .pagination-compact {
+      flex: 1;
+      text-align: center;
       color: var(--color-muted);
       font-size: 14px;
       font-variant-numeric: tabular-nums;
@@ -94,6 +110,9 @@ export function pageItems(page: number, lastPage: number): number[] {
       .pagination-compact {
         display: none;
       }
+      .pagination .pagination-btn {
+        min-width: 36px;
+      }
       .pagination-pages {
         display: flex;
       }
@@ -106,6 +125,15 @@ export class Pagination {
   readonly label = input('Stranice');
   readonly previousLabel = input('Prethodna strana');
   readonly nextLabel = input('Sledeća strana');
+  readonly firstLabel = input('Prva strana');
+  readonly lastLabel = input('Poslednja strana');
+
+  protected readonly size = toSignal(
+    inject(BreakpointObserver)
+      .observe('(min-width: 600px)')
+      .pipe(map((state) => (state.matches ? 'sm' : 'md'))),
+    { initialValue: 'md' as const },
+  );
 
   protected readonly items = computed(() => pageItems(this.page(), this.lastPage()));
 
