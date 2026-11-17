@@ -14,6 +14,8 @@ import { NotificationService } from '../../core/notification.service';
 import { formatDate } from '../../core/content/content.model';
 import { phoneHref } from '../../core/phone';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { debouncedSearch, searchDraft } from '../../shared/list-filters/search-input';
+import { DeleteService } from '../../core/delete.service';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { FilterPanel } from '../../shared/filter-panel/filter-panel';
 import { ListHeader } from '../../shared/list-header/list-header';
@@ -47,10 +49,10 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
           <mat-option [value]="true">Čekaju aktivaciju</mat-option>
         </mat-select>
       </mat-form-field>
-      <form class="search-form" (ngSubmit)="search.set(searchText().trim()); page.set(1)">
+      <form class="search-form" (ngSubmit)="searchInput.flush(searchText())">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Pretraga (ime, mejl, škola, opština)</mat-label>
-          <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+          <input matInput name="search" type="search" enterkeyhint="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event); searchInput.schedule($event)" />
         </mat-form-field>
       </form>
     </app-filter-panel>
@@ -109,6 +111,7 @@ export class AdminUsers {
   readonly #http = inject(HttpClient);
   readonly #notifications = inject(NotificationService);
   readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
   readonly #dialog = inject(MatDialog);
 
   protected readonly roleLabels = ROLE_LABELS;
@@ -117,7 +120,13 @@ export class AdminUsers {
   protected readonly pending = signal(false);
   protected readonly sending = signal(false);
   protected readonly search = signal('');
-  protected readonly searchText = linkedSignal(() => this.search());
+  protected readonly searchText = searchDraft(() => this.search());
+  protected readonly searchInput = debouncedSearch((value) => {
+    if (value !== this.search()) {
+      this.search.set(value);
+      this.page.set(1);
+    }
+  });
   protected readonly page = signal(1);
 
   protected readonly resource = httpResource<Page<AdminUser>>(() => ({
@@ -237,20 +246,15 @@ export class AdminUsers {
   }
 
   #remove(user: AdminUser): void {
-    this.#confirm
-      .confirm({ title: 'Brisanje korisnika', message: `Trajno obrisati ${user.name} (${user.email})? Briše se nalog i prijava na obaveštenja i to ne može da se vrati.`, confirmLabel: 'Obriši' })
-      .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
-        }
-        this.#http.delete(`${API_URL}/admin/users/${user.id}`).subscribe({
-          next: () => {
-            this.#notifications.show(`${user.name} je obrisan.`);
-            this.resource.reload();
-          },
-          error: (error) => this.#notifications.show(apiErrorMessage(error)),
-        });
-      });
+    this.#delete.confirmDelete(
+      {
+        title: 'Brisanje korisnika',
+        message: `Trajno obrisati ${user.name} (${user.email})? Briše se nalog i prijava na obaveštenja i to ne može da se vrati.`,
+        url: `${API_URL}/admin/users/${user.id}`,
+        success: `${user.name} je obrisan.`,
+      },
+      () => this.resource.reload(),
+    );
   }
 
   #toggleBlock(user: AdminUser): void {

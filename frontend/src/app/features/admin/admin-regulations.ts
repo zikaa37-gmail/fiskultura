@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
@@ -15,13 +12,16 @@ import { RULE_TOPICS, reviewDue } from '../../content/rules/rule-topics';
 import { CONTACTS_CHECKED_AT } from '../../content/rules/contacts';
 import { AdminReviewRow } from './admin-review-row';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
-import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
+import { DeleteService } from '../../core/delete.service';
+import { FilterField, ListFilters } from '../../shared/list-filters/list-filters';
+import { matchesSearch, queryFilters } from '../../shared/list-filters/query-filters';
+import { ListHeader } from '../../shared/list-header/list-header';
 
 type RowAction = 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-regulations',
-  imports: [AdminReviewRow, FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, OptionsMenu],
+  imports: [AdminReviewRow, RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="admin-review">
@@ -63,17 +63,13 @@ type RowAction = 'edit' | 'remove';
     </section>
 
     <h2>Svi propisi</h2>
-    <div class="admin-toolbar">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="admin-search">
-        <mat-label>Pretraga (naziv, glasnik)</mat-label>
-        <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
-      </mat-form-field>
+    <app-list-filters [fields]="fields" [values]="filters.values()" emptySummary="Svi propisi" (filterChange)="filters.set($event)" (clearAll)="filters.clear()" />
+    <app-list-header [count]="filtered().length">
       <a mat-flat-button routerLink="novi">Novi propis</a>
-    </div>
+    </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
-    <p class="muted small result-count mb-2">Ukupno: {{ filtered().length }}</p>
     <div class="admin-rows">
       @for (item of filtered(); track item.id) {
         <div class="admin-row admin-row-compact">
@@ -88,6 +84,10 @@ type RowAction = 'edit' | 'remove';
           </div>
           <app-options-menu [options]="menuFor(item)" [label]="'Opcije za: ' + item.title" (selected)="onAction(item, $event)" />
         </div>
+      } @empty {
+        @if (!resource.isLoading()) {
+          <p class="muted">Nema propisa za ovaj izbor.</p>
+        }
       }
     </div>
   `,
@@ -96,7 +96,7 @@ export class AdminRegulations {
   protected readonly auth = inject(AuthService);
   readonly #http = inject(HttpClient);
   readonly #notifications = inject(NotificationService);
-  readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
 
   protected readonly kindLabels = REGULATION_KIND_LABELS;
   protected readonly verificationLabels = VERIFICATION_LABELS;
@@ -108,12 +108,24 @@ export class AdminRegulations {
   protected readonly review = computed(() => (this.reviewResource.hasValue() ? this.reviewResource.value() : []));
   protected readonly changed = computed(() => this.review().filter((item) => item.change_detected_at));
   protected readonly stale = computed(() => this.review().filter((item) => !item.change_detected_at));
-  protected readonly search = signal('');
+  protected readonly filters = queryFilters(['vrsta', 'status', 'provera', 'pretraga']);
+  protected readonly fields: FilterField[] = [
+    { key: 'vrsta', label: 'Vrsta', allLabel: 'Sve vrste', options: Object.entries(REGULATION_KIND_LABELS).map(([value, label]) => ({ value, label })) },
+    { key: 'status', label: 'Važenje', allLabel: 'Sve', options: Object.entries(REGULATION_STATUS_LABELS).map(([value, label]) => ({ value, label: capitalize(label) })) },
+    { key: 'provera', label: 'Tekst', allLabel: 'Sve', options: Object.entries(VERIFICATION_LABELS).map(([value, label]) => ({ value, label: capitalize(label) })) },
+    { key: 'pretraga', label: 'Pretraga (naziv, glasnik)', type: 'search' },
+  ];
   protected readonly resource = httpResource<Regulation[]>(() => `${API_URL}/regulations`);
   protected readonly filtered = computed(() => {
-    const term = this.search().trim().toLowerCase();
+    const { vrsta, status, provera, pretraga } = this.filters.values();
     const items = this.resource.hasValue() ? this.resource.value() : [];
-    return term ? items.filter((item) => [item.title, item.gazette, item.key].some((value) => value?.toLowerCase().includes(term))) : items;
+    return items.filter(
+      (item) =>
+        (!vrsta || item.kind === vrsta) &&
+        (!status || item.status === status) &&
+        (!provera || item.verification === provera) &&
+        matchesSearch(pretraga, [item.title, item.gazette, item.key]),
+    );
   });
 
   protected date(value: string | null): string {
@@ -140,22 +152,14 @@ export class AdminRegulations {
 
   protected onAction(item: Regulation, action: RowAction): void {
     if (action === 'remove') {
-      this.remove(item);
+      this.#delete.confirmDelete(
+        { title: 'Brisanje propisa', message: `Obrisati „${item.title}“ sa istorijom izmena?`, url: `${API_URL}/admin/regulations/${item.id}`, success: 'Propis je obrisan.' },
+        () => this.resource.reload(),
+      );
     }
   }
+}
 
-  protected remove(item: Regulation): void {
-    this.#confirm.confirm({ title: 'Brisanje propisa', message: `Obrisati „${item.title}“ sa istorijom izmena?`, confirmLabel: 'Obriši' }).subscribe((confirmed) => {
-      if (!confirmed) {
-        return;
-      }
-      this.#http.delete(`${API_URL}/admin/regulations/${item.id}`).subscribe({
-        next: () => {
-          this.#notifications.show('Propis je obrisan.');
-          this.resource.reload();
-        },
-        error: (error) => this.#notifications.show(apiErrorMessage(error)),
-      });
-    });
-  }
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }

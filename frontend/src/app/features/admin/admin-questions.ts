@@ -1,18 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { HttpClient, httpResource } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthService } from '../../core/auth/auth.service';
 import { formatDate } from '../../core/content/content.model';
-import { API_URL, apiErrorMessage } from '../../core/http/api';
-import { NotificationService } from '../../core/notification.service';
+import { DeleteService } from '../../core/delete.service';
+import { API_URL } from '../../core/http/api';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
-import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
-import { FilterPanel } from '../../shared/filter-panel/filter-panel';
+import { FilterField, ListFilters } from '../../shared/list-filters/list-filters';
+import { matchesSearch, queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionStatus } from '../questions/question.model';
 
@@ -20,23 +17,10 @@ type RowAction = 'view' | 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-questions',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, FilterPanel, ListHeader, OptionsMenu],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, OptionsMenu],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <app-filter-panel [summary]="filterSummary()">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Pretraga (pitanje, odgovor)</mat-label>
-        <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" />
-      </mat-form-field>
-      <div class="chip-row" role="group" aria-label="Status">
-        <button type="button" [matButton]="!status() ? 'filled' : 'outlined'" [theme]="!status() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!status()" (click)="status.set(null)">Sva</button>
-        @for (option of statuses; track option) {
-          <button type="button" [matButton]="status() === option ? 'filled' : 'outlined'" [theme]="status() === option ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="status() === option" (click)="status.set(option)">
-            {{ statusLabels[option] }}{{ option === 'pending' && pending() ? ' (' + pending() + ')' : '' }}
-          </button>
-        }
-      </div>
-    </app-filter-panel>
+    <app-list-filters [fields]="fields()" [values]="filters.values()" emptySummary="Sva pitanja" (filterChange)="filters.set($event)" (clearAll)="filters.clear()" />
     <app-list-header [count]="items().length">
       <a mat-flat-button routerLink="novo">Novo pitanje i odgovor</a>
     </app-list-header>
@@ -71,32 +55,39 @@ type RowAction = 'view' | 'edit' | 'remove';
 })
 export class AdminQuestions {
   protected readonly auth = inject(AuthService);
-  readonly #http = inject(HttpClient);
-  readonly #notifications = inject(NotificationService);
-  readonly #confirm = inject(ConfirmService);
+  readonly #delete = inject(DeleteService);
 
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly statusLabels = QUESTION_STATUS_LABELS;
-  protected readonly statuses = Object.keys(QUESTION_STATUS_LABELS) as QuestionStatus[];
-  protected readonly status = signal<QuestionStatus | null>(null);
-  protected readonly search = signal('');
-  protected readonly filterSummary = computed(() => {
-    const status = this.status();
-    const label = status ? this.statusLabels[status] : '';
-    const parts = [label.charAt(0).toUpperCase() + label.slice(1), this.search().trim() ? `„${this.search().trim()}”` : ''];
-    return parts.filter(Boolean).join(' · ') || 'Sva pitanja';
+  protected readonly filters = queryFilters(['status', 'kategorija', 'pretraga']);
+  readonly #status = computed(() => {
+    const status = this.filters.values()['status'];
+    return status in QUESTION_STATUS_LABELS ? (status as QuestionStatus) : null;
   });
 
   protected readonly resource = httpResource<{ data: AdminQuestion[]; pending: number }>(() => ({
     url: `${API_URL}/admin/questions/list`,
     method: 'POST',
-    body: { status: this.status() },
+    body: { status: this.#status() },
   }));
   protected readonly pending = computed(() => (this.resource.hasValue() ? this.resource.value().pending : 0));
+  protected readonly fields = computed<FilterField[]>(() => [
+    {
+      key: 'status',
+      label: 'Status',
+      allLabel: 'Sva',
+      options: (Object.keys(QUESTION_STATUS_LABELS) as QuestionStatus[]).map((value) => ({
+        value,
+        label: capitalize(QUESTION_STATUS_LABELS[value]) + (value === 'pending' && this.pending() ? ` (${this.pending()})` : ''),
+      })),
+    },
+    { key: 'kategorija', label: 'Oblast', allLabel: 'Sve oblasti', options: Object.entries(QUESTION_CATEGORY_LABELS).map(([value, label]) => ({ value, label })) },
+    { key: 'pretraga', label: 'Pretraga (pitanje, odgovor)', type: 'search' },
+  ]);
   protected readonly items = computed(() => {
-    const term = this.search().trim().toLowerCase();
+    const { kategorija, pretraga } = this.filters.values();
     const items = this.resource.hasValue() ? this.resource.value().data : [];
-    return term ? items.filter((item) => [item.title, item.original, item.answer].some((value) => value?.toLowerCase().includes(term))) : items;
+    return items.filter((item) => (!kategorija || item.category === kategorija) && matchesSearch(pretraga, [item.title, item.original, item.answer]));
   });
 
   protected date(value: string): string {
@@ -117,22 +108,14 @@ export class AdminQuestions {
 
   protected onAction(item: AdminQuestion, action: RowAction): void {
     if (action === 'remove') {
-      this.remove(item);
+      this.#delete.confirmDelete(
+        { title: 'Brisanje pitanja', message: `Obrisati „${item.title}“?`, url: `${API_URL}/admin/questions/${item.id}`, success: 'Pitanje je obrisano.' },
+        () => this.resource.reload(),
+      );
     }
   }
+}
 
-  protected remove(item: AdminQuestion): void {
-    this.#confirm.confirm({ title: 'Brisanje pitanja', message: `Obrisati „${item.title}“?`, confirmLabel: 'Obriši' }).subscribe((confirmed) => {
-      if (!confirmed) {
-        return;
-      }
-      this.#http.delete(`${API_URL}/admin/questions/${item.id}`).subscribe({
-        next: () => {
-          this.#notifications.show('Pitanje je obrisano.');
-          this.resource.reload();
-        },
-        error: (error) => this.#notifications.show(apiErrorMessage(error)),
-      });
-    });
-  }
+function capitalize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }

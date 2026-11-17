@@ -61,7 +61,9 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Liste sa filterima: filteri su `app-list-filters` (`shared/list-filters`, polja i opcije se prosleđuju kao
   `FilterField[]`, vrednosti u `values`, izmena kroz `filterChange`, sažetak i „Poništi filtere” su ugrađeni), a
   poseban raspored ide direktno u `app-filter-panel`. Javna i admin lista iste vrste su jedna komponenta sa
-  nivoom pristupa (`app-news-list`, `[admin]` iz `data` rute), filteri u query parametrima. Filteri idu u `app-filter-panel` (`shared/filter-panel`, sklopiv panel sa sažetkom
+  nivoom pristupa (`app-news-list`, `[admin]` iz `data` rute), filteri u query parametrima (`queryFilters([...])`
+  i `matchesSearch` iz `shared/list-filters/query-filters.ts`). Opcije reda su `app-options-menu` (tri tačke), a
+  brisanje sa potvrdom ide kroz `DeleteService.confirmDelete` (`core/delete.service.ts`). Filteri idu u `app-filter-panel` (`shared/filter-panel`, sklopiv panel sa sažetkom
   izabranog u zaglavlju; na telefonu sklopljen i polja preko cele širine, na desktopu otvoren i polja u redu),
   a ispod njega `app-list-header` (`Ukupno: N` levo, glavna akcija desno). Duga lista koja treba da se skroluje
   ispod filtera ide u `app-scroll-area` (`[fill]="true"` zauzme ostatak ekrana, pa filteri i paginacija ostaju

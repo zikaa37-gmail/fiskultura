@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
+import { debouncedSearch, searchDraft } from '../../shared/list-filters/search-input';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory } from './question.model';
 
@@ -82,7 +83,7 @@ import { LEGAL_DISCLAIMER, Question, QUESTION_CATEGORY_LABELS, QuestionCategory 
           <form class="search-form" (ngSubmit)="search()">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Pretraga pitanja i odgovora</mat-label>
-              <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" />
+              <input matInput name="search" [ngModel]="searchText()" (ngModelChange)="typeSearch($event)" />
             </mat-form-field>
             <button type="submit" mat-stroked-button>Traži</button>
           </form>
@@ -134,7 +135,8 @@ export class Questions {
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly categories = Object.keys(QUESTION_CATEGORY_LABELS) as QuestionCategory[];
   protected readonly category = computed(() => (this.categories.includes(this.oblast() as QuestionCategory) ? (this.oblast() as QuestionCategory) : null));
-  protected readonly searchText = linkedSignal(() => this.pretraga() ?? '');
+  protected readonly searchText = searchDraft(() => this.pretraga() ?? '');
+  readonly #search = debouncedSearch((value) => value !== (this.pretraga() ?? '') && this.#navigate({ pretraga: value || null }, true));
 
   protected readonly resource = httpResource<Question[]>(() => {
     const params = new URLSearchParams();
@@ -149,15 +151,20 @@ export class Questions {
     this.#navigate({ oblast: category === this.category() ? null : category });
   }
 
+  protected typeSearch(value: string): void {
+    this.searchText.set(value);
+    this.#search.schedule(value);
+  }
+
   protected search(): void {
-    this.#navigate({ pretraga: this.searchText().trim() || null });
+    this.#search.flush(this.searchText());
   }
 
   protected date(value: string): string {
     return formatDate(value);
   }
 
-  #navigate(params: Record<string, string | null>): void {
-    this.#router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  #navigate(params: Record<string, string | null>, replaceUrl = false): void {
+    this.#router.navigate([], { queryParams: params, queryParamsHandling: 'merge', replaceUrl });
   }
 }
