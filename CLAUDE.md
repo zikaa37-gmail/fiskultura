@@ -73,7 +73,8 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   „Objave“ kod udruženja vode na `/vesti?udruzenje=<slug>`, ne na stranicu udruženja.
 - Linkovi udruženja su kartice sa ikonicom (`app-org-links`); link koji `organizations:check-links` označi
   kao `broken` je onemogućen. Blokade botova (Facebook 400, 403) su `unknown` i link ostaje aktivan.
-- Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`, putanje iz statičke naslovne).
+- Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`): SVG fajlovi u `frontend/public/icons/`, prikaz kroz CSS masku (boja = `currentColor`,
+  radi i u SSR-u); nova ikonica = fajl + ime u `ICON_NAMES`. Isti set kao u zakazivanju (Unicons line stil iz cln-spa, gde postoji).
 - Prenete objave udruženja: sažetak svojim rečima + link na izvor, nikad kopiran tekst.
 - Ne dodavati tajne u repozitorijum.
 
