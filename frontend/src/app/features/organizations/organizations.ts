@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { httpResource } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { API_URL } from '../../core/http/api';
@@ -21,7 +22,7 @@ const SECTION_TITLES: Record<OrganizationType, string> = {
 
 @Component({
   selector: 'app-organizations',
-  imports: [BUTTON_IMPORTS, MatProgressBarModule, OrganizationCard],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, OrganizationCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './organizations.html',
 })

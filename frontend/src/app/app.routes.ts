@@ -23,6 +23,17 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/news/news-detail').then((m) => m.NewsDetail),
   },
   {
+    path: 'udruzenja/osnivanje',
+    title: 'Kako osnovati društvo pedagoga fizičke kulture — Fiskultura',
+    data: {
+      seo: {
+        description:
+          'Osnivanje društva pedagoga fizičke kulture korak po korak: tri osnivača, osnivačka skupština, statut i osnivački akt po primeru APR-a, prijava, naknada i obaveze posle upisa.',
+      },
+    },
+    loadComponent: () => import('./features/organizations/founding-guide').then((m) => m.FoundingGuide),
+  },
+  {
     path: 'udruzenja/:slug',
     title: 'Udruženje — Fiskultura',
     data: { dynamicSeo: true },

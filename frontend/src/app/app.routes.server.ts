@@ -34,6 +34,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'vesti', renderMode: RenderMode.Prerender },
   { path: 'vesti/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('news'), fallback: PrerenderFallback.Client },
   { path: 'udruzenja', renderMode: RenderMode.Prerender },
+  { path: 'udruzenja/osnivanje', renderMode: RenderMode.Prerender },
   { path: 'udruzenja/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('organizations'), fallback: PrerenderFallback.Client },
   { path: 'propisi', renderMode: RenderMode.Prerender },
   { path: 'propisi/:tema', renderMode: RenderMode.Prerender, getPrerenderParams: async () => RULE_TOPICS.map((topic) => ({ tema: topic.slug })) },
