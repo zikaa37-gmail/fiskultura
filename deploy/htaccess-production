@@ -45,5 +45,5 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    RewriteRule ^ /index.csr.html [L]
+    RewriteRule ^ index.php [L]
 </IfModule>

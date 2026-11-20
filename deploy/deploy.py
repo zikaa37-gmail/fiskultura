@@ -205,9 +205,10 @@ def main() -> int:
         'api udruženja (200)': status(f'{base}/api/organizations'),
         'portfolio (200)': status(f'{base}/portfolio/'),
         'api bez tokena (401)': status(f'{base}/api/auth/me'),
+        'nepostojeća stranica (404)': status(f'{base}/nepostojeca-stranica-provera'),
     }
     print('  ', checks)
-    if list(checks.values()) != [200] * (len(checks) - 1) + [401]:
+    if any(code != int(label[-4:-1]) for label, code in checks.items()):
         return 1
 
     print('Deploy je završen.')
