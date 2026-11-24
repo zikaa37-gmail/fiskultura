@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\FoundingController;
 use App\Http\Controllers\Api\Admin\AdminInstagramController;
 use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
@@ -38,9 +39,11 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/invitation', [InvitationController::class, 'show']);
     Route::post('/auth/invitation/complete', [InvitationController::class, 'complete']);
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+    Route::post('/founding-interests', [FoundingController::class, 'store']);
 });
 Route::middleware('throttle:30,1')->group(function () {
     Route::post('/subscriptions/confirm', [SubscriptionController::class, 'confirm']);
+    Route::post('/founding-interests/confirm', [FoundingController::class, 'confirm']);
     Route::post('/subscriptions/manage', [SubscriptionController::class, 'manage']);
     Route::patch('/subscriptions/manage', [SubscriptionController::class, 'updateManaged']);
     Route::post('/subscriptions/unsubscribe', [SubscriptionController::class, 'unsubscribe']);
@@ -51,6 +54,7 @@ Route::get('/news/{slug}', [NewsController::class, 'show']);
 Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
+Route::get('/founding/coverage', [FoundingController::class, 'coverage']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
 Route::get('/seo/routes', [SeoController::class, 'routes']);
 

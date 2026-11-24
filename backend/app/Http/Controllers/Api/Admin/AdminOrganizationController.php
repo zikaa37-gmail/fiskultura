@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use App\Services\LinkChecker;
+use App\Support\Districts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -71,6 +72,7 @@ class AdminOrganizationController extends Controller
             'type' => ['required', Rule::in(Organization::TYPES)],
             'level' => ['required', Rule::in(Organization::LEVELS)],
             'city' => ['nullable', 'string', 'max:120'],
+            'district' => ['nullable', Rule::in(Districts::ALL)],
             'website' => ['nullable', 'url', 'max:255'],
             'social' => ['nullable', 'array'],
             'social.facebook' => ['nullable', 'url', 'max:255'],

@@ -45,6 +45,9 @@ Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (
 | GET | `/news/{slug}` | vest sa `body` i `related` (3 iz iste organizacije ili kategorije) |
 | GET | `/organizations` | sve organizacije sa `parent` i `news_count` |
 | GET | `/organizations/{slug}` | organizacija sa `members` i poslednjih 20 objava |
+| GET | `/founding/coverage` | pokrivenost po okruzima: lokalna strukovna društva (status `aktivno` / `nepoznato` / `nema`) i broj potvrđenih prijava interesovanja po mestu |
+| POST | `/founding-interests` | prijava interesovanja za društvo (`district`, `city`, `name`, `email`, `school`, `consent`); šalje link za potvrdu |
+| POST | `/founding-interests/confirm` | potvrda (`id`, `token`); kad u mestu ima bar 3 potvrđene prijave, mejl sa kontaktima prijavljenima i SSPFVS-u |
 
 Vest: `slug`, `title`, `summary`, `category`, `featured`, `cover_image`, `published_at`,
 `source: { url, type (sajt | facebook | instagram | youtube | mediji | ostalo), published_at }`,

@@ -20,7 +20,7 @@ class SpaShellController extends Controller
 
     public const PRIVATE_SECTIONS = [
         'admin', 'profil', 'imenik', 'notifikacije', 'prijava', 'registracija', 'potvrda-naloga',
-        'zaboravljena-lozinka', 'zavrsi-registraciju', 'nova-lozinka', 'obavestenja/potvrda', 'obavestenja/odjava',
+        'zaboravljena-lozinka', 'zavrsi-registraciju', 'nova-lozinka', 'obavestenja/potvrda', 'obavestenja/odjava', 'udruzenja/osnivanje/potvrda',
     ];
 
     public function show(Request $request): Response

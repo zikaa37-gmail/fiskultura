@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['slug', 'name', 'short_name', 'type', 'level', 'city', 'website', 'social', 'email', 'description', 'status', 'last_activity', 'parent_id', 'member_source'])]
+#[Fillable(['slug', 'name', 'short_name', 'type', 'level', 'city', 'district', 'website', 'social', 'email', 'description', 'status', 'last_activity', 'parent_id', 'member_source'])]
 class Organization extends Model
 {
     public const TYPES = ['strukovno-udruzenje', 'skolski-sport', 'institucija', 'fakultet', 'sindikat', 'ostalo'];
