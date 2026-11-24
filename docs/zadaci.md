@@ -41,7 +41,7 @@ faza 1 prođe proveru.
 ### #6 Kostur frontenda (faza-1)
 `frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
-- [ ] `ng build` i `ng test` prolaze
+- [x] `ng build` i `ng test` prolaze
 
 ### #7 Kostur backenda (faza-1)
 `backend/`: Laravel 13, MySQL `fiskultura`, `DB_PREFIX=fk_`, JWT + refresh (kao `evidencija-fv`),
