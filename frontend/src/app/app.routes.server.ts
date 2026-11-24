@@ -55,6 +55,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'sportovi/vezbe-sa-rekvizitima', renderMode: RenderMode.Prerender },
   { path: 'sportovi/plesovi', renderMode: RenderMode.Prerender },
   { path: 'literatura', renderMode: RenderMode.Prerender },
+  { path: 'sabloni', renderMode: RenderMode.Prerender },
   { path: 'ishodi', renderMode: RenderMode.Prerender },
   { path: 'ishodi/:razred', renderMode: RenderMode.Prerender, getPrerenderParams: async () => OUTCOME_GRADES.map((grade) => ({ razred: grade.slug })) },
   { path: 'aplikacije', renderMode: RenderMode.Prerender },

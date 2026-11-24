@@ -130,6 +130,12 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/literature/literature').then((m) => m.Literature),
   },
   {
+    path: 'sabloni',
+    title: 'Šabloni dokumenata za nastavnike fizičkog — Fiskultura',
+    data: { seo: { description: 'Word šabloni za nastavnike fizičkog vaspitanja: saglasnost roditelja za takmičenje, zahtev za oslobađanje, zapisnik testiranja, izveštaj sekcije, plan stručnog veća i operativni plan.' } },
+    loadComponent: () => import('./features/templates/templates').then((m) => m.Templates),
+  },
+  {
     path: 'ishodi',
     title: 'Ishodi fizičkog i zdravstvenog vaspitanja po razredima — Fiskultura',
     data: { seo: { description: 'Ishodi, teme, sadržaji i fond časova fizičkog i zdravstvenog vaspitanja za svaki razred osnovne i srednje škole, prema važećim pravilnicima i sa linkom na zvanični tekst.' } },
