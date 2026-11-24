@@ -16,14 +16,14 @@ tema, tokeni za akcent kartica (plava, limeta, narandžasta, nebo, ljubičasta, 
 komponente: kartica modula, status-čip, sekcija sa naslovom, prazno stanje, loader, potvrda brisanja.
 - [ ] Izgled kao na fiskultura.rs na 360 px i 1280 px, svetla i tamna tema
 
-### #3 SEO osnova (opste) — urađeno (bez RSS)
+### #3 SEO osnova (opste) — urađeno
 `<title>`, description i og: tagovi po ruti (`Title` + `Meta` servis), prerender statičnih ruta,
 Laravel ubacuje meta tagove za `/vesti/:slug` i `/udruzenja/:slug`, `sitemap.xml`, `rss.xml`,
 `robots.txt`.
 - [x] Angular SSR: prerender svih javnih stranica pri deploy-u (i svake vesti, udruženja i pitanja)
 - [x] `SeoService`: title, description, canonical, robots, Open Graph, Twitter, JSON-LD (NewsArticle, QAPage, Organization, BreadcrumbList)
 - [x] `sitemap.xml` (Laravel, uvek aktuelan), `robots.txt`, slika za deljenje `og-image.png`
-- [ ] `rss.xml` za vesti
+- [x] `rss.xml` za vesti (30 najnovijih, `<link rel="alternate">` u `index.html`)
 - [ ] Google Search Console: potvrda domena i slanje sitemap-a
 
 ### #4 Izvori i uređivački proces (opste, sadrzaj)

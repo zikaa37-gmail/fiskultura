@@ -201,6 +201,7 @@ def main() -> int:
         'literatura (200)': status(f'{base}/literatura'),
         'kontakt (200)': status(f'{base}/kontakt'),
         'sitemap (200)': status(f'{base}/sitemap.xml'),
+        'rss (200)': status(f'{base}/rss.xml'),
         'robots (200)': status(f'{base}/robots.txt'),
         'api udruženja (200)': status(f'{base}/api/organizations'),
         'portfolio (200)': status(f'{base}/portfolio/'),

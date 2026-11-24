@@ -9,5 +9,6 @@ Route::get('/', function () {
 });
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap']);
+Route::get('/rss.xml', [SeoController::class, 'rss']);
 
 Route::fallback([SpaShellController::class, 'show']);

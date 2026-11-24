@@ -96,6 +96,57 @@ class SeoController extends Controller
         return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8', 'Cache-Control' => 'public, max-age=3600']);
     }
 
+    public const RSS_CATEGORIES = [
+        'vest' => 'Vesti',
+        'seminar' => 'Stručni skupovi',
+        'takmicenje' => 'Takmičenja',
+        'saopstenje' => 'Saopštenja',
+        'propis' => 'Propisi',
+        'konkurs' => 'Konkursi',
+        'ostalo' => 'Ostalo',
+    ];
+
+    public function rss()
+    {
+        $base = rtrim((string) config('app.frontend_url'), '/');
+        $items = News::visible()->with('organization:id,name')->orderByDesc('published_at')->limit(30)
+            ->get(['id', 'slug', 'title', 'summary', 'category', 'organization_id', 'published_at']);
+
+        $lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+            '<channel>',
+            '  <title>Fiskultura — vesti</title>',
+            '  <link>'.e($base.'/vesti').'</link>',
+            '  <description>Vesti za nastavnike fizičkog vaspitanja u Srbiji: školski sport, udruženja, seminari i propisi.</description>',
+            '  <language>sr-Latn</language>',
+            '  <atom:link href="'.e($base.'/rss.xml').'" rel="self" type="application/rss+xml"/>',
+        ];
+        if ($items->isNotEmpty()) {
+            $lines[] = '  <lastBuildDate>'.$items->first()->published_at->toRfc2822String().'</lastBuildDate>';
+        }
+        foreach ($items as $news) {
+            $link = e($base.'/vesti/'.rawurlencode($news->slug));
+            $lines[] = '  <item>';
+            $lines[] = '    <title>'.e($news->title).'</title>';
+            $lines[] = '    <link>'.$link.'</link>';
+            $lines[] = '    <guid isPermaLink="true">'.$link.'</guid>';
+            $lines[] = '    <pubDate>'.$news->published_at->toRfc2822String().'</pubDate>';
+            $lines[] = '    <category>'.e(self::RSS_CATEGORIES[$news->category] ?? $news->category).'</category>';
+            if ($news->organization) {
+                $lines[] = '    <category>'.e($news->organization->name).'</category>';
+            }
+            if ($news->summary) {
+                $lines[] = '    <description>'.e($news->summary).'</description>';
+            }
+            $lines[] = '  </item>';
+        }
+        $lines[] = '</channel>';
+        $lines[] = '</rss>';
+
+        return response(implode("\n", $lines)."\n", 200, ['Content-Type' => 'application/rss+xml; charset=UTF-8', 'Cache-Control' => 'public, max-age=1800']);
+    }
+
     private function lastmod(?Carbon $updated, ?Carbon $published): ?string
     {
         $value = $updated && $published && $published->gt($updated) ? $published : ($updated ?? $published);
