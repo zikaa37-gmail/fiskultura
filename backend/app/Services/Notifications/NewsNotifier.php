@@ -5,6 +5,7 @@ namespace App\Services\Notifications;
 use App\Models\News;
 use App\Models\NotificationLog;
 use App\Models\Subscription;
+use App\Services\Inbox;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -155,8 +156,10 @@ class NewsNotifier
             if (! $channel) {
                 throw new \RuntimeException("Kanal {$subscription->channel} ne postoji.");
             }
-            $channel->send($subscription, Notice::forNews($subscription, $kind, $news));
+            $notice = Notice::forNews($subscription, $kind, $news);
+            $channel->send($subscription, $notice);
             $this->record($subscription, $kind, $about);
+            app(Inbox::class)->recordNotice($subscription, $notice);
             $result[$kind]++;
         } catch (Throwable $error) {
             $this->record($subscription, $kind, $about, $error);

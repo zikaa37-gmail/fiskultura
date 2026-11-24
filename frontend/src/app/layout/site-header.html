@@ -14,18 +14,33 @@
 
     <nav class="topnav" [class.topnav-open]="menuOpen()" aria-label="Glavna navigacija">
       @for (item of navItems; track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="topnav-active" (click)="closeMenu()">{{ item.label }}</a>
+        @if (!item.members || auth.isAuthenticated()) {
+        <a [routerLink]="item.route" routerLinkActive="topnav-active" [class.topnav-active]="!!item.also && url().startsWith(item.also)" (click)="closeMenu()">{{ item.label }}</a>
+        }
       }
       @if (auth.isAuthenticated()) {
         <a routerLink="/imenik" routerLinkActive="topnav-active" (click)="closeMenu()">Imenik</a>
       }
-      @if (auth.isEditor()) {
+      @if (auth.isStaff()) {
         <a routerLink="/admin" routerLinkActive="topnav-active" (click)="closeMenu()">Admin</a>
       }
     </nav>
 
     <div class="topbar-actions">
       @if (auth.currentUser(); as user) {
+        <a
+          class="bell-button"
+          routerLink="/notifikacije"
+          routerLinkActive="bell-button-active"
+          [attr.aria-label]="inbox.unread() ? 'Notifikacije, nepročitanih: ' + inbox.unread() : 'Notifikacije'"
+          [title]="inbox.unread() ? 'Nepročitanih: ' + inbox.unread() : 'Notifikacije'"
+          (click)="closeMenu()"
+        >
+          <app-icon name="bell" [size]="20" />
+          @if (inbox.unread()) {
+            <span class="bell-dot" aria-hidden="true"></span>
+          }
+        </a>
         @defer (on immediate) {
           <app-account-menu [user]="user" (opened)="closeMenu()" />
         } @placeholder {

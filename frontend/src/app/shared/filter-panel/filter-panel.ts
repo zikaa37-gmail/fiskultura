@@ -28,5 +28,5 @@ export class FilterPanel {
   readonly title = input('Filteri');
   readonly summary = input('');
 
-  protected readonly expanded = signal(isPlatformBrowser(inject(PLATFORM_ID)) && window.matchMedia('(min-width: 900px)').matches);
+  protected readonly expanded = signal(isPlatformBrowser(inject(PLATFORM_ID)) && typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 900px)').matches);
 }

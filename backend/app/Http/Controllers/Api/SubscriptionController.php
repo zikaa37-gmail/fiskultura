@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\SubscriptionMail;
 use App\Models\News;
 use App\Models\Subscription;
+use App\Services\Inbox;
 use App\Services\Notifications\NewsNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -155,6 +156,15 @@ class SubscriptionController extends Controller
         try {
             Mail::to($subscription->email)->send(new SubscriptionMail($subscription, $purpose));
             $this->notifier->record($subscription, $purpose);
+            if ($subscription->user) {
+                app(Inbox::class)->record(
+                    $subscription->user,
+                    'subscription',
+                    $purpose === Subscription::CONFIRM ? 'Potvrdite prijavu na obaveštenja' : 'Link za podešavanja obaveštenja',
+                    $purpose === Subscription::CONFIRM ? 'Poslali smo mejl sa linkom za potvrdu. Obaveštenja počinju kad potvrdite prijavu.' : 'Poslali smo mejl sa linkom za izmenu ili odjavu obaveštenja.',
+                    '/obavestenja',
+                );
+            }
         } catch (Throwable $error) {
             $this->notifier->record($subscription, $purpose, null, $error);
             report($error);

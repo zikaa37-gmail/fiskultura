@@ -44,7 +44,7 @@ interface NewsRow {
         <p class="muted">Pokušaj ponovo za nekoliko minuta.</p>
       </div>
     } @else if (meta(); as info) {
-      <app-list-header [label]="admin() ? 'Ukupno' : 'Pronađeno objava'" [count]="info.total">
+      <app-list-header [label]="admin() ? 'Ukupno' : 'Pronađeno objava'" [count]="info.total" [page]="info.page" [lastPage]="info.last_page">
         @if (admin()) {
           <a mat-flat-button routerLink="/admin/vesti/nova">Nova vest</a>
         }
@@ -58,6 +58,7 @@ interface NewsRow {
               [menu]="row.admin ? menuFor(row.admin) : null"
               [editLink]="row.admin ? ['/admin/vesti', row.admin.id] : null"
               (changed)="reload()"
+              [shareable]="!row.admin || row.admin.is_visible"
               (menuSelected)="row.admin && onAction(row.admin, $event)"
             />
           } @empty {

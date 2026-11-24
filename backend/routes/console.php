@@ -4,8 +4,15 @@ use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
 use App\Models\Regulation;
 use App\Models\User;
+use App\Services\Ai\DebateIntroWriter;
+use App\Services\Inbox;
+use App\Services\Instagram\InstagramAccount;
+use App\Services\Instagram\InstagramPublisher;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
+use App\Services\Mailbox\Mailbox;
+use App\Services\Mailbox\MailboxUnavailableException;
+use App\Services\Notifications\DebatePromoter;
 use App\Services\Notifications\NewsNotifier;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
@@ -75,12 +82,75 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
 
-Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier) {
+Artisan::command('debates:intros {--limit=2}', function (DebateIntroWriter $writer) {
+    $done = $writer->runPending((int) $this->option('limit'));
+    $this->info("Uvodni pregledi: obrađeno {$done}.");
+
+    return 0;
+})->purpose('Pravi uvodne preglede tema koji čekaju (AI sa pretragom interneta)');
+
+Schedule::command('debates:intros')->everyFiveMinutes()->withoutOverlapping(20);
+
+Artisan::command('instagram:publish-scheduled', function (InstagramPublisher $publisher) {
+    $this->info('Instagram: objavljeno zakazanih '.$publisher->publishDue().'.');
+
+    return 0;
+})->purpose('Objavljuje zakazane Instagram objave kojima je došlo vreme');
+
+Schedule::command('instagram:publish-scheduled')->everyFiveMinutes()->withoutOverlapping(15);
+
+Artisan::command('instagram:refresh-token', function (InstagramAccount $account) {
+    $this->info($account->refresh() ? 'Instagram token je osvežen.' : 'Instagram token nije osvežen (nalog nije povezan ili token više ne važi).');
+
+    return 0;
+})->purpose('Osvežava dugotrajni Instagram token (važi 60 dana)');
+
+Schedule::command('instagram:refresh-token')->weeklyOn(1, '04:30');
+
+Artisan::command('ai:check', function () {
+    $key = (string) config('services.anthropic.key');
+    if ($key === '') {
+        $this->warn('AI: NEMA KLJUČA (ANTHROPIC_API_KEY nije u .env ili je config keširan bez njega).');
+
+        return 1;
+    }
+
+    try {
+        $model = (new Anthropic\Client(apiKey: $key))->models->retrieve('claude-opus-5-5');
+        $this->line("AI: ključ radi ({$model->id}).");
+
+        return 0;
+    } catch (Throwable $error) {
+        $this->warn('AI: ključ postoji, ali API ga odbija: '.mb_substr($error->getMessage(), 0, 200));
+
+        return 1;
+    }
+})->purpose('Proverava da li server ima Anthropic ključ i da li ga API prihvata (ne troši tokene)');
+
+Artisan::command('mailbox:check', function (Mailbox $mailbox) {
+    try {
+        $result = $mailbox->check();
+    } catch (MailboxUnavailableException $error) {
+        $this->warn($error->getMessage());
+
+        return 0;
+    }
+
+    $this->line('Nalog: '.$mailbox->address());
+    $this->line('IMAP: '.($result['imap'] ? "radi, foldera {$result['folders']}, nepročitano u INBOX {$result['inbox_unread']}, Sent: ".($result['sent_folder'] ?? 'nije pronađen') : 'NE RADI: '.($result['imap_error'] ?? '')));
+    $this->line('SMTP: '.($result['smtp'] ? 'prijava radi' : 'NE RADI: '.($result['smtp_error'] ?? '')));
+
+    return $result['imap'] && $result['smtp'] ? 0 : 1;
+})->purpose('Proverava prijavu na IMAP i SMTP naloga za poštu u adminu (ništa ne šalje)');
+
+Artisan::command('notifications:send {--dry-run}', function (NewsNotifier $notifier, DebatePromoter $promoter) {
     $dry = (bool) $this->option('dry-run');
     $result = $notifier->run($dry);
+    $budget = $result['limited'] ? 0 : $notifier->remainingBudget(now()) - ($dry ? $result['instant'] + $result['weekly'] : 0);
+    $debates = $promoter->run(max(0, $budget), $dry);
 
-    $this->info(($dry ? 'Probno: ' : '')."Vesti za odmah: {$result['news']}, poslato odmah: {$result['instant']}, nedeljnih pregleda: {$result['weekly']}, neuspelih: {$result['failed']}.");
-    if ($result['limited']) {
+    $this->info(($dry ? 'Probno: ' : '')."Vesti za odmah: {$result['news']}, poslato odmah: {$result['instant']}, nedeljnih pregleda: {$result['weekly']}, poziva na debatu: {$debates['sent']}, neuspelih: ".($result['failed'] + $debates['failed']).'.');
+    if ($result['limited'] || $debates['limited']) {
         $this->warn('Dostignut je limit po satu; ostatak ide u sledećem pokretanju.');
     }
 
@@ -117,6 +187,7 @@ Artisan::command('regulations:check {--key=} {--no-mail}', function (PisChecker 
     $recipients = User::query()->whereIn('role', [User::EDITOR, User::ADMIN])->whereNull('blocked_at')->whereNotNull('email_verified_at')->pluck('email');
     if ($lines && $recipients->isNotEmpty() && ! $this->option('no-mail')) {
         Mail::to($recipients->all())->send(new RegulationChangesMail($lines));
+        app(Inbox::class)->recordForEmails($recipients, 'regulation_changes', 'Nove izmene propisa u PIS-u ('.count($lines).')', implode("\n", array_slice($lines, 0, 10)), '/admin/propisi');
     }
 
     return 0;

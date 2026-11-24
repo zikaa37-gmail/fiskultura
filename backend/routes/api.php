@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\Admin\AdminInstagramController;
+use App\Http\Controllers\Api\Admin\AdminMailboxController;
+use App\Http\Controllers\Api\Admin\AdminModeratorController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
@@ -13,12 +17,16 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\DebateController;
 use App\Http\Controllers\Api\RegulationController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\UserNotificationController;
 use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
+Route::get('/public/instagram-media/{token}.jpg', [AdminInstagramController::class, 'media'])->where('token', '[A-Za-z0-9]{40}');
+Route::get('/public/social/{network}/callback', [AdminInstagramController::class, 'callback'])->whereIn('network', ['instagram', 'facebook'])->middleware('throttle:20,10');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/login', [AuthController::class, 'login']);
@@ -54,6 +62,28 @@ Route::middleware('jwt')->group(function () {
     Route::get('/me/questions', [QuestionController::class, 'mine']);
     Route::get('/questions', [QuestionController::class, 'index']);
     Route::get('/questions/{slug}', [QuestionController::class, 'show']);
+    Route::get('/debates', [DebateController::class, 'index']);
+    Route::post('/debates', [DebateController::class, 'propose'])->middleware('throttle:5,10');
+    Route::get('/debates/{slug}', [DebateController::class, 'show']);
+    Route::patch('/debates/{slug}', [DebateController::class, 'update']);
+    Route::get('/debates/{slug}/posts', [DebateController::class, 'posts']);
+    Route::post('/debates/{slug}/posts', [DebateController::class, 'storePost'])->middleware('throttle:10,1');
+    Route::post('/debates/{slug}/analysis', [DebateController::class, 'analyze'])->middleware('throttle:5,10');
+    Route::post('/debates/{slug}/analysis/approve', [DebateController::class, 'approve']);
+    Route::post('/debates/{slug}/intro', [DebateController::class, 'requestIntro'])->middleware('throttle:5,10');
+    Route::post('/debates/{slug}/intro/approve', [DebateController::class, 'approveIntro']);
+    Route::patch('/debates/{slug}/intro', [DebateController::class, 'updateIntro'])->middleware('throttle:30,1');
+    Route::post('/debate-posts/{post}/like', [DebateController::class, 'like'])->middleware('throttle:60,1');
+    Route::patch('/debate-posts/{post}', [DebateController::class, 'moderatePost']);
+    Route::post('/debate-posts/{post}/react', [DebateController::class, 'react'])->middleware('throttle:60,1');
+    Route::post('/debate-posts/{post}/ban', [DebateController::class, 'ban'])->middleware('throttle:20,1');
+    Route::get('/debates/{slug}/bans', [DebateController::class, 'bans']);
+    Route::delete('/debate-bans/{ban}', [DebateController::class, 'liftBan']);
+    Route::post('/debates/{slug}/reopen-requests', [DebateController::class, 'requestReopen'])->middleware('throttle:3,10');
+    Route::post('/debate-reopen-requests/{reopen}/decision', [DebateController::class, 'decideReopen']);
+    Route::get('/me/notifications', [UserNotificationController::class, 'index']);
+    Route::get('/me/notifications/unread', [UserNotificationController::class, 'unread']);
+    Route::post('/me/notifications/read', [UserNotificationController::class, 'read']);
 
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::patch('/auth/me', [AuthController::class, 'updateProfile']);
@@ -65,6 +95,13 @@ Route::middleware('jwt')->group(function () {
     Route::get('/me/subscription', [SubscriptionController::class, 'mine']);
     Route::put('/me/subscription', [SubscriptionController::class, 'updateMine']);
 
+    Route::prefix('admin')->middleware('role:author,editor,admin')->group(function () {
+        Route::post('/questions/list', [AdminQuestionController::class, 'list']);
+        Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
+        Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
+        Route::post('/questions/{question}/draft', [AdminQuestionController::class, 'draft'])->middleware('throttle:10,10');
+    });
+
     Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
         Route::post('/news/list', [AdminNewsController::class, 'list']);
         Route::get('/news/{news}', [AdminNewsController::class, 'show']);
@@ -73,10 +110,17 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/news/{news}/featured', [AdminNewsController::class, 'feature']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
 
-        Route::post('/questions/list', [AdminQuestionController::class, 'list']);
-        Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
         Route::post('/questions', [AdminQuestionController::class, 'store']);
-        Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
+        Route::get('/staff', [AdminQuestionController::class, 'staff']);
+
+        Route::post('/debates/list', [AdminDebateController::class, 'list']);
+        Route::get('/instagram', [AdminInstagramController::class, 'state']);
+        Route::get('/instagram/posts', [AdminInstagramController::class, 'index']);
+        Route::post('/instagram/posts', [AdminInstagramController::class, 'store'])->middleware('throttle:10,10');
+        Route::post('/instagram/posts/{post}/publish', [AdminInstagramController::class, 'publish'])->middleware('throttle:10,10');
+        Route::delete('/instagram/posts/{post}', [AdminInstagramController::class, 'destroy']);
+        Route::post('/debates', [AdminDebateController::class, 'store']);
+        Route::patch('/debates/{debate}', [AdminDebateController::class, 'update']);
 
         Route::get('/organizations', [AdminOrganizationController::class, 'index']);
         Route::get('/organizations/{organization}', [AdminOrganizationController::class, 'show']);
@@ -100,5 +144,24 @@ Route::middleware('jwt')->group(function () {
         Route::get('/subscriptions/stats', [AdminSubscriptionController::class, 'stats']);
         Route::get('/members/stats', [MemberController::class, 'stats']);
         Route::delete('/questions/{question}', [AdminQuestionController::class, 'destroy']);
+        Route::patch('/questions/{question}/assignee', [AdminQuestionController::class, 'assign']);
+        Route::delete('/debates/{debate}', [AdminDebateController::class, 'destroy']);
+        Route::get('/debates/{debate}/promotion', [AdminDebateController::class, 'promotion']);
+        Route::get('/moderators', [AdminModeratorController::class, 'index']);
+        Route::get('/moderators/log', [AdminModeratorController::class, 'log']);
+        Route::patch('/moderators/{user}', [AdminModeratorController::class, 'update']);
+        Route::post('/instagram/connect', [AdminInstagramController::class, 'connect'])->middleware('throttle:10,10');
+        Route::delete('/instagram', [AdminInstagramController::class, 'disconnect']);
+        Route::post('/facebook/connect', [AdminInstagramController::class, 'connectFacebook'])->middleware('throttle:10,10');
+        Route::delete('/facebook', [AdminInstagramController::class, 'disconnectFacebook']);
+        Route::post('/social/{network}/authorize', [AdminInstagramController::class, 'authorize'])->whereIn('network', ['instagram', 'facebook']);
+        Route::get('/mailbox/folders', [AdminMailboxController::class, 'folders']);
+        Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
+        Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');
+        Route::patch('/mailbox/messages/{uid}', [AdminMailboxController::class, 'seen'])->whereNumber('uid');
+        Route::post('/mailbox/messages/{uid}/action', [AdminMailboxController::class, 'act'])->whereNumber('uid')->middleware('throttle:120,1');
+        Route::get('/mailbox/messages/{uid}/attachments/{index}', [AdminMailboxController::class, 'attachment'])->whereNumber(['uid', 'index']);
+        Route::post('/mailbox/send', [AdminMailboxController::class, 'send'])->middleware('throttle:20,10');
+        Route::post('/debates/{debate}/promotions', [AdminDebateController::class, 'promote'])->middleware('throttle:5,10');
     });
 });

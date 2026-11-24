@@ -9,6 +9,8 @@ import { NotificationService } from '../../core/notification.service';
 import { Icon } from '../icon/icon';
 import { NewsDialogService } from '../news-dialog/news-dialog';
 import { MenuOption, OptionsMenu } from '../options-menu/options-menu';
+import { newsShare } from '../social-share/share-data';
+import { SocialShareService } from '../social-share/social-share.service';
 
 export interface NewsCardState {
   label: string;
@@ -35,8 +37,8 @@ export interface NewsCardState {
         }
         <span class="post-category">{{ categoryLabels[item.category] }}</span>
       </span>
-      @if (menu(); as options) {
-        <app-options-menu [options]="options" [label]="'Opcije za: ' + item.title" (selected)="menuSelected.emit($event)" />
+      @if (options().length) {
+        <app-options-menu [options]="options()" [label]="'Opcije za: ' + item.title" (selected)="select($event)" />
       }
     </div>
     @if (editLink(); as link) {
@@ -64,6 +66,7 @@ export class NewsCard {
   readonly news = input.required<NewsItem>();
   readonly state = input<NewsCardState | null>(null);
   readonly menu = input<MenuOption[] | null>(null);
+  readonly shareable = input(true);
   readonly editLink = input<(string | number)[] | null>(null);
   readonly changed = output<void>();
   readonly menuSelected = output<string>();
@@ -72,12 +75,21 @@ export class NewsCard {
   readonly #http = inject(HttpClient);
   readonly #notifications = inject(NotificationService);
   readonly #dialog = inject(NewsDialogService);
+  readonly #share = inject(SocialShareService);
+
+  protected readonly options = computed(() => [...(this.menu() ?? []), ...(this.shareable() ? this.#share.options(!!this.menu()) : [])]);
 
   protected readonly categoryLabels = NEWS_CATEGORY_LABELS;
   protected readonly sourceLabels = SOURCE_TYPE_LABELS;
   protected readonly label = organizationLabel;
   protected readonly date = computed(() => formatDate(this.news().source.published_at ?? this.news().published_at));
   protected readonly busy = signal(false);
+
+  protected select(action: string): void {
+    if (!this.#share.handle(action, newsShare(this.news()))) {
+      this.menuSelected.emit(action);
+    }
+  }
 
   protected open(event: MouseEvent): void {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {

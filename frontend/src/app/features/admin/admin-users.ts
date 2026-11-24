@@ -56,7 +56,7 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
         </mat-form-field>
       </form>
     </app-filter-panel>
-    <app-list-header [count]="meta()?.total ?? null">
+    <app-list-header [count]="meta()?.total ?? null" [page]="page()" [lastPage]="meta()?.last_page ?? null">
       @if (invitable().length) {
         <button type="button" mat-flat-button theme="tertiary" [disabled]="sending()" [attr.aria-label]="'Pošalji poziv svima koji čekaju aktivaciju (' + invitable().length + ')'" (click)="inviteAll()">Pozovi sve ({{ invitable().length }})</button>
       }

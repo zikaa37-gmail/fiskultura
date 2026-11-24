@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PORTAL_APPS } from '../content/portal-content';
+import { AuthService } from '../core/auth/auth.service';
+import { PortalSocialLinks } from '../shared/portal-social/portal-social';
 
 @Component({
   selector: 'app-site-footer',
-  imports: [RouterLink],
+  imports: [RouterLink, PortalSocialLinks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
@@ -12,6 +14,7 @@ import { PORTAL_APPS } from '../content/portal-content';
         <div class="footer-col">
           <strong>Fiskultura</strong>
           <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi</span>
+          <app-portal-social label="Pratite nas" />
         </div>
         <nav class="footer-col" aria-label="Aplikacije">
           <strong>Aplikacije</strong>
@@ -24,9 +27,13 @@ import { PORTAL_APPS } from '../content/portal-content';
           <a class="footer-link" routerLink="/vesti">Vesti</a>
           <a class="footer-link" routerLink="/udruzenja">Udruženja</a>
           <a class="footer-link" routerLink="/propisi">Propisi</a>
-          <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
+          @if (auth.isAuthenticated()) {
+            <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
+          }
           <a class="footer-link" routerLink="/sportovi">Sportovi i pravila</a>
-          <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
+          @if (auth.isAuthenticated()) {
+            <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
+          }
           <a class="footer-link" routerLink="/sabloni">Šabloni dokumenata</a>
           <a class="footer-link" routerLink="/novi-nastavnici">Za nove nastavnike i studente</a>
           <a class="footer-link" routerLink="/literatura">Literatura i izvori</a>
@@ -42,6 +49,7 @@ import { PORTAL_APPS } from '../content/portal-content';
   `,
 })
 export class SiteFooter {
+  protected readonly auth = inject(AuthService);
   protected readonly apps = PORTAL_APPS;
   protected readonly year = new Date().getFullYear();
 }

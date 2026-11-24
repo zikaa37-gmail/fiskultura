@@ -11,9 +11,11 @@ import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu'
 import { FilterField, ListFilters } from '../../shared/list-filters/list-filters';
 import { matchesSearch, queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
+import { questionShare } from '../../shared/social-share/share-data';
+import { ShareAction, SocialShareService } from '../../shared/social-share/social-share.service';
 import { AdminQuestion, QUESTION_CATEGORY_LABELS, QUESTION_STATUS_LABELS, QuestionStatus } from '../questions/question.model';
 
-type RowAction = 'view' | 'edit' | 'remove';
+type RowAction = ShareAction | 'view' | 'edit' | 'remove';
 
 @Component({
   selector: 'app-admin-questions',
@@ -22,7 +24,9 @@ type RowAction = 'view' | 'edit' | 'remove';
   template: `
     <app-list-filters [fields]="fields()" [values]="filters.values()" emptySummary="Sva pitanja" (filterChange)="filters.set($event)" (clearAll)="filters.clear()" />
     <app-list-header [count]="items().length">
-      <a mat-flat-button routerLink="novo">Novo pitanje i odgovor</a>
+      @if (auth.isEditor()) {
+        <a mat-flat-button routerLink="novo">Novo pitanje i odgovor</a>
+      }
     </app-list-header>
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
@@ -37,6 +41,7 @@ type RowAction = 'view' | 'edit' | 'remove';
               @if (item.asker) {
                 <span>{{ item.asker.name }}</span>
               }
+              <span>dodeljeno: {{ item.assignee?.name ?? 'niko' }}</span>
               @if (item.created_at) {
                 <span>{{ date(item.created_at) }}</span>
               }
@@ -56,10 +61,11 @@ type RowAction = 'view' | 'edit' | 'remove';
 export class AdminQuestions {
   protected readonly auth = inject(AuthService);
   readonly #delete = inject(DeleteService);
+  readonly #share = inject(SocialShareService);
 
   protected readonly categoryLabels = QUESTION_CATEGORY_LABELS;
   protected readonly statusLabels = QUESTION_STATUS_LABELS;
-  protected readonly filters = queryFilters(['status', 'kategorija', 'pretraga']);
+  protected readonly filters = queryFilters(['status', 'kategorija', 'dodeljeno', 'pretraga']);
   readonly #status = computed(() => {
     const status = this.filters.values()['status'];
     return status in QUESTION_STATUS_LABELS ? (status as QuestionStatus) : null;
@@ -68,7 +74,7 @@ export class AdminQuestions {
   protected readonly resource = httpResource<{ data: AdminQuestion[]; pending: number }>(() => ({
     url: `${API_URL}/admin/questions/list`,
     method: 'POST',
-    body: { status: this.#status() },
+    body: { status: this.#status(), mine: this.filters.values()['dodeljeno'] === 'meni' },
   }));
   protected readonly pending = computed(() => (this.resource.hasValue() ? this.resource.value().pending : 0));
   protected readonly fields = computed<FilterField[]>(() => [
@@ -82,7 +88,8 @@ export class AdminQuestions {
       })),
     },
     { key: 'kategorija', label: 'Oblast', allLabel: 'Sve oblasti', options: Object.entries(QUESTION_CATEGORY_LABELS).map(([value, label]) => ({ value, label })) },
-    { key: 'pretraga', label: 'Pretraga (pitanje, odgovor)', type: 'search' },
+    ...(this.auth.isEditor() ? [{ key: 'dodeljeno', label: 'Dodeljeno', allLabel: 'Svima', options: [{ value: 'meni', label: 'Meni' }] }] : []),
+    { key: 'pretraga', label: 'Pretraga (pitanje, odgovor)', type: 'search' as const },
   ]);
   protected readonly items = computed(() => {
     const { kategorija, pretraga } = this.filters.values();
@@ -103,10 +110,16 @@ export class AdminQuestions {
     if (this.auth.isAdmin()) {
       options.push({ value: 'remove', label: 'Obriši', icon: 'trash', danger: true, dividerBefore: true });
     }
+    if (item.status === 'published' && item.slug) {
+      options.push(...this.#share.options(true));
+    }
     return options;
   }
 
   protected onAction(item: AdminQuestion, action: RowAction): void {
+    if (this.#share.handle(action, questionShare(item))) {
+      return;
+    }
     if (action === 'remove') {
       this.#delete.confirmDelete(
         { title: 'Brisanje pitanja', message: `Obrisati „${item.title}“?`, url: `${API_URL}/admin/questions/${item.id}`, success: 'Pitanje je obrisano.' },
