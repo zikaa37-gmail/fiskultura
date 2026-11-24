@@ -86,11 +86,15 @@ izvor podatka o članstvu. Na `/udruzenja` istaknut SSPFVS, ispod članice po ok
 organizacije (školski sport, institucije, fakulteti, sindikati).
 - [x] Za svaku članicu prikupiti sajt / FB / kontakt: javno postoji samo za UPFK Niš, ostalo preko SSPFVS (`docs/izvori/udruzenja.md`)
 
-### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1)
+### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1) — urađeno (bez mape)
 Spisak okruga i gradova (šifarnik) sa statusom: postoji aktivno / postoji neaktivno / nema. Mapa
 Srbije (SVG po okruzima) kasnije. Vodič za osnivanje (koraci, primer statuta, APR, učlanjenje u
 SSPFVS — sadržaj dogovoriti sa SSPFVS) i forma „zainteresovan sam za društvo u <grad>" — kad se
 skupi bar 3 kolege, obaveštenje SSPFVS-u i prijavljenima.
+- [x] Okrug na organizaciji (`district`, podaci i admin), pokrivenost po okruzima na `/udruzenja/osnivanje`
+- [x] Forma interesovanja sa potvrdom mejlom; na 3 potvrđene prijave u mestu mejl sa kontaktima prijavljenima i SSPFVS-u
+- [ ] SVG mapa Srbije po okruzima
+- [ ] Sadržaj vodiča i poruke dogovoriti sa SSPFVS-om
 
 ### #15c Izvori organizacija i red za urednika (faza-1)
 Tabela `fk_organization_sources` (organizacija, tip: sajt / rss / facebook / instagram / youtube,

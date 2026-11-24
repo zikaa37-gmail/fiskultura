@@ -36,6 +36,12 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/organizations/founding-guide').then((m) => m.FoundingGuide),
   },
   {
+    path: 'udruzenja/osnivanje/potvrda',
+    title: 'Potvrda interesovanja — Fiskultura',
+    data: { seo: { noindex: true } },
+    loadComponent: () => import('./features/organizations/founding-confirm').then((m) => m.FoundingConfirm),
+  },
+  {
     path: 'udruzenja/:slug',
     title: 'Udruženje — Fiskultura',
     data: { dynamicSeo: true },

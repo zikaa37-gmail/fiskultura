@@ -50,6 +50,7 @@ class OrganizationController extends Controller
             'type' => $organization->type,
             'level' => $organization->level,
             'city' => $organization->city,
+            'district' => $organization->district,
             'website' => $organization->website,
             'social' => $organization->social ?? (object) [],
             'email' => $organization->email,

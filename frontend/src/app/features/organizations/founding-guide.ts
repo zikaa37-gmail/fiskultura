@@ -5,10 +5,12 @@ import { EXPANSION_IMPORTS } from '../../../theme/ui/expansion';
 import { formatDate } from '../../core/content/content.model';
 import { AFTER_FOUNDING, FOUNDING_ACTS, FOUNDING_CHECKED_AT, FOUNDING_DOCUMENTS, FOUNDING_LINKS, FOUNDING_STEPS, SEAL_TEMPLATE, SEAL_TEMPLATE_TITLE } from '../../content/founding-guide';
 import { Icon } from '../../shared/icon/icon';
+import { FoundingCoverage } from './founding-coverage';
+import { FoundingInterestForm } from './founding-interest-form';
 
 @Component({
   selector: 'app-founding-guide',
-  imports: [RouterLink, BUTTON_IMPORTS, EXPANSION_IMPORTS, Icon],
+  imports: [RouterLink, BUTTON_IMPORTS, EXPANSION_IMPORTS, Icon, FoundingCoverage, FoundingInterestForm],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .founding-summary {
@@ -91,6 +93,16 @@ import { Icon } from '../../shared/icon/icon';
             <li><app-icon name="check" [size]="18" /><span>Pečat <strong>nije obavezan</strong> od 2018, ali ga možete napraviti (primer odluke je ispod).</span></li>
             <li><app-icon name="chart" [size]="18" /><span>Svake godine do <strong>31. marta</strong> izveštaj APR-u, ili izjava o neaktivnosti.</span></li>
           </ul>
+        </section>
+
+        <section class="mb-5" aria-labelledby="founding-coverage">
+          <h2 id="founding-coverage" class="mb-2">Gde društva postoje</h2>
+          <p class="muted mb-3">Gradska i okružna društva po okruzima. Nema društva u vašem okrugu? Prijavite se ispod i nađite još dve kolege.</p>
+          <app-founding-coverage />
+        </section>
+
+        <section class="mb-5" aria-label="Prijava interesovanja">
+          <app-founding-interest-form />
         </section>
 
         <section class="mb-5" aria-labelledby="founding-steps">

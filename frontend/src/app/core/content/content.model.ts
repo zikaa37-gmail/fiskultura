@@ -42,6 +42,7 @@ export interface Organization extends OrganizationRef {
   type: OrganizationType;
   level: OrganizationLevel;
   city: string | null;
+  district: string | null;
   website: string | null;
   social: { facebook?: string; instagram?: string; youtube?: string };
   email: string | null;
