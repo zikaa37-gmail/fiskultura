@@ -60,9 +60,10 @@ class SeoTest extends TestCase
 
     public function test_rss_lists_newest_public_news_with_absolute_links(): void
     {
+        $this->travel(5)->minutes();
         $draft = News::create(['slug' => 'nacrt-rss', 'title' => 'Nacrt', 'summary' => 'x', 'category' => 'vest', 'status' => News::DRAFT]);
         $future = News::create(['slug' => 'buduca-rss', 'title' => 'Buduća', 'summary' => 'x', 'category' => 'vest', 'status' => News::PUBLISHED, 'published_at' => now()->addDay()]);
-        $newest = News::create(['slug' => 'najnovija-rss', 'title' => 'Najnovija & prva', 'summary' => 'Kratko <b>o</b> vesti', 'category' => 'takmicenje', 'status' => News::PUBLISHED, 'published_at' => now()->subSecond()]);
+        $newest = News::create(['slug' => 'najnovija-rss', 'title' => 'Najnovija & prva', 'summary' => 'Kratko <b>o</b> vesti', 'category' => 'takmicenje', 'status' => News::PUBLISHED, 'published_at' => now()]);
 
         $response = $this->get('/rss.xml')->assertOk()->assertHeader('Content-Type', 'application/rss+xml; charset=UTF-8');
 
