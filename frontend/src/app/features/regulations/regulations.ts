@@ -8,13 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { API_URL } from '../../core/http/api';
 import { formatDate } from '../../core/content/content.model';
@@ -39,6 +35,9 @@ import { RULE_HISTORY, RULE_HISTORY_INTRO, RULE_UPCOMING } from '../../content/r
 import { linkArticles, regulationTextUrl } from '../../core/content/regulation-links';
 import { RULE_TOPICS } from '../../content/rules/rule-topics';
 import { Icon } from '../../shared/icon/icon';
+import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
+import { ListHeader } from '../../shared/list-header/list-header';
+import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import { RegulationHistoryService } from './regulation-history';
 import { ContactDialogService } from './contact-dialog';
@@ -55,16 +54,15 @@ export const REGULATIONS_TABS: { id: RegulationsTab; label: string }[] = [
 @Component({
   selector: 'app-regulations',
   imports: [
-    FormsModule,
     RouterLink,
     BUTTON_IMPORTS,
-    FORM_FIELD_IMPORTS,
-    MatInputModule,
     MatProgressBarModule,
-    MatSelectModule,
     MatTabsModule,
     Icon,
     SimpleMarkdownPipe,
+    ListFilters,
+    ListHeader,
+    ScrollArea,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './regulations.html',
@@ -105,7 +103,26 @@ export class Regulations {
   protected readonly kind = computed(() =>
     this.kinds.includes(this.vrsta() as RegulationKind) ? (this.vrsta() as RegulationKind) : null,
   );
-  protected readonly searchText = linkedSignal(() => this.pretraga() ?? '');
+  protected readonly fields: FilterField[] = [
+    {
+      key: 'oblast',
+      label: 'Oblast',
+      allLabel: 'Sve oblasti',
+      options: this.areas.map((value) => ({ value, label: REGULATION_AREA_LABELS[value] })),
+    },
+    {
+      key: 'vrsta',
+      label: 'Vrsta',
+      allLabel: 'Sve vrste',
+      options: this.kinds.map((value) => ({ value, label: REGULATION_KIND_LABELS[value] })),
+    },
+    { key: 'pretraga', label: 'Pretraga', type: 'search' },
+  ];
+  protected readonly filterValues = computed(() => ({
+    oblast: this.area() ?? '',
+    vrsta: this.kind() ?? '',
+    pretraga: this.pretraga() ?? '',
+  }));
 
   readonly #resource = httpResource<Regulation[]>(
     () => {
@@ -155,20 +172,15 @@ export class Regulations {
     () => !!this.area() || !!this.kind() || !!this.pretraga(),
   );
 
-  protected setArea(area: RegulationArea | null): void {
-    this.#navigate({ oblast: area === this.area() ? null : area });
-  }
-
-  protected setKind(kind: RegulationKind | null): void {
-    this.#navigate({ vrsta: kind });
-  }
-
-  protected search(): void {
-    this.#navigate({ pretraga: this.searchText().trim() || null });
+  protected setFilter(change: FilterChange): void {
+    this.#router.navigate([], {
+      queryParams: { [change.key]: change.value || null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   protected clearFilters(): void {
-    this.searchText.set('');
     this.#router.navigate([], { queryParams: { tab: this.tab() ?? null } });
   }
 
@@ -212,9 +224,5 @@ export class Regulations {
 
   protected date(value: string | null): string {
     return formatDate(value);
-  }
-
-  #navigate(queryParams: Record<string, string | null>): void {
-    this.#router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
 }

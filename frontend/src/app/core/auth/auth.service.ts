@@ -26,6 +26,7 @@ export class AuthService {
   readonly isAuthenticated = computed(() => this.#currentUser() !== null);
   readonly isAdmin = computed(() => this.#currentUser()?.role === 'admin');
   readonly isEditor = computed(() => ['editor', 'admin'].includes(this.#currentUser()?.role ?? ''));
+  readonly isStaff = computed(() => ['author', 'editor', 'admin'].includes(this.#currentUser()?.role ?? ''));
   readonly homeUrl = computed(() => (this.isEditor() ? '/admin' : '/'));
 
   login(email: string, password: string): Observable<TokenResponse> {
@@ -63,8 +64,8 @@ export class AuthService {
     return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/forgot-password`, { email });
   }
 
-  resetPassword(token: string, password: string): Observable<MessageResponse> {
-    return this.#http.post<MessageResponse>(`${this.#apiUrl}/auth/reset-password`, {
+  resetPassword(token: string, password: string): Observable<MessageResponse & { email?: string }> {
+    return this.#http.post<MessageResponse & { email?: string }>(`${this.#apiUrl}/auth/reset-password`, {
       token,
       password,
       password_confirmation: password,

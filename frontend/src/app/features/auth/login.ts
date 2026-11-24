@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
@@ -34,7 +34,7 @@ import { NotificationService } from '../../core/notification.service';
           }
           <button type="submit" mat-flat-button [disabled]="busy()">Prijavi se</button>
           <div class="auth-links">
-            <a class="inline-link" routerLink="/zaboravljena-lozinka">Zaboravljena lozinka</a>
+            <a class="inline-link" routerLink="/zaboravljena-lozinka" [queryParams]="{ email: form.controls.email.value || null }">Zaboravljena lozinka</a>
             <a class="inline-link" routerLink="/registracija">Napravi nalog</a>
           </div>
         </form>
@@ -44,6 +44,7 @@ import { NotificationService } from '../../core/notification.service';
 })
 export class Login {
   readonly povratak = input<string>();
+  readonly email = input<string>();
 
   readonly #auth = inject(AuthService);
   readonly #router = inject(Router);
@@ -56,6 +57,15 @@ export class Login {
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly unverified = signal(false);
+
+  constructor() {
+    effect(() => {
+      const email = this.email();
+      if (email && !this.form.controls.email.value) {
+        this.form.controls.email.setValue(email);
+      }
+    });
+  }
 
   protected submit(): void {
     if (this.form.invalid) {

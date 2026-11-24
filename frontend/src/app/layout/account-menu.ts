@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { MatDivider } from '@angular/material/divider';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../core/auth/auth.service';
+import { InboxService } from '../core/inbox/inbox.service';
 import { User } from '../core/auth/user.model';
 import { Icon } from '../shared/icon/icon';
 
@@ -22,10 +23,11 @@ import { Icon } from '../shared/icon/icon';
         <span class="small muted">{{ user().email }}</span>
       </div>
       <a mat-menu-item routerLink="/profil"><app-icon name="user" [size]="20" /> Moj profil</a>
-      <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Moja obaveštenja</button>
+      <a mat-menu-item routerLink="/notifikacije"><app-icon name="bell" [size]="20" /> Notifikacije{{ inbox.unread() ? ' (' + inbox.unread() + ')' : '' }}</a>
+      <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Obaveštenja mejlom</button>
       <button type="button" mat-menu-item (click)="askQuestion()"><app-icon name="help" [size]="20" /> Postavi pitanje</button>
       <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik struke</a>
-      @if (auth.isEditor()) {
+      @if (auth.isStaff()) {
         <a mat-menu-item routerLink="/admin"><app-icon name="clipboard" [size]="20" /> Admin</a>
       }
       <mat-divider />
@@ -38,6 +40,7 @@ export class AccountMenu {
   readonly opened = output();
 
   protected readonly auth = inject(AuthService);
+  protected readonly inbox = inject(InboxService);
   readonly #injector = inject(Injector);
 
   protected readonly firstName = computed(() => (this.user().name ?? '').trim().split(/\s+/)[0] || 'Nalog');

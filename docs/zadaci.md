@@ -380,6 +380,88 @@ Put ka komori (kasnije, posle dovoljnog broja članova):
 - [ ] Prijava preko Google naloga (razmotriti)
 - [ ] Ankete i inicijative struke (#44) za članove sa saglasnošću
 
+### #50 Pitanja i odgovori + Debate, uz AI pomoć (faza-1b, centralno)
+Sekcija „Pitanja i odgovori” dobija dva taba: **Pitanja i odgovori** (postojeći Q&A) i **Stručne debate** (javne
+rasprave o temama struke). Uvod „Administracija i propisi u praksi” se uklanja, stranica počinje tabovima.
+U tabu pitanja je dugme „Postavi pitanje”, u tabu debata „Predloži temu za razgovor”; ispod su filteri, pa rezultati.
+
+Pitanja i odgovori:
+- pitanje se pri prijemu automatski dodeljuje uredniku ili autoru (onom sa najmanje otvorenih pitanja);
+  admin ručno menja kome je dodeljeno; autor u adminu vidi i odgovara samo na pitanja dodeljena njemu;
+- „Predlog odgovora (AI)”: AI napiše nacrt odgovora uz propise sa portala; urednik ga čita, ispravlja i
+  objavljuje. AI nikad ne objavljuje sam.
+
+Debate:
+- temu otvara urednik ili admin; svaki član može da predloži temu („Predloži temu za razgovor”), a urednik
+  je odobri ili odbije; više tema može da teče paralelno;
+- **moderator teme** je urednik koga aplikacija dodeli automatski (onaj sa najmanje aktivnih tema); admin
+  ručno postavlja bilo kog drugog korisnika;
+- u temi svaki prijavljeni član piše prilog i bira vrstu: pitanje, kritika, konstatacija, predlog; ostali
+  lajkuju (jedan lajk po članu, može da se povuče); dugme „Hoću da kažem” otvara polje za prilog;
+- pretraga i filter po vrsti priloga u svakoj temi; sortiranje „najnovije” i „najviše lajkova”;
+- moderator ističe najbolje priloge, skriva neprimerene i zatvara temu (zatvorena tema ostaje za čitanje);
+- **AI analiza debate**: na zahtev moderatora AI pročita sve priloge (sa lajkovima i istaknutima) i napravi
+  sažetak: šta je rečeno, glavna mišljenja i koliko podrške imaju, zaključci, najbolji komentari i predlozi.
+  Analiza je nacrt dok je moderator ne odobri; moderator može da da smernice („istakni predloge za normu”,
+  „ne navodi imena”) i traži novu verziju. Članovi vide samo odobrenu analizu, sa datumom i brojem priloga.
+
+Tehnički: `fk_debates`, `fk_debate_posts`, `fk_debate_post_likes`, `questions.assigned_to`; AI preko
+zvaničnog Anthropic PHP SDK-a (`anthropic-ai/sdk`, model `claude-opus-5-5`), ključ `ANTHROPIC_API_KEY`
+samo u `.env`; bez ključa AI dugmad javljaju da AI nije podešen, a sve ostalo radi.
+- [x] Tabovi `/pitanja` i `/debate`, `/debate/:slug`, uklonjen uvod
+- [x] Debate: teme, prilozi, lajkovi, pretraga, moderator (automatski + ručno od admina), predlog teme
+- [x] AI analiza debate sa odobravanjem i smernicama moderatora
+- [x] Dodela pitanja uredniku / autoru i AI predlog odgovora
+- [x] Admin „Debate” (predlozi tema, moderatori, zatvaranje), testovi, provera na 360 px
+- [ ] `ANTHROPIC_API_KEY` u `deploy/.env` i probna AI analiza na pravoj debati (moderator proveri kvalitet)
+- [x] Mejl moderatoru za svaki novi prilog u njegovoj temi
+- [x] Poziv u raspravu (teaser) mejlom svim članovima sa uključenim obaveštenjima, iz admina
+- [x] Prva tema: „Koliko nam vođenje administracije u nastavi FV oduzima vremena…” (predložio Rade Kraljević, moderator Igor Živanović; pravi je migracija)
+- [ ] Mejl dodeljenom uredniku/autoru kad stigne pitanje i uredniku kad stigne predlog teme
+
+### #51 Moderatori, zamrznute teme, ponovno otvaranje i notifikacije (faza-1b)
+Moderatori:
+- admin u adminu („Moderatori”) određuje ko je u rotaciji; automatska dodela bira člana rotacije sa najmanje
+  aktivnih tema (ako je rotacija prazna, urednika, pa admina);
+- za svakog moderatora vidi se opterećenje (aktivne, na čekanju, zatvorene teme, prilozi, zahtevi) i ko je
+  sledeći na redu; evidencija beleži svaku dodelu (automatska, ručna, ko je dodelio, ko je bio pre).
+
+Zatvorena tema je zamrznuta: nema novih priloga, lajkova, isticanja ni nove analize; sažetak i zaključci ostaju
+kakvi jesu. Član može da zatraži ponovno otvaranje: u modalu napiše šta je hteo da kaže, moderator dobija mejl;
+kad moderator odobri, tema se otvara, prilog se objavljuje, a član dobija mejl (isto i kad odbije).
+
+Notifikacije: zvonce u meniju sa tačkom kad ima nepročitanih, stranica `/notifikacije`. Sve što portal pošalje
+korisniku (mejlom, kasnije WhatsApp / Viber / SMS) upisuje se i tu, sa kanalom kojim je poslato. Izuzetak su
+mejlovi pre nego što nalog postoji (potvrda naloga, poziv za registraciju).
+- [x] Rotacija i evidencija moderatora, stranica „Moderatori”
+- [x] Zamrzavanje zatvorene teme, zahtev za ponovno otvaranje sa mejlovima
+- [x] `fk_user_notifications`, zvonce i `/notifikacije`, upis za sve postojeće mejlove
+
+### #52 Instagram i Facebook portala (faza-1b)
+Nalozi portala na Instagramu (`fiskultura_rs`) i Facebooku: ikonice u footeru i na naslovnoj; admin/urednik iz
+admina objavljuje na obe mreže (tekst, slika, link na vest ili debatu), sa evidencijom objava.
+Za objavljivanje treba: Facebook stranica portala i Instagram nalog tipa Business/Creator povezan sa njom, Meta
+aplikacija sa dozvolama `pages_manage_posts`, `pages_read_engagement`, `instagram_basic`,
+`instagram_content_publish` (prolazi Meta proveru), trajni Page access token u `.env`. Instagram objava mora da ima
+sliku dostupnu na javnom URL-u.
+- [ ] Ikonice i linkovi (Instagram `fiskultura_rs`; tačan Facebook link čeka)
+- [ ] Meta aplikacija, token u `.env`, objava iz admina i evidencija objava
+
+### #53 Pošta admin@fiskultura.rs u adminu (faza-1b)
+Admin u adminu („Pošta”) čita i piše mejlove naloga `admin@fiskultura.rs`: folderi, pretraga, čitanje (HTML u
+izolovanom okviru, slike tek na zahtev), prilozi, odgovor, odgovor svima, prosleđivanje, nov mejl; poslato ostaje u
+folderu „Sent” (vidi se i u Roundcube-u). IMAP 993 / SMTP 465, lozinka samo u `.env`.
+- [x] Čitanje, slanje i stranica „Pošta” (proverena sa probnim podacima)
+- [ ] Lozinka u `backend/.env` i `deploy/.env`, provera sa pravim sandučetom
+- [ ] Nacrti, brisanje u otpad i premeštanje u folder (ako zatreba)
+
+### #54 Reakcije, zabrane pisanja i notifikacije u realnom vremenu (faza-1b)
+- [x] Reakcije na prilog: slažem se, ne slažem se, korisno, sviđa mi se (jedna po članu); autoru notifikacija na sajtu; AI analiza dobija raspodelu
+- [x] Moderator zabranjuje autoru pisanje (razlog, 1/7/30 dana ili trajno, tema ili sve teme), mejl i notifikacija, ukidanje
+- [x] Uvodni pregled: loader dok AI radi, napomene odvojene, izmena teksta nacrta i objavljenog
+- [ ] Web soketi (notifikacije i novi prilozi bez osvežavanja); na deljenom hostingu nema trajnog procesa, pa treba spoljni servis (npr. Pusher / Ably) ili VPS sa Laravel Reverb-om
+- [ ] Odgovor na prilog (niti) i pominjanje kolege
+
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)

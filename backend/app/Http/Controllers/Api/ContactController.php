@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\ContactMessageMail;
 use App\Models\User;
+use App\Services\Inbox;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
@@ -32,6 +34,7 @@ class ContactController extends Controller
             Log::warning('Poruka uredništvu bez primaoca', $data);
         } else {
             Mail::to($recipients->all())->send(new ContactMessageMail($data));
+            app(Inbox::class)->recordForEmails($recipients, 'contact_message', "Poruka uredništvu: {$data['name']}", Str::limit($data['message'], 300));
         }
 
         return response()->json(['message' => 'Poruka je poslata uredništvu. Odgovaramo na mejl koji ste naveli.'], 201);

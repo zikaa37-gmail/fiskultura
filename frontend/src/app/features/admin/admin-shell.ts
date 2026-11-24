@@ -9,6 +9,7 @@ interface AdminLink {
   label: string;
   icon: IconName;
   exact?: boolean;
+  editorOnly?: boolean;
 }
 
 interface AdminGroup {
@@ -69,16 +70,18 @@ export class AdminShell {
     {
       title: 'Vesti',
       links: [
-        { route: 'vesti', label: 'Sve vesti', icon: 'news', exact: true },
-        { route: 'vesti/nova', label: 'Nova vest', icon: 'star', exact: true },
+        { route: 'vesti', label: 'Sve vesti', icon: 'news', exact: true, editorOnly: true },
+        { route: 'vesti/nova', label: 'Nova vest', icon: 'star', exact: true, editorOnly: true },
       ],
     },
     {
       title: 'Sadržaj portala',
       links: [
         { route: 'pitanja', label: 'Pitanja', icon: 'help' },
-        { route: 'udruzenja', label: 'Udruženja', icon: 'globe' },
-        { route: 'propisi', label: 'Propisi', icon: 'book' },
+        { route: 'debate', label: 'Stručne debate', icon: 'people', editorOnly: true },
+        { route: 'udruzenja', label: 'Udruženja', icon: 'globe', editorOnly: true },
+        { route: 'propisi', label: 'Propisi', icon: 'book', editorOnly: true },
+        { route: 'drustvene-mreze', label: 'Društvene mreže', icon: 'instagram', editorOnly: true },
       ],
     },
     {
@@ -86,6 +89,8 @@ export class AdminShell {
       adminOnly: true,
       links: [
         { route: 'korisnici', label: 'Korisnici', icon: 'user' },
+        { route: 'moderatori', label: 'Moderatori', icon: 'people' },
+        { route: 'posta', label: 'Pošta (admin@)', icon: 'mail' },
         { route: 'clanstvo', label: 'Članstvo', icon: 'people' },
         { route: 'obavestenja', label: 'Obaveštenja', icon: 'mail' },
       ],
@@ -100,5 +105,10 @@ export class AdminShell {
     });
   }
 
-  protected readonly visibleGroups = computed(() => this.#groups.filter((group) => !group.adminOnly || this.#auth.isAdmin()));
+  protected readonly visibleGroups = computed(() =>
+    this.#groups
+      .filter((group) => !group.adminOnly || this.#auth.isAdmin())
+      .map((group) => ({ ...group, links: group.links.filter((link) => !link.editorOnly || this.#auth.isEditor()) }))
+      .filter((group) => group.links.length),
+  );
 }

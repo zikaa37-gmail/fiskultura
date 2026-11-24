@@ -18,7 +18,7 @@ import { apiErrorMessage } from '../../core/http/api';
           <h1>Nova lozinka</h1>
           @if (doneMessage(); as message) {
             <p>{{ message }}</p>
-            <a mat-flat-button routerLink="/prijava">Prijavi se</a>
+            <a mat-flat-button routerLink="/prijava" [queryParams]="{ email: doneEmail() }">Prijavi se</a>
           } @else {
             <mat-form-field appearance="outline">
               <mat-label>Nova lozinka</mat-label>
@@ -44,6 +44,7 @@ export class ResetPassword {
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly doneMessage = signal<string | null>(null);
+  protected readonly doneEmail = signal<string | null>(null);
 
   protected submit(): void {
     const token = this.token();
@@ -53,7 +54,10 @@ export class ResetPassword {
     }
     this.busy.set(true);
     this.#auth.resetPassword(token, this.form.controls.password.value).subscribe({
-      next: (response) => this.doneMessage.set(response.message),
+      next: (response) => {
+        this.doneEmail.set(response.email ?? null);
+        this.doneMessage.set(response.message);
+      },
       error: (error) => {
         this.error.set(apiErrorMessage(error));
         this.busy.set(false);
