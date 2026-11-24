@@ -27,7 +27,7 @@ class InvitationController extends Controller
             $this->fail();
         }
 
-        return response()->json($user->only(['name', 'email', 'phone', 'member_status', 'school', 'municipality', 'district']));
+        return response()->json([...$user->only(['name', 'email', 'phone', 'member_status', 'school', 'municipality', 'district']), 'schools' => $user->schools ?? []]);
     }
 
     public function complete(Request $request)
@@ -39,6 +39,7 @@ class InvitationController extends Controller
             'password' => ['required', 'string', Password::min(8), 'confirmed'],
             'member_status' => ['nullable', Rule::in(User::MEMBER_STATUSES)],
             'school' => ['nullable', 'string', 'max:190'],
+            ...User::schoolRules(),
             'municipality' => ['nullable', 'string', 'max:120'],
             'district' => ['nullable', 'string', 'max:120'],
             'directory_consent' => ['sometimes', 'boolean'],
@@ -53,7 +54,7 @@ class InvitationController extends Controller
 
         DB::transaction(function () use ($data) {
             $user = $this->tokens->consume($data['token'], UserToken::INVITATION);
-            $user->fill(array_intersect_key($data, array_flip(['name', 'phone', 'member_status', 'school', 'municipality', 'district'])));
+            $user->fill(array_intersect_key($data, array_flip(['name', 'phone', 'member_status', 'school', 'schools', 'municipality', 'district'])));
             $user->forceFill([
                 'password' => $data['password'],
                 'email_verified_at' => $user->email_verified_at ?? now(),

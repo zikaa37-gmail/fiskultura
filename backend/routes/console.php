@@ -194,3 +194,31 @@ Artisan::command('regulations:check {--key=} {--no-mail}', function (PisChecker 
 })->purpose('Proverava u PIS-u da li su propisi iz kataloga dobili nove izmene i javlja urednicima');
 
 Schedule::command('regulations:check')->weeklyOn(1, '05:00')->withoutOverlapping();
+
+Artisan::command('institutions:import {file} {--type=} {--source=}', function (App\Services\InstitutionImporter $importer) {
+    $counts = $importer->importFile($this->argument('file'), $this->option('type'), $this->option('source'));
+    $this->info("Ustanove: novih {$counts['created']}, dopunjenih {$counts['updated']}, preskočenih {$counts['skipped']}.");
+})->purpose('Uvoz ustanova (škole, fakulteti) iz JSON ili CSV fajla');
+
+Artisan::command('facilities:report', function (App\Services\Facilities\FacilityReporter $reporter) {
+    foreach (['osnovna', 'srednja'] as $type) {
+        $scope = ['type' => $type];
+        if ($reporter->stats($scope)['with_data'] === 0) {
+            $this->line("Infrastruktura ({$type}): nema upisanih podataka, izveštaj se ne pravi.");
+
+            continue;
+        }
+        $report = $reporter->generate($scope);
+        $this->info("Infrastruktura ({$type}): izveštaj #{$report->id}".($report->error ? " bez AI teksta ({$report->error})" : '').'.');
+    }
+})->purpose('Mesečni AI izveštaj o infrastrukturi za FV (osnovne i srednje škole)');
+
+Schedule::command('facilities:report')->monthlyOn(1, '05:00')->withoutOverlapping(30);
+
+Artisan::command('institutions:import-mpn {--dir=}', function (App\Services\MpnSchoolImporter $importer) {
+    foreach ($importer->import($this->option('dir')) as $type => $counts) {
+        $this->info("Škole ({$type}): novih {$counts['created']}, dopunjenih {$counts['updated']}, preskočenih {$counts['skipped']}.");
+    }
+})->purpose('Uvoz osnovnih i srednjih škola iz otvorenih podataka Ministarstva prosvete (opendata.mpn.gov.rs)');
+
+Schedule::command('institutions:import-mpn')->monthlyOn(2, '04:00')->withoutOverlapping(30);

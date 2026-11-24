@@ -13,7 +13,7 @@ import { PortalSocialLinks } from '../shared/portal-social/portal-social';
       <div class="container footer-inner">
         <div class="footer-col">
           <strong>Fiskultura</strong>
-          <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi</span>
+          <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji</span>
           <app-portal-social label="Pratite nas" />
         </div>
         <nav class="footer-col" aria-label="Aplikacije">

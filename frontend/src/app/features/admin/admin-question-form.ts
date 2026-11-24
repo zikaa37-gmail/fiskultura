@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { aiBusy } from '../../core/http/busy';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -283,7 +284,7 @@ export class AdminQuestionForm {
   #requestDraft(item: AdminQuestion): void {
     this.drafting.set(true);
     this.aiNote.set(null);
-    this.#http.post<AnswerDraft>(`${API_URL}/admin/questions/${item.id}/draft`, {}).subscribe({
+    this.#http.post<AnswerDraft>(`${API_URL}/admin/questions/${item.id}/draft`, {}, { context: aiBusy() }).subscribe({
       next: (draft) => {
         this.drafting.set(false);
         this.form.patchValue({

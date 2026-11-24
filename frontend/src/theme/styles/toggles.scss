@@ -1,0 +1,29 @@
+@use 'sass:map';
+@use 'sizes';
+
+.app-toggle {
+  display: flex;
+  align-items: center;
+  min-height: map.get(map.get(sizes.$controls, md), height);
+  --mat-slide-toggle-label-text-size: #{map.get(map.get(sizes.$controls, md), font)};
+  --mat-slide-toggle-selected-track-color: var(--color-primary);
+  --mat-slide-toggle-selected-hover-track-color: var(--color-primary-hover);
+  --mat-slide-toggle-selected-focus-track-color: var(--color-primary-hover);
+  --mat-slide-toggle-selected-pressed-track-color: var(--color-primary-hover);
+  --mat-slide-toggle-selected-handle-color: var(--color-on-primary);
+  --mat-slide-toggle-selected-hover-handle-color: var(--color-on-primary);
+  --mat-slide-toggle-selected-focus-handle-color: var(--color-on-primary);
+  --mat-slide-toggle-selected-pressed-handle-color: var(--color-on-primary);
+  --mat-slide-toggle-selected-icon-color: var(--color-primary);
+}
+
+.app-toggle .mdc-label {
+  padding-left: 12px;
+}
+
+@each $name, $size in sizes.$controls {
+  .app-toggle.toggle-size-#{$name} {
+    min-height: map.get($size, height);
+    --mat-slide-toggle-label-text-size: #{map.get($size, font)};
+  }
+}

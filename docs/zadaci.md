@@ -6,20 +6,25 @@ obrazloženje su u `koncept.md`.
 ## Opšti zadaci (važe kroz sve faze)
 
 ### #1 Konvencije i radni tok (opste)
+
 `CLAUDE.md` po uzoru na `evidencija-fv` (signali, zoneless, OnPush, Material M3, prevodi, bez
 komentara u kodu, `present()` u kontrolerima, `POST .../list` za liste sa filterima),
 `docs/git-workflow.md` (issue → grana → PR), `docs/api-rute.md`.
 
 ### #2 Dizajn sistem iz statičke naslovne (opste)
+
 Material M3 tema sa paletom iz `style.css` (primarna `#1d4ed8`, tercijarna limeta), Inter, tamna
 tema, tokeni za akcent kartica (plava, limeta, narandžasta, nebo, ljubičasta, roze). Deljene
 komponente: kartica modula, status-čip, sekcija sa naslovom, prazno stanje, loader, potvrda brisanja.
+
 - [ ] Izgled kao na fiskultura.rs na 360 px i 1280 px, svetla i tamna tema
 
 ### #3 SEO osnova (opste) — urađeno (bez RSS)
+
 `<title>`, description i og: tagovi po ruti (`Title` + `Meta` servis), prerender statičnih ruta,
 Laravel ubacuje meta tagove za `/vesti/:slug` i `/udruzenja/:slug`, `sitemap.xml`, `rss.xml`,
 `robots.txt`.
+
 - [x] Angular SSR: prerender svih javnih stranica pri deploy-u (i svake vesti, udruženja i pitanja)
 - [x] `SeoService`: title, description, canonical, robots, Open Graph, Twitter, JSON-LD (NewsArticle, QAPage, Organization, BreadcrumbList)
 - [x] `sitemap.xml` (Laravel, uvek aktuelan), `robots.txt`, slika za deljenje `og-image.png`
@@ -27,11 +32,13 @@ Laravel ubacuje meta tagove za `/vesti/:slug` i `/udruzenja/:slug`, `sitemap.xml
 - [ ] Google Search Console: potvrda domena i slanje sitemap-a
 
 ### #4 Izvori i uređivački proces (opste, sadrzaj)
+
 Lista izvora koje urednik prati (sajtovi i FB stranice udruženja, Ministarstvo prosvete, ZUOV,
 savez za školski sport, Zdravitas), učestalost provere, pravila prenošenja (sažetak + link, bez
 kopiranja), pravila za fotografije (sopstvene ili uz dozvolu, deca samo uz saglasnost).
 
 ### #5 Deploy na cPanel (opste)
+
 `deploy/` kao u `evidencija-fv`: build frontenda u `public_html`, Laravel van `public_html`,
 `.htaccess` za SPA + `/api`, jednokratni PHP za migracije. Statička naslovna se zamenjuje tek kad
 faza 1 prođe proveru.
@@ -39,60 +46,75 @@ faza 1 prođe proveru.
 ## Faza 1 — kostur, javni portal, vesti, udruženja
 
 ### #6 Kostur frontenda (faza-1)
+
 `frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
+
 - [ ] `ng build` i `ng test` prolaze
 
 ### #7 Kostur backenda (faza-1)
+
 `backend/`: Laravel 13, MySQL `fiskultura`, `DB_PREFIX=fk_`, JWT + refresh (kao `evidencija-fv`),
 CORS za lokal, `php artisan test` prolazi, `dev.mjs` u korenu diže oba.
 
 ### #8 Naslovna (faza-1)
+
 Prenos statičke naslovne: hero, traka sa brojkama, kartice delova portala (sa slike) proširene
 vestima, udruženjima i stručnom pomoći, „za koga", vežba dana. Najnovije 3 vesti i istaknuta
 objava udruženja.
 
 ### #9 Stranica „Aplikacije" (faza-1)
+
 Kartice za e-pripreme, Evidenciju FV, Jadžent i Zdravitas (naziv, opis, link, snimak ekrana).
 Linkovi i u top baru / footeru.
 
 ### #10 Nalozi i uloge (faza-1)
+
 Registracija korisnika (mejl + potvrda), prijava, zaboravljena lozinka, profil (škola, opština,
 okrug). Uloge `user` (korisnik: nastavnici FV, učitelji i svi zainteresovani), `author`, `editor`, `admin`. Guard-ovi na frontendu, middleware na backendu.
 
 ### #11 Vesti — backend (faza-1)
+
 Tabele `fk_news`, `fk_news_categories`, `fk_tags`, pivot; CRUD za urednika, javne rute
 (`POST /api/news/list` sa filterima, `GET /api/news/{slug}`), status nacrt / objavljeno / zakazano,
 naslovna slika (upload, WebP). Testovi.
 
 ### #12 Vesti — javni prikaz (faza-1)
+
 `/vesti` (lista, filteri kategorija / organizacija / godina, pretraga, paginacija), `/vesti/:slug`
 (tekst, izvor, srodne vesti, deljenje).
 
 ### #13 Admin: vesti (faza-1)
+
 `/admin/vesti`: lista sa filterima, forma sa rich text editorom, slika, kategorija, oznake, izvor,
 zakazano objavljivanje, pregled pre objave.
 
 ### #14 Udruženja — backend i seed (faza-1)
+
 Tabele `fk_organizations`, veza vest → organizacija; seed iz `backend/database/data/organizations.json` i
 `news.json` (objave se uvoze kao vesti kategorije „udruženja", sa izvorom).
 
 ### #15 Udruženja — javni prikaz i admin (faza-1)
+
 `/udruzenja` (filteri po tipu, nivou, okrugu), `/udruzenja/:slug` (podaci + objave), `/admin/udruzenja`.
 
 ### #15a Mreža udruženja: SSPFVS i članice (faza-1)
+
 `parent_id` na organizaciji (SSPFVS krovno, 15 redovnih članica sa https://sspfvs.wixsite.com/sspfvs/o-nama),
 izvor podatka o članstvu. Na `/udruzenja` istaknut SSPFVS, ispod članice po okrugu, zatim ostale
 organizacije (školski sport, institucije, fakulteti, sindikati).
+
 - [ ] Za svaku članicu prikupiti sajt / FB / kontakt (sada većina nepoznato)
 
 ### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1)
+
 Spisak okruga i gradova (šifarnik) sa statusom: postoji aktivno / postoji neaktivno / nema. Mapa
 Srbije (SVG po okruzima) kasnije. Vodič za osnivanje (koraci, primer statuta, APR, učlanjenje u
 SSPFVS — sadržaj dogovoriti sa SSPFVS) i forma „zainteresovan sam za društvo u <grad>" — kad se
 skupi bar 3 kolege, obaveštenje SSPFVS-u i prijavljenima.
 
 ### #15c Izvori organizacija i red za urednika (faza-1)
+
 Tabela `fk_organization_sources` (organizacija, tip: sajt / rss / facebook / instagram / youtube,
 URL, način praćenja: automatski / ručno, poslednja provera). Komanda `sources:check` (cron, jednom
 dnevno) čita RSS i javne stranice gde je dozvoljeno, nove stavke idu u `fk_news_suggestions`
@@ -100,50 +122,61 @@ dnevno) čita RSS i javne stranice gde je dozvoljeno, nove stavke idu u `fk_news
 „Pošalji objavu" za udruženja bez naloga.
 
 ### #15d Oznaka izvora na vesti (faza-1)
+
 Vest ima `organization_id`, `source_url`, `source_type` (sajt / Facebook / ...), `source_published_at`.
 U prikazu: čip organizacije (link na `/udruzenja/:slug`), „Preuzeto sa: ...", datum originala, link.
 Filteri na `/vesti`: organizacija, „SSPFVS i članice", okrug. Obaveštenja mejlom mogu da se prate
 po organizaciji.
 
 ### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
+
 Gde ZUOV objavljuje Katalog programa stalnog stručnog usavršavanja i liste odobrenih stručnih skupova,
 u kom formatu (pretraga, PDF, Excel), koliko često se menjaju; izdvojiti sve programe za FV i školski
 sport za tekuću i prethodnu školsku godinu u `backend/database/data/seminars.json`. Dopuniti iz sajtova
 realizatora (SSPFVS, UPFK, fakulteti).
 
 ### #15f Seminari — backend (faza-1)
+
 Tabele `fk_school_years`, `fk_seminars` (naziv, kataloški broj / rešenje, realizator →
 organizacija, oblik, bodovi, trajanje, kompetencija, prioritet, ciljna grupa, cena, link, izvor) i
 `fk_seminar_sessions` (datum, mesto, okrug, onlajn, link za prijavu); pivot seminar ↔ školska godina.
 `POST /api/seminars/list` sa filterima, seed iz `backend/database/data/seminars.json`. Testovi.
 
 ### #15g Seminari — javni prikaz i admin (faza-1)
+
 `/seminari` sa izborom školske godine, filterima i „uskoro", stranica seminara sa terminima;
 `/admin/seminari` (unos, uvoz liste iz ZUOV-a, novi termin). Nov program / termin automatski predlaže
 vest kategorije „Seminari" i ide u obaveštenja po okrugu i realizatoru.
 
 ### #15h Sačuvani seminari i podsetnik (faza-2)
+
 Nastavnik čuva seminar, mejl podsetnik 7 dana i 1 dan pred termin; kasnije lična evidencija bodova.
 
 ### #16 Admin: korisnici i šifarnici (faza-1)
+
 Lista korisnika, promena uloge, blokiranje; kategorije vesti, oznake, okruzi.
 
 ### #16a Slanje mejlova (faza-1)
+
 SMTP `obavestenja@fiskultura.rs` (kredencijali u `backend/.env` i na serveru, ne u gitu),
 Laravel Mailables sa zajedničkim šablonom u bojama portala, queue `database` + cron `schedule:run`,
 ograničenje po satu (limit hostinga), tabela `fk_mail_log`. Sistemski mejlovi: potvrda naloga,
 zaboravljena lozinka. SPF/DKIM/DMARC za domen proveriti u cPanel-u.
+
 - [ ] Probni mejl stiže na Gmail i ne ide u spam
 
 ### #16b Pretplata na obaveštenja (faza-1) — urađeno
+
 Tabela `fk_subscriptions` (mejl, korisnik opciono, šta prati: kategorije / udruženja / okrug / sportovi,
 učestalost `instant` | `weekly`, kanal `mail`, potvrđeno, token za odjavu). Prijava bez naloga uz
 dvostruki opt-in, odjava jednim klikom, stranica „Moja obaveštenja" za ulogovane.
 
 ### #16c Slanje obaveštenja o vestima (faza-1) — urađeno
+
 Na objavu istaknute vesti → `instant` pretplatnicima koji prate tu kategoriju/organizaciju; nedeljni
 pregled ponedeljkom u 7h. Kanal kroz interfejs (`NotificationChannel`), da se kasnije dodaju
 WhatsApp / Viber / push bez promene logike. Admin vidi broj poslatih i odjava.
+
 - [x] `/obavestenja` (prijava, podešavanja preko linka, „Moja obaveštenja“), potvrda i odjava jednim klikom
 - [x] `notifications:send` na 10 minuta, limit po satu, `fk_notification_log`, admin kartica „Obaveštenja“
 - [ ] Okrug i sportovi kao filteri kada vesti dobiju okrug / sport
@@ -155,65 +188,79 @@ Cilj: fiskultura.rs je mesto na koje nastavnici FV iz cele Srbije dolaze po info
 Redosled: #38 → #39 → #16b/#16c (obaveštenja) → #40 → #41 → ostalo.
 
 ### #38 Propisi i literatura na portalu — jedan izvor (faza-1b) — urađeno (prvo izdanje)
+
 Biblioteka na `/propisi`: zakoni, pravilnici (plan i program po razredu, ocenjivanje, norma, kalendar,
 zaštita učenika), stručna literatura i korisni linkovi (Službeni glasnik, Ministarstvo, ZUOV, Zdravitas).
 Zapis: naziv, vrsta, oblast, razredi / nivo, broj i datum glasila, važi od / do, link na zvaničan tekst,
 kratko „šta je bitno za FV", istorija izmena (stara verzija ostaje vidljiva kao nevažeća).
 Početni podaci: preuzeti iz kataloga „Literatura" u e-pripremama (`api/database/seeders/data`,
 `RegulationCatalogSeeder`), bez dupliranja. Pretraga i filteri, admin za urednika.
+
 - [x] Isti format kao katalog „Literatura“ u e-pripremama (vrste, oblasti, proverenost, istorija verzija)
 
 ### #39 E-pripreme čitaju propise sa portala (faza-1b, repo e-pripreme-fv) — urađeno (e-pripreme-fv PR #87)
+
 Javni API portala `GET /api/regulations` (sa `updated_since`); e-pripreme zadržavaju svoj modul
 „Literatura", ali ga pune sa portala (komanda za sinhronizaciju + nedeljni raspored), lokalne
 izmene super admina se ne gaze. Kasnije isto i za druge aplikacije (Evidencija FV).
+
 - [x] `regulations:sync` u e-pripremama (`--dry-run`, `--full`), ponedeljkom u 5:30, `edited_locally`
 - [ ] #38 pušten na fiskultura.rs (sada `/api/regulations` vraća 404), pa prvo preuzimanje
-  `deploy.py --regulations` u e-pripremama
+      `deploy.py --regulations` u e-pripremama
 - [ ] Cron `schedule:run` za e-pripreme u cPanelu (`e-pripreme-fv/docs/DEPLOY.md`)
 
 ### #40 Pitanja i odgovori — administracija i pravna pitanja (faza-1b) — urađeno
+
 Proširenje #31: kategorije (norma i fond časova, ocenjivanje, oslobađanje od nastave, odgovornost i
 bezbednost na času, takmičenja, Zdravitas, ES dnevnik). Odgovor ima poziv na propis iz #38 i datum
 „važi na dan". „Postavi pitanje" (prijavljeni korisnik) → urednik odgovara i objavljuje anonimno; mejl
 pitaocu. Napomena da odgovor nije pravni savet.
+
 - [x] `/pitanja` (oblasti, pretraga), `/pitanja/:slug` sa propisima i „važi na dan“, `/pitanja/postavi` i „Moja pitanja“
 - [x] Admin „Pitanja“: red na čekanju, originalno pitanje samo za urednika, mejl pitaocu pri objavi
 - [x] 4 početna odgovora iz sažetaka propisa (`data/questions.json`); urednik treba da ih pročita pre puštanja
 
 ### #41 Kalendar sa podsetnicima (faza-1b)
+
 `/kalendar`: školski kalendar (iz pravilnika za tekuću godinu), takmičenja (#33), seminari (#15f),
 rokovi (unos u Zdravitas, izveštaji, prijave za takmičenja). Filter po okrugu i vrsti; pretplata na
 podsetnik mejlom (7 dana i 1 dan pre); izvoz u Google / Outlook kalendar (iCal).
 
 ### #42 Oglasi: konkursi škola i zamene (faza-1b)
+
 Škola ili kolega objavljuje oglas (radno mesto nastavnika FV, zamena, honorarni rad u sekciji);
 urednik odobrava; rok važenja, okrug, link na zvanični konkurs; obaveštenje mejlom po okrugu.
 
 ### #43 Šabloni dokumenata (faza-1b, sadrzaj)
+
 Preuzimanje šablona: operativni plan, izveštaj sekcije, saglasnost roditelja za takmičenje,
 zapisnik testiranja, molba za oslobađanje, plan rada aktiva. Word / PDF, oznaka verzije i propisa.
 
 ### #44 Glas struke: ankete i inicijative (faza-1b)
+
 Urednik pokreće anketu (npr. „broj časova FZV nedeljno"); glasaju prijavljeni nastavnici (jedan glas,
 okrug i nivo škole za analizu); rezultati javni po zatvaranju i šalju se SSPFVS-u i udruženjima.
 Inicijative sa potpisima kolega (ime, škola, opština; javno samo broj).
 
 ### #45 Saradnja škola (faza-1b, kasnije)
+
 Oglasna tabla po opštini: prijateljske utakmice, zajednički turniri, pozajmica opreme, zajednički
 prevoz na takmičenja.
 
 ### #46 Linkovi udruženja: ručna potvrda (faza-1b) — urađeno
+
 Automatska provera (`organizations:check-links`) za sajtove i YouTube; Facebook i Instagram server ne
 može da proveri, pa urednik ručno označava link koji ne radi (admin, kvačica „ne radi"), a podaci
 mogu da nose `brokenLinks`. Ručna oznaka se ne gubi dok automatska provera ne potvrdi da link radi.
 Instagram kartica je uvek prikazana, posivljena dok udruženje nema nalog.
 
 ### #47 ZUOV i praćenje zvaničnih izvora (faza-1b, sadrzaj)
+
 ZUOV je jedno od centralnih mesta za informisanje nastavnika. Radi se na posebnoj grani, posle
 ishoda po razredima.
 
 Istraživanje:
+
 - sve što ZUOV objavljuje u vezi sa nastavom fizičkog i zdravstvenog vaspitanja (programi, priručnici,
   standardi, obuke, planovi realizacije);
 - katalog stalnog stručnog usavršavanja, oblast 17
@@ -222,12 +269,14 @@ Istraživanje:
   prikaz na portalu uz seminare iz vesti.
 
 Stranice ZUOV-a koje pratimo:
+
 - <https://zuov.gov.rs/download-category/zdravstveno-vaspitanje/>
 - <https://zuov.gov.rs/category/vesti/>
 - <https://zuov.gov.rs/konkursi-za-prosvetne-radnike-i-skole/>
 - <https://zuov.gov.rs/novi-pravilnici-vesti-i-obavestenja/>
 
 Periodični pregled izvora:
+
 - zapisan spisak mesta koja se proveravaju (zakoni i pravilnici u PIS-u, Prosvetni glasnik, ZUOV,
   Ministarstvo, konkursi, katalog seminara, udruženja), sa redosledom i učestalošću provere;
 - PIS ima javni API: ELI adresa (`https://slgl.pravno-informacioni-sistem.rs/api/prins/eli/rep/pg/...`)
@@ -243,6 +292,7 @@ Periodični pregled izvora:
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
 ### #48 Propisi: šta važi danas, istorija i provera (faza-1b, centralno)
+
 Pravilo portala: ono što važi danas uvek je istaknuto. Raniji propisi ostaju kao istorija, a kratko
 hronološko objašnjenje kaže šta se, kada i zašto promenilo, da nastavnici „jednom zauvek znaju šta je
 prava istina”. Mnoge kolege rade po pravilima koja više ne važe (primer: fond časova FZV).
@@ -253,6 +303,7 @@ za pravila. Tabovi odvajaju ono što važi od starog, a jedan tab je priča. Tab
 tabova ostaje vidljivo pri skrolu.
 
 Stranica `/propisi`:
+
 - **Važeće** (podrazumevani tab):
   - kartice tema „Šta važi danas”, svaka sa jednom rečenicom šta važi i oznakom „menja se od …” kad je
     izmena objavljena;
@@ -266,6 +317,7 @@ Stranica `/propisi`:
   linkovima na teme i zvanične tekstove.
 
 Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`) ima iste tabove:
+
 - **Važi danas**:
   - pravilo u 2–5 rečenica, od kada važi, po kom propisu (link na PIS) i kad je poslednji put provereno;
   - **Šta se menja**: izmene koje su objavljene, a još se ne primenjuju (npr. od 2027/28);
@@ -276,12 +328,14 @@ Stranica teme `/propisi/:tema` (npr. `/propisi/fond-casova`) ima iste tabove:
   propis i šta je promenio.
 
 Mesto na sajtu:
+
 - stavka „Propisi” u meniju vodi na novu stranicu; na naslovnoj je blok „Šta važi od 1. septembra” i
   „Novo u propisima”;
 - propis ima polja `replaces` i `replacedBy`, pa se iz zastarelog propisa vidi koji ga je zamenio;
 - odgovor, vest ili ishod koji se poziva na propis koji više ne važi dobija upozorenje i link na važeću temu.
 
 Hronologija uz pomoć AI-ja:
+
 - nacrt sažetka i vremenske linije piše AI, i to samo iz zvaničnih tekstova (PIS, „Prosvetni glasnik”,
   ZUOV);
 - urednik ga čita, ispravlja i odobrava. Na stranici piše „pripremljeno uz pomoć AI-ja, proverio urednik,
@@ -289,6 +343,7 @@ Hronologija uz pomoć AI-ja:
 - ništa se ne objavljuje bez odobrenja.
 
 Mehanizam provere (nastavlja #47):
+
 - komanda `sources:check` po rasporedu (cron) proverava listu izmena svakog propisa u PIS-u i nove objave
   ZUOV-a i Ministarstva;
 - novi broj glasnika ili nova objava otvara stavku „za proveru” uredniku i šalje mu mejl;
@@ -298,6 +353,7 @@ Mehanizam provere (nastavlja #47):
   označen kao prestao.
 
 Prve teme:
+
 1. fond časova po razredima;
 2. oslobađanje od praktičnog dela nastave;
 3. ocenjivanje;
@@ -309,6 +365,7 @@ Prve teme:
 9. stručno usavršavanje.
 
 Kontakti (dopuna, 6. 11. 2026):
+
 - tab **Kontakti** na `/propisi`: Ministarstvo prosvete (sektori za OŠ i SŠ, zaštita od nasilja, pravni poslovi,
   licenca), prosvetna inspekcija, školske uprave, ZUOV, ZVKOV, Pedagoški zavod Vojvodine, Ministarstvo
   sporta, Inspektorat za rad i Poverenik. Uz svaku instituciju piše kada joj se obraćamo, a podaci su samo
@@ -324,6 +381,7 @@ Kontakti (dopuna, 6. 11. 2026):
 - [ ] Kontakti institucija i `/kontakt` sa obrascem za uredništvo
 
 ### #49 Zajednica nastavnika FV: registracija, trajna prijava, umrežavanje (faza-1b, centralno)
+
 Cilj: okupiti sve nastavnike fizičkog vaspitanja i studente fakulteta sporta pod jednom kapom. Dugoročno to je
 osnova za strukovnu komoru, koja bi imala reč o struci, a jednog dana i nadležnosti oko licenci. Prvi korak je
 da ljudi počnu da koriste portal.
@@ -332,9 +390,11 @@ Pravilo: **sadržaj ostaje javan**, ništa se ne krije iza prijave. Registracija
 bazu kontakata struke.
 
 Javno, bez naloga:
+
 - vesti, propisi i teme, ishodi, pravila sportova, pitanja i odgovori, udruženja, kontakti.
 
 Uz nalog:
+
 - obaveštenja po izboru (oblast, okrug, nivo škole);
 - postavljanje pitanja i praćenje odgovora, sačuvani propisi i teme;
 - profil u imeniku struke: ime, škola ili fakultet, okrug, status (nastavnik OŠ ili SŠ, student, pripravnik,
@@ -343,6 +403,7 @@ Uz nalog:
 - učešće u anketama i inicijativama struke (#44).
 
 Prijava „jednom i zauvek”:
+
 - posle registracije i potvrde mejla korisnik je odmah prijavljen. Refresh token traje 365 dana i obnavlja
   se pri svakom korišćenju (rotacija), pa se aktivan korisnik praktično nikad ne odjavljuje;
 - „Zapamti me” je podrazumevano uključeno. Odjava sa svih uređaja je u profilu;
@@ -350,6 +411,7 @@ Prijava „jednom i zauvek”:
   preko Google naloga.
 
 Privlačenje novih članova:
+
 - stranica **„Za nove nastavnike i studente”**: prvi koraci u struci (propisi, ishodi, planiranje,
   pripravnički staž, ispit za licencu, seminari);
 - kampanja na fakultetima sporta i fizičkog vaspitanja u Beogradu, Novom Sadu i Nišu: plakat sa QR kodom,
@@ -357,20 +419,22 @@ Privlačenje novih članova:
 - poziv na registraciju na pravom mestu (posle korisnog sadržaja), bez iskačućih prozora.
 
 Baza kontakata i privatnost:
+
 - saglasnost po svrsi (obaveštenja, imenik, ankete), u skladu sa Zakonom o zaštiti podataka o ličnosti;
 - izvoz i brisanje sopstvenih podataka iz profila;
 - uredništvo vidi statistiku: broj članova po statusu, okrugu i izvoru registracije.
 
 Put ka komori (kasnije, posle dovoljnog broja članova):
+
 - članstvo i statut, saradnja sa SSPFVS i udruženjima, stav struke o propisima;
 - podaci o licenci i stažu se uvode tek kad za to postoji pravni osnov.
 
 - [x] Analiza: iza prijave su samo postavljanje pitanja, profil i administracija; automatska prijava posle potvrde
-  i refresh 365 dana sa rotacijom već postoje (sesija u `localStorage`, „zapamti me” je uvek uključeno)
+      i refresh 365 dana sa rotacijom već postoje (sesija u `localStorage`, „zapamti me” je uvek uključeno)
 - [x] Trajna prijava: `last_active_at` pri svakom osvežavanju, odjava sa svih uređaja u profilu
 - [x] Registracija u jednom koraku (ime, mejl, lozinka, status), škola i mesto kasnije u profilu
 - [x] Profil sa statusom i saglasnostima (imenik, ankete), izvoz i brisanje sopstvenih podataka
-- [x] Imenik struke `/imenik`: vide ga samo članovi koji su i sami u njemu, bez mejlova
+- [x] Imenik kolega `/imenik`: vide ga samo članovi koji su i sami u njemu, bez mejlova
 - [x] Stranica `/novi-nastavnici` (ZOSOV čl. 142, 144, 145, 147, 151) i poziv na registraciju posle sadržaja
 - [x] Izvor registracije (`?izvor=fsfv-bg|fsfv-ns|fsfv-nis`), linkovi za kampanju u administraciji
 - [x] Statistika članstva za uredništvo (Admin → Članstvo)
@@ -379,17 +443,20 @@ Put ka komori (kasnije, posle dovoljnog broja članova):
 - [ ] Ankete i inicijative struke (#44) za članove sa saglasnošću
 
 ### #50 Pitanja i odgovori + Debate, uz AI pomoć (faza-1b, centralno)
+
 Sekcija „Pitanja i odgovori” dobija dva taba: **Pitanja i odgovori** (postojeći Q&A) i **Stručne debate** (javne
 rasprave o temama struke). Uvod „Administracija i propisi u praksi” se uklanja, stranica počinje tabovima.
 U tabu pitanja je dugme „Postavi pitanje”, u tabu debata „Predloži temu za razgovor”; ispod su filteri, pa rezultati.
 
 Pitanja i odgovori:
+
 - pitanje se pri prijemu automatski dodeljuje uredniku ili autoru (onom sa najmanje otvorenih pitanja);
   admin ručno menja kome je dodeljeno; autor u adminu vidi i odgovara samo na pitanja dodeljena njemu;
 - „Predlog odgovora (AI)”: AI napiše nacrt odgovora uz propise sa portala; urednik ga čita, ispravlja i
   objavljuje. AI nikad ne objavljuje sam.
 
 Debate:
+
 - temu otvara urednik ili admin; svaki član može da predloži temu („Predloži temu za razgovor”), a urednik
   je odobri ili odbije; više tema može da teče paralelno;
 - **moderator teme** je urednik koga aplikacija dodeli automatski (onaj sa najmanje aktivnih tema); admin
@@ -406,6 +473,7 @@ Debate:
 Tehnički: `fk_debates`, `fk_debate_posts`, `fk_debate_post_likes`, `questions.assigned_to`; AI preko
 zvaničnog Anthropic PHP SDK-a (`anthropic-ai/sdk`, model `claude-opus-5-5`), ključ `ANTHROPIC_API_KEY`
 samo u `.env`; bez ključa AI dugmad javljaju da AI nije podešen, a sve ostalo radi.
+
 - [x] Tabovi `/pitanja` i `/debate`, `/debate/:slug`, uklonjen uvod
 - [x] Debate: teme, prilozi, lajkovi, pretraga, moderator (automatski + ručno od admina), predlog teme
 - [x] AI analiza debate sa odobravanjem i smernicama moderatora
@@ -418,7 +486,9 @@ samo u `.env`; bez ključa AI dugmad javljaju da AI nije podešen, a sve ostalo 
 - [ ] Mejl dodeljenom uredniku/autoru kad stigne pitanje i uredniku kad stigne predlog teme
 
 ### #51 Moderatori, zamrznute teme, ponovno otvaranje i notifikacije (faza-1b)
+
 Moderatori:
+
 - admin u adminu („Moderatori”) određuje ko je u rotaciji; automatska dodela bira člana rotacije sa najmanje
   aktivnih tema (ako je rotacija prazna, urednika, pa admina);
 - za svakog moderatora vidi se opterećenje (aktivne, na čekanju, zatvorene teme, prilozi, zahtevi) i ko je
@@ -431,29 +501,35 @@ kad moderator odobri, tema se otvara, prilog se objavljuje, a član dobija mejl 
 Notifikacije: zvonce u meniju sa tačkom kad ima nepročitanih, stranica `/notifikacije`. Sve što portal pošalje
 korisniku (mejlom, kasnije WhatsApp / Viber / SMS) upisuje se i tu, sa kanalom kojim je poslato. Izuzetak su
 mejlovi pre nego što nalog postoji (potvrda naloga, poziv za registraciju).
+
 - [x] Rotacija i evidencija moderatora, stranica „Moderatori”
 - [x] Zamrzavanje zatvorene teme, zahtev za ponovno otvaranje sa mejlovima
 - [x] `fk_user_notifications`, zvonce i `/notifikacije`, upis za sve postojeće mejlove
 
 ### #52 Instagram i Facebook portala (faza-1b)
+
 Nalozi portala na Instagramu (`fiskultura_rs`) i Facebooku: ikonice u footeru i na naslovnoj; admin/urednik iz
 admina objavljuje na obe mreže (tekst, slika, link na vest ili debatu), sa evidencijom objava.
 Za objavljivanje treba: Facebook stranica portala i Instagram nalog tipa Business/Creator povezan sa njom, Meta
 aplikacija sa dozvolama `pages_manage_posts`, `pages_read_engagement`, `instagram_basic`,
 `instagram_content_publish` (prolazi Meta proveru), trajni Page access token u `.env`. Instagram objava mora da ima
 sliku dostupnu na javnom URL-u.
+
 - [ ] Ikonice i linkovi (Instagram `fiskultura_rs`; tačan Facebook link čeka)
 - [ ] Meta aplikacija, token u `.env`, objava iz admina i evidencija objava
 
 ### #53 Pošta admin@fiskultura.rs u adminu (faza-1b)
+
 Admin u adminu („Pošta”) čita i piše mejlove naloga `admin@fiskultura.rs`: folderi, pretraga, čitanje (HTML u
 izolovanom okviru, slike tek na zahtev), prilozi, odgovor, odgovor svima, prosleđivanje, nov mejl; poslato ostaje u
 folderu „Sent” (vidi se i u Roundcube-u). IMAP 993 / SMTP 465, lozinka samo u `.env`.
+
 - [x] Čitanje, slanje i stranica „Pošta” (proverena sa probnim podacima)
 - [ ] Lozinka u `backend/.env` i `deploy/.env`, provera sa pravim sandučetom
 - [ ] Nacrti, brisanje u otpad i premeštanje u folder (ako zatreba)
 
 ### #54 Reakcije, zabrane pisanja i notifikacije u realnom vremenu (faza-1b)
+
 - [x] Reakcije na prilog: slažem se, ne slažem se, korisno, sviđa mi se (jedna po članu); autoru notifikacija na sajtu; AI analiza dobija raspodelu
 - [x] Moderator zabranjuje autoru pisanje (razlog, 1/7/30 dana ili trajno, tema ili sve teme), mejl i notifikacija, ukidanje
 - [x] Uvodni pregled: loader dok AI radi, napomene odvojene, izmena teksta nacrta i objavljenog
@@ -463,115 +539,337 @@ folderu „Sent” (vidi se i u Roundcube-u). IMAP 993 / SMTP 465, lozinka samo 
 ## Faza 2 — sportske igre i PDF uputstva
 
 ### #17 Model sadržaja za sport (faza-2)
+
 Sport → kartice pravila (naslov, sličica, kadrovi dobro/loše, objašnjenje) + kviz + „za čas" +
 zvanični izvori. Sadržaj u TS fajlovima kao u `kosarkaska-evidencija/features/rules`
 (`rules-content.ts`, `rule-picture`), kasnije u bazi ako urednik treba da ga menja.
 
 ### #18 Komponente pravila (faza-2)
+
 Prenos i uopštavanje `rules` iz `kosarkaska-evidencija`: igraonica, kviz sa zvezdicama, napredak,
 zvanična pravila; SVG sličice parametrizovane po terenu (košarka, odbojka, rukomet, fudbal).
 Rute `/sportovi`, `/sportovi/:sport`.
 
 ### #19 Košarka (faza-2, sadrzaj)
+
 Prenos sadržaja iz `kosarkaska-evidencija` prilagođen školskom času + „kako sa 30 dece".
 
 ### #20 Odbojka (faza-2, sadrzaj)
+
 Teren, rotacija, servis, tri dodira, dvostruki dodir, mreža, prijem, poeni; mini odbojka za školu.
 
 ### #21 Rukomet (faza-2, sadrzaj)
+
 Teren i prostor golmana, koraci (3), 3 sekunde, dupla lopta, faul, isključenje, sedmerac; mini rukomet.
 
 ### #22 Mali fudbal (faza-2, sadrzaj)
+
 Teren, aut i korner, kazneni prostor, faul i akumulirani faul, golman, izmene u letu.
 
 ### #23 Slikovito PDF uputstvo po sportu (faza-2)
+
 Print stranica `/sportovi/:sport/uputstvo` (A4, sličice + kratko pravilo + česte greške + „za čas"),
 dugme „Preuzmi PDF"; zatim pre-generisani PDF pri build-u (headless Chrome) za brže preuzimanje.
+
 - [ ] Čitljivo crno-belo, 2–6 strana
 
 ## Faza 3 — atletika, gimnastika, elementarne igre, plesovi, jadžent
 
 ### #24 Atletika (faza-3, sadrzaj)
+
 Discipline iz programa (trčanja, skokovi, bacanja, štafeta): faze tehnike sa sličicama, česte greške,
 metodski niz, merenje, ocenjivanje, pravila takmičenja (prestup, nulti skok, start). PDF uputstvo.
 
 ### #25 Gimnastika (faza-3, sadrzaj)
+
 Elementi po spravi (tlo, preskok, greda, vratilo, razboj, krugovi, karike) i razredu, metodski niz,
 čuvanje i pomaganje, mere sigurnosti. PDF uputstvo.
 
 ### #26 Elementarne igre (faza-3, sadrzaj)
+
 Kartica igre (uzrast, učesnici, prostor, oprema, pravila, varijante): „Između dve vatre", „Graničar",
 štafetne igre, igre hvatanja... Filter po uzrastu i delu časa. PDF zbirka.
 
 ### #27 Plesovi (faza-3, sadrzaj)
+
 Narodna kola i društveni plesovi iz programa: koraci po taktovima, muzika, video link, uzrast. PDF.
 
 ### #28 Jadžent (faza-3)
+
 Stranica sporta sa kratkim pravilima i linkom na https://jadzent.fiskultura.rs (i PDF pravila sa
 tog sajta, uz dozvolu).
 
 ## Faza 4 — stručna pomoć
 
 ### #29 Blog / stručni tekstovi (faza-4)
+
 Tabela tekstova sa autorom, temom, oznakama; autor piše, urednik odobrava; `/strucno`, `/strucno/:slug`,
 profil autora.
 
 ### #29a Pozivi i profil kolumniste (faza-4)
+
 Urednik šalje poziv (mejl, ime, predložena tema, rok) → tabela `fk_invitations` (token, hash u bazi,
 važi 14 dana) → pozvani pravi nalog sa ulogom `author` ili je dobija postojeći korisnik. Profil
 autora: zvanje, mesto, biografija, fotografija, linkovi; javno `/autori/:slug` sa svim tekstovima.
 Rubrike (serijali) sa ritmom i podsetnikom autoru mejlom pred rok.
 
 ### #29b Kolumne — tok uređivanja (faza-4)
+
 Tekst tipa `column` (pored `article`): nacrt → poslato → napomene urednika (interne) → odobreno →
 objavljeno / zakazano; rich text editor, naslovna slika, oznake, napomena o stavovima autora.
 `/kolumne` (lista po rubrici i autoru), `/kolumne/:slug`. Admin: red tekstova za pregled.
 
 ### #29c Reakcije (faza-4)
+
 `fk_reactions` (korisnik, sadržaj — polimorfno: vest, kolumna, polemika, komentar — vrsta),
 jedinstveno po korisniku i vrsti; `POST/DELETE /api/reactions`; brojači u listama bez N+1.
 
 ### #29d Komentari i moderacija (faza-4)
+
 `fk_comments` (sadržaj, korisnik, roditelj — jedan nivo, tekst, status: objavljen / na odobrenju /
 sakriven, izmenjen), prvi komentar novog korisnika na odobrenje, izmena 15 min, prijava komentara
 (`fk_comment_reports`), urednik sakriva / zaključava diskusiju, pravila diskusije prihvaćena uz
 datum. Ograničenje broja komentara po minutu. Mejl kad neko odgovori na moj komentar.
 
 ### #29e Polemike (faza-4)
+
 `fk_debates` (naslov, pitanje, uvod, rok, status otvorena / zatvorena, zaključak), stavovi (kolumne
 vezane za polemiku sa oznakom „za" / „protiv" / „drugi ugao"), glasanje čitalaca (jedan glas po
 korisniku, rezultat posle glasanja), komentari, replike čitalaca na odobrenje. `/polemike`,
 `/polemike/:slug`; zatvaranje na rok, zaključak urednika i PDF za udruženja.
 
 ### #29f Replike i povezani tekstovi (faza-4)
+
 Tekst može biti „odgovor na" drugi tekst; prikaz niza replika ispod originala i na stranici
 polemike.
 
 ### #30 Administracija nastavnika — vodiči (faza-4, sadrzaj)
+
 ES dnevnik, ocenjivanje (formativno / sumativno, opisno), oslobađanje od nastave, planiranje,
 izveštaji, sekcije; šabloni dokumenata za preuzimanje.
 
 ### #31 Pravna pitanja (faza-4)
+
 Pitanja i odgovori sa propisom i datumom važenja, pretraga, „postavi pitanje" (ide uredniku),
 napomena da nije pravni savet; biblioteka propisa sa linkovima na zvanične tekstove.
 
 ### #32 Predlozi za unapređenje nastave (faza-4)
+
 Nastavnik šalje predlog, urednik objavljuje, glasanje i komentari.
+
+### #55 Imenik ustanova (faza-1b)
+
+Imenik ima tabove Kolege · Osnovne škole · Srednje škole · Fakulteti · Institucije (Ministarstvo, zavodi, školske
+uprave). Tabela `institutions` (vrsta, naziv, mesto, opština, okrug, oblast Srbija / Republika Srpska, adresa,
+telefoni, mejl, sajt, direktor, PIB, matični broj, žiro računi, ostalo u `extra`), uvoz `php artisan
+institutions:import fajl.json|csv` i `database/data/institutions.json` kroz `ContentSeeder`. Spisak jedne vrste
+se učitava jednom (`InstitutionStore`), filteri okrug → opština (select-search) i pretraga rade na frontendu. Polje
+„Škola ili fakultet” na profilu, završetku registracije i u admin formi bira sa liste (`app-school-field`) i
+popunjava opštinu i okrug. Klik na ustanovu otvara modal sa svim podacima.
+
+- [x] fakulteti za sport i FV (Srbija, Kosovo i Metohija)
+- [ ] fakulteti u Republici Srpskoj
+- [x] fakulteti u Republici Srpskoj (Banja Luka, Istočno Sarajevo / Pale, Apeiron — akreditaciju Apeirona proveriti)
+- [x] osnovne i srednje škole u Srbiji sa Kosovom i Metohijom: `php artisan institutions:import-mpn` (opendata.mpn.gov.rs,
+  CC BY): naziv, mesto, opština, okrug, adresa sedišta, PIB, matični broj, broj i površina fiskulturnih sala; mesečno
+- [ ] osnovne i srednje škole u Republici Srpskoj (RPZ adresar xlsx + APIF bizreg za JIB, spajanje po nazivu i opštini)
+- [ ] telefoni i mejlovi škola u Srbiji (Digitalna publikacija MPN nema licencu — tražiti zvaničan izvoz od Ministarstva)
+
+### #56 Infrastruktura za FV u školama (faza-2)
+
+Prijavljene kolege popunjavaju formular o školi u kojoj rade: sala (dimenzije, stanje), spoljni teren, bazen,
+atletska staza, jama za skok, rekviziti. Podaci se prikazuju u modalu škole u Imeniku i služe za planiranje
+nastave i sadržaja portala (predlozi aktivnosti prema onome što škola ima). Urednik vidi pregled po okrugu.
+
+- [x] „Dopuni podatke” u modalu škole: prijavljen kolega šalje predlog (`facility_submissions`), jedan otvoren predlog
+  po kolegi i školi; urednik i admin dobijaju notifikaciju, proveravaju na `/admin/infrastruktura` (predlog uporedo sa
+  stanjem), odobravaju ili odbijaju sa razlogom; kolega dobija mejl i notifikaciju
+- [x] oznake po grupi podataka: „Zvanično” (MPN), „Provereno” (kolega + urednik ili urednik), „Na proveri” (otvoren predlog)
+- [ ] predlog vezan za školu sa profila kolege (brži ulaz „Moja škola”), istorija izmena po školi
+
+### #57 Izveštaji o infrastrukturi (faza-2)
+
+Infrastruktura škole je JSON (`institutions.facilities`), šifarnik u `config/facilities.php`, oznake za izveštaje
+(`FacilityCatalog::flags`: sala, sala za košarku, bez sale, teren, bazen, staza, jama, gimnastika). U Imeniku filter
+„Infrastruktura” i panel „Izveštaj o infrastrukturi” (brojevi za izabrani okrug/opštinu odmah na frontendu), PDF
+izveštaja i PDF škole (dompdf), AI izveštaj na klik (urednik) i mesečno (`facilities:report`).
+
+- [x] broj i površina sala iz otvorenih podataka MPN
+- [ ] tereni i balon iz Digitalne publikacije MPN (tek uz dozvolu Ministarstva), OSM tereni u dvorištu škole kao nagoveštaj
+- [ ] zahtev Republičkom zavodu za sport (nacionalni registar sportskih objekata) po Zakonu o slobodnom pristupu
+- [ ] formular za kolege (#56) sa proverom: izmenu iz škole vidi urednik pre objave
+
+### #58 Za razmišljanje: grupe po interesovanjima (faza-6, ideja)
+
+Odvojene grupe/kanali po temama (npr. odbojka, korektivna gimnastika, mlađi razredi, takmičenja, pripravnici), da
+kolege prate samo ono što ih zanima. Primer: NOP (ZUOV) koristi privatnu Viber zajednicu sa QR kodom. Opcije:
+Viber/WhatsApp zajednica (brzo, bez razvoja, ali sadržaj nije naš i ne pretražuje se), grupe u portalu (teme kao
+stručne debate + praćenje i obaveštenja, podaci i moderacija kod nas), posebna aplikacija (najskuplje). Predlog:
+počni sa Viber zajednicom za brza obaveštenja i linkove ka portalu, a rasprave drži u portalu (stručne debate sa
+kategorijama i praćenjem kategorije).
+
+### #60 Naše kolege u institucijama (faza-2)
+
+Umesto suvog spiska telefona: uz svaku instituciju (ZUOV, školske uprave, Ministarstvo, savez za školski sport,
+fakulteti) na vrhu kartice stoji **„Naš kolega ovde”**: nastavnik fizičkog vaspitanja koji tu radi, sa fotografijom,
+ulogom („savetnik u ZUOV, osnivač SSPFVS, urednik portala”), čime može da pomogne i dugmetom **„Piši kolegi”**.
+Zvanični telefoni i mejlovi ostaju ispod, sklopljeni („Zvanični kontakti”).
+
+- Veza korisnik ↔ institucija (`institution_contacts`: user_id, institucija, funkcija, kratak tekst „u čemu mogu da
+  pomognem”, teme, redosled, aktivno do).
+- Samo uz izričitu saglasnost kolege (uključuje u profilu, admin samo predlaže). Ime i uloga su javni, telefon i mejl
+  nikad automatski. Kontakt ide kroz portal (poruka kolegi sa mejlom i notifikacijom), pa lična adresa ostaje skrivena.
+- Oznake na profilu i u Imeniku: „u ZUOV”, „školska uprava Čačak”, „savez za školski sport”, „urednik portala”.
+- Prikaz: lice i ime kolege su prvo što se vidi na kartici institucije; traka „Naše kolege u institucijama” na vrhu
+  taba Institucije; u vodiču „Kome da se obratim” uz svaku službu „pitajte prvo kolegu”.
+- Admin: spisak kolega po institucijama, poziv kolegi da potvrdi ulogu (mejl), istek uloge (promena posla).
+- Prvi korak: admin upisuje 5–10 kolega koji su pristali (npr. Miroslav u ZUOV), pa pratimo koliko se javljaju.
+
+- [ ] saglasnost i podaci u profilu kolege, admin dodela
+- [ ] „Naš kolega ovde” na kartici institucije, zvanični kontakti sklopljeni
+- [ ] poruka kolegi kroz portal (notifikacija + mejl), bez otkrivanja adresa
+- [ ] traka „Naše kolege u institucijama” u Imeniku
+
+### #61 Kontakti i podaci iz koda u bazu, sa proverom (faza-2)
+
+Sada su kontakti institucija i deo sadržaja upisani u kod (`content/rules/contacts.ts`, `contact-guides.ts`,
+`school-sport.ts` i dr.). Svaka izmena traži programera, build i deploy, pa zastarela informacija stoji dok se ne
+objavi nova verzija. Cilj: ono što zastareva samo od sebe (telefoni, mejlovi, ljudi na funkcijama) uređuje urednik u
+adminu, a portal sam proverava podatke i predlaže izmene.
+
+**Šta ide u bazu, a šta ostaje u kodu**
+- U bazu: institucije i njihovi kontakti (ministarstva, zavodi, inspekcije), školske uprave, opštinske i gradske
+  prosvetne inspekcije, savezi i koordinatori školskog sporta, osobe na funkcijama, članovi uredništva.
+- Ostaje u kodu: duži tekstovi koji se pišu jednom i retko menjaju (vodič „Kome da se obratim”, objašnjenja zakona,
+  redosled takmičenja, pravila sportova). Kasnije, po potrebi, i oni u bazu sa uređivačem teksta.
+- Prvi korak: popis svih fajlova u `frontend/src/app/content/` i stranica sa ugrađenim podacima, uz predlog za svaki
+  (baza / ostaje / kasnije).
+
+**Model**
+- `contact_entries`: grupa (institucije, školske uprave, opštinska inspekcija, školski sport…), naziv, oblast/okrug,
+  opis „kada se obratiti”, adresa, sajt, link na izvor, ikonica i boja, redosled, aktivno, `checked_at`,
+  `source_url`, `page_hash` (za proveru izmena).
+- `contact_lines`: entry_id, oznaka, ime osobe, telefon, mejl, redosled.
+- Uvoz postojećih podataka iz `.ts` fajlova jednom komandom (idempotentno, kao `ContentImporter`), pa brisanje iz koda.
+- Javni API vraća celu listu jednom; frontend je čuva u store-u (`providedIn: 'root'`, signal), stranica se i dalje
+  prerenderuje.
+
+**Admin (`/admin/kontakti`)**
+- Lista sa filterima (grupa, okrug, „nije provereno više od godinu dana”, „ima prijavu greške”), forma za unos i
+  izmenu institucije i njenih kontakata (dodaj/ukloni red, redosled), brisanje uz potvrdu.
+
+**Provera podataka (od najjeftinijeg ka najskupljem)**
+1. **Prijavi grešku** na svakoj kartici: kolega piše šta nije tačno („broj se ne javlja”, „promenio se načelnik”).
+   Prijava stiže uredniku u notifikacije, a kartica u adminu dobija oznaku.
+2. **Mesečna automatska provera bez AI-ja**: da li link radi (`broken` / `unknown`, kao `organizations:check-links`) i
+   da li se stranica izvora promenila (hash teksta). Promenjene i neispravne idu na listu „za proveru”.
+3. **AI provera** (Claude sa pretragom interneta): dugme za admina (jedna institucija ili cela grupa) i zakazano jednom
+   godišnje, a ranije samo za stavke koje je korak 2 označio. AI pravi **predlog izmena** (staro → novo, sa linkom na
+   izvor i stepenom sigurnosti); admin ga pregleda i odobrava pojedinačno. AI nikad ne menja podatke sam.
+4. Kasnije: naše kolege u institucijama (#60) potvrđuju kontakte svoje institucije.
+
+**Trošak AI provere (procena)**: oko 10–30 centi po instituciji (Opus 5.5, pretraga i čitanje stranica), za ~60
+institucija oko 10–20 USD po proveri, plus naknada za pretrage. Iskustvo iz istraživanja (13.11.2026): dosta se
+nađe, ali deo nije moguće potvrditi (sajt ne radi ili blokira, imena savetnika nisu objavljena, izvori se ne slažu),
+pa je ljudska provera obavezna.
+
+- [ ] popis sadržaja u kodu i odluka šta ide u bazu
+- [ ] model, migracija, uvoz iz `.ts` fajlova, javni API i store na frontendu
+- [ ] admin CRUD `/admin/kontakti`
+- [ ] „Prijavi grešku” na kartici i oznaka u adminu
+- [ ] mesečna provera linkova i izmena stranica (bez AI-ja)
+- [ ] AI provera na dugme i jednom godišnje, predlog izmena na odobrenje
+
+### #59 Pištaljka — prijava zloupotreba (faza-6)
+
+Kolege prijavljuju zloupotrebe i nezakonite radnje kojima svedoče (npr. nameštanje takmičenja, fiktivni časovi i
+sekcije, novac za opremu koji ne stiže, pritisak na nastavnika, nebezbedna sala, lažni izveštaji) i prilažu dokumente.
+Portal prijave **ne objavljuje automatski**. Urednik ih prima, proverava i odlučuje: prosleđuje nadležnom organu,
+objavljuje pregled bez imena ili zatvara prijavu sa obrazloženjem.
+
+**Mesto u aplikaciji**
+- Tab „Pištaljka” na stranici Pitanja (`/pitanja/pistaljka`) i stalan link van menija: u footeru („Prijavi
+  zloupotrebu”), kartica na naslovnoj i link u pozivnici i nedeljnom mejlu.
+- Ruta je javna i prerenderovana (SEO: „prijava zloupotreba u školi, fizičko vaspitanje”). Sama prijava traži prijavu
+  na portal *ili* je anonimna (vidi ispod).
+
+**Pre slanja: kratko „šta treba da znate” jednostavnim rečima**
+- Šta se prijavljuje ovde, a šta ide direktno nadležnima. Link na karticu Institucije: školska uprava, prosvetna
+  inspekcija, inspekcija rada, policija za krivična dela, a hitni slučajevi (nasilje, opasnost po decu) idu odmah
+  nadležnima, ne čekaju portal.
+- Zaštita uzbunjivača (Zakon o zaštiti uzbunjivača) postoji za **unutrašnje** (kod poslodavca), **spoljašnje**
+  (ovlašćeni organ) i **javno** uzbunjivanje. Pisanje portalu se smatra javnim uzbunjivanjem, a zaštita tada važi samo
+  pod uslovima iz zakona. Zato portal savetuje da se prvo ili paralelno obrati nadležnom organu i nudi da prijavu
+  prosledi sam. Tačne članove i uslove proveriti sa pravnikom pre objave stranice.
+- Pišite činjenice (šta, gde, kada, ko je svedok, koji dokument to pokazuje), ne procene i uvrede. Neistinita prijava
+  data svesno nije zaštićena.
+
+**Formular**
+- Škola ili ustanova (sa spiska, nije obavezno), opština, vrsta zloupotrebe (lista), period, opis, kome je već
+  prijavljeno i šta je odgovoreno, prilozi: PDF, JPG/PNG, DOCX, do 5 fajlova po 10 MB.
+- Izbor „Anonimno” ili „Uredništvo sme da me kontaktira” (kontakt vidi samo urednik, nikad javnost).
+- Anonimna prijava dobija **šifru prijave** (nasumičan token, u bazi samo hash, kao `UserTokenService`). Sa njom
+  prijavilac kasnije vidi status i odgovara na pitanja urednika, bez naloga.
+- Jasna poruka posle slanja: šta se dalje dešava i za koliko dana stiže odgovor.
+
+**Bezbednost i privatnost (najvažniji deo)**
+- Prilozi su van `public` diska, šifrovani na disku (Laravel `encrypt` / poseban disk), preuzimaju se samo preko
+  kontrolera uz proveru uloge. Svako otvaranje se loguje (ko je otvorio, kada).
+- Pri prijemu se brišu metapodaci (EXIF sa fotografija i GPS, autor u PDF/DOCX), a prilozi se proveravaju po tipu i
+  veličini (provera tipa fajla, ne samo ekstenzije).
+- Za anonimne prijave se ne čuvaju IP, user agent ni `user_id`. Ni u logovima: middleware gasi logovanje za ove rute.
+  Throttle samo u memoriji, bez trajnog zapisa.
+- Pristup ima samo admin i posebna uloga ili zastavica „poverenik za prijave” (ne svi urednici). Liste i detalji su van
+  običnog admin pregleda.
+- Rok čuvanja: zatvorene prijave i prilozi se brišu posle N meseci (zakazana komanda), osim ako su prosleđene organu.
+- Mejl uredništvu sadrži samo „stigla je nova prijava” i link, nikad sadržaj ni priloge.
+- AI ne obrađuje prijave osim ako to poverenik izričito ne pokrene. Ako pokrene, AI pravi samo nacrt sažetka bez
+  ličnih podataka.
+
+**Rad uredništva (`/admin/pistaljka`)**
+- Statusi: primljeno → u proveri → prosleđeno (kome, kada, broj predmeta) → zatvoreno (osnovano / neosnovano / nije
+  naša nadležnost).
+- Poruke sa prijaviocem unutar prijave: notifikacija i mejl ako je ostavio kontakt, odnosno šifra prijave ako je
+  anonimna.
+- Prosleđivanje nadležnom organu: dopis iz šablona sa prilozima. Poverenik ga pregleda i šalje sa
+  `obavestenja@fiskultura.rs` ili ga preuzima kao PDF.
+- Objava: samo kao poseban tekst urednika (vest ili pregled), bez imena osoba i škole dok organ ne utvrdi činjenice.
+  Pre objave obavezna provera rizika od klevete.
+
+**Javni deo**
+- Statistika bez detalja: broj prijava po vrsti i ishodu, prosleđeno organima, broj osnovanih.
+- Saveti i vodiči: kako se prijavljuje svakom organu, uzorak dopisa, rokovi.
+
+**Pre izrade**
+- Pravnik: uslovi zaštite pri javnom uzbunjivanju, obaveze portala kao primaoca, rok čuvanja, izjava o privatnosti.
+- Odluka ko je „poverenik za prijave” i koliko brzo odgovara (npr. potvrda u roku od 3 radna dana).
+- Proveriti limit veličine fajlova na hostingu i prostor na disku.
+
+- [ ] pravna provera i tekst „šta treba da znate”
+- [ ] model `whistle_reports` + `whistle_attachments` + `whistle_messages`, šifra prijave (hash), šifrovan disk
+- [ ] formular sa prilozima (brisanje metapodataka, provera tipa), anonimno ili sa kontaktom
+- [ ] admin lista i detalj za poverenika, statusi, poruke, log pristupa
+- [ ] prosleđivanje organu (šablon dopisa), zakazano brisanje starih prijava
+- [ ] tab na Pitanjima, link u footeru i na naslovnoj, javna statistika
 
 ## Faza 5 — takmičenja i obaveštavanje
 
 ### #33 Kalendar školskih takmičenja (faza-5)
+
 Sport, nivo, mesto, datum, propozicije, rezultati; izvor savez za školski sport.
 
 ### #34 Za razmišljanje: WhatsApp / Viber kanal (faza-5, ideja)
+
 Proceniti WhatsApp Channel / Viber zajednicu (ručno objavljivanje) naspram WhatsApp Business API-ja
 (plaćeno po poruci, odobreni šabloni). Ne raditi pre nego što mejl obaveštenja zažive.
 
 ### #34a Za razmišljanje: AI pomoć (faza-5, ideja)
+
 Asistent nad sadržajem portala (vodiči, pravna pitanja, propisi, vesti) sa citiranjem izvora; pomoć
 uredniku pri sažimanju objava. Proceniti trošak, odgovornost i privatnost pre bilo kakve izrade.
 
 ### #35 Nalozi za udruženja (faza-5)
+
 Udruženje dobija urednika ograničenog na svoje objave; pouzdana udruženja objavljuju bez odobrenja.
 Prvo SSPFVS, pa članice.
 

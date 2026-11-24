@@ -1,0 +1,91 @@
+@use 'sass:map';
+@use 'sizes';
+
+.app-icon-button {
+  --icon-btn-bg: transparent;
+  --icon-btn-fg: var(--color-muted);
+  --icon-btn-border: transparent;
+  --icon-btn-hover-bg: var(--color-tertiary);
+  --icon-btn-hover-fg: var(--color-text);
+  --icon-btn-active-bg: var(--color-border);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: map.get(map.get(sizes.$controls, md), height);
+  height: map.get(map.get(sizes.$controls, md), height);
+  padding: 0;
+  border: 1px solid var(--icon-btn-border);
+  border-radius: sizes.$radius;
+  background: var(--icon-btn-bg);
+  color: var(--icon-btn-fg);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease,
+    transform 80ms ease;
+}
+
+.app-icon-button:hover {
+  background: var(--icon-btn-hover-bg);
+  color: var(--icon-btn-hover-fg);
+}
+
+.app-icon-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.app-icon-button:active {
+  background: var(--icon-btn-active-bg);
+  transform: scale(0.94);
+}
+
+.app-icon-button:disabled,
+.app-icon-button[aria-disabled='true'] {
+  background: transparent;
+  color: var(--color-muted);
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+.icon-btn-neutral {
+  --icon-btn-bg: var(--color-surface-alt);
+  --icon-btn-fg: var(--color-text);
+  --icon-btn-hover-bg: var(--color-border);
+  --icon-btn-active-bg: color-mix(in srgb, var(--color-border) 70%, var(--color-text));
+}
+
+.icon-btn-primary {
+  --icon-btn-bg: var(--color-primary);
+  --icon-btn-fg: var(--color-on-primary);
+  --icon-btn-hover-bg: var(--color-primary-hover);
+  --icon-btn-hover-fg: var(--color-on-primary);
+  --icon-btn-active-bg: color-mix(in srgb, var(--color-primary-hover) 80%, #000);
+}
+
+.icon-btn-accent {
+  --icon-btn-fg: var(--accent, var(--color-primary));
+  --icon-btn-border: color-mix(in srgb, var(--accent, var(--color-primary)) 30%, var(--color-border));
+  --icon-btn-hover-bg: color-mix(in srgb, var(--accent, var(--color-primary)) 12%, var(--color-surface));
+  --icon-btn-hover-fg: var(--accent, var(--color-primary));
+  --icon-btn-active-bg: color-mix(in srgb, var(--accent, var(--color-primary)) 22%, var(--color-surface));
+}
+
+.icon-btn-danger {
+  --icon-btn-fg: var(--color-rose);
+  --icon-btn-hover-bg: color-mix(in srgb, var(--color-rose) 12%, var(--color-surface));
+  --icon-btn-hover-fg: var(--color-rose);
+  --icon-btn-active-bg: color-mix(in srgb, var(--color-rose) 22%, var(--color-surface));
+}
+
+@each $name, $size in sizes.$controls {
+  .app-icon-button.icon-btn-size-#{$name} {
+    width: max(map.get($size, height), 32px);
+    height: max(map.get($size, height), 32px);
+  }
+}

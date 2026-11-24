@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, linkedSignal, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
+import { ICON_BUTTON_IMPORTS } from '../../../theme/ui/icon-button';
 import { formatDate } from '../../core/content/content.model';
 import { API_URL } from '../../core/http/api';
 import { CHANNEL_LABELS, InboxItem, InboxService } from '../../core/inbox/inbox.service';
-import { Icon } from '../../shared/icon/icon';
+import { MailBadge } from '../../shared/mail-badge/mail-badge';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Pagination } from '../../shared/pagination/pagination';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
@@ -19,16 +20,22 @@ interface InboxPage {
 
 @Component({
   selector: 'app-notifications-page',
-  imports: [MatProgressBarModule, BUTTON_IMPORTS, Icon, ListHeader, Pagination, ScrollArea],
+  imports: [MatProgressBarModule, BUTTON_IMPORTS, ICON_BUTTON_IMPORTS, ListHeader, Pagination, ScrollArea, MailBadge],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section qa-section">
       <div class="container inbox-page">
-        <h1 class="mb-2">Notifikacije</h1>
-        <p class="muted small mb-3">
-          Sve što vam portal pošalje: odgovori na pitanja, prilozi u temama koje moderirate, pozivi u debate, vesti. Uz svaku piše kojim
-          kanalom je poslata (sada mejl, kasnije i WhatsApp, Viber ili SMS).
-        </p>
+        <div class="inbox-title mb-2">
+          <h1>Notifikacije</h1>
+          <button type="button" app-icon-button icon="help" theme="ghost" label="Šta su notifikacije" [attr.aria-expanded]="info()" (click)="info.set(!info())"></button>
+        </div>
+        @if (info()) {
+          <p class="info-box small mb-3">
+            Sve što vam portal pošalje: odgovori na pitanja, prilozi u temama koje moderirate, pozivi u debate, vesti. Uz svaku piše kojim
+            kanalom je poslata (sada mejl, kasnije i WhatsApp, Viber ili SMS). Dodirom otvarate ono na šta se notifikacija odnosi.
+          </p>
+        }
+        <app-mail-badge class="mail-badge-row" [wide]="true" />
         <div class="chip-row mb-2" role="group" aria-label="Prikaz">
           <button type="button" [matButton]="!onlyUnread() ? 'filled' : 'outlined'" [theme]="!onlyUnread() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="!onlyUnread()" (click)="show(false)">Sve</button>
           <button type="button" [matButton]="onlyUnread() ? 'filled' : 'outlined'" [theme]="onlyUnread() ? 'primary' : 'tertiary'" size="sm" [attr.aria-pressed]="onlyUnread()" (click)="show(true)">
@@ -46,8 +53,8 @@ interface InboxPage {
         <app-scroll-area label="Notifikacije" [fill]="true" [resetOn]="[page(), onlyUnread()]">
           <ul class="inbox-list">
             @for (item of items(); track item.id) {
-              <li>
-                <button type="button" class="inbox-item" [class.inbox-item-unread]="!item.read" (click)="open(item)">
+              <li class="inbox-item" [class.inbox-item-unread]="!item.read">
+                <button type="button" class="inbox-open" (click)="open(item)">
                   <span class="inbox-item-head">
                     @if (!item.read) {
                       <span class="inbox-dot" aria-label="Nepročitano"></span>
@@ -57,13 +64,16 @@ interface InboxPage {
                   @if (item.body) {
                     <span class="inbox-body small">{{ item.body }}</span>
                   }
-                  <span class="small muted">
-                    {{ item.created_at ? date(item.created_at) : '' }}
-                    @for (channel of item.channels; track channel) {
-                      · <app-icon [name]="channel === 'site' ? 'bell' : 'mail'" [size]="14" /> {{ channelLabels[channel] ?? channel }}
-                    }
-                  </span>
                 </button>
+                <div class="inbox-meta">
+                  <span class="small muted">{{ item.created_at ? date(item.created_at) : '' }}</span>
+                  @for (channel of item.channels; track channel) {
+                    <span class="reg-label" [title]="'Poslato: ' + (channelLabels[channel] ?? channel)">{{ channel === 'site' ? 'na sajtu' : 'poslato ' + (channelLabels[channel] ?? channel) + 'om' }}</span>
+                  }
+                </div>
+                @if (!item.read) {
+                  <button type="button" app-icon-button icon="check" theme="accent" size="sm" class="inbox-read" label="Označi kao pročitano" (click)="markRead(item)"></button>
+                }
               </li>
             } @empty {
               @if (!resource.isLoading()) {
@@ -91,23 +101,62 @@ interface InboxPage {
       padding: 0;
       list-style: none;
     }
+    .inbox-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .inbox-title h1 {
+      margin: 0;
+    }
+    .info-box {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: var(--color-surface-alt);
+    }
     .inbox-item {
+      position: relative;
       display: grid;
-      gap: 4px;
-      width: 100%;
-      min-height: 44px;
-      padding: 12px 16px;
+      grid-template-columns: 1fr auto;
+      gap: 6px 8px;
+      padding: 12px 12px 12px 16px;
       border: 1px solid var(--color-border);
       border-radius: var(--radius);
       background: var(--color-surface);
-      color: var(--color-text);
-      font: inherit;
-      text-align: left;
-      cursor: pointer;
       overflow-wrap: anywhere;
     }
     .inbox-item:hover {
       border-color: var(--color-primary);
+    }
+    .inbox-open {
+      grid-column: 1;
+      display: grid;
+      gap: 4px;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--color-text);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .inbox-open:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+    .inbox-meta {
+      grid-column: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+    .inbox-read {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
     }
     .inbox-item-unread {
       border-left: 4px solid var(--color-primary);
@@ -136,6 +185,7 @@ export class NotificationsPage {
   protected readonly inbox = inject(InboxService);
   readonly #router = inject(Router);
   protected readonly channelLabels = CHANNEL_LABELS;
+  protected readonly info = signal(false);
 
   protected readonly page = computed(() => Math.max(1, Number(this.strana()) || 1));
   protected readonly onlyUnread = computed(() => this.samo() === 'neprocitane');
@@ -167,6 +217,11 @@ export class NotificationsPage {
   protected readAll(): void {
     this.inbox.markRead('all');
     this.resource.reload();
+  }
+
+  protected markRead(item: InboxItem): void {
+    this.inbox.markRead([item.id]);
+    this.#last.update((page) => (page ? { ...page, data: page.data.map((entry) => (entry.id === item.id ? { ...entry, read: true } : entry)) } : page));
   }
 
   protected open(item: InboxItem): void {

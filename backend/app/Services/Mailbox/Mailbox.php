@@ -10,6 +10,8 @@ interface Mailbox
 
     public function folders(): array;
 
+    public function unseen(): array;
+
     public function messages(string $folder, int $page, int $perPage, ?string $search = null): array;
 
     public function message(string $folder, int $uid): array;

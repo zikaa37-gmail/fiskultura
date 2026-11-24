@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,20 +17,40 @@ import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
-import { MEMBER_STATUS_LABELS, MEMBER_STATUSES, MemberStatus, ROLE_LABELS, User } from '../../core/auth/user.model';
+import {
+  MEMBER_STATUS_LABELS,
+  MEMBER_STATUSES,
+  MemberStatus,
+  ROLE_LABELS,
+  User,
+  UserSchool,
+} from '../../core/auth/user.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { THEME_OPTIONS, ThemeService } from '../../core/theme.service';
 import { DISTRICTS } from '../../content/districts';
 import { ConfirmService } from '../../shared/confirm-dialog/confirm-dialog';
 import { Icon } from '../../shared/icon/icon';
+import { cleanSchools, SchoolsField } from '../../shared/school-field/schools-field';
+import { Institution, matchDistrict } from '../community/institution.model';
 import { NotificationsDialogService } from '../notifications/notifications-dialog';
 import { Subscription } from '../notifications/subscription.model';
 import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, Icon],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    BUTTON_IMPORTS,
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    FORM_FIELD_IMPORTS,
+    MatInputModule,
+    MatSelectModule,
+    Icon,
+    SchoolsField,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -35,7 +62,9 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
               <h1>{{ user.name }}</h1>
               <p class="muted">{{ user.email }}</p>
             </div>
-            <button type="button" mat-stroked-button (click)="auth.logout()"><app-icon name="logout" [size]="18" /> Odjavi se</button>
+            <button type="button" mat-stroked-button (click)="auth.logout()">
+              <app-icon name="logout" [size]="18" /> Odjavi se
+            </button>
           </div>
 
           <section class="mb-5" aria-labelledby="profile-community">
@@ -43,10 +72,18 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
             <div class="rule-topic-grid">
               <a class="rule-topic-card accent-lime" routerLink="/imenik">
                 <span class="tint-icon"><app-icon name="people" [size]="18" /></span>
-                <strong>Imenik struke</strong>
-                <span class="small">{{ user.directory_consent ? 'Ti si u imeniku. Pronađi kolege iz okruga i škole.' : 'Pronađi kolege iz okruga, sa fakulteta i iz škole.' }}</span>
+                <strong>Imenik</strong>
+                <span class="small">{{
+                  user.directory_consent
+                    ? 'Ti si u imeniku. Pronađi kolege iz okruga i škole.'
+                    : 'Pronađi kolege iz okruga, sa fakulteta i iz škole.'
+                }}</span>
               </a>
-              <button type="button" class="rule-topic-card accent-orange" (click)="openNotifications()">
+              <button
+                type="button"
+                class="rule-topic-card accent-orange"
+                (click)="openNotifications()"
+              >
                 <span class="tint-icon"><app-icon name="mail" [size]="18" /></span>
                 <strong>Moja obaveštenja</strong>
                 <span class="small">{{ subscriptionText() }}</span>
@@ -89,11 +126,8 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                     }
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>Škola ili fakultet</mat-label>
-                  <input matInput formControlName="school" />
-                </mat-form-field>
               </div>
+              <app-schools-field class="mb-4" [value]="schools()" (valueChange)="schools.set($event); profileForm.markAsDirty()" (picked)="pickSchool($event)" />
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Opština / grad</mat-label>
@@ -111,14 +145,22 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
               </div>
 
               <h3 class="mb-1">Saglasnosti</h3>
-              <p class="small muted mb-2">Svaku možeš da isključiš kad hoćeš. Bez saglasnosti tvoji podaci ostaju samo uredništvu.</p>
+              <p class="small muted mb-2">
+                Svaku možeš da isključiš kad hoćeš. Bez saglasnosti tvoji podaci ostaju samo
+                uredništvu.
+              </p>
               <mat-checkbox formControlName="directory_consent">
                 Prikaži me u imeniku struke
-                <span class="small muted consent-note">Ime, status, škola, opština i okrug, vidljivo samo članovima koji su i sami u imeniku. Mejl se ne prikazuje.</span>
+                <span class="small muted consent-note"
+                  >Ime, status, škola, opština i okrug, vidljivo samo članovima koji su i sami u
+                  imeniku. Mejl se ne prikazuje.</span
+                >
               </mat-checkbox>
               <mat-checkbox formControlName="surveys_consent">
                 Pozivaj me na ankete i inicijative struke
-                <span class="small muted consent-note">Povremeni mejl kad struka treba da kaže svoje mišljenje.</span>
+                <span class="small muted consent-note"
+                  >Povremeni mejl kad struka treba da kaže svoje mišljenje.</span
+                >
               </mat-checkbox>
               <button type="submit" mat-flat-button [disabled]="busy()">Sačuvaj podatke</button>
             </form>
@@ -126,8 +168,17 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
             <div class="profile-side">
               <div class="auth-card">
                 <h2>Izgled</h2>
-                <p class="small muted mb-2">Tema važi na ovom uređaju. „Kao uređaj” prati svetli ili tamni režim telefona i računara.</p>
-                <mat-button-toggle-group class="theme-toggle" hideSingleSelectionIndicator [value]="theme.choice()" (change)="theme.set($event.value)" aria-label="Tema">
+                <p class="small muted mb-2">
+                  Tema važi na ovom uređaju. „Kao uređaj” prati svetli ili tamni režim telefona i
+                  računara.
+                </p>
+                <mat-button-toggle-group
+                  class="theme-toggle"
+                  hideSingleSelectionIndicator
+                  [value]="theme.choice()"
+                  (change)="theme.set($event.value)"
+                  aria-label="Tema"
+                >
                   @for (option of themeOptions; track option.value) {
                     <mat-button-toggle [value]="option.value">{{ option.label }}</mat-button-toggle>
                   }
@@ -138,32 +189,71 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 <h2>Promena lozinke</h2>
                 <mat-form-field appearance="outline">
                   <mat-label>Trenutna lozinka</mat-label>
-                  <input matInput type="password" formControlName="current" autocomplete="current-password" />
+                  <input
+                    matInput
+                    type="password"
+                    formControlName="current"
+                    autocomplete="current-password"
+                  />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Nova lozinka</mat-label>
-                  <input matInput type="password" formControlName="password" autocomplete="new-password" />
+                  <input
+                    matInput
+                    type="password"
+                    formControlName="password"
+                    autocomplete="new-password"
+                  />
                   <mat-hint>Najmanje 8 znakova</mat-hint>
                 </mat-form-field>
-                <button type="submit" mat-stroked-button [disabled]="busy()">Promeni lozinku</button>
+                <button type="submit" mat-stroked-button [disabled]="busy()">
+                  Promeni lozinku
+                </button>
               </form>
 
               <div class="auth-card">
                 <h2>Nalog i podaci</h2>
-                <p class="small muted">Ako si se prijavio na tuđem računaru, odjavi se sa svih uređaja.</p>
+                <p class="small muted">
+                  Ako si se prijavio na tuđem računaru, odjavi se sa svih uređaja.
+                </p>
                 <div class="profile-links">
-                  <button type="button" mat-stroked-button [disabled]="busy()" (click)="logoutAll()">Odjavi se sa svih uređaja</button>
-                  <button type="button" mat-button theme="tertiary" [disabled]="busy()" (click)="exportData()">Preuzmi moje podatke</button>
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    [disabled]="busy()"
+                    (click)="logoutAll()"
+                  >
+                    Odjavi se sa svih uređaja
+                  </button>
+                  <button
+                    type="button"
+                    mat-button
+                    theme="tertiary"
+                    [disabled]="busy()"
+                    (click)="exportData()"
+                  >
+                    Preuzmi moje podatke
+                  </button>
                 </div>
                 <details class="profile-delete">
                   <summary>Obriši nalog</summary>
                   <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()">
-                    <p class="small">Brišu se nalog, profil i prijava na obaveštenja. Objavljena pitanja ostaju, bez veze sa tobom.</p>
+                    <p class="small">
+                      Brišu se nalog, profil i prijava na obaveštenja. Objavljena pitanja ostaju,
+                      bez veze sa tobom.
+                    </p>
                     <mat-form-field appearance="outline">
                       <mat-label>Lozinka</mat-label>
-                      <input matInput type="password" formControlName="password" autocomplete="current-password" />
+                      <input
+                        matInput
+                        type="password"
+                        formControlName="password"
+                        autocomplete="current-password"
+                      />
                     </mat-form-field>
-                    <button type="submit" mat-flat-button theme="danger" [disabled]="busy()">Obriši nalog</button>
+                    <button type="submit" mat-flat-button theme="danger" [disabled]="busy()">
+                      Obriši nalog
+                    </button>
                   </form>
                 </details>
               </div>
@@ -188,10 +278,24 @@ export class Profile {
   protected readonly themeOptions = THEME_OPTIONS;
   protected readonly statuses = MEMBER_STATUSES;
   protected readonly statusLabels = MEMBER_STATUS_LABELS;
+  protected pickSchool(school: Institution): void {
+    const controls = this.profileForm.controls;
+    if (!controls.municipality.value && (school.municipality || school.place)) {
+      controls.municipality.setValue(school.municipality ?? school.place ?? '');
+    }
+    const district = matchDistrict(school.district, DISTRICTS);
+    if (!controls.district.value && district) {
+      controls.district.setValue(district);
+    }
+  }
+
   protected readonly districts = DISTRICTS;
   protected readonly busy = signal(false);
+  protected readonly schools = signal<UserSchool[]>([]);
 
-  readonly #subscription = httpResource<Subscription>(() => (this.#browser && this.auth.isAuthenticated() ? `${API_URL}/me/subscription` : undefined));
+  readonly #subscription = httpResource<Subscription>(() =>
+    this.#browser && this.auth.isAuthenticated() ? `${API_URL}/me/subscription` : undefined,
+  );
   protected readonly subscriptionText = computed(() => {
     const subscription = this.#subscription.hasValue() ? this.#subscription.value() : null;
     if (!subscription) {
@@ -200,14 +304,18 @@ export class Profile {
     if (!subscription.active) {
       return 'Isključena. Uključi da ti vesti stižu mejlom.';
     }
-    const scope = subscription.categories.length || subscription.organization_ids.length ? 'izabrane vesti' : 'sve vesti';
-    return subscription.frequency === 'instant' ? `Stižu odmah: ${scope}.` : `Nedeljni pregled: ${scope}.`;
+    const scope =
+      subscription.categories.length || subscription.organization_ids.length
+        ? 'izabrane vesti'
+        : 'sve vesti';
+    return subscription.frequency === 'instant'
+      ? `Stižu odmah: ${scope}.`
+      : `Nedeljni pregled: ${scope}.`;
   });
 
   protected readonly profileForm = this.#formBuilder.group({
     name: ['', Validators.required],
     member_status: ['' as MemberStatus | ''],
-    school: [''],
     municipality: [''],
     district: [''],
     directory_consent: [false],
@@ -229,12 +337,17 @@ export class Profile {
       this.#fill(user);
     }
     if (this.#browser && user) {
-      this.auth.reloadUser().subscribe({ next: (fresh) => this.#fill(fresh), error: () => undefined });
+      this.auth
+        .reloadUser()
+        .subscribe({ next: (fresh) => this.#fill(fresh), error: () => undefined });
     }
   }
 
   protected openNotifications(): void {
-    this.#notificationsDialog.open().afterClosed().subscribe(() => this.#subscription.reload());
+    this.#notificationsDialog
+      .open()
+      .afterClosed()
+      .subscribe(() => this.#subscription.reload());
   }
 
   protected askQuestion(): void {
@@ -252,7 +365,7 @@ export class Profile {
       .updateProfile({
         name: value.name,
         member_status: value.member_status || null,
-        school: value.school || null,
+        schools: cleanSchools(this.schools()),
         municipality: value.municipality || null,
         district: value.district || null,
         directory_consent: value.directory_consent,
@@ -304,7 +417,9 @@ export class Profile {
     this.busy.set(true);
     this.auth.exportData().subscribe({
       next: (data) => {
-        const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+        const url = URL.createObjectURL(
+          new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }),
+        );
         const link = document.createElement('a');
         link.href = url;
         link.download = 'fiskultura-moji-podaci.json';
@@ -325,7 +440,11 @@ export class Profile {
       return;
     }
     this.#confirm
-      .confirm({ title: 'Brisanje naloga', message: 'Nalog i podaci se brišu trajno i ne mogu da se vrate.', confirmLabel: 'Obriši nalog' })
+      .confirm({
+        title: 'Brisanje naloga',
+        message: 'Nalog i podaci se brišu trajno i ne mogu da se vrate.',
+        confirmLabel: 'Obriši nalog',
+      })
       .subscribe((confirmed) => {
         if (!confirmed) {
           return;
@@ -342,10 +461,10 @@ export class Profile {
   }
 
   #fill(user: User): void {
+    this.schools.set(user.schools ?? []);
     this.profileForm.setValue({
       name: user.name,
       member_status: user.member_status ?? '',
-      school: user.school ?? '',
       municipality: user.municipality ?? '',
       district: user.district ?? '',
       directory_consent: !!user.directory_consent,

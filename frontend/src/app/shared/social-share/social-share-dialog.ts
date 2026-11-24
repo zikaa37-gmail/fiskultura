@@ -11,6 +11,7 @@ import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { AuthService } from '../../core/auth/auth.service';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
+import { busyContext } from '../../core/http/busy';
 import { DialogShell } from '../dialog-shell/dialog-shell';
 import { fileToJpeg, renderSocialCard, SocialKind } from './social-card';
 import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './social.model';
@@ -31,14 +32,7 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
           <p class="muted">Administrator ih povezuje na stranici Društvene mreže.</p>
         }
       } @else {
-        @if (busy()) {
-          <div class="share-busy" role="status" aria-live="polite">
-            <mat-progress-bar mode="indeterminate" />
-            <strong>{{ scheduled() ? 'Zakazujem objavu…' : 'Objavljujem na mreže…' }}</strong>
-            <span class="small muted">Instagram prvo obradi sliku, ovo traje do pola minuta. Ne zatvarajte prozor.</span>
-          </div>
-        }
-        <div class="share-layout" [class.share-dimmed]="busy()" [attr.inert]="busy() ? '' : null">
+        <div class="share-layout">
           <div class="share-preview">
             @if (image(); as src) {
               <img [src]="src" alt="Slika za objavu" [class.story]="kind() === 'story'" />
@@ -108,18 +102,6 @@ import { SocialNetwork, SocialPost, SocialShareData, SocialState } from './socia
     .share-layout {
       display: grid;
       gap: 16px;
-    }
-    .share-busy {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 16px;
-      padding: 16px;
-      border-radius: 12px;
-      background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
-    }
-    .share-dimmed {
-      opacity: 0.5;
-      pointer-events: none;
     }
     .share-preview {
       display: grid;
@@ -241,7 +223,7 @@ export class SocialShareDialog {
         scheduled_at: this.scheduled() && this.when() ? new Date(this.when()).toISOString() : null,
         source_type: this.data.sourceType ?? null,
         source_id: this.data.sourceId ?? null,
-      })
+      }, { context: busyContext(this.scheduled() ? 'Zakazujem objavu…' : 'Objavljujem na Instagram i Facebook. Instagram prvo obradi sliku, to traje do pola minuta.') })
       .subscribe({
         next: (post) => this.#ref.close(post),
         error: (error) => {

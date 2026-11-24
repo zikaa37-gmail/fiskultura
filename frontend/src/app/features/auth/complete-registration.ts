@@ -10,6 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MEMBER_STATUS_LABELS, MemberStatus } from '../../core/auth/user.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { DISTRICTS } from '../../content/districts';
+import { cleanSchools, SchoolsField } from '../../shared/school-field/schools-field';
+import { UserSchool } from '../../core/auth/user.model';
+import { Institution, matchDistrict } from '../community/institution.model';
 import { formatPhone, isValidPhone } from '../../core/phone';
 import { PhoneField } from '../../shared/phone-field/phone-field';
 
@@ -19,13 +22,14 @@ interface Invitation {
   phone: string | null;
   member_status: MemberStatus | null;
   school: string | null;
+  schools: UserSchool[];
   municipality: string | null;
   district: string | null;
 }
 
 @Component({
   selector: 'app-complete-registration',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, PhoneField],
+  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, PhoneField, SchoolsField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -50,10 +54,7 @@ interface Invitation {
                 }
               </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Škola</mat-label>
-              <input matInput name="school" maxlength="190" [ngModel]="school()" (ngModelChange)="school.set($event)" />
-            </mat-form-field>
+            <app-schools-field class="mb-4" [(value)]="schools" (picked)="pickSchool($event)" />
             <mat-form-field appearance="outline">
               <mat-label>Opština</mat-label>
               <input matInput name="municipality" maxlength="120" [ngModel]="municipality()" (ngModelChange)="municipality.set($event)" />
@@ -97,6 +98,16 @@ export class CompleteRegistration {
   protected readonly statusLabels = MEMBER_STATUS_LABELS;
   protected readonly districts = DISTRICTS;
 
+  protected pickSchool(school: Institution): void {
+    if (!this.municipality() && (school.municipality || school.place)) {
+      this.municipality.set(school.municipality ?? school.place ?? '');
+    }
+    const district = matchDistrict(school.district, DISTRICTS);
+    if (!this.district() && district) {
+      this.district.set(district);
+    }
+  }
+
   protected readonly resource = httpResource<Invitation>(() => {
     const token = this.token();
     return token ? { url: `${API_URL}/auth/invitation`, method: 'POST', body: { token } } : undefined;
@@ -107,7 +118,7 @@ export class CompleteRegistration {
   protected readonly name = linkedSignal(() => this.invitation()?.name ?? '');
   protected readonly phone = linkedSignal(() => this.invitation()?.phone ?? '');
   protected readonly memberStatus = linkedSignal<MemberStatus | null>(() => this.invitation()?.member_status ?? null);
-  protected readonly school = linkedSignal(() => this.invitation()?.school ?? '');
+  protected readonly schools = linkedSignal<UserSchool[]>(() => this.invitation()?.schools ?? []);
   protected readonly municipality = linkedSignal(() => this.invitation()?.municipality ?? '');
   protected readonly district = linkedSignal<string | null>(() => this.invitation()?.district ?? null);
   protected readonly password = signal('');
@@ -129,7 +140,7 @@ export class CompleteRegistration {
         name: this.name().trim(),
         phone: formatPhone(this.phone()),
         member_status: this.memberStatus(),
-        school: this.school().trim() || null,
+        schools: cleanSchools(this.schools()),
         municipality: this.municipality().trim() || null,
         district: this.district(),
         password: this.password(),

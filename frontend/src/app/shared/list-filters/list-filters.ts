@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { FilterPanel } from '../filter-panel/filter-panel';
+import { SelectSearch } from '../select-search/select-search';
 import { debouncedSearch } from './search-input';
 
 export interface FilterOption {
@@ -15,7 +16,7 @@ export interface FilterOption {
 export interface FilterField {
   key: string;
   label: string;
-  type?: 'select' | 'search';
+  type?: 'select' | 'search' | 'select-search';
   options?: FilterOption[];
   allLabel?: string;
 }
@@ -29,7 +30,7 @@ export interface FilterChange {
 
 @Component({
   selector: 'app-list-filters',
-  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, FilterPanel],
+  imports: [FormsModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, FilterPanel, SelectSearch],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-filter-panel [title]="title()" [summary]="summary()">
@@ -48,6 +49,14 @@ export interface FilterChange {
               />
             </mat-form-field>
           </form>
+        } @else if (field.type === 'select-search') {
+          <app-select-search
+            [label]="field.label"
+            [options]="field.options ?? []"
+            [allLabel]="field.allLabel ?? 'Sve'"
+            [value]="values()[field.key] ?? ''"
+            (valueChange)="filterChange.emit({ key: field.key, value: $event })"
+          />
         } @else {
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>{{ field.label }}</mat-label>

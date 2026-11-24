@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 export type IconName =
   | 'dumbbell'
   | 'clipboard'
+  | 'share'
+  | 'map'
   | 'chart'
   | 'globe'
   | 'trophy'
@@ -74,6 +76,8 @@ const ICON_PATHS: Record<IconName, string[]> = {
   facebook: ['M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V9H7v3h2v9h3v-9h2.5l.5-3h-3V7a1 1 0 0 1 1-1h2z'],
   instagram: ['M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z', 'M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z', 'M17.5 6.5h.01'],
   youtube: ['M3 8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z', 'M10 9l5 3-5 3z'],
+  share: ['M12 15V4', 'M8 8l4-4l4 4', 'M6 12H5v8h14v-8h-1'],
+  map: ['M9 4L3 6v14l6-2l6 2l6-2V4l-6 2z', 'M9 4v14', 'M15 6v14'],
   link: ['M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1', 'M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1'],
   check: ['M5 12l5 5L20 7'],
   'arrow-left': ['M19 12H5', 'M11 6l-6 6l6 6'],

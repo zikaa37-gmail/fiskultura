@@ -6,10 +6,11 @@ import { AuthService } from './core/auth/auth.service';
 import { SiteHeader } from './layout/site-header';
 import { SiteFooter } from './layout/site-footer';
 import { BackToTop } from './shared/back-to-top/back-to-top';
+import { BusyOverlay } from './shared/busy-overlay/busy-overlay';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeader, SiteFooter, BackToTop],
+  imports: [RouterOutlet, SiteHeader, SiteFooter, BackToTop, BusyOverlay],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-site-header ngSkipHydration />
@@ -18,6 +19,7 @@ import { BackToTop } from './shared/back-to-top/back-to-top';
     </main>
     <app-site-footer />
     <app-back-to-top />
+    <app-busy-overlay />
   `,
 })
 export class App {

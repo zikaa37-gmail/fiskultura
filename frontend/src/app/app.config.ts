@@ -4,13 +4,14 @@ import { provideClientHydration, withEventReplay, withHttpTransferCacheOptions }
 import { provideRouter, TitleStrategy, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { apiOriginInterceptor } from './core/http/api-origin.interceptor';
+import { busyInterceptor } from './core/http/busy';
 import { SeoTitleStrategy } from './core/seo/seo-title.strategy';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor, apiOriginInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([busyInterceptor, authInterceptor, apiOriginInterceptor])),
     provideRouter(
       routes,
       withComponentInputBinding(),

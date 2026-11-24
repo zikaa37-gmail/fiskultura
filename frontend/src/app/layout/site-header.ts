@@ -9,11 +9,12 @@ import { InboxService } from '../core/inbox/inbox.service';
 import { NotificationsDialogService } from '../features/notifications/notifications-dialog';
 import { AskQuestionDialogService } from '../features/questions/ask-question-dialog';
 import { Icon } from '../shared/icon/icon';
+import { MailBadge } from '../shared/mail-badge/mail-badge';
 import { AdminNavService } from './admin-nav.service';
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, RouterLinkActive, MatDividerModule, MatMenuModule, Icon],
+  imports: [RouterLink, RouterLinkActive, MatDividerModule, MatMenuModule, Icon, MailBadge],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './site-header.html',
 })

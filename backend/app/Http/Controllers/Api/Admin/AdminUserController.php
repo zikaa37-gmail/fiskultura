@@ -132,7 +132,7 @@ class AdminUserController extends Controller
             $user->role = $data['role'];
         }
 
-        $user->fill(Arr::only($data, ['name', 'phone', 'member_status', 'school', 'municipality', 'district']));
+        $user->fill(Arr::only($data, ['name', 'phone', 'member_status', 'school', 'schools', 'municipality', 'district']));
 
         if (array_key_exists('email', $data)) {
             $this->changeEmail($user, $data['email']);
@@ -184,6 +184,7 @@ class AdminUserController extends Controller
             'phone' => ['sometimes', 'nullable', 'string', 'max:40', new PhoneNumber],
             'member_status' => ['sometimes', 'nullable', Rule::in(User::MEMBER_STATUSES)],
             'school' => ['sometimes', 'nullable', 'string', 'max:190'],
+            ...User::schoolRules(),
             'municipality' => ['sometimes', 'nullable', 'string', 'max:120'],
             'district' => ['sometimes', 'nullable', 'string', 'max:120'],
         ];
@@ -219,6 +220,7 @@ class AdminUserController extends Controller
             'role' => $user->role,
             'member_status' => $user->member_status,
             'school' => $user->school,
+            'schools' => $user->schools ?? [],
             'municipality' => $user->municipality,
             'district' => $user->district,
             'source' => $user->source,

@@ -3,11 +3,12 @@
 namespace Database\Seeders;
 
 use App\Services\ContentImporter;
+use App\Services\InstitutionImporter;
 use Illuminate\Database\Seeder;
 
 class ContentSeeder extends Seeder
 {
-    public function run(ContentImporter $importer): void
+    public function run(ContentImporter $importer, InstitutionImporter $institutions): void
     {
         $result = $importer->import(database_path('data/organizations.json'), database_path('data/news.json'), database_path('data/regulations.json'), database_path('data/questions.json'));
 
@@ -25,5 +26,8 @@ class ContentSeeder extends Seeder
             $result['questions']['updated'],
             $result['questions']['skipped'],
         ));
+
+        $counts = $institutions->importFile(database_path('data/institutions.json'), source: 'portal');
+        $this->command?->info("Ustanove: {$counts['created']} novih, {$counts['updated']} dopunjenih.");
     }
 }
