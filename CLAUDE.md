@@ -15,7 +15,7 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   zove `SeoService.set`); kod koji dira `localStorage`/`window` mora da radi i na serveru. Angular Material M3 (`mat.theme` u
   `src/styles.scss`, boje i tokeni u `src/theme/styles/colors.scss`, preneti iz statičke naslovne). Bez biblioteke za prevode: sav tekst je na
   srpskom, direktno u šablonima; duži sadržaj stranica je u `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.
-- `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), lokalno SQLite, na serveru MySQL.
+- `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), MySQL lokalno (baza `fiskultura`, testovi `fiskultura_test`) i na serveru.
   Mejl: SMTP `obavestenja@fiskultura.rs` (lozinka samo u `backend/.env` i na serveru; lokalno
   `MAIL_MAILER=log`, za probu slanja `smtp`). Auth: JWT access (60 min) + refresh sa rotacijom kao u
   evidencija-fv, uloge `user` / `author` / `editor` / `admin`, middleware `jwt` i `role:...`,
