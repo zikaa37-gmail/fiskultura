@@ -32,6 +32,7 @@ class SeoController extends Controller
         '/sportovi/vezbe-sa-rekvizitima' => ['monthly', '0.6'],
         '/sportovi/plesovi' => ['monthly', '0.6'],
         '/literatura' => ['monthly', '0.5'],
+        '/sabloni' => ['monthly', '0.6'],
         '/ishodi' => ['monthly', '0.7'],
         '/ishodi/1-razred' => ['monthly', '0.6'],
         '/ishodi/2-razred' => ['monthly', '0.6'],

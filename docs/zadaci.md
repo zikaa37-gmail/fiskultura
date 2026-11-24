@@ -190,9 +190,11 @@ podsetnik mejlom (7 dana i 1 dan pre); izvoz u Google / Outlook kalendar (iCal).
 Škola ili kolega objavljuje oglas (radno mesto nastavnika FV, zamena, honorarni rad u sekciji);
 urednik odobrava; rok važenja, okrug, link na zvanični konkurs; obaveštenje mejlom po okrugu.
 
-### #43 Šabloni dokumenata (faza-1b, sadrzaj)
+### #43 Šabloni dokumenata (faza-1b, sadrzaj) — urađeno (prvo izdanje)
 Preuzimanje šablona: operativni plan, izveštaj sekcije, saglasnost roditelja za takmičenje,
 zapisnik testiranja, molba za oslobađanje, plan rada aktiva. Word / PDF, oznaka verzije i propisa.
+- [x] `/sabloni`: šest Word šablona u `frontend/public/sabloni/`, pravi ih `scripts/document_templates.py` (python-docx); verzija 2026/27, propis i povezano pitanje na kartici
+- [ ] PDF verzije i godišnja provera šablona pred novu školsku godinu
 
 ### #44 Glas struke: ankete i inicijative (faza-1b)
 Urednik pokreće anketu (npr. „broj časova FZV nedeljno"); glasaju prijavljeni nastavnici (jedan glas,
