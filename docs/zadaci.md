@@ -238,7 +238,7 @@ Periodični pregled izvora:
   uredniku šta je novo; ništa se ne objavljuje samo, urednik pregleda i odobri;
 - kad se promeni propis: ažurirati propise, pitanja i odgovore, ishode i planove koji ga navode
   (polje „važi od”) i objaviti kratku vest sa linkom na zvanični tekst.
-- [ ] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
+- [x] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
 - [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
