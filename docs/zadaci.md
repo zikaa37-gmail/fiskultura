@@ -84,7 +84,7 @@ Tabele `fk_organizations`, veza vest → organizacija; seed iz `backend/database
 `parent_id` na organizaciji (SSPFVS krovno, 15 redovnih članica sa https://sspfvs.wixsite.com/sspfvs/o-nama),
 izvor podatka o članstvu. Na `/udruzenja` istaknut SSPFVS, ispod članice po okrugu, zatim ostale
 organizacije (školski sport, institucije, fakulteti, sindikati).
-- [ ] Za svaku članicu prikupiti sajt / FB / kontakt (sada većina nepoznato)
+- [x] Za svaku članicu prikupiti sajt / FB / kontakt: javno postoji samo za UPFK Niš, ostalo preko SSPFVS (`docs/izvori/udruzenja.md`)
 
 ### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1)
 Spisak okruga i gradova (šifarnik) sa statusom: postoji aktivno / postoji neaktivno / nema. Mapa

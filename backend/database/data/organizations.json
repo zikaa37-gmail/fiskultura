@@ -44,12 +44,14 @@
     "type": "strukovno-udruzenje",
     "level": "gradski",
     "city": "Niš",
-    "website": null,
-    "social": {},
+    "website": "http://www.upfk-nis.org.rs/",
+    "social": {
+      "facebook": "https://www.facebook.com/УПФК-Ниш-Удружење-педагога-физичке-културе-Ниш-316902621675025/"
+    },
     "email": "upfknis@yahoo.com",
     "description": "Niško udruženje nastavnika fizičkog vaspitanja koje u saradnji sa Fakultetom sporta i fizičkog vaspitanja u Nišu organizuje odobrene jednodnevne simpozijume za nastavnike.",
     "status": "aktivno",
-    "lastActivity": "2025-10-16",
+    "lastActivity": "2026-07-07",
     "parent": "sspfvs",
     "memberSource": "https://sspfvs.wixsite.com/sspfvs/o-nama"
   },

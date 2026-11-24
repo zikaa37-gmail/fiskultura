@@ -387,3 +387,23 @@ Ovo nije pronađeno ili treba ručno proveriti.
 - **FB stranice školskih saveza** (Čačak, Novi Sad, SŠSS) nisu čitane, jer WebFetch ne može da pristupi Facebooku. Tamo je verovatno više objava o takmičenjima.
 - **Novi Sad:** objave sa sajta saveza nemaju pojedinačne URL-ove, pa linkovi vode na stranice sekcija po sportovima.
 - **Datumi:** tri objave iz kataloga ZUOV-a (šifre 1555, 1573, 1272) nemaju datum održavanja (`date: null`). Kod letnje škole SSPFVS 2026 godina objave je zaključena iz sadržaja.
+
+## Kontakti članica SSPFVS (provera 24. 11. 2026)
+
+Na stranici SSPFVS „O nama” svih 15 članica stoji bez kontakta. Tamo su samo dva linka: UPFK Niš
+(radi) i DPFV Vojvodine (`skolskisportvojvodine.rs/.../drustvo-pedagoga`, sada 404). Upisano je
+samo ono što organizacija sama objavljuje; lični telefoni i mejlovi pojedinaca nisu preneti.
+
+| Članica | Javni kanal | Napomena |
+|---|---|---|
+| UPFK Niš | [upfk-nis.org.rs](http://www.upfk-nis.org.rs/), FB (link sa sajta), upfknis@yahoo.com | sajt aktivan, poslednja vest 7. 7. 2026; uneto u `organizations.json` |
+| UPFK Beograd | upfkbg@gmail.com (od ranije) | Letnja škola na Zlatiboru avgusta 2025; jedan agregator registra uz udruženje navodi sajt `www.fiskultura.rs` (verovatno raniji domen udruženja) |
+| DPFV Vojvodine | dpfvoj@gmail.com (od ranije) | telefon postoji samo na neprofitne.rs, nije sa izvora udruženja |
+| UPFK Užice | nema | sajt difue.com ugašen (arhiva iz 2022, poslednji projekat 2019) |
+| UPFK Šabac, UPFK Čačak | nema | samo pomeni u medijima iz 2014. i 2015. |
+| UPFK Pančevo, Požarevac, Kraljevo; UPFK Prokuplje (verovatno „UPFK – Toplica”) | nema | postoje samo kao udruženja u registru |
+| DNFV Novi Sad, UPFK Vrbas, Kragujevac, Vranje, UPFVS Pirot | nema | nijedan javni kanal nije nađen |
+
+Facebook nije čitan direktno; pretraga po skraćenicama i punim nazivima (ćirilica i latinica) nije
+našla stranice članica osim Niša. Sledeći korak je preko SSPFVS: zamoliti savez da članice pošalju
+kontakt i link, ili da se jave kroz formu „Pošalji objavu” (#15c).
