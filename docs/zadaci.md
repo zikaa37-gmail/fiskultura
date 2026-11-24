@@ -41,7 +41,7 @@ faza 1 prođe proveru.
 ### #6 Kostur frontenda (faza-1)
 `frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
-- [ ] `ng build` i `ng test` prolaze
+- [x] `ng build` i `ng test` prolaze
 
 ### #7 Kostur backenda (faza-1)
 `backend/`: Laravel 13, MySQL `fiskultura`, `DB_PREFIX=fk_`, JWT + refresh (kao `evidencija-fv`),
@@ -84,7 +84,7 @@ Tabele `fk_organizations`, veza vest → organizacija; seed iz `backend/database
 `parent_id` na organizaciji (SSPFVS krovno, 15 redovnih članica sa https://sspfvs.wixsite.com/sspfvs/o-nama),
 izvor podatka o članstvu. Na `/udruzenja` istaknut SSPFVS, ispod članice po okrugu, zatim ostale
 organizacije (školski sport, institucije, fakulteti, sindikati).
-- [ ] Za svaku članicu prikupiti sajt / FB / kontakt (sada većina nepoznato)
+- [x] Za svaku članicu prikupiti sajt / FB / kontakt: javno postoji samo za UPFK Niš, ostalo preko SSPFVS (`docs/izvori/udruzenja.md`)
 
 ### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1)
 Spisak okruga i gradova (šifarnik) sa statusom: postoji aktivno / postoji neaktivno / nema. Mapa
@@ -190,9 +190,11 @@ podsetnik mejlom (7 dana i 1 dan pre); izvoz u Google / Outlook kalendar (iCal).
 Škola ili kolega objavljuje oglas (radno mesto nastavnika FV, zamena, honorarni rad u sekciji);
 urednik odobrava; rok važenja, okrug, link na zvanični konkurs; obaveštenje mejlom po okrugu.
 
-### #43 Šabloni dokumenata (faza-1b, sadrzaj)
+### #43 Šabloni dokumenata (faza-1b, sadrzaj) — urađeno (prvo izdanje)
 Preuzimanje šablona: operativni plan, izveštaj sekcije, saglasnost roditelja za takmičenje,
 zapisnik testiranja, molba za oslobađanje, plan rada aktiva. Word / PDF, oznaka verzije i propisa.
+- [x] `/sabloni`: šest Word šablona u `frontend/public/sabloni/`, pravi ih `scripts/document_templates.py` (python-docx); verzija 2026/27, propis i povezano pitanje na kartici
+- [ ] PDF verzije i godišnja provera šablona pred novu školsku godinu
 
 ### #44 Glas struke: ankete i inicijative (faza-1b)
 Urednik pokreće anketu (npr. „broj časova FZV nedeljno"); glasaju prijavljeni nastavnici (jedan glas,
@@ -238,7 +240,7 @@ Periodični pregled izvora:
   uredniku šta je novo; ništa se ne objavljuje samo, urednik pregleda i odobri;
 - kad se promeni propis: ažurirati propise, pitanja i odgovore, ishode i planove koji ga navode
   (polje „važi od”) i objaviti kratku vest sa linkom na zvanični tekst.
-- [ ] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
+- [x] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
 - [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
