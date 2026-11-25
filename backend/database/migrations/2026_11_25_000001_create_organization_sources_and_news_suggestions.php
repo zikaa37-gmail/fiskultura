@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('last_error', 255)->nullable();
             $table->unsignedSmallInteger('last_found')->default(0);
             $table->timestamps();
-            $table->unique(['organization_id', 'url']);
         });
 
         Schema::create('news_suggestions', function (Blueprint $table) {
