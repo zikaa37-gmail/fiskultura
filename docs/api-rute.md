@@ -40,7 +40,7 @@ Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (
 
 | Metod | Ruta | Opis |
 |---|---|---|
-| POST | `/news/list` | `category`, `organization` (slug), `umbrella` (slug krovne — ona i članice), `year`, `search`, `featured`, `page`, `per_page` (≤ 50) → `{ data, meta: { page, per_page, total, last_page } }`; samo objavljene, najnovije prve |
+| POST | `/news/list` | `category`, `organization` (slug), `umbrella` (slug krovne — ona i članice), `district` (okrug organizacije), `year`, `search`, `featured`, `page`, `per_page` (≤ 50) → `{ data, meta: { page, per_page, total, last_page } }`; samo objavljene, najnovije prve |
 | GET | `/news/years` | godine za koje postoje objave |
 | GET | `/news/{slug}` | vest sa `body` i `related` (3 iz iste organizacije ili kategorije) |
 | GET | `/organizations` | sve organizacije sa `parent` i `news_count` |
@@ -60,7 +60,7 @@ postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
 
 | Metod | Ruta | Uloga | Opis |
 |---|---|---|---|
-| POST | `/admin/news/list` | editor, admin | `status` (draft / published / scheduled), `category`, `organization_id`, `search`, `page`, `per_page`; nacrti prvi |
+| POST | `/admin/news/list` | editor, admin | `status` (draft / published / scheduled), `category`, `organization_id`, `organization`, `umbrella`, `district`, `year`, `search`, `page`, `per_page`; nacrti prvi |
 | GET | `/admin/news/{id}` | editor, admin | vest sa svim poljima (`status`, `is_visible`, `author`) |
 | POST | `/admin/news` | editor, admin | nova vest; `slug` iz naslova ako nije zadat; `published_at` prazno + objavljeno = sada, budućnost = zakazano; autor = prijavljeni |
 | PATCH | `/admin/news/{id}` | editor, admin | izmena |

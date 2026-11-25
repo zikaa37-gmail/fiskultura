@@ -106,11 +106,14 @@ dnevno) čita RSS i javne stranice gde je dozvoljeno, nove stavke idu u `fk_news
 - [x] Fid se traži na stranici (`<link rel="alternate">`) ili na `/feed/`, poštuje se robots.txt; Facebook, Instagram i YouTube (robots.txt zabranjuje fid kanala) se prate ručno
 - [x] `/admin/predlozi` (napravi nacrt vesti, odbaci, vrati u red), `/admin/izvori`, javna forma `/udruzenja/posalji-objavu`
 
-### #15d Oznaka izvora na vesti (faza-1)
+### #15d Oznaka izvora na vesti (faza-1) — urađeno
 Vest ima `organization_id`, `source_url`, `source_type` (sajt / Facebook / ...), `source_published_at`.
 U prikazu: čip organizacije (link na `/udruzenja/:slug`), „Preuzeto sa: ...", datum originala, link.
 Filteri na `/vesti`: organizacija, „SSPFVS i članice", okrug. Obaveštenja mejlom mogu da se prate
 po organizaciji.
+- [x] Čip organizacije na kartici, blok „Izvor informacije” u modalu i na stranici vesti (organizacija i okrug, „Preuzeto sa”, datum originala, link)
+- [x] Filteri na `/vesti` i u adminu: izvor, „SSPFVS i članice”, okrug (`district`, po okrugu organizacije)
+- [x] Praćenje po organizaciji u obaveštenjima (`organization_ids`)
 
 ### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
 Gde ZUOV objavljuje Katalog programa stalnog stručnog usavršavanja i liste odobrenih stručnih skupova,
