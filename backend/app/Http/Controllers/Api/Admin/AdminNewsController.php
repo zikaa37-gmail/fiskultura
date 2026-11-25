@@ -19,6 +19,7 @@ class AdminNewsController extends Controller
             'organization_id' => ['nullable', 'integer'],
             'organization' => ['nullable', 'string', 'max:100'],
             'umbrella' => ['nullable', 'string', 'max:100'],
+            'district' => ['nullable', 'string', 'max:100'],
             'year' => ['nullable', 'integer', 'min:2000', 'max:2100'],
             'search' => ['nullable', 'string', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
@@ -37,6 +38,7 @@ class AdminNewsController extends Controller
             ->when($filters['umbrella'] ?? null, fn (Builder $query, string $slug) => $query->whereHas('organization', fn (Builder $organization) => $organization
                 ->where('slug', $slug)
                 ->orWhereHas('parent', fn (Builder $parent) => $parent->where('slug', $slug))))
+            ->when($filters['district'] ?? null, fn (Builder $query, string $district) => $query->whereHas('organization', fn (Builder $organization) => $organization->where('district', $district)))
             ->when($filters['year'] ?? null, fn (Builder $query, int $year) => $query->whereYear('published_at', $year))
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query->where(fn (Builder $inner) => $inner
                 ->where('title', 'like', "%{$search}%")

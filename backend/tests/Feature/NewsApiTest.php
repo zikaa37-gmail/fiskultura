@@ -75,6 +75,11 @@ class NewsApiTest extends TestCase
         $umbrella = $this->postJson('/api/news/list', ['umbrella' => 'sspfvs', 'per_page' => 50])->assertOk();
         $this->assertGreaterThan($organization->json('meta.total'), $umbrella->json('meta.total'));
 
+        $district = $this->postJson('/api/news/list', ['district' => 'Južnobački', 'per_page' => 50])->assertOk();
+        $this->assertNotEmpty($district->json('data'));
+        $this->assertSame(['Južnobački'], collect($district->json('data'))->pluck('organization.district')->unique()->values()->all());
+        $this->assertSame(0, $this->postJson('/api/news/list', ['district' => 'Nepostojeći'])->json('meta.total'));
+
         $year = $this->postJson('/api/news/list', ['year' => 2024, 'per_page' => 50])->assertOk();
         $this->assertTrue(collect($year->json('data'))->every(fn ($item) => str_starts_with($item['published_at'], '2024')));
 

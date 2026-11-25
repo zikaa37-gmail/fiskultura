@@ -12,6 +12,7 @@ export interface OrganizationRef {
   slug: string;
   name: string;
   short_name: string | null;
+  district?: string | null;
 }
 
 export interface NewsItem {

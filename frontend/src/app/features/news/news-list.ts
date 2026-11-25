@@ -18,7 +18,7 @@ import { AdminNews, newsState, Page } from '../admin/admin.model';
 
 const UMBRELLA_FILTER = 'sspfvs-mreza';
 const STATUS_LABELS: Record<string, string> = { draft: 'Nacrti', published: 'Objavljeno', scheduled: 'Zakazano' };
-const QUERY_KEYS = ['status', 'kategorija', 'udruzenje', 'godina', 'pretraga'] as const;
+const QUERY_KEYS = ['status', 'kategorija', 'udruzenje', 'okrug', 'godina', 'pretraga'] as const;
 
 type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
 
@@ -108,6 +108,7 @@ export class NewsList {
     const organizations = (this.#organizationsResource.hasValue() ? this.#organizationsResource.value() : [])
       .filter((organization) => (organization.news_count ?? 0) > 0)
       .sort((a, b) => organizationLabel(a).localeCompare(organizationLabel(b), 'sr'));
+    const districts = [...new Set(organizations.map((item) => item.district).filter((district): district is string => !!district))].sort((a, b) => a.localeCompare(b, 'sr'));
     const years = this.#yearsResource.hasValue() ? this.#yearsResource.value() : [];
     const fields: FilterField[] = [
       { key: 'kategorija', label: 'Kategorija', options: (Object.keys(NEWS_CATEGORY_LABELS) as NewsCategory[]).map((value) => ({ value, label: NEWS_CATEGORY_LABELS[value] })) },
@@ -117,6 +118,7 @@ export class NewsList {
         allLabel: 'Svi izvori',
         options: [{ value: UMBRELLA_FILTER, label: 'SSPFVS i članice' }, ...organizations.map((item) => ({ value: item.slug, label: organizationLabel(item) }))],
       },
+      { key: 'okrug', label: 'Okrug', allLabel: 'Svi okruzi', options: districts.map((district) => ({ value: district, label: district })) },
       { key: 'godina', label: 'Godina', allLabel: 'Sve godine', options: years.map((year) => ({ value: `${year}`, label: `${year}` })) },
       { key: 'pretraga', label: 'Pretraga', type: 'search' },
     ];
@@ -136,6 +138,7 @@ export class NewsList {
         category: filters['kategorija'] || null,
         organization: organization && organization !== UMBRELLA_FILTER ? organization : null,
         umbrella: organization === UMBRELLA_FILTER ? 'sspfvs' : null,
+        district: filters['okrug'] || null,
         year: filters['godina'] ? Number(filters['godina']) : null,
         search: filters['pretraga'] || null,
         page: this.#page(),
