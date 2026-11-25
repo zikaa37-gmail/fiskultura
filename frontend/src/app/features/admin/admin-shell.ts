@@ -72,6 +72,8 @@ export class AdminShell {
       links: [
         { route: 'vesti', label: 'Sve vesti', icon: 'news', exact: true, editorOnly: true },
         { route: 'vesti/nova', label: 'Nova vest', icon: 'star', exact: true, editorOnly: true },
+        { route: 'predlozi', label: 'Predlozi vesti', icon: 'checklist', editorOnly: true },
+        { route: 'izvori', label: 'Izvori organizacija', icon: 'link', editorOnly: true },
       ],
     },
     {

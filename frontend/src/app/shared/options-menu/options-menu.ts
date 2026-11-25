@@ -13,6 +13,7 @@ export interface MenuOption<T extends string = string> {
   disabled?: boolean;
   dividerBefore?: boolean;
   link?: string | (string | number)[];
+  href?: string;
   newTab?: boolean;
 }
 
@@ -51,7 +52,11 @@ export class OptionLabel {
         @if (option.dividerBefore && !$first) {
           <mat-divider />
         }
-        @if (option.link) {
+        @if (option.href) {
+          <a mat-menu-item [href]="option.href" target="_blank" rel="noopener">
+            <app-option-label [option]="option" />
+          </a>
+        } @else if (option.link) {
           <a mat-menu-item [routerLink]="option.link" [attr.target]="option.newTab ? '_blank' : null" [class.row-action-danger]="option.danger" [disabled]="!!option.disabled">
             <app-option-label [option]="option" />
           </a>

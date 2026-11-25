@@ -65,6 +65,12 @@ postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
 | POST | `/admin/news` | editor, admin | nova vest; `slug` iz naslova ako nije zadat; `published_at` prazno + objavljeno = sada, budućnost = zakazano; autor = prijavljeni |
 | PATCH | `/admin/news/{id}` | editor, admin | izmena |
 | DELETE | `/admin/news/{id}` | editor, admin | brisanje |
+| POST | `/admin/news-suggestions/list` | editor, admin | red predloga vesti: `status` (`new` podrazumevano / `accepted` / `dismissed`), `origin` (`feed` / `form`), `organization`, `search`, `page`; uz listu `counts` po stanju |
+| POST | `/admin/news-suggestions/{id}/accept` | editor, admin | pravi nacrt vesti (naslov, organizacija, izvor, datum originala) i vraća `news_id`; sažetak urednik piše sam |
+| PATCH | `/admin/news-suggestions/{id}` | editor, admin | `status`: `dismissed` (odbaci) ili `new` (vrati u red) |
+| GET | `/admin/sources` | editor, admin | izvori organizacija (sajt / rss / facebook / instagram / youtube, praćenje `auto` / `manual`, poslednja provera) |
+| POST / PATCH / DELETE | `/admin/sources[/{id}]` | editor, admin | unos, izmena i brisanje izvora; Facebook i Instagram samo ručno |
+| POST | `/admin/sources/{id}/check` | editor, admin | proveri izvor odmah (isto što i `sources:check`) |
 | GET | `/admin/organizations` | editor, admin | sve organizacije sa `news_count` i `parent_id` |
 | GET | `/admin/organizations/{id}` | editor, admin | jedna organizacija |
 | POST | `/admin/organizations` | editor, admin | nova; `slug` iz skraćenice ili naziva |
@@ -111,6 +117,7 @@ imaju datum provere; posle 6 meseci, i leti ako nisu provereni od juna, stoje u 
 
 | Metod | Ruta | Pristup | Opis |
 |---|---|---|---|
+| POST | `/news-suggestions` | javno (5 na sat) | „Pošalji objavu”: `organization_id` ili `sender_organization`, `title`, `url` ili `excerpt`, `sender_name`, `sender_email`, prazno `website`; mejl i notifikacija urednicima, ista adresa se ne prima dva puta |
 | POST | `/contact` | javno (5 na sat) | `name`, `email`, `topic` (`pitanje`, `greska`, `predlog`, `saradnja`, `drugo`), `message`, prazno polje `website`; mejl urednicima i adminima, odgovor ide pošiljaocu (`Reply-To`) |
 
 ## Pitanja i odgovori (#40)

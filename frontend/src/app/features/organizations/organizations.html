@@ -41,6 +41,7 @@
         </p>
         <div class="found-cta-actions">
           <a mat-flat-button routerLink="/udruzenja/osnivanje">Vodič za osnivanje</a>
+          <a mat-stroked-button theme="tertiary" routerLink="/udruzenja/posalji-objavu">Pošalji objavu društva</a>
           @if (umbrellaEmail(); as email) {
             <a mat-stroked-button theme="tertiary" [href]="'mailto:' + email + '?subject=Osnivanje%20dru%C5%A1tva%20pedagoga%20fizi%C4%8Dke%20kulture'">Piši SSPFVS-u</a>
           }

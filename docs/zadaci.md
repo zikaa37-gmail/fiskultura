@@ -96,12 +96,15 @@ skupi bar 3 kolege, obaveštenje SSPFVS-u i prijavljenima.
 - [ ] SVG mapa Srbije po okruzima
 - [ ] Sadržaj vodiča i poruke dogovoriti sa SSPFVS-om
 
-### #15c Izvori organizacija i red za urednika (faza-1)
+### #15c Izvori organizacija i red za urednika (faza-1) — urađeno
 Tabela `fk_organization_sources` (organizacija, tip: sajt / rss / facebook / instagram / youtube,
 URL, način praćenja: automatski / ručno, poslednja provera). Komanda `sources:check` (cron, jednom
 dnevno) čita RSS i javne stranice gde je dozvoljeno, nove stavke idu u `fk_news_suggestions`
 (naslov, link, datum, izvor) — urednik ih jednim klikom pretvara u vest sa sažetkom. Forma
 „Pošalji objavu" za udruženja bez naloga.
+- [x] `fk_organization_sources` (izvori se sami dodaju iz sajta i mreža udruženja), `fk_news_suggestions`, `sources:check` svakog jutra u 6:15
+- [x] Fid se traži na stranici (`<link rel="alternate">`) ili na `/feed/`, poštuje se robots.txt; Facebook, Instagram i YouTube (robots.txt zabranjuje fid kanala) se prate ručno
+- [x] `/admin/predlozi` (napravi nacrt vesti, odbaci, vrati u red), `/admin/izvori`, javna forma `/udruzenja/posalji-objavu`
 
 ### #15d Oznaka izvora na vesti (faza-1)
 Vest ima `organization_id`, `source_url`, `source_type` (sajt / Facebook / ...), `source_published_at`.
