@@ -23,7 +23,7 @@ class FoundingInterest extends Model
 
     public static function cityKey(string $city): string
     {
-        return Str::slug(Str::ascii(trim($city)));
+        return Str::limit(Str::slug(Str::ascii(trim($city))), 50, '');
     }
 
     public function scopeConfirmed(Builder $query): Builder
