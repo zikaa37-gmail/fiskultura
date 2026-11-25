@@ -42,6 +42,17 @@ const allRoutes: Routes = [
     loadComponent: () => import('./features/organizations/founding-confirm').then((m) => m.FoundingConfirm),
   },
   {
+    path: 'udruzenja/posalji-objavu',
+    title: 'Pošalji objavu udruženja — Fiskultura',
+    data: {
+      seo: {
+        description:
+          'Društva pedagoga fizičke kulture i savezi šalju uredništvu Fiskulture seminare, takmičenja i skupštine; urednik objavljuje kratku vest sa linkom na izvor.',
+      },
+    },
+    loadComponent: () => import('./features/organizations/send-post').then((m) => m.SendPost),
+  },
+  {
     path: 'udruzenja/:slug',
     title: 'Udruženje — Fiskultura',
     data: { dynamicSeo: true },
@@ -309,6 +320,8 @@ const allRoutes: Routes = [
       { path: 'vesti', canActivate: [editorGuard], title: 'Admin: vesti — Fiskultura', data: { admin: true }, loadComponent: () => import('./features/news/news-list').then((m) => m.NewsList) },
       { path: 'vesti/nova', canActivate: [editorGuard], title: 'Nova vest — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
       { path: 'vesti/:id', canActivate: [editorGuard], title: 'Izmena vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-news-form').then((m) => m.AdminNewsForm) },
+      { path: 'predlozi', canActivate: [editorGuard], title: 'Admin: predlozi vesti — Fiskultura', loadComponent: () => import('./features/admin/admin-suggestions').then((m) => m.AdminSuggestions) },
+      { path: 'izvori', canActivate: [editorGuard], title: 'Admin: izvori organizacija — Fiskultura', loadComponent: () => import('./features/admin/admin-sources').then((m) => m.AdminSources) },
       { path: 'pitanja', title: 'Admin: pitanja — Fiskultura', loadComponent: () => import('./features/admin/admin-questions').then((m) => m.AdminQuestions) },
       { path: 'pitanja/novo', canActivate: [editorGuard], title: 'Novo pitanje — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },
       { path: 'pitanja/:id', title: 'Pitanje i odgovor — Fiskultura', loadComponent: () => import('./features/admin/admin-question-form').then((m) => m.AdminQuestionForm) },

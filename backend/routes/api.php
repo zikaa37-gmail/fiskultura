@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Admin\AdminInstagramController;
 use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
+use App\Http\Controllers\Api\Admin\AdminNewsSuggestionController;
+use App\Http\Controllers\Api\Admin\AdminSourceController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
 use App\Http\Controllers\Api\Admin\AdminRegulationController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\NewsSuggestionController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ContactController;
@@ -26,6 +29,7 @@ use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
+Route::post('/news-suggestions', [NewsSuggestionController::class, 'store'])->middleware('throttle:5,60');
 Route::get('/public/instagram-media/{token}.jpg', [AdminInstagramController::class, 'media'])->where('token', '[A-Za-z0-9]{40}');
 Route::get('/public/social/{network}/callback', [AdminInstagramController::class, 'callback'])->whereIn('network', ['instagram', 'facebook'])->middleware('throttle:20,10');
 
@@ -113,6 +117,14 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/news/{news}', [AdminNewsController::class, 'update']);
         Route::patch('/news/{news}/featured', [AdminNewsController::class, 'feature']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
+        Route::post('/news-suggestions/list', [AdminNewsSuggestionController::class, 'list']);
+        Route::post('/news-suggestions/{suggestion}/accept', [AdminNewsSuggestionController::class, 'accept']);
+        Route::patch('/news-suggestions/{suggestion}', [AdminNewsSuggestionController::class, 'update']);
+        Route::get('/sources', [AdminSourceController::class, 'index']);
+        Route::post('/sources', [AdminSourceController::class, 'store']);
+        Route::patch('/sources/{source}', [AdminSourceController::class, 'update']);
+        Route::delete('/sources/{source}', [AdminSourceController::class, 'destroy']);
+        Route::post('/sources/{source}/check', [AdminSourceController::class, 'check'])->middleware('throttle:20,1');
 
         Route::post('/questions', [AdminQuestionController::class, 'store']);
         Route::get('/staff', [AdminQuestionController::class, 'staff']);

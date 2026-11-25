@@ -16,7 +16,7 @@ class SpaShellController extends Controller
 
     public const STATUS_MISSING = 'missing';
 
-    public const EXTRA_PUBLIC_PAGES = ['/debate', '/udruzenja/osnivanje', '/pitanja/postavi'];
+    public const EXTRA_PUBLIC_PAGES = ['/debate', '/udruzenja/osnivanje', '/udruzenja/posalji-objavu', '/pitanja/postavi'];
 
     public const PRIVATE_SECTIONS = [
         'admin', 'profil', 'imenik', 'notifikacije', 'prijava', 'registracija', 'potvrda-naloga',
