@@ -528,6 +528,15 @@ tog sajta, uz dozvolu).
 Tabela tekstova sa autorom, temom, oznakama; autor piše, urednik odobrava; `/strucno`, `/strucno/:slug`,
 profil autora.
 
+### #29-1 Kolumne i autorski tekstovi, prva verzija — urađeno
+- [x] `fk_topics`, `fk_articles` (kolumna / članak, tema, debata, autor), potpis i biografija autora na nalogu
+- [x] Tok nacrt → poslato → vraćeno sa napomenom / objavljeno ili zakazano, notifikacije autoru i urednicima
+- [x] Tekst se lepi u formu (pasusi i liste sa „- ”), pregled pre slanja, urednik koriguje pre objave
+- [x] „Priče kolega” na naslovnoj, na vrhu `/vesti`, u glavnom meniju; `/tekstovi`, `/tekstovi/:slug` (prerender, sitemap)
+- [x] Admin: `/admin/tekstovi`, `/admin/teme`; početne teme o poslu van škole (vojska, policija, GSS, ...)
+- [ ] Fotografija autora i javna stranica autora (`/autori/:slug`, #29a)
+- [ ] Obaveštenja mejlom o novom tekstu (po temi / autoru)
+
 ### #29a Pozivi i profil kolumniste (faza-4)
 Urednik šalje poziv (mejl, ime, predložena tema, rok) → tabela `fk_invitations` (token, hash u bazi,
 važi 14 dana) → pozvani pravi nalog sa ulogom `author` ili je dobija postojeći korisnik. Profil

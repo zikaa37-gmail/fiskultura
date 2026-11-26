@@ -5,6 +5,7 @@ import { RULE_TOPICS } from './content/rules/rule-topics';
 
 interface SeoRoutes {
   news: { slug: string }[];
+  articles: { slug: string }[];
   organizations: { slug: string }[];
   questions: { slug: string }[];
 }
@@ -22,16 +23,18 @@ function loadSeoRoutes(): Promise<SeoRoutes> {
     })
     .catch((error: unknown) => {
       console.warn(`Prerender bez stranica vesti, udruženja i pitanja: ${origin}/api/seo/routes nije dostupan (${error}).`);
-      return { news: [], organizations: [], questions: [] };
+      return { news: [], articles: [], organizations: [], questions: [] };
     });
   return seoRoutes;
 }
 
-const slugs = (kind: keyof SeoRoutes) => async () => (await loadSeoRoutes())[kind].map(({ slug }) => ({ slug }));
+const slugs = (kind: keyof SeoRoutes) => async () => ((await loadSeoRoutes())[kind] ?? []).map(({ slug }) => ({ slug }));
 
 export const serverRoutes: ServerRoute[] = [
   { path: '', renderMode: RenderMode.Prerender },
   { path: 'vesti', renderMode: RenderMode.Prerender },
+  { path: 'tekstovi', renderMode: RenderMode.Prerender },
+  { path: 'tekstovi/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('articles'), fallback: PrerenderFallback.Client },
   { path: 'vesti/:slug', renderMode: RenderMode.Prerender, getPrerenderParams: slugs('news'), fallback: PrerenderFallback.Client },
   { path: 'udruzenja', renderMode: RenderMode.Prerender },
   { path: 'udruzenja/osnivanje', renderMode: RenderMode.Prerender },

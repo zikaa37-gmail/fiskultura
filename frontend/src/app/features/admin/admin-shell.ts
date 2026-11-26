@@ -70,6 +70,8 @@ export class AdminShell {
     {
       title: 'Vesti',
       links: [
+        { route: 'tekstovi', label: 'Kolumne i tekstovi', icon: 'edit' },
+        { route: 'teme', label: 'Teme tekstova', icon: 'book', editorOnly: true },
         { route: 'vesti', label: 'Sve vesti', icon: 'news', exact: true, editorOnly: true },
         { route: 'vesti/nova', label: 'Nova vest', icon: 'star', exact: true, editorOnly: true },
         { route: 'predlozi', label: 'Predlozi vesti', icon: 'checklist', editorOnly: true },

@@ -25,6 +25,7 @@ import { PortalSocialLinks } from '../shared/portal-social/portal-social';
         <nav class="footer-col" aria-label="Portal">
           <strong>Portal</strong>
           <a class="footer-link" routerLink="/vesti">Vesti</a>
+          <a class="footer-link" routerLink="/tekstovi">Priče kolega</a>
           <a class="footer-link" routerLink="/udruzenja">Udruženja</a>
           <a class="footer-link" routerLink="/propisi">Propisi</a>
           @if (auth.isAuthenticated()) {

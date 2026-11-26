@@ -5,9 +5,11 @@ use App\Http\Controllers\Api\FoundingController;
 use App\Http\Controllers\Api\Admin\AdminInstagramController;
 use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
+use App\Http\Controllers\Api\Admin\AdminArticleController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminNewsSuggestionController;
 use App\Http\Controllers\Api\Admin\AdminSourceController;
+use App\Http\Controllers\Api\Admin\AdminTopicController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
 use App\Http\Controllers\Api\Admin\AdminRegulationController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\NewsSuggestionController;
 use App\Http\Controllers\Api\OrganizationController;
@@ -55,6 +58,9 @@ Route::middleware('throttle:30,1')->group(function () {
 Route::post('/news/list', [NewsController::class, 'list']);
 Route::get('/news/years', [NewsController::class, 'years']);
 Route::get('/news/{slug}', [NewsController::class, 'show']);
+Route::get('/topics', [ArticleController::class, 'topics']);
+Route::post('/articles/list', [ArticleController::class, 'list']);
+Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/organizations', [OrganizationController::class, 'index']);
@@ -108,6 +114,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
         Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
         Route::post('/questions/{question}/draft', [AdminQuestionController::class, 'draft'])->middleware('throttle:10,10');
+        Route::get('/articles/options', [AdminArticleController::class, 'options']);
+        Route::post('/articles/list', [AdminArticleController::class, 'list']);
+        Route::get('/articles/{article}', [AdminArticleController::class, 'show']);
+        Route::post('/articles', [AdminArticleController::class, 'store'])->middleware('throttle:30,10');
+        Route::patch('/articles/{article}', [AdminArticleController::class, 'update']);
+        Route::post('/articles/{article}/submit', [AdminArticleController::class, 'submit']);
+        Route::delete('/articles/{article}', [AdminArticleController::class, 'destroy']);
+        Route::patch('/author-profile', [AdminArticleController::class, 'updateProfile']);
     });
 
     Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
@@ -125,6 +139,15 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/sources/{source}', [AdminSourceController::class, 'update']);
         Route::delete('/sources/{source}', [AdminSourceController::class, 'destroy']);
         Route::post('/sources/{source}/check', [AdminSourceController::class, 'check'])->middleware('throttle:20,1');
+
+        Route::post('/articles/{article}/publish', [AdminArticleController::class, 'publish']);
+        Route::post('/articles/{article}/return', [AdminArticleController::class, 'sendBack']);
+        Route::post('/articles/{article}/unpublish', [AdminArticleController::class, 'unpublish']);
+        Route::patch('/articles/{article}/featured', [AdminArticleController::class, 'feature']);
+        Route::get('/topics', [AdminTopicController::class, 'index']);
+        Route::post('/topics', [AdminTopicController::class, 'store']);
+        Route::patch('/topics/{topic}', [AdminTopicController::class, 'update']);
+        Route::delete('/topics/{topic}', [AdminTopicController::class, 'destroy']);
 
         Route::post('/questions', [AdminQuestionController::class, 'store']);
         Route::get('/staff', [AdminQuestionController::class, 'staff']);

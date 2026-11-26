@@ -25,6 +25,7 @@ export class SiteHeader {
   protected readonly firstName = computed(() => (this.auth.currentUser()?.name ?? '').trim().split(/\s+/)[0] || 'Nalog');
   protected readonly navItems: { route: string; label: string; also?: string; members?: boolean }[] = [
     { route: '/vesti', label: 'Vesti' },
+    { route: '/tekstovi', label: 'Priče kolega' },
     { route: '/udruzenja', label: 'Udruženja' },
     { route: '/propisi', label: 'Propisi' },
     { route: '/ishodi', label: 'Ishodi', members: true },
