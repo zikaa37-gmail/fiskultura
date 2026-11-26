@@ -89,6 +89,30 @@ Organizacija ima i `link_status: { website?, facebook?, instagram?, youtube?, me
 (ponedeljkom u 4h preko schedule-a, ili `deploy.py --check-links`); `broken` samo kad nema domena / veze, 404, 410
 ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
 
+## Kolumne i autorski tekstovi („Priče kolega”)
+
+Tekst je `kolumna` ili `clanak`, uvek potpisan nalogom autora (uloga `author`, `editor` ili `admin`) sa potpisom
+(`users.byline`: zvanje, specijalnost, mesto) i kratkom biografijom (`users.bio`). Tok: `draft` → `submitted` (autor šalje)
+→ `returned` (urednik vraća sa napomenom koju vidi samo autor) ili `published` (odmah ili zakazano `published_at`).
+Teme (`fk_topics`) uređuje urednik; početne teme su o poslu van škole (vojska, policija, GSS, ski centri, borilačke
+veštine, spasilaštvo, rekreacija i turizam).
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/topics` | javno | teme sa brojem objavljenih tekstova |
+| POST | `/articles/list` | javno | `kind`, `topic` (slug), `search`, `page`, `per_page` (≤ 50); istaknuti pa najnoviji |
+| GET | `/articles/{slug}` | javno | tekst sa `body`, autorom (ime, potpis, biografija), temom, debatom i `related` |
+| GET | `/admin/articles/options` | author, editor, admin | teme, otvorene/zatvorene debate i potpis prijavljenog |
+| POST | `/admin/articles/list` | author (samo svoje), editor, admin | `status` (i `scheduled`), `kind`, `topic_id`, `search`, `page`; poslati prvi, uz `submitted` broj |
+| GET / POST / PATCH | `/admin/articles[/{id}]` | autor svog nacrta ili vraćenog teksta, urednik uvek | `kind`, `topic_id`, `debate_id`, `title`, `summary`, `body`, `slug` (samo urednik) |
+| POST | `/admin/articles/{id}/submit` | autor teksta | traži potpis (`byline`, 422); notifikacija urednicima |
+| POST | `/admin/articles/{id}/publish` | editor, admin | `published_at` (prazno = odmah); notifikacija autoru |
+| POST | `/admin/articles/{id}/return` | editor, admin | `note` (obavezno); notifikacija autoru |
+| POST | `/admin/articles/{id}/unpublish` · PATCH `/featured` | editor, admin | skidanje sa sajta, isticanje |
+| DELETE | `/admin/articles/{id}` | autor (neobjavljen), editor, admin | |
+| PATCH | `/admin/author-profile` | author, editor, admin | `byline`, `bio` |
+| GET / POST / PATCH / DELETE | `/admin/topics[/{id}]` | editor, admin | `name`, `description`, `sort`; brisanje ostavlja tekstove bez teme |
+
 ## Propisi i literatura
 
 | Metod | Ruta | Pristup | Opis |

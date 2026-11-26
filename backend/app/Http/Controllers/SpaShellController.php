@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\News;
 use App\Models\Organization;
 use App\Models\Question;
@@ -59,10 +60,11 @@ class SpaShellController extends Controller
             return self::STATUS_PUBLIC;
         }
 
-        if (preg_match('#^/(vesti|pitanja|udruzenja|debate)/([^/]+)$#', $path, $match)) {
+        if (preg_match('#^/(vesti|tekstovi|pitanja|udruzenja|debate)/([^/]+)$#', $path, $match)) {
             $slug = rawurldecode($match[2]);
             $exists = match ($match[1]) {
                 'vesti' => News::visible()->where('slug', $slug)->exists(),
+                'tekstovi' => Article::visible()->where('slug', $slug)->exists(),
                 'pitanja' => Question::visible()->where('slug', $slug)->exists(),
                 'udruzenja' => Organization::where('slug', $slug)->exists(),
                 'debate' => true,

@@ -23,6 +23,9 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   AI (sažetak debate, nacrt odgovora): `App\Services\Ai\Assistant` → `ClaudeAssistant` (Anthropic PHP SDK,
   `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY` samo u `.env`); AI uvek pravi nacrt koji urednik ili moderator
   odobrava, u testovima se `Assistant` zamenjuje lažnim. Autor u adminu vidi samo pitanja dodeljena njemu.
+  Kolumne i autorski tekstovi („Priče kolega”, `/tekstovi`, `features/articles`): svaki tekst je potpisan nalogom autora
+  (potpis `byline` obavezan pre slanja), urednik vraća sa napomenom ili objavljuje; blok `app-articles-showcase` stoji na
+  naslovnoj i na vrhu `/vesti`. Ključevi indeksa u migracijama najviše 1000 bajtova (server je MyISAM).
   Svaki mejl korisniku prati upis u notifikacije (`App\Services\Inbox::record`, stranica `/notifikacije`, zvonce u meniju).
   Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `korisnik@fiskultura.test`, lozinka `lozinka123`.
 

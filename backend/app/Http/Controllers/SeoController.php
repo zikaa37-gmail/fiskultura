@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\News;
 use App\Models\Organization;
 use App\Models\Question;
@@ -13,6 +14,7 @@ class SeoController extends Controller
     public const STATIC_PAGES = [
         '/' => ['daily', '1.0'],
         '/vesti' => ['daily', '0.9'],
+        '/tekstovi' => ['weekly', '0.8'],
         '/udruzenja' => ['weekly', '0.8'],
         '/propisi' => ['weekly', '0.8'],
         '/kontakt' => ['yearly', '0.4'],
@@ -57,6 +59,8 @@ class SeoController extends Controller
                 ->map(fn (News $news) => ['slug' => $news->slug, 'updated_at' => $this->lastmod($news->updated_at, $news->published_at)])->values(),
             'organizations' => Organization::orderBy('name')->get(['slug', 'updated_at'])
                 ->map(fn (Organization $organization) => ['slug' => $organization->slug, 'updated_at' => $organization->updated_at?->toIso8601String()])->values(),
+            'articles' => Article::visible()->orderByDesc('published_at')->get(['slug', 'updated_at', 'published_at'])
+                ->map(fn (Article $article) => ['slug' => $article->slug, 'updated_at' => $this->lastmod($article->updated_at, $article->published_at)])->values(),
             'questions' => Question::visible()->orderByDesc('published_at')->get(['slug', 'updated_at', 'published_at'])
                 ->map(fn (Question $question) => ['slug' => $question->slug, 'updated_at' => $this->lastmod($question->updated_at, $question->published_at)])->values(),
         ]);
@@ -72,6 +76,7 @@ class SeoController extends Controller
         $newest = [
             '/' => News::visible()->max('published_at'),
             '/vesti' => News::visible()->max('published_at'),
+            '/tekstovi' => Article::visible()->max('published_at'),
             '/udruzenja' => Organization::max('updated_at'),
             '/propisi' => Regulation::max('updated_at'),
             '/pitanja' => Question::visible()->max('updated_at'),
@@ -79,7 +84,7 @@ class SeoController extends Controller
         foreach (self::STATIC_PAGES as $path => [$frequency, $priority]) {
             $urls[] = ['loc' => $base.($path === '/' ? '/' : $path), 'lastmod' => $latest($newest[$path] ?? null), 'changefreq' => $frequency, 'priority' => $priority];
         }
-        foreach (['news' => ['/vesti/', 'monthly', '0.7'], 'organizations' => ['/udruzenja/', 'weekly', '0.6']] as $kind => [$prefix, $frequency, $priority]) {
+        foreach (['news' => ['/vesti/', 'monthly', '0.7'], 'organizations' => ['/udruzenja/', 'weekly', '0.6'], 'articles' => ['/tekstovi/', 'monthly', '0.7']] as $kind => [$prefix, $frequency, $priority]) {
             foreach ($routes[$kind] as $item) {
                 $urls[] = ['loc' => $base.$prefix.rawurlencode($item['slug']), 'lastmod' => $latest($item['updated_at']), 'changefreq' => $frequency, 'priority' => $priority];
             }

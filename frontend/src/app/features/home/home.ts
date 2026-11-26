@@ -11,12 +11,13 @@ import { NewsPage } from '../../core/content/content.model';
 import { EXERCISES, PORTAL_MODULES } from '../../content/portal-content';
 import { RULE_TOPICS } from '../../content/rules/rule-topics';
 import { PortalSocialLinks } from '../../shared/portal-social/portal-social';
+import { ArticlesShowcase } from '../articles/articles-showcase';
 
 const DAY_MS = 86_400_000;
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, BUTTON_IMPORTS, ModuleCard, NewsCard, Icon, JoinCta, PortalSocialLinks],
+  imports: [RouterLink, BUTTON_IMPORTS, ModuleCard, NewsCard, Icon, JoinCta, PortalSocialLinks, ArticlesShowcase],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
 })
