@@ -142,7 +142,11 @@
       @for (source of current.sources; track source.url + source.title) {
         <li>
           <app-icon [name]="source.url.endsWith('.pdf') ? 'pdf' : 'external'" [size]="18" />
-          <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.title }}</a>
+          @if (isLinkDisabled(source.url)) {
+            <span [title]="disabledTitle">{{ source.title }} (trenutno ne radi)</span>
+          } @else {
+            <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.title }}</a>
+          }
           <span class="muted small">— {{ source.publisher }}{{ source.year ? ', ' + source.year : '' }}{{ source.pages ? ', str. ' + source.pages : '' }}</span>
         </li>
       }

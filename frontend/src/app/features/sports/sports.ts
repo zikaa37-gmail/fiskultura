@@ -3,6 +3,7 @@ import { SPORT_GROUPS, SPORTS } from '../../content/sports-content';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Icon } from '../../shared/icon/icon';
+import { DISABLED_LINK_TITLE, isLinkDisabled } from '../../core/disabled-links';
 
 @Component({
   selector: 'app-sports',
@@ -35,7 +36,11 @@ import { Icon } from '../../shared/icon/icon';
                     <a class="inline-link" [href]="sport.externalSite" target="_blank" rel="noopener">Sajt sporta →</a>
                   }
                   @for (source of sport.officialSources; track source.url) {
-                    <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.label }} →</a>
+                    @if (isLinkDisabled(source.url)) {
+                      <span class="muted small" [title]="disabledTitle">{{ source.label }} (trenutno ne radi)</span>
+                    } @else {
+                      <a class="inline-link" [href]="source.url" target="_blank" rel="noopener">{{ source.label }} →</a>
+                    }
                   }
                 </article>
               }
@@ -77,6 +82,8 @@ export class Sports {
 
   protected readonly groups = groupSports();
   protected readonly statusLabel = { ready: 'Dostupno', first: 'Prvo izdanje', soon: 'Uskoro' } as const;
+  protected readonly isLinkDisabled = isLinkDisabled;
+  protected readonly disabledTitle = DISABLED_LINK_TITLE;
 }
 
 function groupSports() {

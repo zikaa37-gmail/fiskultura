@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { Icon } from '../../shared/icon/icon';
+import { DISABLED_LINK_TITLE, isLinkDisabled } from '../../core/disabled-links';
 import { TestPictureView } from './test-picture';
 import { BATTERIES, BatteryGuide, REFERENCE_TABLES } from './testing-content';
 
@@ -17,6 +18,8 @@ import { BATTERIES, BatteryGuide, REFERENCE_TABLES } from './testing-content';
 })
 export class Testing {
   protected readonly batteries = BATTERIES;
+  protected readonly isLinkDisabled = isLinkDisabled;
+  protected readonly disabledTitle = DISABLED_LINK_TITLE;
   protected readonly batteryId = signal<BatteryGuide['id']>('zdravitas');
   protected readonly battery = computed(() => this.batteries.find((item) => item.id === this.batteryId()) ?? this.batteries[0]);
   protected readonly references = computed(() => REFERENCE_TABLES.filter((table) => table.battery === this.batteryId()));

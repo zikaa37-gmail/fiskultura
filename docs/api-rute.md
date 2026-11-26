@@ -111,6 +111,7 @@ veštine, spasilaštvo, rekreacija i turizam).
 | POST | `/admin/articles/{id}/unpublish` · PATCH `/featured` | editor, admin | skidanje sa sajta, isticanje |
 | DELETE | `/admin/articles/{id}` | autor (neobjavljen), editor, admin | |
 | PATCH | `/admin/author-profile` | author, editor, admin | `byline`, `bio` |
+| GET / POST | `/author-request` | prijavljen korisnik | prijava za autora: `byline`, `note` (o čemu bi pisao), `bio`; prva prijava ide adminima u notifikacije, admin dodeljuje ulogu u Korisnici (filter `author_requests`), korisnik dobija notifikaciju |
 | GET / POST / PATCH / DELETE | `/admin/topics[/{id}]` | editor, admin | `name`, `description`, `sort`; brisanje ostavlja tekstove bez teme |
 
 ## Propisi i literatura

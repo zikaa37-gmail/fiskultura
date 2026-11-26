@@ -2,17 +2,18 @@ import { ChangeDetectionStrategy, Component, effect, inject, input, signal } fro
 import { HttpClient } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { SubscribeLink } from '../../shared/subscribe-link/subscribe-link';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../core/auth/auth.service';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
-import { CONTACT_TOPICS, ContactTopic, EDITORIAL_TEAM } from '../../content/rules/contacts';
+import { CONTACT_TOPICS, ContactTopic } from '../../content/rules/contacts';
 
 @Component({
   selector: 'app-contact-page',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule],
+  imports: [ReactiveFormsModule, RouterLink, SubscribeLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -24,19 +25,7 @@ import { CONTACT_TOPICS, ContactTopic, EDITORIAL_TEAM } from '../../content/rule
             Portal pravimo nastavnici i za nastavnike fizičkog i zdravstvenog vaspitanja. Pišite nam kad nešto nije tačno ili je zastarelo,
             kad imate pitanje ili predlog, ili kad želite da sarađujemo. Odgovaramo na mejl koji navedete.
           </p>
-        </div>
-
-        <div class="editorial-team">
-          @for (member of team; track member.name) {
-            <article class="contact-card">
-              <h2>{{ member.name }}</h2>
-              <p class="small rule-now-label">{{ member.role }}</p>
-              <p class="small">{{ member.about }}</p>
-              @if (member.url) {
-                <a class="inline-link small" [href]="member.url">Više o autoru</a>
-              }
-            </article>
-          }
+          <app-subscribe-link />
         </div>
 
         <div class="auth-card contact-form-card">
@@ -90,7 +79,6 @@ export class ContactPage {
   readonly #http = inject(HttpClient);
   readonly #auth = inject(AuthService);
 
-  protected readonly team = EDITORIAL_TEAM;
   protected readonly topics = CONTACT_TOPICS;
   protected readonly busy = signal(false);
   protected readonly error = signal<string | null>(null);

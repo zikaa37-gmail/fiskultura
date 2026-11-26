@@ -4,11 +4,22 @@
       <p class="eyebrow">Vesti i objave</p>
       <h1>Šta je novo u fizičkom vaspitanju</h1>
       <p class="muted">Objave strukovnih udruženja, saveza za školski sport i institucija — ukratko, uz oznaku odakle je informacija i link na izvor.</p>
-      <a class="news-subscribe" routerLink="/obavestenja">Primajte vesti mejlom</a>
+      <app-subscribe-link />
     </div>
 
-    <app-articles-showcase class="mb-5" [limit]="3" [pageTitle]="false" />
-
-    <app-news-list />
+    <nav mat-tab-nav-bar class="news-tabs" [tabPanel]="panel" mat-stretch-tabs="false" [disablePagination]="true" aria-label="Vesti i priče kolega">
+      <a mat-tab-link routerLink="/vesti" [queryParams]="{ prikaz: null }" queryParamsHandling="merge" [active]="tab() === 'vesti'">Vesti</a>
+      <a mat-tab-link routerLink="/vesti" [queryParams]="{ prikaz: 'price' }" queryParamsHandling="merge" [active]="tab() === 'price'">Priče kolega</a>
+    </nav>
+    <mat-tab-nav-panel #panel>
+      <div class="news-layout">
+        <div class="news-main" [class.news-pane-hidden]="tab() !== 'vesti'">
+          <app-news-list />
+        </div>
+        <aside class="news-aside" [class.news-pane-hidden]="tab() !== 'price'" aria-label="Kolumne i autorski tekstovi">
+          <app-articles-showcase [limit]="5" [pageTitle]="false" [compact]="true" />
+        </aside>
+      </div>
+    </mat-tab-nav-panel>
   </div>
 </section>

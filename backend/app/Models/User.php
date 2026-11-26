@@ -57,6 +57,7 @@ class User extends Authenticatable
             'invited_at' => 'datetime',
             'directory_consent_at' => 'datetime',
             'surveys_consent_at' => 'datetime',
+            'author_requested_at' => 'datetime',
             'last_active_at' => 'datetime',
             'password' => 'hashed',
         ];

@@ -72,6 +72,9 @@ export const ICON_NAMES = [
   'tag',
   'upload',
   'x-circle',
+  'volume',
+  'stop',
+  'eye-slash',
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];

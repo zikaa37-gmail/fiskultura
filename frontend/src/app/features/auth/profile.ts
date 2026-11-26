@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { PasswordToggle } from '../../shared/password-toggle/password-toggle';
 import { isPlatformBrowser } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +24,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, Icon],
+  imports: [PasswordToggle, ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -138,12 +139,13 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 <h2>Promena lozinke</h2>
                 <mat-form-field appearance="outline">
                   <mat-label>Trenutna lozinka</mat-label>
-                  <input matInput type="password" formControlName="current" autocomplete="current-password" />
+                  <input #pw1 matInput type="password" formControlName="current" autocomplete="current-password" />
+                  <app-password-toggle matSuffix [input]="pw1" />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Nova lozinka</mat-label>
-                  <input matInput type="password" formControlName="password" autocomplete="new-password" />
-                  <mat-hint>Najmanje 8 znakova</mat-hint>
+                  <input #pw2 matInput type="password" formControlName="password" autocomplete="new-password" />
+                  <app-password-toggle matSuffix [input]="pw2" /><mat-hint>Najmanje 8 znakova</mat-hint>
                 </mat-form-field>
                 <button type="submit" mat-stroked-button [disabled]="busy()">Promeni lozinku</button>
               </form>
@@ -161,7 +163,8 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                     <p class="small">Brišu se nalog, profil i prijava na obaveštenja. Objavljena pitanja ostaju, bez veze sa tobom.</p>
                     <mat-form-field appearance="outline">
                       <mat-label>Lozinka</mat-label>
-                      <input matInput type="password" formControlName="password" autocomplete="current-password" />
+                      <input #pw3 matInput type="password" formControlName="password" autocomplete="current-password" />
+                      <app-password-toggle matSuffix [input]="pw3" />
                     </mat-form-field>
                     <button type="submit" mat-flat-button theme="danger" [disabled]="busy()">Obriši nalog</button>
                   </form>

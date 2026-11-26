@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { Icon } from '../../shared/icon/icon';
 import { PORTAL_APPS } from '../../content/portal-content';
+import { DISABLED_LINK_TITLE, isLinkDisabled } from '../../core/disabled-links';
 
 @Component({
   selector: 'app-apps',
@@ -22,9 +23,13 @@ import { PORTAL_APPS } from '../../content/portal-content';
               <h3>{{ app.name }}</h3>
               <p>{{ app.description }}</p>
               <span class="muted small">{{ app.owner }}</span>
-              <a mat-flat-button [href]="app.url" target="_blank" rel="noopener">
-                Otvori <app-icon name="external" [size]="18" />
-              </a>
+              @if (isLinkDisabled(app.url)) {
+                <button type="button" mat-flat-button disabled [title]="disabledTitle">Trenutno ne radi</button>
+              } @else {
+                <a mat-flat-button [href]="app.url" target="_blank" rel="noopener">
+                  Otvori <app-icon name="external" [size]="18" />
+                </a>
+              }
             </article>
           }
         </div>
@@ -34,4 +39,6 @@ import { PORTAL_APPS } from '../../content/portal-content';
 })
 export class Apps {
   protected readonly apps = PORTAL_APPS;
+  protected readonly isLinkDisabled = isLinkDisabled;
+  protected readonly disabledTitle = DISABLED_LINK_TITLE;
 }
