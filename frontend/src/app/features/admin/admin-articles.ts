@@ -13,7 +13,9 @@ import { FilterChange, FilterField, ListFilters } from '../../shared/list-filter
 import { ListHeader } from '../../shared/list-header/list-header';
 import { MenuOption, OptionsMenu } from '../../shared/options-menu/options-menu';
 import { Pagination } from '../../shared/pagination/pagination';
-import { AdminArticle, AdminArticlePage, ARTICLE_KIND_LABELS, ARTICLE_STATUS_LABELS, ArticleKind, articleState, Topic } from '../articles/article.model';
+import { AdminArticle, AdminArticlePage, ARTICLE_KIND_LABELS, ARTICLE_STATUS_LABELS, ArticleKind, articleState } from '../articles/article.model';
+import { Icon } from '../../shared/icon/icon';
+import { ArticleTopicStore } from '../articles/article-topic-store';
 
 type RowAction = 'view' | 'edit' | 'feature' | 'remove';
 
@@ -21,17 +23,20 @@ const QUERY_KEYS = ['status', 'vrsta', 'tema', 'pretraga'] as const;
 
 @Component({
   selector: 'app-admin-articles',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, OptionsMenu, Pagination],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, OptionsMenu, Pagination, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-list-filters [fields]="fields()" [values]="filters()" emptySummary="Svi tekstovi" (filterChange)="setFilter($event)" (clearAll)="clearFilters()" />
     @if (resource.isLoading()) {
       <mat-progress-bar mode="indeterminate" />
     }
+    <app-list-header [count]="page()?.meta?.total ?? null" [page]="page()?.meta?.page ?? null" [lastPage]="page()?.meta?.last_page ?? null">
+      <a mat-flat-button routerLink="nova-prica"><app-icon name="plus" [size]="18" /> Nova priča</a>
+    </app-list-header>
+    @if (resource.error()) {
+      <p class="form-error" role="alert">Spisak priča trenutno nije dostupan. Pokušaj ponovo za nekoliko minuta.</p>
+    }
     @if (page(); as data) {
-      <app-list-header [count]="data.meta.total" [page]="data.meta.page" [lastPage]="data.meta.last_page">
-        <a mat-flat-button routerLink="novi">Novi tekst</a>
-      </app-list-header>
       <div class="admin-rows">
         @for (item of data.data; track item.id) {
           @let state = stateOf(item);
@@ -42,6 +47,8 @@ const QUERY_KEYS = ['status', 'vrsta', 'tema', 'pretraga'] as const;
                 <span class="state-chip state-muted">{{ kindLabels[item.kind] }}</span>
                 @if (item.topic) {
                   <span>{{ item.topic.name }}</span>
+                } @else if (item.topic_proposal) {
+                  <span class="state-chip state-warn">Nova tema: {{ item.topic_proposal }}</span>
                 }
                 @if (auth.isEditor()) {
                   <span>{{ item.author.name }}</span>
@@ -58,7 +65,7 @@ const QUERY_KEYS = ['status', 'vrsta', 'tema', 'pretraga'] as const;
           <div class="empty-state">
             <h3>{{ auth.isEditor() ? 'Nema tekstova za ovaj izbor' : 'Još nemaš tekstova' }}</h3>
             <p class="muted">Tekst se piše u Wordu ili bilo gde drugde, pa se nalepi u formu. Urednik ga pregleda pre objave.</p>
-            <a mat-flat-button routerLink="novi">Novi tekst</a>
+            <a mat-flat-button routerLink="nova-prica"><app-icon name="plus" [size]="18" /> Nova priča</a>
           </div>
         }
       </div>
@@ -81,7 +88,7 @@ export class AdminArticles {
 
   protected readonly filters = computed(() => Object.fromEntries(QUERY_KEYS.map((key) => [key, this.#query()?.get(key) ?? ''])) as Record<string, string>);
   readonly #page = computed(() => Math.max(1, Number(this.#query()?.get('strana')) || 1));
-  readonly #topics = httpResource<Topic[]>(() => `${API_URL}/topics`);
+  readonly #topics = inject(ArticleTopicStore).load().topics;
 
   protected readonly resource = httpResource<AdminArticlePage>(() => {
     const { status, vrsta, tema, pretraga } = this.filters();
@@ -106,7 +113,7 @@ export class AdminArticles {
         options: Object.entries(ARTICLE_STATUS_LABELS).map(([value, label]) => ({ value, label: value === 'submitted' && submitted ? `${label} (${submitted})` : label })),
       },
       { key: 'vrsta', label: 'Vrsta', allLabel: 'Sve', options: (Object.keys(ARTICLE_KIND_LABELS) as ArticleKind[]).map((value) => ({ value, label: ARTICLE_KIND_LABELS[value] })) },
-      { key: 'tema', label: 'Tema', allLabel: 'Sve teme', options: (this.#topics.hasValue() ? this.#topics.value() : []).map((topic) => ({ value: `${topic.id}`, label: topic.name })) },
+      { key: 'tema', label: 'Tema', allLabel: 'Sve teme', options: this.#topics().map((topic) => ({ value: `${topic.id}`, label: topic.name })) },
       { key: 'pretraga', label: 'Pretraga', type: 'search' },
     ];
   });

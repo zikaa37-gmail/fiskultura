@@ -7,6 +7,7 @@ use App\Models\Debate;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\UserNotification;
+use App\Services\Ai\Assistant;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Concerns\AuthenticatesWithJwt;
@@ -125,7 +126,7 @@ class ArticleTest extends TestCase
         $other = Article::where('author_id', $this->editor->id)->firstOrFail();
         $this->withJwt($this->author)->getJson("/api/admin/articles/{$other->id}")->assertForbidden();
         $this->withJwt($this->user)->postJson('/api/admin/articles', $this->payload())->assertForbidden();
-        $this->withJwt($this->author)->patchJson('/api/admin/topics/1', ['name' => 'Nova'])->assertForbidden();
+        $this->withJwt($this->author)->postJson('/api/admin/articles', [...$this->payload(), 'topic_id' => 999])->assertJsonValidationErrors('topic_id');
     }
 
     public function test_scheduled_text_is_hidden_until_publish_time(): void
@@ -160,22 +161,72 @@ class ArticleTest extends TestCase
         $this->getJson('/api/articles/kolumna')->assertJsonPath('debate', null);
     }
 
-    public function test_author_profile_and_topic_management(): void
+    public function test_author_profile_from_account_and_bio_only_on_detail(): void
     {
-        $this->withJwt($this->author)->patchJson('/api/admin/author-profile', ['byline' => 'profesor FV, OŠ „Vuk Karadžić”, Niš', 'bio' => 'Dvadeset godina u školi.'])
+        $this->withJwt($this->author)->patchJson('/api/auth/me', ['name' => $this->author->name, 'byline' => 'profesor FV, OŠ „Vuk Karadžić”, Niš', 'bio' => 'Dvadeset godina u školi.'])
             ->assertOk()
             ->assertJsonPath('byline', 'profesor FV, OŠ „Vuk Karadžić”, Niš');
         $this->publishedArticle();
         $this->getJson('/api/articles/objavljen-tekst')->assertJsonPath('author.bio', 'Dvadeset godina u školi.');
         $this->postJson('/api/articles/list')->assertJsonMissingPath('data.0.author.bio');
 
-        $topic = $this->withJwt($this->editor)->postJson('/api/admin/topics', ['name' => 'Plivanje u školi'])->assertCreated()->assertJsonPath('slug', 'plivanje-u-skoli')->json();
-        $this->withJwt($this->editor)->postJson('/api/admin/topics', ['name' => 'Plivanje u školi'])->assertUnprocessable();
-        $this->withJwt($this->editor)->patchJson("/api/admin/topics/{$topic['id']}", ['name' => 'Plivanje', 'sort' => 5])->assertOk()->assertJsonPath('sort', 5);
+    }
 
-        $gss = Topic::where('slug', 'gss')->firstOrFail();
-        $this->withJwt($this->editor)->deleteJson("/api/admin/topics/{$gss->id}")->assertOk();
-        $this->assertNull(Article::where('slug', 'objavljen-tekst')->value('topic_id'));
+    public function test_author_proposes_new_topic_and_editor_resolves_it_before_publishing(): void
+    {
+        $id = $this->withJwt($this->author)->postJson('/api/admin/articles', [...$this->payload(), 'topic_id' => null, 'topic_proposal' => '  Plivanje u školi '])
+            ->assertCreated()
+            ->assertJsonPath('topic_proposal', 'Plivanje u školi')
+            ->json('id');
+        $this->author->forceFill(['byline' => 'profesor FV, Niš'])->save();
+        $this->withJwt($this->author)->postJson("/api/admin/articles/{$id}/submit")->assertOk();
+        $this->assertStringContainsString('predlaže novu temu: Plivanje u školi', UserNotification::where('user_id', $this->editor->id)->latest('id')->value('body'));
+
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$id}/publish")->assertJsonValidationErrors('topic_proposal');
+        $this->withJwt($this->author)->postJson("/api/admin/articles/{$id}/topic", ['name' => 'Plivanje'])->assertForbidden();
+
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$id}/topic", ['name' => 'Plivanje u školi'])
+            ->assertOk()
+            ->assertJsonPath('topic_proposal', null)
+            ->assertJsonPath('topic.slug', 'plivanje-u-skoli');
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$id}/publish")->assertOk();
+        $this->assertSame(9, Topic::count());
+
+        $other = $this->withJwt($this->author)->postJson('/api/admin/articles', [...$this->payload(), 'title' => 'Drugi', 'topic_id' => null, 'topic_proposal' => 'plivanje u školi'])->json('id');
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$other}/topic", ['name' => 'Plivanje u školi'])->assertOk();
+        $this->assertSame(9, Topic::count());
+
+        $third = $this->withJwt($this->author)->postJson('/api/admin/articles', [...$this->payload(), 'title' => 'Treći', 'topic_proposal' => 'Ignorisano'])->assertJsonPath('topic_proposal', null)->json('id');
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$third}/topic", ['topic_id' => Topic::where('slug', 'gss')->value('id')])->assertJsonPath('topic.slug', 'gss');
+
+        $this->artisan('topics:merge', ['from' => 'plivanje-u-skoli', 'into' => 'spasilastvo'])->assertExitCode(0);
+        $this->assertSame(2, Article::where('topic_id', Topic::where('slug', 'spasilastvo')->value('id'))->count());
+        $this->artisan('topics:rename', ['slug' => 'gss', 'name' => 'GSS'])->assertExitCode(0);
+        $this->assertSame('GSS', Topic::where('slug', 'gss')->value('name'));
+    }
+
+    public function test_slug_follows_title_until_first_publication(): void
+    {
+        $id = $this->withJwt($this->editor)->postJson('/api/admin/articles', [...$this->payload(), 'title' => 'Prvi naslov', 'slug' => 'rucna-adresa'])->assertCreated()->assertJsonPath('slug', 'prvi-naslov')->json('id');
+        $this->withJwt($this->editor)->patchJson("/api/admin/articles/{$id}", [...$this->payload(), 'title' => 'Drugi naslov'])->assertJsonPath('slug', 'drugi-naslov');
+        $this->withJwt($this->editor)->postJson("/api/admin/articles/{$id}/publish")->assertOk();
+        $this->withJwt($this->editor)->patchJson("/api/admin/articles/{$id}", [...$this->payload(), 'title' => 'Treći naslov'])->assertJsonPath('slug', 'drugi-naslov');
+    }
+
+    public function test_ai_writes_summary_from_pasted_text_for_staff_only(): void
+    {
+        $ai = new FakeAssistant;
+        $ai->response = ['summary' => '  Kako da čas bude svaki dan i zašto se to isplati.  '];
+        $this->app->instance(Assistant::class, $ai);
+        $body = str_repeat('Deca koja se kreću svaki dan bolje uče i ređe su bolesna. ', 5);
+
+        $this->withJwt($this->author)->postJson('/api/admin/articles/summary', ['title' => 'Čas svaki dan', 'body' => $body])
+            ->assertOk()
+            ->assertJsonPath('summary', 'Kako da čas bude svaki dan i zašto se to isplati.');
+        $this->assertStringContainsString('<naslov>Čas svaki dan</naslov>', $ai->prompt);
+
+        $this->withJwt($this->author)->postJson('/api/admin/articles/summary', ['body' => 'Kratko.'])->assertJsonValidationErrors('body');
+        $this->withJwt($this->user)->postJson('/api/admin/articles/summary', ['body' => $body])->assertForbidden();
     }
 
     public function test_author_deletes_own_draft_but_not_published_text(): void

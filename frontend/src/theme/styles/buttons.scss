@@ -60,13 +60,47 @@ $sizes: sizes.$controls;
 
 .btn-theme-secondary {
   @include theme(
-    var(--color-lime),
-    color-mix(in srgb, var(--color-lime) 82%, var(--color-lime-strong)),
-    color-mix(in srgb, var(--color-lime) 64%, var(--color-lime-strong)),
-    #1a2e05,
-    var(--color-lime-strong),
-    color-mix(in srgb, var(--color-lime-strong) 55%, var(--color-border))
+    var(--color-secondary),
+    var(--color-secondary-hover),
+    color-mix(in srgb, var(--color-secondary-hover) 82%, var(--color-text)),
+    var(--color-on-secondary),
+    var(--color-secondary-ink),
+    color-mix(in srgb, var(--color-secondary-ink) 55%, var(--color-border))
   );
+}
+
+#{$all} {
+  .mdc-button__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--btn-gap);
+  }
+}
+
+#{$all} {
+  &:has(.mdc-button__label > .app-icon) {
+    --btn-pad-override: 0;
+    min-width: var(--btn-height);
+
+    .mdc-button__label {
+      gap: 0;
+      font-size: 0;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  #{$all} {
+    &:has(.mdc-button__label > .app-icon) {
+      --btn-pad-override: initial;
+      min-width: 0;
+
+      .mdc-button__label {
+        gap: var(--btn-gap);
+        font-size: inherit;
+      }
+    }
+  }
 }
 
 .btn-theme-tertiary {
@@ -100,7 +134,7 @@ $sizes: sizes.$controls;
 #{$filled} {
   --mat-button-filled-container-shape: var(--btn-radius);
   --mat-button-filled-container-height: var(--btn-height);
-  --mat-button-filled-horizontal-padding: var(--btn-padding);
+  --mat-button-filled-horizontal-padding: var(--btn-pad-override, var(--btn-padding));
   --mat-button-filled-label-text-size: var(--btn-font-size);
   --mat-button-filled-label-text-weight: 600;
   --mat-button-filled-icon-spacing: var(--btn-gap);
@@ -115,7 +149,7 @@ $sizes: sizes.$controls;
   --mat-button-filled-disabled-label-text-color: var(--btn-disabled-ink);
   --mat-button-protected-container-shape: var(--btn-radius);
   --mat-button-protected-container-height: var(--btn-height);
-  --mat-button-protected-horizontal-padding: var(--btn-padding);
+  --mat-button-protected-horizontal-padding: var(--btn-pad-override, var(--btn-padding));
   --mat-button-protected-label-text-size: var(--btn-font-size);
   --mat-button-protected-label-text-weight: 600;
   --mat-button-protected-container-color: var(--btn-color);
@@ -124,7 +158,7 @@ $sizes: sizes.$controls;
   --mat-button-protected-disabled-label-text-color: var(--btn-disabled-ink);
   --mat-button-tonal-container-shape: var(--btn-radius);
   --mat-button-tonal-container-height: var(--btn-height);
-  --mat-button-tonal-horizontal-padding: var(--btn-padding);
+  --mat-button-tonal-horizontal-padding: var(--btn-pad-override, var(--btn-padding));
   --mat-button-tonal-label-text-size: var(--btn-font-size);
   --mat-button-tonal-container-color: var(--btn-color);
   --mat-button-tonal-label-text-color: var(--btn-on-color);
@@ -141,7 +175,7 @@ $sizes: sizes.$controls;
 #{$outlined} {
   --mat-button-outlined-container-shape: var(--btn-radius);
   --mat-button-outlined-container-height: var(--btn-height);
-  --mat-button-outlined-horizontal-padding: var(--btn-padding);
+  --mat-button-outlined-horizontal-padding: var(--btn-pad-override, var(--btn-padding));
   --mat-button-outlined-label-text-size: var(--btn-font-size);
   --mat-button-outlined-label-text-weight: 600;
   --mat-button-outlined-icon-spacing: var(--btn-gap);

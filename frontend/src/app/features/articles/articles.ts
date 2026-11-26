@@ -10,7 +10,8 @@ import { FilterChange, FilterField, ListFilters } from '../../shared/list-filter
 import { queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Pagination } from '../../shared/pagination/pagination';
-import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage, Topic } from './article.model';
+import { ArticleTopicStore } from './article-topic-store';
+import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage } from './article.model';
 import { WriteButton } from './write-button';
 
 @Component({
@@ -69,10 +70,10 @@ export class Articles {
   protected readonly filters = queryFilters(['vrsta', 'tema', 'pretraga']);
   readonly #page = computed(() => Math.max(1, Number(this.#query()?.get('strana')) || 1));
 
-  readonly #topics = httpResource<Topic[]>(() => `${API_URL}/topics`);
+  readonly #topics = inject(ArticleTopicStore).load().topics;
   protected readonly fields = computed<FilterField[]>(() => [
     { key: 'vrsta', label: 'Vrsta', allLabel: 'Sve', options: (Object.keys(ARTICLE_KIND_LABELS) as ArticleKind[]).map((value) => ({ value, label: ARTICLE_KIND_LABELS[value] })) },
-    { key: 'tema', label: 'Tema', allLabel: 'Sve teme', options: (this.#topics.hasValue() ? this.#topics.value() : []).map((topic) => ({ value: topic.slug, label: topic.name })) },
+    { key: 'tema', label: 'Tema', allLabel: 'Sve teme', options: this.#topics().map((topic) => ({ value: topic.slug, label: topic.name })) },
     { key: 'pretraga', label: 'Pretraga', type: 'search' },
   ]);
 

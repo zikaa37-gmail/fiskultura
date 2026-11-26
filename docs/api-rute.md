@@ -94,7 +94,7 @@ ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
 Tekst je `kolumna` ili `clanak`, uvek potpisan nalogom autora (uloga `author`, `editor` ili `admin`) sa potpisom
 (`users.byline`: zvanje, specijalnost, mesto) i kratkom biografijom (`users.bio`). Tok: `draft` → `submitted` (autor šalje)
 → `returned` (urednik vraća sa napomenom koju vidi samo autor) ili `published` (odmah ili zakazano `published_at`).
-Teme (`fk_topics`) uređuje urednik; početne teme su o poslu van škole (vojska, policija, GSS, ski centri, borilačke
+Teme su u `fk_topics` (bez admin stranice): autor bira postojeću ili upisuje svoju (`topic_proposal`), a urednik je u formi teksta dodaje kao novu temu, stavlja tekst u postojeću ili odbacuje predlog; preimenovanje i spajanje: `php artisan topics:rename {slug} {naziv}` i `topics:merge {iz} {u}`. Početne teme su o poslu van škole (vojska, policija, GSS, ski centri, borilačke
 veštine, spasilaštvo, rekreacija i turizam).
 
 | Metod | Ruta | Pristup | Opis |
@@ -103,16 +103,16 @@ veštine, spasilaštvo, rekreacija i turizam).
 | POST | `/articles/list` | javno | `kind`, `topic` (slug), `search`, `page`, `per_page` (≤ 50); istaknuti pa najnoviji |
 | GET | `/articles/{slug}` | javno | tekst sa `body`, autorom (ime, potpis, biografija), temom, debatom i `related` |
 | GET | `/admin/articles/options` | author, editor, admin | teme, otvorene/zatvorene debate i potpis prijavljenog |
-| POST | `/admin/articles/list` | author (samo svoje), editor, admin | `status` (i `scheduled`), `kind`, `topic_id`, `search`, `page`; poslati prvi, uz `submitted` broj |
-| GET / POST / PATCH | `/admin/articles[/{id}]` | autor svog nacrta ili vraćenog teksta, urednik uvek | `kind`, `topic_id`, `debate_id`, `title`, `summary`, `body`, `slug` (samo urednik) |
-| POST | `/admin/articles/{id}/submit` | autor teksta | traži potpis (`byline`, 422); notifikacija urednicima |
-| POST | `/admin/articles/{id}/publish` | editor, admin | `published_at` (prazno = odmah); notifikacija autoru |
+| POST | `/admin/articles/list` | author (samo svoje), editor, admin | `status` (i `scheduled`), `kind`, `topic_id`, `proposals` (samo sa predlogom teme), `search`, `page`; poslati prvi, uz `submitted` broj |
+| POST | `/admin/articles/summary` | author, editor, admin; 10/10 min | `title`, `body` (bar 200 znakova) → AI predlog uvoda `{ summary }`, ništa se ne čuva |
+| GET / POST / PATCH | `/admin/articles[/{id}]` | autor svog nacrta ili vraćenog teksta, urednik uvek | `kind`, `topic_id` ili `topic_proposal` (nova tema, samo kad nije izabrana postojeća), `debate_id`, `title`, `summary`, `body`; adresa (`slug`) se pravi iz naslova i ne menja se posle prve objave |
+| POST | `/admin/articles/{id}/submit` | autor teksta | traži potpis iz profila (`byline` preko `PATCH /auth/me`, 422); notifikacija urednicima |
+| POST | `/admin/articles/{id}/publish` | editor, admin | `published_at` (prazno = odmah); 422 dok postoji nerešen predlog teme; notifikacija autoru |
+| POST | `/admin/articles/{id}/topic` | editor, admin | `name` (nova tema ili postojeća istog naziva) ili `topic_id`; prazno = odbaci predlog |
 | POST | `/admin/articles/{id}/return` | editor, admin | `note` (obavezno); notifikacija autoru |
 | POST | `/admin/articles/{id}/unpublish` · PATCH `/featured` | editor, admin | skidanje sa sajta, isticanje |
 | DELETE | `/admin/articles/{id}` | autor (neobjavljen), editor, admin | |
-| PATCH | `/admin/author-profile` | author, editor, admin | `byline`, `bio` |
 | GET / POST | `/author-request` | prijavljen korisnik | prijava za autora: `byline`, `note` (o čemu bi pisao), `bio`; prva prijava ide adminima u notifikacije, admin dodeljuje ulogu u Korisnici (filter `author_requests`), korisnik dobija notifikaciju |
-| GET / POST / PATCH / DELETE | `/admin/topics[/{id}]` | editor, admin | `name`, `description`, `sort`; brisanje ostavlja tekstove bez teme |
 
 ## Propisi i literatura
 

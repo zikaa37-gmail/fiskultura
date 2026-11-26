@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Debate;
 use App\Models\Topic;
 use App\Models\User;
+use App\Services\Ai\ArticleSummarizer;
 use App\Services\Inbox;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -40,6 +41,7 @@ class AdminArticleController extends Controller
             'status' => ['nullable', Rule::in([...Article::STATUSES, 'scheduled'])],
             'kind' => ['nullable', Rule::in(Article::KINDS)],
             'topic_id' => ['nullable', 'integer'],
+            'proposals' => ['nullable', 'boolean'],
             'search' => ['nullable', 'string', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
@@ -56,6 +58,7 @@ class AdminArticleController extends Controller
             })
             ->when($filters['kind'] ?? null, fn (Builder $query, string $kind) => $query->where('kind', $kind))
             ->when($filters['topic_id'] ?? null, fn (Builder $query, int $id) => $query->where('topic_id', $id))
+            ->when($filters['proposals'] ?? false, fn (Builder $query) => $query->whereNotNull('topic_proposal'))
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query->where(fn (Builder $inner) => $inner
                 ->where('title', 'like', "%{$search}%")
                 ->orWhere('summary', 'like', "%{$search}%")))
@@ -86,11 +89,11 @@ class AdminArticleController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-        $data = $this->validated($request, $user);
+        $data = $this->validated($request);
 
         $article = Article::create([
             ...$data,
-            'slug' => Article::uniqueSlug($data['slug'] ?? $data['title']),
+            'slug' => Article::uniqueSlug($data['title']),
             'author_id' => $user->id,
             'status' => Article::DRAFT,
         ]);
@@ -102,11 +105,11 @@ class AdminArticleController extends Controller
     {
         $user = $request->user();
         abort_unless($article->isEditableBy($user), 403, 'Tekst je poslat uredniku i ne može da se menja dok ga ne pregleda.');
-        $data = $this->validated($request, $user);
+        $data = $this->validated($request);
 
         $article->update([
             ...$data,
-            'slug' => isset($data['slug']) && $data['slug'] !== $article->slug ? Article::uniqueSlug($data['slug'], $article->id) : $article->slug,
+            'slug' => $article->published_at === null && $data['title'] !== $article->title ? Article::uniqueSlug($data['title'], $article->id) : $article->slug,
         ]);
 
         return response()->json($this->present($article->fresh(['topic', 'author']), $user, withBody: true));
@@ -117,13 +120,14 @@ class AdminArticleController extends Controller
         $user = $request->user();
         abort_unless($article->author_id === $user->id && in_array($article->status, [Article::DRAFT, Article::RETURNED], true), 403, 'Tekst je već poslat ili objavljen.');
         if (blank($user->byline)) {
-            throw ValidationException::withMessages(['byline' => 'Pre slanja upiši potpis: zvanje ili specijalnost i mesto. Tekst se objavljuje pod tvojim imenom.']);
+            throw ValidationException::withMessages(['byline' => 'Pre slanja upiši potpis u profilu: zvanje ili specijalnost i mesto.']);
         }
 
         $article->forceFill(['status' => Article::SUBMITTED, 'submitted_at' => now()])->save();
 
         $editors = User::whereIn('role', [User::EDITOR, User::ADMIN])->whereNull('blocked_at')->whereKeyNot($user->id)->get();
-        $this->inbox->record($editors, 'article_submitted', "Tekst za pregled: {$article->title}", "{$user->name} · ".self::KIND_LABELS[$article->kind], "/admin/tekstovi/{$article->id}", ['site']);
+        $detail = "{$user->name} · ".self::KIND_LABELS[$article->kind].($article->topic_proposal ? " · predlaže novu temu: {$article->topic_proposal}" : '');
+        $this->inbox->record($editors, 'article_submitted', "Tekst za pregled: {$article->title}", $detail, "/admin/tekstovi/{$article->id}", ['site']);
 
         return response()->json($this->present($article->fresh(['topic', 'author']), $user, withBody: true));
     }
@@ -132,6 +136,9 @@ class AdminArticleController extends Controller
     {
         $user = $request->user();
         $data = $request->validate(['published_at' => ['nullable', 'date']]);
+        if ($article->topic_proposal) {
+            throw ValidationException::withMessages(['topic_proposal' => "Autor predlaže novu temu „{$article->topic_proposal}”. Pre objave je dodaj kao novu temu, izaberi postojeću ili odbaci predlog."]);
+        }
         $wasVisible = $article->isVisible();
 
         $article->forceFill([
@@ -195,36 +202,50 @@ class AdminArticleController extends Controller
         return response()->json(['message' => 'Tekst je obrisan.']);
     }
 
-    public function updateProfile(Request $request)
+    public function resolveTopic(Request $request, Article $article)
     {
         $data = $request->validate([
-            'byline' => ['nullable', 'string', 'max:160'],
-            'bio' => ['nullable', 'string', 'max:1000'],
+            'name' => ['nullable', 'string', 'max:120'],
+            'topic_id' => ['nullable', 'integer', 'exists:topics,id'],
         ]);
+        $name = trim((string) ($data['name'] ?? ''));
 
-        $user = $request->user();
-        $user->forceFill(['byline' => $data['byline'] ?? null, 'bio' => $data['bio'] ?? null])->save();
+        if ($name !== '') {
+            $topic = Topic::whereRaw('lower(name) = ?', [mb_strtolower($name)])->first()
+                ?? Topic::create(['name' => $name, 'slug' => Topic::uniqueSlug($name), 'sort' => (int) Topic::max('sort') + 10]);
+            $article->forceFill(['topic_id' => $topic->id, 'topic_proposal' => null])->save();
+        } else {
+            $article->forceFill(['topic_id' => $data['topic_id'] ?? $article->topic_id, 'topic_proposal' => null])->save();
+        }
 
-        return response()->json(['name' => $user->name, 'byline' => $user->byline, 'bio' => $user->bio]);
+        return response()->json($this->present($article->fresh(['topic', 'author']), $request->user(), withBody: true));
     }
 
-    private function validated(Request $request, User $user): array
+    public function summary(Request $request, ArticleSummarizer $summarizer)
+    {
+        $data = $request->validate([
+            'title' => ['nullable', 'string', 'max:255'],
+            'body' => ['required', 'string', 'min:200', 'max:100000'],
+        ], [
+            'body.min' => 'Prvo nalepi tekst, pa AI može da napiše uvod.',
+        ]);
+
+        return response()->json(['summary' => $summarizer->summarize($data['title'] ?? '', $data['body'])]);
+    }
+
+    private function validated(Request $request): array
     {
         $data = $request->validate([
             'kind' => ['required', Rule::in(Article::KINDS)],
             'topic_id' => ['nullable', 'integer', 'exists:topics,id'],
+            'topic_proposal' => ['nullable', 'string', 'max:120'],
             'debate_id' => ['nullable', 'integer', Rule::exists('debates', 'id')->whereIn('status', Debate::PUBLIC_STATUSES)],
             'title' => ['required', 'string', 'max:255'],
             'summary' => ['required', 'string', 'max:1000'],
             'body' => ['required', 'string', 'max:100000'],
-            'slug' => ['nullable', 'string', 'max:140', 'regex:/^[a-z0-9]+(-[a-z0-9]+)*$/'],
-        ], [
-            'slug.regex' => 'Adresa sme da sadrži samo mala slova bez kvačica, brojeve i crtice.',
         ]);
-
-        if (! $this->isEditor($user)) {
-            unset($data['slug']);
-        }
+        $proposal = trim((string) ($data['topic_proposal'] ?? ''));
+        $data['topic_proposal'] = empty($data['topic_id']) && $proposal !== '' ? $proposal : null;
 
         return $data;
     }
@@ -244,6 +265,7 @@ class AdminArticleController extends Controller
         return [
             ...ArticleController::present($article, $withBody),
             'topic_id' => $article->topic_id,
+            'topic_proposal' => $article->topic_proposal,
             'debate_id' => $article->debate_id,
             'status' => $article->status,
             'is_visible' => $article->isVisible(),

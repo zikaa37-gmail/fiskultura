@@ -12,9 +12,9 @@ import { AuthorRequestDialog } from './author-request-dialog';
   template: `
     @if (auth.isStaff()) {
       @if (primary()) {
-        <a mat-flat-button routerLink="/admin/tekstovi/novi">Napiši tekst</a>
+        <a mat-flat-button routerLink="/admin/tekstovi/nova-prica">Napiši tekst</a>
       } @else {
-        <a mat-stroked-button routerLink="/admin/tekstovi/novi">Napiši tekst</a>
+        <a mat-stroked-button routerLink="/admin/tekstovi/nova-prica">Napiši tekst</a>
       }
     } @else {
       <button type="button" mat-stroked-button (click)="open()">Želim da pišem</button>

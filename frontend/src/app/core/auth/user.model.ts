@@ -11,6 +11,8 @@ export interface User {
   school: string | null;
   municipality: string | null;
   district: string | null;
+  byline?: string | null;
+  bio?: string | null;
   directory_consent: boolean;
   surveys_consent: boolean;
 }
@@ -31,6 +33,8 @@ export interface ProfilePayload {
   school: string | null;
   municipality: string | null;
   district: string | null;
+  byline?: string | null;
+  bio?: string | null;
   directory_consent?: boolean;
   surveys_consent?: boolean;
 }

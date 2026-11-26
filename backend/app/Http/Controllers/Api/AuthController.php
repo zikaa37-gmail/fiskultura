@@ -196,6 +196,8 @@ class AuthController extends Controller
             'school' => ['nullable', 'string', 'max:190'],
             'municipality' => ['nullable', 'string', 'max:120'],
             'district' => ['nullable', 'string', 'max:120'],
+            'byline' => ['sometimes', 'nullable', 'string', 'max:160'],
+            'bio' => ['sometimes', 'nullable', 'string', 'max:1000'],
             'directory_consent' => ['sometimes', 'boolean'],
             'surveys_consent' => ['sometimes', 'boolean'],
         ]);
@@ -325,6 +327,8 @@ class AuthController extends Controller
             'school' => $user->school,
             'municipality' => $user->municipality,
             'district' => $user->district,
+            'byline' => $user->byline,
+            'bio' => $user->bio,
             'directory_consent' => $user->directory_consent_at !== null,
             'surveys_consent' => $user->surveys_consent_at !== null,
         ];

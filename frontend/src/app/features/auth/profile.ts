@@ -111,6 +111,21 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 </mat-form-field>
               </div>
 
+              @if (auth.isStaff()) {
+                <h3 class="mb-1">Potpis autora</h3>
+                <p class="small muted mb-2">Ide ispod imena na svakom tvom tekstu.</p>
+                <mat-form-field subscriptSizing="dynamic" appearance="outline">
+                  <mat-label>Zvanje, specijalnost i mesto</mat-label>
+                  <input matInput formControlName="byline" maxlength="160" placeholder="npr. profesor FV, instruktor skijanja, Kopaonik" />
+                  <mat-hint>Obavezno pre slanja teksta uredniku.</mat-hint>
+                </mat-form-field>
+                <mat-form-field subscriptSizing="dynamic" appearance="outline" class="mb-4">
+                  <mat-label>Kratka biografija (nije obavezno)</mat-label>
+                  <textarea matInput formControlName="bio" rows="3" maxlength="1000"></textarea>
+                  <mat-hint>Gde radiš, šta si završio i koje licence ili zvanja imaš.</mat-hint>
+                </mat-form-field>
+              }
+
               <h3 class="mb-1">Saglasnosti</h3>
               <p class="small muted mb-2">Svaku možeš da isključiš kad hoćeš. Bez saglasnosti tvoji podaci ostaju samo uredništvu.</p>
               <mat-checkbox formControlName="directory_consent">
@@ -213,6 +228,8 @@ export class Profile {
     school: [''],
     municipality: [''],
     district: [''],
+    byline: [''],
+    bio: [''],
     directory_consent: [false],
     surveys_consent: [false],
   });
@@ -258,6 +275,7 @@ export class Profile {
         school: value.school || null,
         municipality: value.municipality || null,
         district: value.district || null,
+        ...(this.auth.isStaff() ? { byline: value.byline.trim() || null, bio: value.bio.trim() || null } : {}),
         directory_consent: value.directory_consent,
         surveys_consent: value.surveys_consent,
       })
@@ -351,6 +369,8 @@ export class Profile {
       school: user.school ?? '',
       municipality: user.municipality ?? '',
       district: user.district ?? '',
+      byline: user.byline ?? '',
+      bio: user.bio ?? '',
       directory_consent: !!user.directory_consent,
       surveys_consent: !!user.surveys_consent,
     });
