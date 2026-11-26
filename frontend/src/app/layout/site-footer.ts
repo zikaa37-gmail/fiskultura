@@ -13,13 +13,14 @@ import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
   template: `
     <footer class="footer">
       <div class="container footer-inner">
-        <div class="footer-col">
-          <strong>Fiskultura</strong>
+        <div class="footer-col footer-brand">
+          <strong class="footer-title">Fiskultura</strong>
           <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi</span>
           <app-portal-social label="Pratite nas" />
+          <app-subscribe-link [footer]="true" />
         </div>
         <nav class="footer-col" aria-label="Aplikacije">
-          <strong>Aplikacije</strong>
+          <strong class="footer-title">Aplikacije</strong>
           @for (app of apps; track app.id) {
             @if (isLinkDisabled(app.url)) {
               <span class="footer-link footer-link-disabled" [title]="disabledTitle">{{ app.name }}</span>
@@ -29,7 +30,7 @@ import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
           }
         </nav>
         <nav class="footer-col" aria-label="Portal">
-          <strong>Portal</strong>
+          <strong class="footer-title">Portal</strong>
           <a class="footer-link" routerLink="/vesti">Vesti</a>
           <a class="footer-link" routerLink="/tekstovi">Priče kolega</a>
           <a class="footer-link" routerLink="/udruzenja">Udruženja</a>
@@ -37,6 +38,10 @@ import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
           @if (auth.isAuthenticated()) {
             <a class="footer-link" routerLink="/pitanja">Pitanja i odgovori</a>
           }
+          <a class="footer-link" routerLink="/kontakt">Kontakt i uredništvo</a>
+        </nav>
+        <nav class="footer-col" aria-label="Za nastavu">
+          <strong class="footer-title">Za nastavu</strong>
           <a class="footer-link" routerLink="/sportovi">Sportovi i pravila</a>
           @if (auth.isAuthenticated()) {
             <a class="footer-link" routerLink="/ishodi">Ishodi po razredima</a>
@@ -44,8 +49,6 @@ import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
           <a class="footer-link" routerLink="/sabloni">Šabloni dokumenata</a>
           <a class="footer-link" routerLink="/novi-nastavnici">Za nove nastavnike i studente</a>
           <a class="footer-link" routerLink="/literatura">Literatura i izvori</a>
-          <app-subscribe-link [footer]="true" />
-          <a class="footer-link" routerLink="/kontakt">Kontakt i uredništvo</a>
         </nav>
       </div>
       <div class="container footer-bottom">
