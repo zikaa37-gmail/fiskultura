@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\Admin\AdminArticleController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
 use App\Http\Controllers\Api\Admin\AdminNewsSuggestionController;
 use App\Http\Controllers\Api\Admin\AdminSourceController;
-use App\Http\Controllers\Api\Admin\AdminTopicController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
 use App\Http\Controllers\Api\Admin\AdminRegulationController;
@@ -119,12 +118,12 @@ Route::middleware('jwt')->group(function () {
         Route::post('/questions/{question}/draft', [AdminQuestionController::class, 'draft'])->middleware('throttle:10,10');
         Route::get('/articles/options', [AdminArticleController::class, 'options']);
         Route::post('/articles/list', [AdminArticleController::class, 'list']);
+        Route::post('/articles/summary', [AdminArticleController::class, 'summary'])->middleware('throttle:10,10');
         Route::get('/articles/{article}', [AdminArticleController::class, 'show']);
         Route::post('/articles', [AdminArticleController::class, 'store'])->middleware('throttle:30,10');
         Route::patch('/articles/{article}', [AdminArticleController::class, 'update']);
         Route::post('/articles/{article}/submit', [AdminArticleController::class, 'submit']);
         Route::delete('/articles/{article}', [AdminArticleController::class, 'destroy']);
-        Route::patch('/author-profile', [AdminArticleController::class, 'updateProfile']);
     });
 
     Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
@@ -145,12 +144,9 @@ Route::middleware('jwt')->group(function () {
 
         Route::post('/articles/{article}/publish', [AdminArticleController::class, 'publish']);
         Route::post('/articles/{article}/return', [AdminArticleController::class, 'sendBack']);
+        Route::post('/articles/{article}/topic', [AdminArticleController::class, 'resolveTopic']);
         Route::post('/articles/{article}/unpublish', [AdminArticleController::class, 'unpublish']);
         Route::patch('/articles/{article}/featured', [AdminArticleController::class, 'feature']);
-        Route::get('/topics', [AdminTopicController::class, 'index']);
-        Route::post('/topics', [AdminTopicController::class, 'store']);
-        Route::patch('/topics/{topic}', [AdminTopicController::class, 'update']);
-        Route::delete('/topics/{topic}', [AdminTopicController::class, 'destroy']);
 
         Route::post('/questions', [AdminQuestionController::class, 'store']);
         Route::get('/staff', [AdminQuestionController::class, 'staff']);

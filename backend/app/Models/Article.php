@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-#[Fillable(['slug', 'kind', 'topic_id', 'debate_id', 'author_id', 'title', 'summary', 'body', 'status', 'editor_note', 'featured', 'submitted_at', 'reviewed_by', 'published_at'])]
+#[Fillable(['slug', 'kind', 'topic_id', 'topic_proposal', 'debate_id', 'author_id', 'title', 'summary', 'body', 'status', 'editor_note', 'featured', 'submitted_at', 'reviewed_by', 'published_at'])]
 class Article extends Model
 {
     public const COLUMN = 'kolumna';

@@ -12,6 +12,7 @@ import { FilterChange, FilterField, ListFilters } from '../../shared/list-filter
 import { ListHeader } from '../../shared/list-header/list-header';
 import { NewsCard, NewsCardState } from '../../shared/news-card/news-card';
 import { MenuOption } from '../../shared/options-menu/options-menu';
+import { Icon } from '../../shared/icon/icon';
 import { Pagination } from '../../shared/pagination/pagination';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { AdminNews, newsState, Page } from '../admin/admin.model';
@@ -30,7 +31,7 @@ interface NewsRow {
 
 @Component({
   selector: 'app-news-list',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, NewsCard, Pagination, ScrollArea],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, NewsCard, Pagination, ScrollArea, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-list-filters [fields]="fields()" [values]="filters()" [emptySummary]="admin() ? 'Sve vesti' : 'Sve objave'" (filterChange)="setFilter($event)" (clearAll)="clearFilters()" />
@@ -46,7 +47,7 @@ interface NewsRow {
     } @else if (meta(); as info) {
       <app-list-header [label]="admin() ? 'Ukupno' : 'Pronađeno objava'" [count]="info.total" [page]="info.page" [lastPage]="info.last_page">
         @if (admin()) {
-          <a mat-flat-button routerLink="/admin/vesti/nova">Nova vest</a>
+          <a mat-flat-button routerLink="/admin/vesti/nova"><app-icon name="plus" [size]="18" /> Nova vest</a>
         }
       </app-list-header>
       <app-scroll-area [label]="admin() ? 'Vesti' : 'Objave'" [fill]="true" [resetOn]="[info.page, filters()]">

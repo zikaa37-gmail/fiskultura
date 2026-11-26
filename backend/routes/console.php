@@ -4,6 +4,7 @@ use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
 use App\Models\OrganizationSource;
 use App\Models\Regulation;
+use App\Models\Topic;
 use App\Models\User;
 use App\Services\Ai\DebateIntroWriter;
 use App\Services\Inbox;
@@ -228,3 +229,27 @@ Artisan::command('regulations:check {--key=} {--no-mail}', function (PisChecker 
 })->purpose('Proverava u PIS-u da li su propisi iz kataloga dobili nove izmene i javlja urednicima');
 
 Schedule::command('regulations:check')->weeklyOn(1, '05:00')->withoutOverlapping();
+
+Artisan::command('topics:rename {slug} {name}', function (string $slug, string $name) {
+    $topic = Topic::where('slug', $slug)->first();
+    if (! $topic) {
+        $this->error("Tema {$slug} ne postoji.");
+
+        return 1;
+    }
+    $topic->update(['name' => $name]);
+    $this->info("Tema {$slug} se sada zove „{$name}”.");
+})->purpose('Preimenuje temu tekstova (slug ostaje isti)');
+
+Artisan::command('topics:merge {from} {into}', function (string $from, string $into) {
+    $source = Topic::where('slug', $from)->first();
+    $target = Topic::where('slug', $into)->first();
+    if (! $source || ! $target || $source->is($target)) {
+        $this->error('Obe teme moraju da postoje i da budu različite.');
+
+        return 1;
+    }
+    $moved = $source->articles()->update(['topic_id' => $target->id]);
+    $source->delete();
+    $this->info("Prebačeno tekstova: {$moved}. Tema {$from} je obrisana.");
+})->purpose('Spaja dve teme tekstova: tekstovi prelaze u drugu, prva se briše');

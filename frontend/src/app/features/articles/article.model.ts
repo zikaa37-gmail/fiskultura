@@ -56,6 +56,7 @@ export interface ArticlePage {
 export interface AdminArticle extends ArticleItem {
   body?: string;
   topic_id: number | null;
+  topic_proposal: string | null;
   debate_id: number | null;
   status: ArticleStatus;
   is_visible: boolean;
@@ -79,7 +80,6 @@ export interface AuthorProfile {
 }
 
 export interface ArticleOptions {
-  topics: Topic[];
   debates: { id: number; title: string }[];
   profile: AuthorProfile;
 }
