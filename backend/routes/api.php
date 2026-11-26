@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthorRequestController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\NewsSuggestionController;
 use App\Http\Controllers\Api\OrganizationController;
@@ -72,6 +73,8 @@ Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::middleware('jwt')->group(function () {
+    Route::get('/author-request', [AuthorRequestController::class, 'show']);
+    Route::post('/author-request', [AuthorRequestController::class, 'store'])->middleware('throttle:5,10');
     Route::post('/questions', [QuestionController::class, 'store'])->middleware('throttle:5,1');
     Route::get('/me/questions', [QuestionController::class, 'mine']);
     Route::get('/questions', [QuestionController::class, 'index']);

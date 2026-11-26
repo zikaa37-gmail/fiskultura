@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { RouterLink } from '@angular/router';
 import { Icon, IconName } from '../icon/icon';
 import { LinkField, Organization } from '../../core/content/content.model';
+import { isLinkDisabled } from '../../core/disabled-links';
 
 interface LinkTile {
   key: string;
@@ -67,7 +68,7 @@ export class OrgLinks {
     for (const social of SOCIAL) {
       const url = links[social.field];
       if (url) {
-        const broken = item.link_status[social.field] === 'broken';
+        const broken = item.link_status[social.field] === 'broken' || isLinkDisabled(url);
         tiles.push({ key: social.field, label: social.label, icon: social.icon, href: url, title: broken ? 'Link trenutno ne radi' : url, broken });
       } else if (social.field === 'instagram') {
         tiles.push({ key: social.field, label: social.label, icon: social.icon, title: 'Nema Instagram naloga', broken: true });

@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { AuthService } from '../../core/auth/auth.service';
 import { API_URL } from '../../core/http/api';
 import { ArticleCard } from '../../shared/article-card/article-card';
 import { FilterChange, FilterField, ListFilters } from '../../shared/list-filters/list-filters';
@@ -12,10 +11,11 @@ import { queryFilters } from '../../shared/list-filters/query-filters';
 import { ListHeader } from '../../shared/list-header/list-header';
 import { Pagination } from '../../shared/pagination/pagination';
 import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage, Topic } from './article.model';
+import { WriteButton } from './write-button';
 
 @Component({
   selector: 'app-articles',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ArticleCard, ListFilters, ListHeader, Pagination],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ArticleCard, ListFilters, ListHeader, Pagination, WriteButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -41,9 +41,7 @@ import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage, Topic } from './article.
           </div>
         } @else if (meta(); as info) {
           <app-list-header label="Pronađeno tekstova" [count]="info.total" [page]="info.page" [lastPage]="info.last_page">
-            @if (auth.isStaff()) {
-              <a mat-flat-button routerLink="/admin/tekstovi/novi">Napiši tekst</a>
-            }
+            <app-write-button [primary]="true" [autoOpen]="pisem() === '1'" />
           </app-list-header>
           <div class="article-grid">
             @for (item of items(); track item.id) {
@@ -51,7 +49,7 @@ import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage, Topic } from './article.
             } @empty {
               <div class="empty-state">
                 <h3>Nema tekstova za izabrane filtere</h3>
-                <p class="muted">Radiš van škole ili imaš specijalizaciju o kojoj se malo zna? <a class="inline-link" routerLink="/kontakt">Piši nam.</a></p>
+                <p class="muted">Radiš van škole ili imaš specijalizaciju o kojoj se malo zna? Prijavi se za autora i napiši svoju priču.</p>
               </div>
             }
           </div>
@@ -64,7 +62,7 @@ import { ARTICLE_KIND_LABELS, ArticleKind, ArticlePage, Topic } from './article.
   `,
 })
 export class Articles {
-  protected readonly auth = inject(AuthService);
+  readonly pisem = input<string>();
   readonly #router = inject(Router);
   readonly #query = toSignal(inject(ActivatedRoute).queryParamMap);
 

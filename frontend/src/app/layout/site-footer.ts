@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PORTAL_APPS } from '../content/portal-content';
+import { DISABLED_LINK_TITLE, isLinkDisabled } from '../core/disabled-links';
 import { AuthService } from '../core/auth/auth.service';
 import { PortalSocialLinks } from '../shared/portal-social/portal-social';
+import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
 
 @Component({
   selector: 'app-site-footer',
-  imports: [RouterLink, PortalSocialLinks],
+  imports: [RouterLink, PortalSocialLinks, SubscribeLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
@@ -19,7 +21,11 @@ import { PortalSocialLinks } from '../shared/portal-social/portal-social';
         <nav class="footer-col" aria-label="Aplikacije">
           <strong>Aplikacije</strong>
           @for (app of apps; track app.id) {
-            <a class="footer-link" [href]="app.url" target="_blank" rel="noopener">{{ app.name }}</a>
+            @if (isLinkDisabled(app.url)) {
+              <span class="footer-link footer-link-disabled" [title]="disabledTitle">{{ app.name }}</span>
+            } @else {
+              <a class="footer-link" [href]="app.url" target="_blank" rel="noopener">{{ app.name }}</a>
+            }
           }
         </nav>
         <nav class="footer-col" aria-label="Portal">
@@ -38,7 +44,7 @@ import { PortalSocialLinks } from '../shared/portal-social/portal-social';
           <a class="footer-link" routerLink="/sabloni">Šabloni dokumenata</a>
           <a class="footer-link" routerLink="/novi-nastavnici">Za nove nastavnike i studente</a>
           <a class="footer-link" routerLink="/literatura">Literatura i izvori</a>
-          <a class="footer-link" routerLink="/obavestenja">Obaveštenja mejlom</a>
+          <app-subscribe-link [footer]="true" />
           <a class="footer-link" routerLink="/kontakt">Kontakt i uredništvo</a>
         </nav>
       </div>
@@ -52,5 +58,7 @@ import { PortalSocialLinks } from '../shared/portal-social/portal-social';
 export class SiteFooter {
   protected readonly auth = inject(AuthService);
   protected readonly apps = PORTAL_APPS;
+  protected readonly isLinkDisabled = isLinkDisabled;
+  protected readonly disabledTitle = DISABLED_LINK_TITLE;
   protected readonly year = new Date().getFullYear();
 }

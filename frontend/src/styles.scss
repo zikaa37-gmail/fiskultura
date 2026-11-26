@@ -315,6 +315,89 @@ p {
   margin-bottom: 28px;
 }
 
+.subscribe-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: start;
+  min-height: 44px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.subscribe-link:hover span:last-child {
+  text-decoration: underline;
+}
+
+.subscribe-link-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.subscribe-link-footer {
+  min-height: 40px;
+  font-weight: 600;
+}
+
+.subscribe-link-footer .subscribe-link-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.news-tabs {
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.news-layout {
+  display: grid;
+  gap: 24px;
+}
+
+.news-layout > * {
+  min-width: 0;
+}
+
+.news-pane-hidden {
+  display: none;
+}
+
+.articles-showcase.articles-showcase-compact .article-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.write-steps {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+@media (min-width: 1100px) {
+  .news-tabs.mat-mdc-tab-nav-bar {
+    display: none;
+  }
+
+  .news-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+  }
+
+  .news-pane-hidden {
+    display: block;
+  }
+
+  .news-aside {
+    position: sticky;
+    top: 88px;
+  }
+}
+
 .news-subscribe {
   display: inline-flex;
   align-items: center;
@@ -463,6 +546,11 @@ p {
   color: var(--color-primary);
   font-weight: 600;
   text-decoration: none;
+}
+
+.footer-link-disabled {
+  color: var(--color-muted);
+  cursor: not-allowed;
 }
 
 .footer-link:hover {
@@ -2398,8 +2486,7 @@ a.org-link:hover {
   margin-top: 28px;
 }
 
-.contact-grid,
-.editorial-team {
+.contact-grid {
   display: grid;
   gap: 12px;
   margin-bottom: 28px;
@@ -2586,7 +2673,6 @@ button.contact-card .small {
 
 @media (min-width: 720px) {
   .contact-grid,
-  .editorial-team,
   .rules-coming {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3149,4 +3235,23 @@ textarea.article-paste {
   .article-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.password-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: var(--color-primary);
 }

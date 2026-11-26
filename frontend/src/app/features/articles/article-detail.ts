@@ -8,12 +8,13 @@ import { API_URL, isNotFound } from '../../core/http/api';
 import { breadcrumbs, DEFAULT_IMAGE, SeoService, SITE_ORGANIZATION, SITE_URL } from '../../core/seo/seo.service';
 import { ArticleCard } from '../../shared/article-card/article-card';
 import { AuthorByline } from '../../shared/author-byline/author-byline';
+import { ReadAloud } from '../../shared/read-aloud/read-aloud';
 import { SimpleMarkdownPipe } from '../../shared/simple-markdown.pipe';
 import { ARTICLE_KIND_LABELS, ArticleDetail as ArticleDetailModel } from './article.model';
 
 @Component({
   selector: 'app-article-detail',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ArticleCard, AuthorByline, SimpleMarkdownPipe],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ArticleCard, AuthorByline, ReadAloud, SimpleMarkdownPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -37,6 +38,7 @@ import { ARTICLE_KIND_LABELS, ArticleDetail as ArticleDetailModel } from './arti
             </span>
             <h1>{{ item.title }}</h1>
             <app-author-byline [author]="item.author" [date]="date()" [large]="true" />
+            <app-read-aloud class="mb-3" [text]="speechText()" />
             <p class="lead">{{ item.summary }}</p>
             <div class="article-prose" [innerHTML]="item.body | simpleMarkdown"></div>
 
@@ -83,6 +85,19 @@ export class ArticleDetail {
   protected readonly resource = httpResource<ArticleDetailModel>(() => `${API_URL}/articles/${encodeURIComponent(this.slug())}`);
   protected readonly article = computed(() => (this.resource.hasValue() ? this.resource.value() : null));
   protected readonly date = computed(() => formatDate(this.article()?.published_at ?? null));
+  protected readonly speechText = computed(() => {
+    const item = this.article();
+    if (!item) {
+      return '';
+    }
+    const body = item.body
+      .split(/\n+/)
+      .map((line) => line.replace(/^\s*[-*]\s+/, '').replace(/[*_#>`]/g, '').trim())
+      .filter(Boolean)
+      .map((line) => (/[.!?…:;]$/.test(line) ? line : `${line}.`))
+      .join(' ');
+    return `${item.title}. Piše ${item.author.name}. ${item.summary} ${body}`;
+  });
 
   constructor() {
     effect(() => {

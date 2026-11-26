@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
+import { PasswordToggle } from '../../shared/password-toggle/password-toggle';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -25,7 +26,7 @@ interface Invitation {
 
 @Component({
   selector: 'app-complete-registration',
-  imports: [FormsModule, RouterLink, BUTTON_IMPORTS, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, PhoneField],
+  imports: [PasswordToggle, FormsModule, RouterLink, BUTTON_IMPORTS, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, PhoneField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -68,7 +69,8 @@ interface Invitation {
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Lozinka</mat-label>
-              <input matInput name="password" type="password" required minlength="8" autocomplete="new-password" [ngModel]="password()" (ngModelChange)="password.set($event)" />
+              <input #pwc matInput name="password" type="password" required minlength="8" autocomplete="new-password" [ngModel]="password()" (ngModelChange)="password.set($event)" />
+              <app-password-toggle matSuffix [input]="pwc" />
               <mat-hint>Najmanje 8 znakova</mat-hint>
             </mat-form-field>
             <mat-checkbox name="directory_consent" [ngModel]="directoryConsent()" (ngModelChange)="directoryConsent.set($event)">Prikaži me u imeniku članova</mat-checkbox>

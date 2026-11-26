@@ -173,22 +173,6 @@ export function telHref(phone: string): string {
   return `tel:+381${phone.replace(/\D/g, '').replace(/^0/, '')}`;
 }
 
-export interface EditorialMember {
-  name: string;
-  role: string;
-  about: string;
-  url?: string;
-}
-
-export const EDITORIAL_TEAM: EditorialMember[] = [
-  {
-    name: 'Igor Živanović',
-    role: 'osnivač i urednik portala',
-    about: 'Pravi portal Fiskultura i aplikacije za nastavu (e-pripreme, Evidencija FV, Jadžent) i uređuje propise, pitanja i odgovore.',
-    url: '/portfolio/',
-  },
-];
-
 export const CONTACT_TOPICS = [
   { id: 'pitanje', label: 'Pitanje uredništvu' },
   { id: 'greska', label: 'Greška ili zastarela informacija' },

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { PasswordToggle } from '../../shared/password-toggle/password-toggle';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
@@ -9,7 +10,7 @@ import { apiErrorMessage } from '../../core/http/api';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule],
+  imports: [PasswordToggle, ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -22,8 +23,8 @@ import { apiErrorMessage } from '../../core/http/api';
           } @else {
             <mat-form-field appearance="outline">
               <mat-label>Nova lozinka</mat-label>
-              <input matInput type="password" formControlName="password" autocomplete="new-password" />
-              <mat-hint>Najmanje 8 znakova</mat-hint>
+              <input #pw1 matInput type="password" formControlName="password" autocomplete="new-password" />
+              <app-password-toggle matSuffix [input]="pw1" /><mat-hint>Najmanje 8 znakova</mat-hint>
             </mat-form-field>
             @if (error(); as message) {
               <p class="form-error" role="alert">{{ message }}</p>
