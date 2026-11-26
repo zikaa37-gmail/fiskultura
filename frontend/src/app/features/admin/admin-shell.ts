@@ -70,8 +70,6 @@ export class AdminShell {
     {
       title: 'Vesti',
       links: [
-        { route: 'tekstovi', label: 'Kolumne i tekstovi', icon: 'edit' },
-        { route: 'teme', label: 'Teme tekstova', icon: 'book', editorOnly: true },
         { route: 'vesti', label: 'Sve vesti', icon: 'news', exact: true, editorOnly: true },
         { route: 'vesti/nova', label: 'Nova vest', icon: 'star', exact: true, editorOnly: true },
         { route: 'predlozi', label: 'Predlozi vesti', icon: 'checklist', editorOnly: true },
@@ -83,6 +81,8 @@ export class AdminShell {
       links: [
         { route: 'pitanja', label: 'Pitanja', icon: 'help' },
         { route: 'debate', label: 'Stručne debate', icon: 'people', editorOnly: true },
+        { route: 'tekstovi', label: 'Priče kolega', icon: 'edit' },
+        { route: 'teme', label: 'Teme priča', icon: 'book', editorOnly: true },
         { route: 'udruzenja', label: 'Udruženja', icon: 'globe', editorOnly: true },
         { route: 'propisi', label: 'Propisi', icon: 'book', editorOnly: true },
         { route: 'drustvene-mreze', label: 'Društvene mreže', icon: 'instagram', editorOnly: true },
