@@ -117,6 +117,13 @@ try {
             $result['links'] = trim($console->output()) ?: 'ok';
         }
 
+        if (($_POST['institutions'] ?? '') === '1') {
+            set_time_limit(600);
+            $console->call('institutions:import', ['file' => $laravel->databasePath('data/institutions.json'), '--source' => 'portal']);
+            $console->call('institutions:import-mpn');
+            $result['institutions'] = trim($console->output()) ?: 'ok';
+        }
+
         if (($_POST['admin_email'] ?? '') !== '' && ($_POST['admin_password'] ?? '') !== '') {
             $console->call('app:admin', ['email' => $_POST['admin_email'], '--password' => $_POST['admin_password']]);
             $result['admin'] = trim($console->output()) ?: 'ok';

@@ -6,6 +6,7 @@
     python deploy/deploy.py --frontend      # samo ponovni prerender i upload frontenda (npr. posle novih vesti)
     python deploy/deploy.py --seed          # i db:seed (u produkciji samo osnovni podaci, bez probnih naloga)
     python deploy/deploy.py --check-links   # i provera linkova udruženja (organizations:check-links, 1–3 min)
+    python deploy/deploy.py --institutions  # i uvoz ustanova (institutions.json + škole iz otvorenih podataka MPN)
     python deploy/deploy.py --users         # i nalozi iz DEPLOY_USERS (email:uloga:Ime, zarezom) sa DEPLOY_USERS_PASSWORD
 
 Dva prolaza: prvo backend (raspakivanje, migracije, seed), pa frontend build čije se stranice prerenderuju iz već
@@ -169,6 +170,7 @@ def main() -> int:
             'admin_email': env.get('DEPLOY_ADMIN_EMAIL', ''),
             'admin_password': env.get('DEPLOY_ADMIN_PASSWORD', ''),
             'check_links': '1' if '--check-links' in args else '0',
+            'institutions': '1' if '--institutions' in args else '0',
             'users': json.dumps(deploy_users(env)) if '--users' in args else '[]',
         })
         if not result.get('ok'):
@@ -185,7 +187,7 @@ def main() -> int:
         (web_zip, f'{web_dir}/_deploy-web.zip'),
         (index.encode('utf-8'), f'{web_dir}/index.php'),
         (DEPLOY / 'htaccess-production', f'{web_dir}/.htaccess'),
-    ], {'seed': '0', 'admin_email': '', 'admin_password': '', 'check_links': '0', 'users': '[]'})
+    ], {'seed': '0', 'admin_email': '', 'admin_password': '', 'check_links': '0', 'institutions': '0', 'users': '[]'})
     if not result.get('ok'):
         return 1
 
