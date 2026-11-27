@@ -50,7 +50,7 @@ interface NewsRow {
           <a mat-flat-button routerLink="/admin/vesti/nova"><app-icon name="plus" [size]="18" /> Nova vest</a>
         }
       </app-list-header>
-      <app-scroll-area [label]="admin() ? 'Vesti' : 'Objave'" [fill]="true" [resetOn]="[info.page, filters()]">
+      <app-scroll-area class="news-scroll" [label]="admin() ? 'Vesti' : 'Objave'" [fill]="true" [resetOn]="[info.page, filters()]">
         <div class="post-list">
           @for (row of rows(); track row.news.id) {
             <app-news-card

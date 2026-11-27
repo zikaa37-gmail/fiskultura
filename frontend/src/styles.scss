@@ -391,6 +391,14 @@ p {
   display: none;
 }
 
+.news-main .filter-panel {
+  margin-top: 0;
+}
+
+.news-scroll {
+  min-height: min(760px, calc(100dvh - 96px));
+}
+
 .articles-showcase.articles-showcase-compact .article-grid {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -418,6 +426,10 @@ p {
   .news-aside {
     position: sticky;
     top: 88px;
+  }
+
+  .news-scroll {
+    min-height: 600px;
   }
 }
 
