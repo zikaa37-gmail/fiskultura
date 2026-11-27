@@ -40,6 +40,7 @@ python deploy/deploy.py --skip-tests
 python deploy/deploy.py --frontend          # samo novi prerender i upload frontenda (posle novih vesti i odgovora)
 python deploy/deploy.py --skip-build        # samo upload postojećih paketa
 python deploy/deploy.py --check-links       # i provera linkova udruženja (organizations:check-links)
+python deploy/deploy.py --institutions      # i uvoz ustanova: institutions.json + osnovne i srednje škole (MPN)
 python deploy/deploy-staticna.py            # stara statična naslovna (samo za povratak, vidi dole)
 ```
 
