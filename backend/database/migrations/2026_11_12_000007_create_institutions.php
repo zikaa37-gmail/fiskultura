@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('institutions');
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
             $table->string('type', 20)->index();
@@ -33,7 +34,7 @@ return new class extends Migration
             $table->timestamp('facilities_updated_at')->nullable();
             $table->foreignId('facilities_updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('source', 40)->nullable();
-            $table->string('search', 500)->index();
+            $table->string('search', 500);
             $table->index(['type', 'name']);
             $table->unique(['type', 'registry_number']);
             $table->timestamps();
