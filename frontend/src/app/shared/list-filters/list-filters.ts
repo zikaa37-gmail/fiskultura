@@ -51,11 +51,13 @@ export interface FilterChange {
           </form>
         } @else if (field.type === 'select-search') {
           <app-select-search
+            [inputId]="'filter-' + field.key"
             [label]="field.label"
             [options]="field.options ?? []"
-            [allLabel]="field.allLabel ?? 'Sve'"
-            [value]="values()[field.key] ?? ''"
-            (valueChange)="filterChange.emit({ key: field.key, value: $event })"
+            [emptyLabel]="field.allLabel ?? 'Sve'"
+            placeholder="Počni da kucaš"
+            [ngModel]="values()[field.key] || null"
+            (ngModelChange)="filterChange.emit({ key: field.key, value: $event ?? '' })"
           />
         } @else {
           <mat-form-field appearance="outline" subscriptSizing="dynamic">

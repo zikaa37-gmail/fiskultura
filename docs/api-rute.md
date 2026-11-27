@@ -40,11 +40,14 @@ Middleware: `jwt` (bearer access token, odbija blokirane), `role:editor,admin` (
 
 | Metod | Ruta | Opis |
 |---|---|---|
-| POST | `/news/list` | `category`, `organization` (slug), `umbrella` (slug krovne — ona i članice), `year`, `search`, `featured`, `page`, `per_page` (≤ 50) → `{ data, meta: { page, per_page, total, last_page } }`; samo objavljene, najnovije prve |
+| POST | `/news/list` | `category`, `organization` (slug), `umbrella` (slug krovne — ona i članice), `district` (okrug organizacije), `year`, `search`, `featured`, `page`, `per_page` (≤ 50) → `{ data, meta: { page, per_page, total, last_page } }`; samo objavljene, najnovije prve |
 | GET | `/news/years` | godine za koje postoje objave |
 | GET | `/news/{slug}` | vest sa `body` i `related` (3 iz iste organizacije ili kategorije) |
 | GET | `/organizations` | sve organizacije sa `parent` i `news_count` |
 | GET | `/organizations/{slug}` | organizacija sa `members` i poslednjih 20 objava |
+| GET | `/founding/coverage` | pokrivenost po okruzima: lokalna strukovna društva (status `aktivno` / `nepoznato` / `nema`) i broj potvrđenih prijava interesovanja po mestu |
+| POST | `/founding-interests` | prijava interesovanja za društvo (`district`, `city`, `name`, `email`, `school`, `consent`); šalje link za potvrdu |
+| POST | `/founding-interests/confirm` | potvrda (`id`, `token`); kad u mestu ima bar 3 potvrđene prijave, mejl sa kontaktima prijavljenima i SSPFVS-u |
 
 Vest: `slug`, `title`, `summary`, `category`, `featured`, `cover_image`, `published_at`,
 `source: { url, type (sajt | facebook | instagram | youtube | mediji | ostalo), published_at }`,
@@ -57,11 +60,17 @@ postojeće organizacije po slug-u i vesti po izvoru + naslovu se preskaču).
 
 | Metod | Ruta | Uloga | Opis |
 |---|---|---|---|
-| POST | `/admin/news/list` | editor, admin | `status` (draft / published / scheduled), `category`, `organization_id`, `search`, `page`, `per_page`; nacrti prvi |
+| POST | `/admin/news/list` | editor, admin | `status` (draft / published / scheduled), `category`, `organization_id`, `organization`, `umbrella`, `district`, `year`, `search`, `page`, `per_page`; nacrti prvi |
 | GET | `/admin/news/{id}` | editor, admin | vest sa svim poljima (`status`, `is_visible`, `author`) |
 | POST | `/admin/news` | editor, admin | nova vest; `slug` iz naslova ako nije zadat; `published_at` prazno + objavljeno = sada, budućnost = zakazano; autor = prijavljeni |
 | PATCH | `/admin/news/{id}` | editor, admin | izmena |
 | DELETE | `/admin/news/{id}` | editor, admin | brisanje |
+| POST | `/admin/news-suggestions/list` | editor, admin | red predloga vesti: `status` (`new` podrazumevano / `accepted` / `dismissed`), `origin` (`feed` / `form`), `organization`, `search`, `page`; uz listu `counts` po stanju |
+| POST | `/admin/news-suggestions/{id}/accept` | editor, admin | pravi nacrt vesti (naslov, organizacija, izvor, datum originala) i vraća `news_id`; sažetak urednik piše sam |
+| PATCH | `/admin/news-suggestions/{id}` | editor, admin | `status`: `dismissed` (odbaci) ili `new` (vrati u red) |
+| GET | `/admin/sources` | editor, admin | izvori organizacija (sajt / rss / facebook / instagram / youtube, praćenje `auto` / `manual`, poslednja provera) |
+| POST / PATCH / DELETE | `/admin/sources[/{id}]` | editor, admin | unos, izmena i brisanje izvora; Facebook i Instagram samo ručno |
+| POST | `/admin/sources/{id}/check` | editor, admin | proveri izvor odmah (isto što i `sources:check`) |
 | GET | `/admin/organizations` | editor, admin | sve organizacije sa `news_count` i `parent_id` |
 | GET | `/admin/organizations/{id}` | editor, admin | jedna organizacija |
 | POST | `/admin/organizations` | editor, admin | nova; `slug` iz skraćenice ili naziva |
@@ -79,6 +88,31 @@ Organizacija ima i `link_status: { website?, facebook?, instagram?, youtube?, me
 `ok` | `broken` | `unknown` (samo za linkove koji postoje). Proverava ih `php artisan organizations:check-links`
 (ponedeljkom u 4h preko schedule-a, ili `deploy.py --check-links`); `broken` samo kad nema domena / veze, 404, 410
 ili 5xx. Promenjen link je `unknown` dok se ponovo ne proveri.
+
+## Kolumne i autorski tekstovi („Priče kolega”)
+
+Tekst je `kolumna` ili `clanak`, uvek potpisan nalogom autora (uloga `author`, `editor` ili `admin`) sa potpisom
+(`users.byline`: zvanje, specijalnost, mesto) i kratkom biografijom (`users.bio`). Tok: `draft` → `submitted` (autor šalje)
+→ `returned` (urednik vraća sa napomenom koju vidi samo autor) ili `published` (odmah ili zakazano `published_at`).
+Teme su u `fk_topics` (bez admin stranice): autor bira postojeću ili upisuje svoju (`topic_proposal`), a urednik je u formi teksta dodaje kao novu temu, stavlja tekst u postojeću ili odbacuje predlog; preimenovanje i spajanje: `php artisan topics:rename {slug} {naziv}` i `topics:merge {iz} {u}`. Početne teme su o poslu van škole (vojska, policija, GSS, ski centri, borilačke
+veštine, spasilaštvo, rekreacija i turizam).
+
+| Metod | Ruta | Pristup | Opis |
+|---|---|---|---|
+| GET | `/topics` | javno | teme sa brojem objavljenih tekstova |
+| POST | `/articles/list` | javno | `kind`, `topic` (slug), `search`, `page`, `per_page` (≤ 50); istaknuti pa najnoviji |
+| GET | `/articles/{slug}` | javno | tekst sa `body`, autorom (ime, potpis, biografija), temom, debatom i `related` |
+| GET | `/admin/articles/options` | author, editor, admin | teme, otvorene/zatvorene debate i potpis prijavljenog |
+| POST | `/admin/articles/list` | author (samo svoje), editor, admin | `status` (i `scheduled`), `kind`, `topic_id`, `proposals` (samo sa predlogom teme), `search`, `page`; poslati prvi, uz `submitted` broj |
+| POST | `/admin/articles/summary` | author, editor, admin; 10/10 min | `title`, `body` (bar 200 znakova) → AI predlog uvoda `{ summary }`, ništa se ne čuva |
+| GET / POST / PATCH | `/admin/articles[/{id}]` | autor svog nacrta ili vraćenog teksta, urednik uvek | `kind`, `topic_id` ili `topic_proposal` (nova tema, samo kad nije izabrana postojeća), `debate_id`, `title`, `summary`, `body`; adresa (`slug`) se pravi iz naslova i ne menja se posle prve objave |
+| POST | `/admin/articles/{id}/submit` | autor teksta | traži potpis iz profila (`byline` preko `PATCH /auth/me`, 422); notifikacija urednicima |
+| POST | `/admin/articles/{id}/publish` | editor, admin | `published_at` (prazno = odmah); 422 dok postoji nerešen predlog teme; notifikacija autoru |
+| POST | `/admin/articles/{id}/topic` | editor, admin | `name` (nova tema ili postojeća istog naziva) ili `topic_id`; prazno = odbaci predlog |
+| POST | `/admin/articles/{id}/return` | editor, admin | `note` (obavezno); notifikacija autoru |
+| POST | `/admin/articles/{id}/unpublish` · PATCH `/featured` | editor, admin | skidanje sa sajta, isticanje |
+| DELETE | `/admin/articles/{id}` | autor (neobjavljen), editor, admin | |
+| GET / POST | `/author-request` | prijavljen korisnik | prijava za autora: `byline`, `note` (o čemu bi pisao), `bio`; prva prijava ide adminima u notifikacije, admin dodeljuje ulogu u Korisnici (filter `author_requests`), korisnik dobija notifikaciju |
 
 ## Propisi i literatura
 
@@ -108,6 +142,7 @@ imaju datum provere; posle 6 meseci, i leti ako nisu provereni od juna, stoje u 
 
 | Metod | Ruta | Pristup | Opis |
 |---|---|---|---|
+| POST | `/news-suggestions` | javno (5 na sat) | „Pošalji objavu”: `organization_id` ili `sender_organization`, `title`, `url` ili `excerpt`, `sender_name`, `sender_email`, prazno `website`; mejl i notifikacija urednicima, ista adresa se ne prima dva puta |
 | POST | `/contact` | javno (5 na sat) | `name`, `email`, `topic` (`pitanje`, `greska`, `predlog`, `saradnja`, `drugo`), `message`, prazno polje `website`; mejl urednicima i adminima, odgovor ide pošiljaocu (`Reply-To`) |
 
 ## Pitanja i odgovori (#40)

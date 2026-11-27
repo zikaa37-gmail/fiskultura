@@ -57,4 +57,28 @@ class SeoTest extends TestCase
         $this->assertEmpty(array_filter($locations, fn (string $location) => str_contains($location, '/pitanja/')));
         $this->assertStringNotContainsString('/admin', $response->getContent());
     }
+
+    public function test_rss_lists_newest_public_news_with_absolute_links(): void
+    {
+        $this->travel(5)->minutes();
+        $draft = News::create(['slug' => 'nacrt-rss', 'title' => 'Nacrt', 'summary' => 'x', 'category' => 'vest', 'status' => News::DRAFT]);
+        $future = News::create(['slug' => 'buduca-rss', 'title' => 'Buduća', 'summary' => 'x', 'category' => 'vest', 'status' => News::PUBLISHED, 'published_at' => now()->addDay()]);
+        $newest = News::create(['slug' => 'najnovija-rss', 'title' => 'Najnovija & prva', 'summary' => 'Kratko <b>o</b> vesti', 'category' => 'takmicenje', 'status' => News::PUBLISHED, 'published_at' => now()]);
+
+        $response = $this->get('/rss.xml')->assertOk()->assertHeader('Content-Type', 'application/rss+xml; charset=UTF-8');
+
+        $xml = simplexml_load_string($response->getContent());
+        $this->assertSame('2.0', (string) $xml['version']);
+        $links = [];
+        foreach ($xml->channel->item as $item) {
+            $links[] = (string) $item->link;
+        }
+        $this->assertSame('https://fiskultura.rs/vesti/najnovija-rss', $links[0]);
+        $this->assertSame('Najnovija & prva', (string) $xml->channel->item[0]->title);
+        $this->assertSame('Kratko <b>o</b> vesti', (string) $xml->channel->item[0]->description);
+        $this->assertSame('Takmičenja', (string) $xml->channel->item[0]->category);
+        $this->assertCount(min(30, News::visible()->count()), $links);
+        $this->assertNotContains("https://fiskultura.rs/vesti/{$draft->slug}", $links);
+        $this->assertNotContains("https://fiskultura.rs/vesti/{$future->slug}", $links);
+    }
 }

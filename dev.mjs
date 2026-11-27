@@ -38,7 +38,7 @@ process.on('SIGINT', stop);
 process.on('SIGTERM', stop);
 
 if (backendDir) run('api', '35', 'php', ['artisan', 'serve', '--host=127.0.0.1', `--port=${backendPort}`, '--no-reload'], backendDir);
-run('web', '36', 'npx', ['ng', 'serve', '--host', '0.0.0.0'], frontendDir, { SSR_API_ORIGIN: `http://127.0.0.1:${backendPort}` });
+run('web', '36', 'npx', ['ng', 'serve', '--host', '0.0.0.0', '--open'], frontendDir, { SSR_API_ORIGIN: `http://127.0.0.1:${backendPort}` });
 
 const lan = Object.values(networkInterfaces()).flat().find((i) => i?.family === 'IPv4' && !i.internal)?.address;
 console.log(`\nFrontend: http://localhost:${frontendPort}${lan ? `  (telefon: http://${lan}:${frontendPort})` : ''}`);

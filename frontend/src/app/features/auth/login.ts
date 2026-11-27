@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
+import { PasswordToggle } from '../../shared/password-toggle/password-toggle';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
@@ -10,7 +11,7 @@ import { NotificationService } from '../../core/notification.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule],
+  imports: [PasswordToggle, ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -24,7 +25,8 @@ import { NotificationService } from '../../core/notification.service';
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Lozinka</mat-label>
-            <input matInput type="password" formControlName="password" autocomplete="current-password" />
+            <input #pw1 matInput type="password" formControlName="password" autocomplete="current-password" />
+            <app-password-toggle matSuffix [input]="pw1" />
           </mat-form-field>
           @if (error(); as message) {
             <p class="form-error" role="alert">{{ message }}</p>

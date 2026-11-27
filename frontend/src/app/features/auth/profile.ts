@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  PLATFORM_ID,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { PasswordToggle } from '../../shared/password-toggle/password-toggle';
 import { isPlatformBrowser } from '@angular/common';
 import { httpResource } from '@angular/common/http';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -39,18 +33,7 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    BUTTON_IMPORTS,
-    MatButtonToggleModule,
-    MatCheckboxModule,
-    FORM_FIELD_IMPORTS,
-    MatInputModule,
-    MatSelectModule,
-    Icon,
-    SchoolsField,
-  ],
+  imports: [PasswordToggle, ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, MatButtonToggleModule, MatCheckboxModule, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, Icon, SchoolsField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="section">
@@ -144,6 +127,21 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 </mat-form-field>
               </div>
 
+              @if (auth.isStaff()) {
+                <h3 class="mb-1">Potpis autora</h3>
+                <p class="small muted mb-2">Ide ispod imena na svakom tvom tekstu.</p>
+                <mat-form-field subscriptSizing="dynamic" appearance="outline">
+                  <mat-label>Zvanje, specijalnost i mesto</mat-label>
+                  <input matInput formControlName="byline" maxlength="160" placeholder="npr. profesor FV, instruktor skijanja, Kopaonik" />
+                  <mat-hint>Obavezno pre slanja teksta uredniku.</mat-hint>
+                </mat-form-field>
+                <mat-form-field subscriptSizing="dynamic" appearance="outline" class="mb-4">
+                  <mat-label>Kratka biografija (nije obavezno)</mat-label>
+                  <textarea matInput formControlName="bio" rows="3" maxlength="1000"></textarea>
+                  <mat-hint>Gde radiš, šta si završio i koje licence ili zvanja imaš.</mat-hint>
+                </mat-form-field>
+              }
+
               <h3 class="mb-1">Saglasnosti</h3>
               <p class="small muted mb-2">
                 Svaku možeš da isključiš kad hoćeš. Bez saglasnosti tvoji podaci ostaju samo
@@ -189,22 +187,13 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                 <h2>Promena lozinke</h2>
                 <mat-form-field appearance="outline">
                   <mat-label>Trenutna lozinka</mat-label>
-                  <input
-                    matInput
-                    type="password"
-                    formControlName="current"
-                    autocomplete="current-password"
-                  />
+                  <input #pw1 matInput type="password" formControlName="current" autocomplete="current-password" />
+                  <app-password-toggle matSuffix [input]="pw1" />
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                   <mat-label>Nova lozinka</mat-label>
-                  <input
-                    matInput
-                    type="password"
-                    formControlName="password"
-                    autocomplete="new-password"
-                  />
-                  <mat-hint>Najmanje 8 znakova</mat-hint>
+                  <input #pw2 matInput type="password" formControlName="password" autocomplete="new-password" />
+                  <app-password-toggle matSuffix [input]="pw2" /><mat-hint>Najmanje 8 znakova</mat-hint>
                 </mat-form-field>
                 <button type="submit" mat-stroked-button [disabled]="busy()">
                   Promeni lozinku
@@ -244,12 +233,8 @@ import { AskQuestionDialogService } from '../questions/ask-question-dialog';
                     </p>
                     <mat-form-field appearance="outline">
                       <mat-label>Lozinka</mat-label>
-                      <input
-                        matInput
-                        type="password"
-                        formControlName="password"
-                        autocomplete="current-password"
-                      />
+                      <input #pw3 matInput type="password" formControlName="password" autocomplete="current-password" />
+                      <app-password-toggle matSuffix [input]="pw3" />
                     </mat-form-field>
                     <button type="submit" mat-flat-button theme="danger" [disabled]="busy()">
                       Obriši nalog
@@ -318,6 +303,8 @@ export class Profile {
     member_status: ['' as MemberStatus | ''],
     municipality: [''],
     district: [''],
+    byline: [''],
+    bio: [''],
     directory_consent: [false],
     surveys_consent: [false],
   });
@@ -368,6 +355,7 @@ export class Profile {
         schools: cleanSchools(this.schools()),
         municipality: value.municipality || null,
         district: value.district || null,
+        ...(this.auth.isStaff() ? { byline: value.byline.trim() || null, bio: value.bio.trim() || null } : {}),
         directory_consent: value.directory_consent,
         surveys_consent: value.surveys_consent,
       })
@@ -467,6 +455,8 @@ export class Profile {
       member_status: user.member_status ?? '',
       municipality: user.municipality ?? '',
       district: user.district ?? '',
+      byline: user.byline ?? '',
+      bio: user.bio ?? '',
       directory_consent: !!user.directory_consent,
       surveys_consent: !!user.surveys_consent,
     });

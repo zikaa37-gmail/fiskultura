@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal } from '@angular/core';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
 import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -44,9 +45,10 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
       </mat-form-field>
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Nalog</mat-label>
-        <mat-select [value]="pending()" (selectionChange)="pending.set($event.value); page.set(1)">
-          <mat-option [value]="false">Svi</mat-option>
-          <mat-option [value]="true">Čekaju aktivaciju</mat-option>
+        <mat-select [value]="status()" (selectionChange)="status.set($event.value); page.set(1)">
+          <mat-option value="">Svi</mat-option>
+          <mat-option value="pending">Čekaju aktivaciju</mat-option>
+          <mat-option value="author">Žele da pišu</mat-option>
         </mat-select>
       </mat-form-field>
       <form class="search-form" (ngSubmit)="searchInput.flush(searchText())">
@@ -93,6 +95,12 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
               }
             </span>
             <strong>{{ user.name }}</strong>
+            @if (user.author_request; as request) {
+              @if (user.role === 'user') {
+                <span class="small"><span class="state-chip state-warn">Želi da piše</span> {{ request.byline }} · prijava {{ date(request.requested_at) }}</span>
+                <span class="small muted">{{ request.note }}</span>
+              }
+            }
             <span class="muted small"><a [href]="'mailto:' + user.email">{{ user.email }}</a>@if (user.phone; as phone) { · <a class="nowrap" [href]="phoneHref(phone)">{{ phone }}</a> }@if (user.school) { · {{ user.school }} }</span>
           </div>
           @if (!isSelf) {
@@ -117,7 +125,7 @@ export class AdminUsers {
   protected readonly roleLabels = ROLE_LABELS;
   protected readonly roles = Object.keys(ROLE_LABELS) as UserRole[];
   protected readonly role = signal<UserRole | ''>('');
-  protected readonly pending = signal(false);
+  protected readonly status = signal<'' | 'pending' | 'author'>(inject(ActivatedRoute).snapshot.queryParamMap.get('prijave') ? 'author' : '');
   protected readonly sending = signal(false);
   protected readonly search = signal('');
   protected readonly searchText = searchDraft(() => this.search());
@@ -132,7 +140,7 @@ export class AdminUsers {
   protected readonly resource = httpResource<Page<AdminUser>>(() => ({
     url: `${API_URL}/admin/users/list`,
     method: 'POST',
-    body: { role: this.role() || null, pending: this.pending(), search: this.search() || null, page: this.page() },
+    body: { role: this.role() || null, pending: this.status() === 'pending', author_requests: this.status() === 'author', search: this.search() || null, page: this.page() },
   }));
   readonly #lastPage = linkedSignal<Page<AdminUser> | undefined, Page<AdminUser> | null>({
     source: () => (this.resource.hasValue() ? this.resource.value() : undefined),
@@ -145,7 +153,7 @@ export class AdminUsers {
   protected readonly phoneHref = phoneHref;
   protected readonly filterSummary = computed(() => {
     const role = this.role();
-    const parts = [role ? this.roleLabels[role] : '', this.pending() ? 'Čekaju aktivaciju' : '', this.search() ? `„${this.search()}”` : ''];
+    const parts = [role ? this.roleLabels[role] : '', { '': '', pending: 'Čekaju aktivaciju', author: 'Žele da pišu' }[this.status()], this.search() ? `„${this.search()}”` : ''];
     return parts.filter(Boolean).join(' · ') || 'Svi korisnici';
   });
 

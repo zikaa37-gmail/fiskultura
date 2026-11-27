@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Models\UserToken;
 use App\Rules\PhoneNumber;
+use App\Services\Inbox;
 use App\Services\UserTokenService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -23,13 +24,14 @@ class AdminUserController extends Controller
 {
     private const INVITE_TTL_MINUTES = 20160;
 
-    public function __construct(private UserTokenService $tokens) {}
+    public function __construct(private UserTokenService $tokens, private Inbox $inbox) {}
 
     public function list(Request $request)
     {
         $filters = $request->validate([
             'role' => ['nullable', Rule::in(User::ROLES)],
             'pending' => ['nullable', 'boolean'],
+            'author_requests' => ['nullable', 'boolean'],
             'search' => ['nullable', 'string', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
@@ -38,6 +40,7 @@ class AdminUserController extends Controller
         $page = User::query()
             ->when($filters['role'] ?? null, fn (Builder $query, string $role) => $query->where('role', $role))
             ->when($filters['pending'] ?? false, fn (Builder $query) => $query->whereNull('email_verified_at')->whereNull('blocked_at'))
+            ->when($filters['author_requests'] ?? false, fn (Builder $query) => $query->whereNotNull('author_requested_at')->where('role', User::USER))
             ->when($filters['search'] ?? null, fn (Builder $query, string $search) => $query->where(fn (Builder $inner) => $inner
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
@@ -128,6 +131,7 @@ class AdminUserController extends Controller
             return $this->wrongPassword();
         }
 
+        $becameAuthor = array_key_exists('role', $data) && $user->role === User::USER && in_array($data['role'], [User::AUTHOR, User::EDITOR, User::ADMIN], true);
         if (array_key_exists('role', $data)) {
             $user->role = $data['role'];
         }
@@ -146,6 +150,10 @@ class AdminUserController extends Controller
         }
 
         $user->save();
+
+        if ($becameAuthor) {
+            $this->inbox->record($user, 'author_granted', 'Možeš da pišeš na Fiskulturi', 'Dobio si ulogu autora. Napiši kolumnu ili tekst i pošalji ga uredništvu na pregled.', '/admin/tekstovi/novi', ['site']);
+        }
 
         return response()->json($this->present($user));
     }
@@ -229,6 +237,11 @@ class AdminUserController extends Controller
             'invited_at' => $user->invited_at?->toIso8601String(),
             'created_at' => $user->created_at?->toIso8601String(),
             'last_active_at' => $user->last_active_at?->toIso8601String(),
+            'author_request' => $user->author_requested_at ? [
+                'requested_at' => $user->author_requested_at->toIso8601String(),
+                'byline' => $user->byline,
+                'note' => $user->author_request_note,
+            ] : null,
         ];
     }
 }

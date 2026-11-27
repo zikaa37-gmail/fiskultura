@@ -8,6 +8,7 @@ import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { DISTRICTS } from '../../content/districts';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
 import { LinkField, ORGANIZATION_LEVEL_LABELS, ORGANIZATION_TYPE_LABELS, OrganizationLevel, OrganizationType, organizationLabel } from '../../core/content/content.model';
@@ -44,6 +45,15 @@ type OrganizationStatus = AdminOrganization['status'];
         <mat-form-field appearance="outline">
           <mat-label>Grad / sedište</mat-label>
           <input matInput formControlName="city" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Okrug</mat-label>
+          <mat-select formControlName="district">
+            <mat-option value="">Nije upisan</mat-option>
+            @for (district of districts; track district) {
+              <mat-option [value]="district">{{ district }}</mat-option>
+            }
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="form-row">
@@ -164,6 +174,7 @@ export class AdminOrganizationForm {
   readonly #router = inject(Router);
   readonly #notifications = inject(NotificationService);
 
+  protected readonly districts = DISTRICTS;
   protected readonly typeLabels = ORGANIZATION_TYPE_LABELS;
   protected readonly types = Object.keys(ORGANIZATION_TYPE_LABELS) as OrganizationType[];
   protected readonly levelLabels = ORGANIZATION_LEVEL_LABELS;
@@ -193,6 +204,7 @@ export class AdminOrganizationForm {
     name: ['', Validators.required],
     short_name: [''],
     city: [''],
+    district: [''],
     type: ['strukovno-udruzenje' as OrganizationType, Validators.required],
     level: ['gradski' as OrganizationLevel, Validators.required],
     parent_id: [null as number | null],
@@ -229,6 +241,7 @@ export class AdminOrganizationForm {
           name: item.name,
           short_name: item.short_name ?? '',
           city: item.city ?? '',
+          district: item.district ?? '',
           type: item.type,
           level: item.level,
           parent_id: item.parent_id,
@@ -262,6 +275,7 @@ export class AdminOrganizationForm {
       name: value.name,
       short_name: nullable(value.short_name),
       city: nullable(value.city),
+      district: nullable(value.district),
       type: value.type,
       level: value.level,
       parent_id: value.parent_id,

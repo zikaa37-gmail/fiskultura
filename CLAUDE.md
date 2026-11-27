@@ -15,7 +15,7 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   zove `SeoService.set`); kod koji dira `localStorage`/`window` mora da radi i na serveru. Angular Material M3 (`mat.theme` u
   `src/styles.scss`, boje i tokeni u `src/theme/styles/colors.scss`, preneti iz statičke naslovne). Bez biblioteke za prevode: sav tekst je na
   srpskom, direktno u šablonima; duži sadržaj stranica je u `src/app/content/*.ts`. Port 5190, `/api` ide preko `proxy.conf.json` na `127.0.0.1:8190`.
-- `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), lokalno SQLite, na serveru MySQL.
+- `backend/`: Laravel 13 API, prefiks tabela `fk_` (`DB_PREFIX`), MySQL lokalno (baza `fiskultura`, testovi `fiskultura_test`) i na serveru.
   Mejl: SMTP `obavestenja@fiskultura.rs` (lozinka samo u `backend/.env` i na serveru; lokalno
   `MAIL_MAILER=log`, za probu slanja `smtp`). Auth: JWT access (60 min) + refresh sa rotacijom kao u
   evidencija-fv, uloge `user` / `author` / `editor` / `admin`, middleware `jwt` i `role:...`,
@@ -23,6 +23,9 @@ aplikacijama (e-pripreme, Evidencija FV, Jadžent, Zdravitas). Koncept: `docs/ko
   AI (sažetak debate, nacrt odgovora): `App\Services\Ai\Assistant` → `ClaudeAssistant` (Anthropic PHP SDK,
   `claude-opus-5-5`, ključ `ANTHROPIC_API_KEY` samo u `.env`); AI uvek pravi nacrt koji urednik ili moderator
   odobrava, u testovima se `Assistant` zamenjuje lažnim. Autor u adminu vidi samo pitanja dodeljena njemu.
+  Kolumne i autorski tekstovi („Priče kolega”, `/tekstovi`, `features/articles`): svaki tekst je potpisan nalogom autora
+  (potpis `byline` obavezan pre slanja), urednik vraća sa napomenom ili objavljuje; blok `app-articles-showcase` stoji na
+  naslovnoj i na vrhu `/vesti`. Ključevi indeksa u migracijama najviše 1000 bajtova (server je MyISAM).
   Svaki mejl korisniku prati upis u notifikacije (`App\Services\Inbox::record`, stranica `/notifikacije`, zvonce u meniju).
   Lokalni nalozi (seed): `admin@`, `urednik@`, `autor@`, `korisnik@fiskultura.test`, lozinka `lozinka123`.
 
@@ -86,7 +89,8 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Linkovi udruženja su kartice sa ikonicom (`app-org-links`); link koji `organizations:check-links` označi
   kao `broken` je onemogućen. Blokade botova (Facebook 400, 403) su `unknown` i link ostaje aktivan.
 - Dugme samo sa ikonicom: `<button app-icon-button icon="close" theme="neutral" label="Zatvori">` (`ICON_BUTTON_IMPORTS` iz `theme/ui/icon-button`, teme `neutral|primary|accent|danger|ghost`, isti `size`; stanja hover, focus, active i disabled su u `icon-buttons.scss`). Svaka adresa, telefon, mejl i sajt ide kroz `app-contact-item` (`kind="address|phone|email|web"`): link (mapa, `tel:`, `mailto:`), ikonica mape uz adresu, kopiranje i deljenje na telefonu; kad nema mesta, dodatne opcije idu u meni sa tri tačke.
-- Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`, putanje iz statičke naslovne).
+- Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`): SVG fajlovi u `frontend/public/icons/`, prikaz kroz CSS masku (boja = `currentColor`,
+  radi i u SSR-u); nova ikonica = fajl + ime u `ICON_NAMES`. Isti set kao u zakazivanju (Unicons line stil iz cln-spa, gde postoji).
 - Prenete objave udruženja: sažetak svojim rečima + link na izvor, nikad kopiran tekst.
 - Ne dodavati tajne u repozitorijum.
 

@@ -2,7 +2,9 @@
 
 use App\Mail\RegulationChangesMail;
 use App\Models\Organization;
+use App\Models\OrganizationSource;
 use App\Models\Regulation;
+use App\Models\Topic;
 use App\Models\User;
 use App\Services\Ai\DebateIntroWriter;
 use App\Services\Inbox;
@@ -10,6 +12,7 @@ use App\Services\Instagram\InstagramAccount;
 use App\Services\Instagram\InstagramPublisher;
 use App\Services\LinkChecker;
 use App\Services\PisChecker;
+use App\Services\SourceChecker;
 use App\Services\Mailbox\Mailbox;
 use App\Services\Mailbox\MailboxUnavailableException;
 use App\Services\Notifications\DebatePromoter;
@@ -81,6 +84,38 @@ Artisan::command('organizations:check-links {--slug=}', function (LinkChecker $c
 })->purpose('Proverava sajtove i mreže organizacija i pamti koji ne rade');
 
 Schedule::command('organizations:check-links')->weeklyOn(1, '04:00');
+
+Artisan::command('sources:check {--organization=}', function (SourceChecker $checker, Inbox $inbox) {
+    $organizations = Organization::query()->when($this->option('organization'), fn ($query, string $slug) => $query->where('slug', $slug))->get();
+    $added = $organizations->sum(fn (Organization $organization) => OrganizationSource::syncFor($organization));
+    $counts = [SourceChecker::OK => 0, SourceChecker::NO_FEED => 0, SourceChecker::BLOCKED => 0, SourceChecker::ERROR => 0];
+    $found = 0;
+
+    OrganizationSource::query()
+        ->with('organization')
+        ->where('mode', OrganizationSource::AUTO)
+        ->whereIn('organization_id', $organizations->pluck('id'))
+        ->orderBy('id')
+        ->each(function (OrganizationSource $source) use ($checker, &$counts, &$found) {
+            $result = $checker->check($source);
+            $counts[$result['status']]++;
+            $found += $result['found'];
+            if ($result['status'] === SourceChecker::ERROR) {
+                $this->warn("{$source->organization->slug} {$source->url}: {$source->last_error}");
+            }
+        });
+
+    $this->info("Izvori: novih {$added}, sa fidom {$counts['ok']}, bez fida {$counts['no_feed']}, zabranjeno u robots.txt {$counts['blocked']}, greška {$counts['error']}. Novih predloga vesti: {$found}.");
+
+    if ($found > 0) {
+        $editors = User::query()->whereIn('role', [User::EDITOR, User::ADMIN])->whereNull('blocked_at')->whereNotNull('email_verified_at')->get();
+        $inbox->record($editors, 'news_suggestion', "Novi predlozi vesti iz izvora organizacija ({$found})", 'Pregledajte ih i od važnih napravite kratku vest sa linkom na izvor.', '/admin/predlozi', ['site']);
+    }
+
+    return 0;
+})->purpose('Čita RSS i javne fidove organizacija i nove objave stavlja u red predloga za urednika');
+
+Schedule::command('sources:check')->dailyAt('06:15')->withoutOverlapping(60);
 
 Artisan::command('debates:intros {--limit=2}', function (DebateIntroWriter $writer) {
     $done = $writer->runPending((int) $this->option('limit'));
@@ -222,3 +257,27 @@ Artisan::command('institutions:import-mpn {--dir=}', function (App\Services\MpnS
 })->purpose('Uvoz osnovnih i srednjih škola iz otvorenih podataka Ministarstva prosvete (opendata.mpn.gov.rs)');
 
 Schedule::command('institutions:import-mpn')->monthlyOn(2, '04:00')->withoutOverlapping(30);
+
+Artisan::command('topics:rename {slug} {name}', function (string $slug, string $name) {
+    $topic = Topic::where('slug', $slug)->first();
+    if (! $topic) {
+        $this->error("Tema {$slug} ne postoji.");
+
+        return 1;
+    }
+    $topic->update(['name' => $name]);
+    $this->info("Tema {$slug} se sada zove „{$name}”.");
+})->purpose('Preimenuje temu tekstova (slug ostaje isti)');
+
+Artisan::command('topics:merge {from} {into}', function (string $from, string $into) {
+    $source = Topic::where('slug', $from)->first();
+    $target = Topic::where('slug', $into)->first();
+    if (! $source || ! $target || $source->is($target)) {
+        $this->error('Obe teme moraju da postoje i da budu različite.');
+
+        return 1;
+    }
+    $moved = $source->articles()->update(['topic_id' => $target->id]);
+    $source->delete();
+    $this->info("Prebačeno tekstova: {$moved}. Tema {$from} je obrisana.");
+})->purpose('Spaja dve teme tekstova: tekstovi prelaze u drugu, prva se briše');

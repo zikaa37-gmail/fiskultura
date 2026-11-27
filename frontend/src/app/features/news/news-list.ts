@@ -12,13 +12,14 @@ import { FilterChange, FilterField, ListFilters } from '../../shared/list-filter
 import { ListHeader } from '../../shared/list-header/list-header';
 import { NewsCard, NewsCardState } from '../../shared/news-card/news-card';
 import { MenuOption } from '../../shared/options-menu/options-menu';
+import { Icon } from '../../shared/icon/icon';
 import { Pagination } from '../../shared/pagination/pagination';
 import { ScrollArea } from '../../shared/scroll-area/scroll-area';
 import { AdminNews, newsState, Page } from '../admin/admin.model';
 
 const UMBRELLA_FILTER = 'sspfvs-mreza';
 const STATUS_LABELS: Record<string, string> = { draft: 'Nacrti', published: 'Objavljeno', scheduled: 'Zakazano' };
-const QUERY_KEYS = ['status', 'kategorija', 'udruzenje', 'godina', 'pretraga'] as const;
+const QUERY_KEYS = ['status', 'kategorija', 'udruzenje', 'okrug', 'godina', 'pretraga'] as const;
 
 type NewsAction = 'view' | 'feature' | 'edit' | 'remove';
 
@@ -30,7 +31,7 @@ interface NewsRow {
 
 @Component({
   selector: 'app-news-list',
-  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, NewsCard, Pagination, ScrollArea],
+  imports: [RouterLink, BUTTON_IMPORTS, MatProgressBarModule, ListFilters, ListHeader, NewsCard, Pagination, ScrollArea, Icon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-list-filters [fields]="fields()" [values]="filters()" [emptySummary]="admin() ? 'Sve vesti' : 'Sve objave'" (filterChange)="setFilter($event)" (clearAll)="clearFilters()" />
@@ -46,7 +47,7 @@ interface NewsRow {
     } @else if (meta(); as info) {
       <app-list-header [label]="admin() ? 'Ukupno' : 'Pronađeno objava'" [count]="info.total" [page]="info.page" [lastPage]="info.last_page">
         @if (admin()) {
-          <a mat-flat-button routerLink="/admin/vesti/nova">Nova vest</a>
+          <a mat-flat-button routerLink="/admin/vesti/nova"><app-icon name="plus" [size]="18" /> Nova vest</a>
         }
       </app-list-header>
       <app-scroll-area [label]="admin() ? 'Vesti' : 'Objave'" [fill]="true" [resetOn]="[info.page, filters()]">
@@ -108,6 +109,7 @@ export class NewsList {
     const organizations = (this.#organizationsResource.hasValue() ? this.#organizationsResource.value() : [])
       .filter((organization) => (organization.news_count ?? 0) > 0)
       .sort((a, b) => organizationLabel(a).localeCompare(organizationLabel(b), 'sr'));
+    const districts = [...new Set(organizations.map((item) => item.district).filter((district): district is string => !!district))].sort((a, b) => a.localeCompare(b, 'sr'));
     const years = this.#yearsResource.hasValue() ? this.#yearsResource.value() : [];
     const fields: FilterField[] = [
       { key: 'kategorija', label: 'Kategorija', options: (Object.keys(NEWS_CATEGORY_LABELS) as NewsCategory[]).map((value) => ({ value, label: NEWS_CATEGORY_LABELS[value] })) },
@@ -117,6 +119,7 @@ export class NewsList {
         allLabel: 'Svi izvori',
         options: [{ value: UMBRELLA_FILTER, label: 'SSPFVS i članice' }, ...organizations.map((item) => ({ value: item.slug, label: organizationLabel(item) }))],
       },
+      { key: 'okrug', label: 'Okrug', allLabel: 'Svi okruzi', options: districts.map((district) => ({ value: district, label: district })) },
       { key: 'godina', label: 'Godina', allLabel: 'Sve godine', options: years.map((year) => ({ value: `${year}`, label: `${year}` })) },
       { key: 'pretraga', label: 'Pretraga', type: 'search' },
     ];
@@ -136,6 +139,7 @@ export class NewsList {
         category: filters['kategorija'] || null,
         organization: organization && organization !== UMBRELLA_FILTER ? organization : null,
         umbrella: organization === UMBRELLA_FILTER ? 'sspfvs' : null,
+        district: filters['okrug'] || null,
         year: filters['godina'] ? Number(filters['godina']) : null,
         search: filters['pretraga'] || null,
         page: this.#page(),

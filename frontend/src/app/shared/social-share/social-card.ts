@@ -53,7 +53,7 @@ export async function renderSocialCard(title: string, label: string, kind: Socia
   await document.fonts?.ready;
 
   const background = context.createLinearGradient(0, 0, WIDTH, height);
-  background.addColorStop(0, '#1d4ed8');
+  background.addColorStop(0, '#1a2d66');
   background.addColorStop(1, '#0b1736');
   context.fillStyle = background;
   context.fillRect(0, 0, WIDTH, height);

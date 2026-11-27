@@ -59,6 +59,7 @@ export interface AdminUser {
   invited_at: string | null;
   created_at: string | null;
   last_active_at: string | null;
+  author_request: { requested_at: string; byline: string | null; note: string | null } | null;
 }
 
 export interface MemberCount {

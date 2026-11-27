@@ -114,6 +114,9 @@ class ContentImporter
         foreach ($rows as $row) {
             $organization = Organization::firstOrNew(['slug' => $row['slug']]);
             if ($organization->exists) {
+                if ($organization->district === null && ! empty($row['district'])) {
+                    $organization->forceFill(['district' => $row['district']])->save();
+                }
                 continue;
             }
 
@@ -123,6 +126,7 @@ class ContentImporter
                 'type' => $row['type'],
                 'level' => $row['level'],
                 'city' => $row['city'] ?? null,
+                'district' => $row['district'] ?? null,
                 'website' => $row['website'] ?? null,
                 'social' => array_filter($row['social'] ?? []) ?: null,
                 'email' => $row['email'] ?? null,

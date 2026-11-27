@@ -19,8 +19,7 @@ komponente: kartica modula, status-čip, sekcija sa naslovom, prazno stanje, loa
 
 - [ ] Izgled kao na fiskultura.rs na 360 px i 1280 px, svetla i tamna tema
 
-### #3 SEO osnova (opste) — urađeno (bez RSS)
-
+### #3 SEO osnova (opste) — urađeno
 `<title>`, description i og: tagovi po ruti (`Title` + `Meta` servis), prerender statičnih ruta,
 Laravel ubacuje meta tagove za `/vesti/:slug` i `/udruzenja/:slug`, `sitemap.xml`, `rss.xml`,
 `robots.txt`.
@@ -28,7 +27,7 @@ Laravel ubacuje meta tagove za `/vesti/:slug` i `/udruzenja/:slug`, `sitemap.xml
 - [x] Angular SSR: prerender svih javnih stranica pri deploy-u (i svake vesti, udruženja i pitanja)
 - [x] `SeoService`: title, description, canonical, robots, Open Graph, Twitter, JSON-LD (NewsArticle, QAPage, Organization, BreadcrumbList)
 - [x] `sitemap.xml` (Laravel, uvek aktuelan), `robots.txt`, slika za deljenje `og-image.png`
-- [ ] `rss.xml` za vesti
+- [x] `rss.xml` za vesti (30 najnovijih, `<link rel="alternate">` u `index.html`)
 - [ ] Google Search Console: potvrda domena i slanje sitemap-a
 
 ### #4 Izvori i uređivački proces (opste, sadrzaj)
@@ -49,8 +48,7 @@ faza 1 prođe proveru.
 
 `frontend/`: Angular 22 standalone, zoneless, Material, rute, shell
 (top bar + footer kao na naslovnoj, mobilni meni), proxy `/api` na `127.0.0.1:8190`, port 5190.
-
-- [ ] `ng build` i `ng test` prolaze
+- [x] `ng build` i `ng test` prolaze
 
 ### #7 Kostur backenda (faza-1)
 
@@ -103,30 +101,36 @@ Tabele `fk_organizations`, veza vest → organizacija; seed iz `backend/database
 `parent_id` na organizaciji (SSPFVS krovno, 15 redovnih članica sa https://sspfvs.wixsite.com/sspfvs/o-nama),
 izvor podatka o članstvu. Na `/udruzenja` istaknut SSPFVS, ispod članice po okrugu, zatim ostale
 organizacije (školski sport, institucije, fakulteti, sindikati).
+- [x] Za svaku članicu prikupiti sajt / FB / kontakt: javno postoji samo za UPFK Niš, ostalo preko SSPFVS (`docs/izvori/udruzenja.md`)
 
-- [ ] Za svaku članicu prikupiti sajt / FB / kontakt (sada većina nepoznato)
-
-### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1)
-
+### #15b Pokrivenost i „Osnuj društvo u svom gradu" (faza-1) — urađeno (bez mape)
 Spisak okruga i gradova (šifarnik) sa statusom: postoji aktivno / postoji neaktivno / nema. Mapa
 Srbije (SVG po okruzima) kasnije. Vodič za osnivanje (koraci, primer statuta, APR, učlanjenje u
 SSPFVS — sadržaj dogovoriti sa SSPFVS) i forma „zainteresovan sam za društvo u <grad>" — kad se
 skupi bar 3 kolege, obaveštenje SSPFVS-u i prijavljenima.
+- [x] Okrug na organizaciji (`district`, podaci i admin), pokrivenost po okruzima na `/udruzenja/osnivanje`
+- [x] Forma interesovanja sa potvrdom mejlom; na 3 potvrđene prijave u mestu mejl sa kontaktima prijavljenima i SSPFVS-u
+- [ ] SVG mapa Srbije po okruzima
+- [ ] Sadržaj vodiča i poruke dogovoriti sa SSPFVS-om
 
-### #15c Izvori organizacija i red za urednika (faza-1)
-
+### #15c Izvori organizacija i red za urednika (faza-1) — urađeno
 Tabela `fk_organization_sources` (organizacija, tip: sajt / rss / facebook / instagram / youtube,
 URL, način praćenja: automatski / ručno, poslednja provera). Komanda `sources:check` (cron, jednom
 dnevno) čita RSS i javne stranice gde je dozvoljeno, nove stavke idu u `fk_news_suggestions`
 (naslov, link, datum, izvor) — urednik ih jednim klikom pretvara u vest sa sažetkom. Forma
 „Pošalji objavu" za udruženja bez naloga.
+- [x] `fk_organization_sources` (izvori se sami dodaju iz sajta i mreža udruženja), `fk_news_suggestions`, `sources:check` svakog jutra u 6:15
+- [x] Fid se traži na stranici (`<link rel="alternate">`) ili na `/feed/`, poštuje se robots.txt; Facebook, Instagram i YouTube (robots.txt zabranjuje fid kanala) se prate ručno
+- [x] `/admin/predlozi` (napravi nacrt vesti, odbaci, vrati u red), `/admin/izvori`, javna forma `/udruzenja/posalji-objavu`
 
-### #15d Oznaka izvora na vesti (faza-1)
-
+### #15d Oznaka izvora na vesti (faza-1) — urađeno
 Vest ima `organization_id`, `source_url`, `source_type` (sajt / Facebook / ...), `source_published_at`.
 U prikazu: čip organizacije (link na `/udruzenja/:slug`), „Preuzeto sa: ...", datum originala, link.
 Filteri na `/vesti`: organizacija, „SSPFVS i članice", okrug. Obaveštenja mejlom mogu da se prate
 po organizaciji.
+- [x] Čip organizacije na kartici, blok „Izvor informacije” u modalu i na stranici vesti (organizacija i okrug, „Preuzeto sa”, datum originala, link)
+- [x] Filteri na `/vesti` i u adminu: izvor, „SSPFVS i članice”, okrug (`district`, po okrugu organizacije)
+- [x] Praćenje po organizaciji u obaveštenjima (`organization_ids`)
 
 ### #15e Istraživanje: odobreni seminari za FV po školskoj godini (faza-1, sadrzaj)
 
@@ -231,10 +235,11 @@ podsetnik mejlom (7 dana i 1 dan pre); izvoz u Google / Outlook kalendar (iCal).
 Škola ili kolega objavljuje oglas (radno mesto nastavnika FV, zamena, honorarni rad u sekciji);
 urednik odobrava; rok važenja, okrug, link na zvanični konkurs; obaveštenje mejlom po okrugu.
 
-### #43 Šabloni dokumenata (faza-1b, sadrzaj)
-
+### #43 Šabloni dokumenata (faza-1b, sadrzaj) — urađeno (prvo izdanje)
 Preuzimanje šablona: operativni plan, izveštaj sekcije, saglasnost roditelja za takmičenje,
 zapisnik testiranja, molba za oslobađanje, plan rada aktiva. Word / PDF, oznaka verzije i propisa.
+- [x] `/sabloni`: šest Word šablona u `frontend/public/sabloni/`, pravi ih `scripts/document_templates.py` (python-docx); verzija 2026/27, propis i povezano pitanje na kartici
+- [ ] PDF verzije i godišnja provera šablona pred novu školsku godinu
 
 ### #44 Glas struke: ankete i inicijative (faza-1b)
 
@@ -287,7 +292,7 @@ Periodični pregled izvora:
   uredniku šta je novo; ništa se ne objavljuje samo, urednik pregleda i odobri;
 - kad se promeni propis: ažurirati propise, pitanja i odgovore, ishode i planove koji ga navode
   (polje „važi od”) i objaviti kratku vest sa linkom na zvanični tekst.
-- [ ] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
+- [x] Spisak izvora sa redom provere u `docs/izvori/pracenje.md`
 - [ ] Seminari iz kataloga ZUOV (oblast 17) na portalu, sa linkom na katalog
 - [ ] Provera izmena propisa preko PIS-a i novih objava ZUOV-a, izveštaj uredniku
 
@@ -605,6 +610,15 @@ tog sajta, uz dozvolu).
 
 Tabela tekstova sa autorom, temom, oznakama; autor piše, urednik odobrava; `/strucno`, `/strucno/:slug`,
 profil autora.
+
+### #29-1 Kolumne i autorski tekstovi, prva verzija — urađeno
+- [x] `fk_topics`, `fk_articles` (kolumna / članak, tema, debata, autor), potpis i biografija autora na nalogu
+- [x] Tok nacrt → poslato → vraćeno sa napomenom / objavljeno ili zakazano, notifikacije autoru i urednicima
+- [x] Tekst se lepi u formu (pasusi i liste sa „- ”), pregled pre slanja, urednik koriguje pre objave
+- [x] „Priče kolega” na naslovnoj, na vrhu `/vesti`, u glavnom meniju; `/tekstovi`, `/tekstovi/:slug` (prerender, sitemap)
+- [x] Admin: `/admin/tekstovi`, `/admin/teme`; početne teme o poslu van škole (vojska, policija, GSS, ...)
+- [ ] Fotografija autora i javna stranica autora (`/autori/:slug`, #29a)
+- [ ] Obaveštenja mejlom o novom tekstu (po temi / autoru)
 
 ### #29a Pozivi i profil kolumniste (faza-4)
 

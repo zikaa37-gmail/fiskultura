@@ -1,10 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminDebateController;
+use App\Http\Controllers\Api\FoundingController;
 use App\Http\Controllers\Api\Admin\AdminInstagramController;
 use App\Http\Controllers\Api\Admin\AdminMailboxController;
 use App\Http\Controllers\Api\Admin\AdminModeratorController;
+use App\Http\Controllers\Api\Admin\AdminArticleController;
 use App\Http\Controllers\Api\Admin\AdminNewsController;
+use App\Http\Controllers\Api\Admin\AdminNewsSuggestionController;
+use App\Http\Controllers\Api\Admin\AdminSourceController;
 use App\Http\Controllers\Api\Admin\AdminOrganizationController;
 use App\Http\Controllers\Api\Admin\AdminQuestionController;
 use App\Http\Controllers\Api\Admin\AdminRegulationController;
@@ -13,7 +17,10 @@ use App\Http\Controllers\Api\Admin\AdminUserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\InvitationController;
 use App\Http\Controllers\Api\MemberController;
+use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AuthorRequestController;
 use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\NewsSuggestionController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\InstitutionController;
 use App\Http\Controllers\Api\FacilityController;
@@ -28,6 +35,7 @@ use App\Http\Controllers\SeoController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,60');
+Route::post('/news-suggestions', [NewsSuggestionController::class, 'store'])->middleware('throttle:5,60');
 Route::get('/public/instagram-media/{token}.jpg', [AdminInstagramController::class, 'media'])->where('token', '[A-Za-z0-9]{40}');
 Route::get('/public/social/{network}/callback', [AdminInstagramController::class, 'callback'])->whereIn('network', ['instagram', 'facebook'])->middleware('throttle:20,10');
 
@@ -41,9 +49,11 @@ Route::middleware('throttle:10,1')->group(function () {
     Route::post('/auth/invitation', [InvitationController::class, 'show']);
     Route::post('/auth/invitation/complete', [InvitationController::class, 'complete']);
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+    Route::post('/founding-interests', [FoundingController::class, 'store']);
 });
 Route::middleware('throttle:30,1')->group(function () {
     Route::post('/subscriptions/confirm', [SubscriptionController::class, 'confirm']);
+    Route::post('/founding-interests/confirm', [FoundingController::class, 'confirm']);
     Route::post('/subscriptions/manage', [SubscriptionController::class, 'manage']);
     Route::patch('/subscriptions/manage', [SubscriptionController::class, 'updateManaged']);
     Route::post('/subscriptions/unsubscribe', [SubscriptionController::class, 'unsubscribe']);
@@ -51,10 +61,14 @@ Route::middleware('throttle:30,1')->group(function () {
 Route::post('/news/list', [NewsController::class, 'list']);
 Route::get('/news/years', [NewsController::class, 'years']);
 Route::get('/news/{slug}', [NewsController::class, 'show']);
+Route::get('/topics', [ArticleController::class, 'topics']);
+Route::post('/articles/list', [ArticleController::class, 'list']);
+Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
 Route::get('/institutions/search', [InstitutionController::class, 'search'])->middleware('throttle:120,1');
 Route::get('/organizations', [OrganizationController::class, 'index']);
+Route::get('/founding/coverage', [FoundingController::class, 'coverage']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
 Route::get('/seo/routes', [SeoController::class, 'routes']);
 
@@ -62,6 +76,8 @@ Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::middleware('jwt')->group(function () {
+    Route::get('/author-request', [AuthorRequestController::class, 'show']);
+    Route::post('/author-request', [AuthorRequestController::class, 'store'])->middleware('throttle:5,10');
     Route::post('/questions', [QuestionController::class, 'store'])->middleware('throttle:5,1');
     Route::get('/me/questions', [QuestionController::class, 'mine']);
     Route::get('/questions', [QuestionController::class, 'index']);
@@ -112,6 +128,14 @@ Route::middleware('jwt')->group(function () {
         Route::get('/questions/{question}', [AdminQuestionController::class, 'show']);
         Route::patch('/questions/{question}', [AdminQuestionController::class, 'update']);
         Route::post('/questions/{question}/draft', [AdminQuestionController::class, 'draft'])->middleware('throttle:10,10');
+        Route::get('/articles/options', [AdminArticleController::class, 'options']);
+        Route::post('/articles/list', [AdminArticleController::class, 'list']);
+        Route::post('/articles/summary', [AdminArticleController::class, 'summary'])->middleware('throttle:10,10');
+        Route::get('/articles/{article}', [AdminArticleController::class, 'show']);
+        Route::post('/articles', [AdminArticleController::class, 'store'])->middleware('throttle:30,10');
+        Route::patch('/articles/{article}', [AdminArticleController::class, 'update']);
+        Route::post('/articles/{article}/submit', [AdminArticleController::class, 'submit']);
+        Route::delete('/articles/{article}', [AdminArticleController::class, 'destroy']);
     });
 
     Route::prefix('admin')->middleware('role:editor,admin')->group(function () {
@@ -121,6 +145,20 @@ Route::middleware('jwt')->group(function () {
         Route::patch('/news/{news}', [AdminNewsController::class, 'update']);
         Route::patch('/news/{news}/featured', [AdminNewsController::class, 'feature']);
         Route::delete('/news/{news}', [AdminNewsController::class, 'destroy']);
+        Route::post('/news-suggestions/list', [AdminNewsSuggestionController::class, 'list']);
+        Route::post('/news-suggestions/{suggestion}/accept', [AdminNewsSuggestionController::class, 'accept']);
+        Route::patch('/news-suggestions/{suggestion}', [AdminNewsSuggestionController::class, 'update']);
+        Route::get('/sources', [AdminSourceController::class, 'index']);
+        Route::post('/sources', [AdminSourceController::class, 'store']);
+        Route::patch('/sources/{source}', [AdminSourceController::class, 'update']);
+        Route::delete('/sources/{source}', [AdminSourceController::class, 'destroy']);
+        Route::post('/sources/{source}/check', [AdminSourceController::class, 'check'])->middleware('throttle:20,1');
+
+        Route::post('/articles/{article}/publish', [AdminArticleController::class, 'publish']);
+        Route::post('/articles/{article}/return', [AdminArticleController::class, 'sendBack']);
+        Route::post('/articles/{article}/topic', [AdminArticleController::class, 'resolveTopic']);
+        Route::post('/articles/{article}/unpublish', [AdminArticleController::class, 'unpublish']);
+        Route::patch('/articles/{article}/featured', [AdminArticleController::class, 'feature']);
 
         Route::post('/questions', [AdminQuestionController::class, 'store']);
         Route::get('/staff', [AdminQuestionController::class, 'staff']);

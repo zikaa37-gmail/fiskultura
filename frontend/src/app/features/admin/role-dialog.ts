@@ -80,7 +80,7 @@ export class RoleDialog {
   protected readonly roleLabels = ROLE_LABELS;
   protected readonly descriptions: Record<UserRole, string> = {
     user: 'Čita sadržaj za članove, prima obaveštenja i postavlja pitanja.',
-    author: 'Može i da piše vesti; objavljuje ih urednik.',
+    author: 'Piše kolumne i autorske tekstove pod svojim imenom i odgovara na dodeljena pitanja; objavljuje urednik.',
     editor: 'Uređuje i objavljuje vesti, propise, pitanja i udruženja.',
     admin: 'Sve, uključujući korisnike i uloge.',
   };

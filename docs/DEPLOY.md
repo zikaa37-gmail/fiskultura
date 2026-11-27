@@ -55,7 +55,7 @@ python deploy/deploy-staticna.py            # stara statična naslovna (samo za 
    ekstenzije koje nedostaju; treba da bude prazno) i `mailbox` (izlaz `mailbox:check`: prijava na IMAP i SMTP za
    poštu u adminu, ništa se ne šalje). Organizacije i vesti iz `backend/database/data/*.json`
    uvozi `--seed` (`ContentSeeder`); ponovni uvoz preskače ono što već postoji.
-4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/pitanja`, `/sitemap.xml`, `/robots.txt`, `/api/organizations`,
+4. Provera: `/`, `/prijava`, `/udruzenja`, `/vesti`, `/pitanja`, `/sitemap.xml`, `/rss.xml`, `/robots.txt`, `/api/organizations`,
    `/portfolio/` → 200, `/api/auth/me` → 401.
 
 ## SEO i prerender (SSR)
@@ -69,7 +69,7 @@ obična Angular stranica (Google izvršava JS, meta se postavlja u pregledaču),
 ili uz `python deploy/deploy.py --frontend`. Ako hosting jednom dobije Node.js, `dist/frontend/server/server.mjs` može
 da renderuje i nove stranice odmah (`RenderMode.Server`).
 
-`/sitemap.xml` pravi Laravel (`SeoController`, uvek aktuelan), `robots.txt` je u `frontend/public`. Posle prvog
+`/sitemap.xml` i `/rss.xml` (30 najnovijih vesti) pravi Laravel (`SeoController`, uvek aktuelni), `robots.txt` je u `frontend/public`. Posle prvog
 deploy-a: Google Search Console → dodati `fiskultura.rs` (DNS potvrda u cPanel-u) i poslati `sitemap.xml`.
 
 Admin se pravi komandom `php artisan app:admin <mejl> --password=...` (pri deploy-u automatski). Posle

@@ -60,43 +60,15 @@
             <span class="bell-dot" aria-hidden="true"></span>
           }
         </a>
-        <button
-          type="button"
-          class="account-button"
-          [matMenuTriggerFor]="accountMenu"
-          aria-label="Moj nalog"
-          (click)="closeMenu()"
-        >
-          <app-icon name="user" [size]="20" />
-          <span class="account-name">{{ firstName() }}</span>
-          <app-icon name="chevron-down" [size]="16" />
-        </button>
-        <mat-menu #accountMenu="matMenu" xPosition="before" class="account-menu">
-          <div class="account-menu-head">
-            <strong>{{ user.name }}</strong>
-            <span class="small muted">{{ user.email }}</span>
-          </div>
-          <a mat-menu-item routerLink="/profil"><app-icon name="user" [size]="20" /> Moj profil</a>
-          <a mat-menu-item routerLink="/notifikacije"
-            ><app-icon name="bell" [size]="20" /> Notifikacije{{
-              inbox.unread() ? ' (' + inbox.unread() + ')' : ''
-            }}</a
-          >
-          <button type="button" mat-menu-item (click)="openNotifications()">
-            <app-icon name="mail" [size]="20" /> Obaveštenja mejlom
+        @defer (on immediate) {
+          <app-account-menu [user]="user" (opened)="closeMenu()" />
+        } @placeholder {
+          <button type="button" class="account-button" aria-label="Moj nalog">
+            <app-icon name="user" [size]="20" />
+            <span class="account-name">{{ firstName() }}</span>
+            <app-icon name="chevron-down" [size]="16" />
           </button>
-          <button type="button" mat-menu-item (click)="askQuestion()">
-            <app-icon name="help" [size]="20" /> Postavi pitanje
-          </button>
-          <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik </a>
-          @if (auth.isStaff()) {
-            <a mat-menu-item routerLink="/admin"><app-icon name="clipboard" [size]="20" /> Admin</a>
-          }
-          <mat-divider />
-          <button type="button" mat-menu-item class="logout-item" (click)="auth.logout()">
-            <app-icon name="logout" [size]="20" /> Odjavi se
-          </button>
-        </mat-menu>
+        }
       } @else {
         <a class="account-button" routerLink="/prijava" (click)="closeMenu()">
           <app-icon name="user" [size]="20" />
