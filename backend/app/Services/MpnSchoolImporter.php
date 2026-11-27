@@ -13,6 +13,8 @@ class MpnSchoolImporter
 
     public const SOURCE = 'Ministarstvo prosvete, otvoreni podaci (CC BY)';
 
+    public const SOURCE_KEY = 'mpn-opendata';
+
     private const DATASETS = ['osnovna' => 'Oo', 'srednja' => 'So'];
 
     public function __construct(private readonly InstitutionImporter $importer) {}
@@ -23,7 +25,7 @@ class MpnSchoolImporter
         foreach (self::DATASETS as $type => $code) {
             $contacts = $this->read($directory, $code, 'kontaktPodaciJSON', 'KontaktPodaci');
             $locations = $this->read($directory, $code, 'PodaciOLOPJSON', 'PodaciLokacije');
-            $result[$type] = $this->importer->import($this->rows($contacts, $locations), $type, self::SOURCE);
+            $result[$type] = $this->importer->import($this->rows($contacts, $locations), $type, self::SOURCE_KEY);
         }
 
         return $result;
