@@ -73,6 +73,24 @@ class InstitutionTest extends TestCase
         $this->assertSame(['podaci', 'bez_sale'], $sava['facility_flags']);
     }
 
+    public function test_mpn_import_keeps_source_short_and_credits_ministry_for_facilities(): void
+    {
+        $directory = storage_path('framework/testing/mpn');
+        @mkdir($directory, 0777, true);
+        $contact = ['nazivUstanove' => 'ОШ "Аца Алексић"', 'okrug' => 'РАСИНСКИ УПРАВНИ ОКРУГ', 'opstina' => 'АЛЕКСАНДРОВАЦ', 'mesto' => 'АЛЕКСАНДРОВАЦ', 'maticniBroj' => '07100060'];
+        $location = $contact + ['ulica' => 'ЈАСИКОВАЧКА ББ', 'sedisteRadnaJedinica' => 'Да', 'brojFiskulturnihSala' => 1, 'brojUcionica' => 12];
+        foreach (['oo', 'so'] as $code) {
+            file_put_contents("{$directory}/{$code}.json", json_encode(['KontaktPodaci' => $code === 'oo' ? [$contact] : []]));
+            file_put_contents("{$directory}/{$code}_lop.json", json_encode(['PodaciLokacije' => $code === 'oo' ? [$location] : []]));
+        }
+
+        $this->artisan('institutions:import-mpn', ['--dir' => $directory])->assertSuccessful();
+
+        $school = Institution::where('registry_number', '07100060')->firstOrFail();
+        $this->assertLessThanOrEqual(40, mb_strlen((string) $school->source));
+        $this->assertSame(\App\Services\MpnSchoolImporter::SOURCE, $school->facilities_source);
+    }
+
     public function test_search_works_without_diacritics_and_in_cyrillic(): void
     {
         $this->getJson('/api/institutions/search?q=vuk cacak')->assertOk()->assertJsonCount(1)->assertJsonPath('0.label', 'OŠ „Vuk Karadžić”, Čačak');
