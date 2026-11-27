@@ -89,7 +89,7 @@ class FacilityTest extends TestCase
     {
         \Illuminate\Support\Facades\Mail::fake();
         $school = Institution::where('name', 'OŠ „Prva”')->firstOrFail();
-        $this->assertSame(['sala' => 'zvanicno', 'staza' => 'zvanicno'], $school->facilities_origin);
+        $this->assertEquals(['sala' => 'zvanicno', 'staza' => 'zvanicno'], $school->facilities_origin);
         $this->withJwt($this->member)->postJson("/api/institutions/{$school->id}/facility-submissions", ['facilities' => ['bazen' => ['ima' => true]]])->assertForbidden();
         $this->member->update(['schools' => [['institution_id' => $school->id, 'name' => $school->name, 'share' => 60], ['name' => 'OŠ Druga škola', 'share' => 40]]]);
         $this->assertSame('OŠ „Prva”; OŠ Druga škola', $this->member->fresh()->school);
@@ -113,7 +113,7 @@ class FacilityTest extends TestCase
         $this->assertEquals(['ima' => true, 'bazeni' => [['duzina' => 25, 'kapacitet' => 30, 'tribine_mesta' => 200]]], $school->facilities['bazen']);
         $this->assertContains('tribine', $school->present()['facility_flags']);
         $this->assertSame(30, (int) $school->facilities['sala']['sale'][0]['duzina']);
-        $this->assertSame(['sala' => 'zvanicno', 'staza' => 'zvanicno', 'bazen' => 'provereno'], $school->facilities_origin);
+        $this->assertEquals(['sala' => 'zvanicno', 'staza' => 'zvanicno', 'bazen' => 'provereno'], $school->facilities_origin);
         \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\FacilitySubmissionReviewedMail::class, fn ($mail) => $mail->hasTo($this->member->email));
         $this->assertDatabaseHas('user_notifications', ['user_id' => $this->member->id, 'kind' => 'facility_review']);
     }
@@ -169,6 +169,6 @@ class FacilityTest extends TestCase
             ->assertJsonPath('school', 'OŠ „Prva”; OŠ „Druga”');
 
         $this->member->update(['school' => 'Gimnazija']);
-        $this->assertSame([['institution_id' => null, 'name' => 'Gimnazija', 'share' => 100]], $this->member->fresh()->schools);
+        $this->assertEquals([['institution_id' => null, 'name' => 'Gimnazija', 'share' => 100]], $this->member->fresh()->schools);
     }
 }
