@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'Grad Beograd', 'Borski', 'Braničevski', 'Zaječarski', 'Zapadnobački', 'Zlatiborski', 'Jablanički', 'Južnobanatski',
+    'Južnobački', 'Kolubarski', 'Mačvanski', 'Moravički', 'Nišavski', 'Pirotski', 'Podunavski', 'Pomoravski', 'Pčinjski',
+    'Rasinski', 'Raški', 'Severnobanatski', 'Severnobački', 'Srednjobanatski', 'Sremski', 'Toplički', 'Šumadijski',
+    'Kosovski', 'Kosovsko-mitrovački', 'Kosovsko-pomoravski', 'Pećki', 'Prizrenski',
+];

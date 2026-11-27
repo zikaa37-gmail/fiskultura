@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, linkedSignal, output, signal } from '@angular/core';
+import { aiBusy } from '../../core/http/busy';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -298,7 +299,7 @@ export class DebateModeration {
   }
 
   protected analyze(): void {
-    this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/analysis`, { guidance: this.guidance().trim() || null }), 'Nacrt analize je spreman. Pročitaj ga pre objave.');
+    this.#run(this.#http.post(`${API_URL}/debates/${this.debate().slug}/analysis`, { guidance: this.guidance().trim() || null }, { context: aiBusy() }), 'Nacrt analize je spreman. Pročitaj ga pre objave.');
   }
 
   protected approve(): void {

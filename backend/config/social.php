@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'links' => [
+        'instagram' => env('SOCIAL_INSTAGRAM_URL', 'https://www.instagram.com/fiskultura_rs/'),
+        'facebook' => env('SOCIAL_FACEBOOK_URL', 'https://www.facebook.com/1486475654546179'),
+    ],
     'instagram' => [
         'app_id' => env('INSTAGRAM_APP_ID'),
         'app_secret' => env('INSTAGRAM_APP_SECRET'),

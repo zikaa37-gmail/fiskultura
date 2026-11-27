@@ -88,6 +88,19 @@ class ImapMailbox implements Mailbox
         });
     }
 
+    public function unseen(): array
+    {
+        return $this->guard(function () {
+            $inbox = $this->folder('INBOX');
+            $status = $inbox->examine();
+
+            return [
+                'unread' => $inbox->query()->whereUnseen()->setFetchBody(false)->leaveUnread()->count(),
+                'latest' => isset($status['uidnext']) ? max(0, (int) $status['uidnext'] - 1) : null,
+            ];
+        });
+    }
+
     public function messages(string $folder, int $page, int $perPage, ?string $search = null): array
     {
         return $this->guard(function () use ($folder, $page, $perPage, $search) {

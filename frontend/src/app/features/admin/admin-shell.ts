@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject } from '@angular/core';
 import { IsActiveMatchOptions, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
+import { MailboxStatusService } from '../../core/inbox/mailbox-status.service';
 import { AdminNavService } from '../../layout/admin-nav.service';
 import { Icon, IconName } from '../../shared/icon/icon';
 
@@ -10,6 +11,7 @@ interface AdminLink {
   icon: IconName;
   exact?: boolean;
   editorOnly?: boolean;
+  mail?: boolean;
 }
 
 interface AdminGroup {
@@ -47,6 +49,9 @@ interface AdminGroup {
                     >
                       <app-icon [name]="link.icon" [size]="20" />
                       <span>{{ link.label }}</span>
+                      @if (link.mail && mailbox.unread()) {
+                        <span class="admin-nav-count" [attr.aria-label]="'nepročitanih: ' + mailbox.unread()">{{ mailbox.unread() }}</span>
+                      }
                     </a>
                   }
                 </div>
@@ -84,6 +89,7 @@ export class AdminShell {
         { route: 'udruzenja', label: 'Udruženja', icon: 'globe', editorOnly: true },
         { route: 'propisi', label: 'Propisi', icon: 'book', editorOnly: true },
         { route: 'drustvene-mreze', label: 'Društvene mreže', icon: 'instagram', editorOnly: true },
+        { route: 'infrastruktura', label: 'Infrastruktura škola', icon: 'checklist', editorOnly: true },
       ],
     },
     {
@@ -92,12 +98,14 @@ export class AdminShell {
       links: [
         { route: 'korisnici', label: 'Korisnici', icon: 'user' },
         { route: 'moderatori', label: 'Moderatori', icon: 'people' },
-        { route: 'posta', label: 'Pošta (admin@)', icon: 'mail' },
+        { route: 'posta', label: 'Pošta (admin@)', icon: 'mail', mail: true },
         { route: 'clanstvo', label: 'Članstvo', icon: 'people' },
         { route: 'obavestenja', label: 'Obaveštenja', icon: 'mail' },
       ],
     },
   ];
+
+  protected readonly mailbox = inject(MailboxStatusService);
 
   constructor() {
     this.adminNav.available.set(true);

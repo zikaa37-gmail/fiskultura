@@ -22,6 +22,9 @@ use App\Http\Controllers\Api\AuthorRequestController;
 use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\NewsSuggestionController;
 use App\Http\Controllers\Api\OrganizationController;
+use App\Http\Controllers\Api\InstitutionController;
+use App\Http\Controllers\Api\FacilityController;
+use App\Http\Controllers\Api\FacilitySubmissionController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\DebateController;
@@ -63,6 +66,7 @@ Route::post('/articles/list', [ArticleController::class, 'list']);
 Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/regulations', [RegulationController::class, 'index']);
 Route::get('/regulations/{key}', [RegulationController::class, 'show']);
+Route::get('/institutions/search', [InstitutionController::class, 'search'])->middleware('throttle:120,1');
 Route::get('/organizations', [OrganizationController::class, 'index']);
 Route::get('/founding/coverage', [FoundingController::class, 'coverage']);
 Route::get('/organizations/{slug}', [OrganizationController::class, 'show']);
@@ -108,6 +112,14 @@ Route::middleware('jwt')->group(function () {
     Route::get('/me/export', [AuthController::class, 'export']);
     Route::delete('/auth/me', [AuthController::class, 'destroy'])->middleware('throttle:5,1');
     Route::get('/members', [MemberController::class, 'index']);
+    Route::get('/members/places', [MemberController::class, 'places']);
+    Route::get('/institutions', [InstitutionController::class, 'index']);
+    Route::get('/institutions/facility-catalog', [FacilityController::class, 'catalog']);
+    Route::get('/institutions/report.pdf', [FacilityController::class, 'reportPdf'])->middleware('throttle:20,1');
+    Route::get('/institutions/reports/latest', [FacilityController::class, 'latest']);
+    Route::get('/institutions/{institution}', [InstitutionController::class, 'show'])->whereNumber('institution');
+    Route::get('/institutions/{institution}/pdf', [FacilityController::class, 'institutionPdf'])->middleware('throttle:30,1');
+    Route::post('/institutions/{institution}/facility-submissions', [FacilitySubmissionController::class, 'store'])->middleware('throttle:10,10');
     Route::get('/me/subscription', [SubscriptionController::class, 'mine']);
     Route::put('/me/subscription', [SubscriptionController::class, 'updateMine']);
 
@@ -153,6 +165,11 @@ Route::middleware('jwt')->group(function () {
 
         Route::post('/debates/list', [AdminDebateController::class, 'list']);
         Route::get('/instagram', [AdminInstagramController::class, 'state']);
+        Route::post('/institutions/reports', [FacilityController::class, 'generate'])->middleware('throttle:10,10');
+        Route::put('/institutions/{institution}/facilities', [FacilityController::class, 'update']);
+        Route::get('/facility-submissions', [FacilitySubmissionController::class, 'index']);
+        Route::post('/facility-submissions/{submission}/approve', [FacilitySubmissionController::class, 'approve']);
+        Route::post('/facility-submissions/{submission}/reject', [FacilitySubmissionController::class, 'reject']);
         Route::get('/instagram/posts', [AdminInstagramController::class, 'index']);
         Route::post('/instagram/posts', [AdminInstagramController::class, 'store'])->middleware('throttle:10,10');
         Route::post('/instagram/posts/{post}/publish', [AdminInstagramController::class, 'publish'])->middleware('throttle:10,10');
@@ -194,6 +211,7 @@ Route::middleware('jwt')->group(function () {
         Route::delete('/facebook', [AdminInstagramController::class, 'disconnectFacebook']);
         Route::post('/social/{network}/authorize', [AdminInstagramController::class, 'authorize'])->whereIn('network', ['instagram', 'facebook']);
         Route::get('/mailbox/folders', [AdminMailboxController::class, 'folders']);
+        Route::get('/mailbox/unseen', [AdminMailboxController::class, 'unseen']);
         Route::get('/mailbox/messages', [AdminMailboxController::class, 'messages']);
         Route::get('/mailbox/messages/{uid}', [AdminMailboxController::class, 'show'])->whereNumber('uid');
         Route::patch('/mailbox/messages/{uid}', [AdminMailboxController::class, 'seen'])->whereNumber('uid');

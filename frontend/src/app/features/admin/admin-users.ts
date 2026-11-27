@@ -101,7 +101,7 @@ type UserAction = 'invite' | 'edit' | 'block' | 'unblock' | 'remove';
                 <span class="small muted">{{ request.note }}</span>
               }
             }
-            <span class="muted small">{{ user.email }}@if (user.phone; as phone) { · <a class="nowrap" [href]="phoneHref(phone)">{{ phone }}</a> }@if (user.school) { · {{ user.school }} }</span>
+            <span class="muted small"><a [href]="'mailto:' + user.email">{{ user.email }}</a>@if (user.phone; as phone) { · <a class="nowrap" [href]="phoneHref(phone)">{{ phone }}</a> }@if (user.school) { · {{ user.school }} }</span>
           </div>
           @if (!isSelf) {
             <app-options-menu [options]="menuFor(user)" [label]="'Opcije za: ' + user.name" (selected)="onAction(user, $event)" />

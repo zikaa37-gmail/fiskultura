@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, linkedSignal, signal, effect, untracked } from '@angular/core';
+import { MailboxStatusService } from '../../../core/inbox/mailbox-status.service';
 import { httpResource } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -179,6 +180,15 @@ export class AdminMailbox {
   }
 
   readonly #seen = signal<Record<number, boolean>>({});
+  readonly #status = inject(MailboxStatusService);
+  readonly #arrivals = effect(() => {
+    if (this.#status.arrived()) {
+      untracked(() => {
+        this.messages.reload();
+        this.folders.reload();
+      });
+    }
+  });
   protected readonly role = computed(() => (this.folders.value()?.folders ?? []).find((item) => item.path === this.current())?.role ?? null);
 
   protected options(item: MailSummary): MenuOption<MailAction>[] {
@@ -187,6 +197,7 @@ export class AdminMailbox {
 
   protected open(item: MailSummary): void {
     this.#seen.update((all) => ({ ...all, [item.uid]: true }));
+    setTimeout(() => this.#status.refresh(), 1500);
     this.#dialog
       .open<MailMessageDialog, MailMessageData, boolean>(MailMessageDialog, {
         data: { uid: item.uid, folder: this.current(), folders: this.folders.value()?.folders ?? [] },
@@ -219,6 +230,7 @@ export class AdminMailbox {
     this.#seen.set({});
     this.messages.reload();
     this.folders.reload();
+    this.#status.refresh();
   }
 
   protected compose(): void {

@@ -40,6 +40,9 @@ function normalize(text: string): string {
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectSearch), multi: true }],
   template: `
     <mat-form-field subscriptSizing="dynamic" appearance="outline" [size]="size()">
+      @if (label()) {
+        <mat-label>{{ label() }}</mat-label>
+      }
       <input
         #field
         matInput
@@ -86,6 +89,7 @@ function normalize(text: string): string {
 export class SelectSearch<T> implements ControlValueAccessor {
   readonly options = input.required<SelectSearchOption<T>[]>();
   readonly inputId = input.required<string>();
+  readonly label = input('');
   readonly placeholder = input('Izaberi ili počni da kucaš');
   readonly emptyLabel = input('');
   readonly allowCustom = input(false);

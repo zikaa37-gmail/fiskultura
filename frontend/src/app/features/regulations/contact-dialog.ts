@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, Injectable, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injectable } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BUTTON_IMPORTS } from '../../../theme/ui/button';
-import { ContactLine, InstitutionContact, SchoolAdministration, telHref } from '../../content/rules/contacts';
+import { ContactLine, InstitutionContact, SchoolAdministration } from '../../content/rules/contacts';
 import { DialogShell } from '../../shared/dialog-shell/dialog-shell';
+import { ContactItem } from '../../shared/contact-item/contact-item';
 import { Icon } from '../../shared/icon/icon';
 
 export interface ContactDialogData {
@@ -17,7 +18,7 @@ export interface ContactDialogData {
 
 @Component({
   selector: 'app-contact-dialog',
-  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon],
+  imports: [MatDialogModule, BUTTON_IMPORTS, DialogShell, Icon, ContactItem],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-dialog-shell [title]="data.title" [class]="'accent-' + data.accent">
@@ -25,30 +26,19 @@ export interface ContactDialogData {
         <p class="contact-when">{{ data.when }}</p>
       }
       @if (data.address) {
-        <a class="contact-action" [href]="mapHref(data.address)" target="_blank" rel="noopener">
-          <app-icon name="pin" [size]="20" />
-          <span>{{ data.address }}</span>
-        </a>
+        <app-contact-item kind="address" [value]="data.address" [mapQuery]="data.title + ', ' + data.address" />
       }
       @for (line of data.lines; track line.label) {
         <section class="contact-group">
           <p class="contact-group-label">{{ line.label }}</p>
+          @if (line.name) {
+            <p class="contact-person">{{ line.name }}</p>
+          }
           @if (line.phone) {
-            <a class="contact-action" [href]="tel(line.phone)">
-              <app-icon name="phone" [size]="20" />
-              <span>{{ line.phone }}</span>
-            </a>
+            <app-contact-item kind="phone" [value]="line.phone" />
           }
           @if (line.email) {
-            <div class="contact-mail-row">
-              <a class="contact-action" [href]="'mailto:' + line.email">
-                <app-icon name="mail" [size]="20" />
-                <span class="contact-email">{{ local(line.email) }}<wbr />&#64;{{ domain(line.email) }}</span>
-              </a>
-              <button type="button" class="contact-copy" [attr.aria-label]="'Kopiraj ' + line.email" title="Kopiraj adresu" (click)="copy(line.email)">
-                <app-icon [name]="copied() === line.email ? 'check' : 'clipboard'" [size]="18" />
-              </button>
-            </div>
+            <app-contact-item kind="email" [value]="line.email" />
           }
         </section>
       }
@@ -63,24 +53,6 @@ export interface ContactDialogData {
 })
 export class ContactDialog {
   protected readonly data = inject<ContactDialogData>(MAT_DIALOG_DATA);
-  protected readonly tel = telHref;
-  protected readonly copied = signal<string | null>(null);
-
-  protected local(email: string): string {
-    return email.split('@')[0];
-  }
-
-  protected domain(email: string): string {
-    return email.split('@')[1] ?? '';
-  }
-
-  protected copy(email: string): void {
-    navigator.clipboard?.writeText(email).then(() => this.copied.set(email));
-  }
-
-  protected mapHref(address: string): string {
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-  }
 }
 
 @Injectable({ providedIn: 'root' })
@@ -93,12 +65,13 @@ export class ContactDialogService {
 
   openAdministration(item: SchoolAdministration): void {
     this.#open({
-      title: `Školska uprava ${item.city}`,
+      title: item.city.includes('(') ? `${item.city.replace(/ \(.*\)$/, '')}: grupa za stručno-pedagoški nadzor` : `Školska uprava ${item.city}`,
       accent: 'primary',
+      when: `${item.area}. Imena prosvetnih savetnika nisu javno objavljena: pitajte upravu koji savetnik je zadužen za vašu školu i za fizičko vaspitanje.`,
       address: `${item.address}, ${item.city.replace(/ \(.*\)$/, '')}`,
-      lines: [{ label: 'Telefon i mejl', phone: item.phone, email: item.email }],
-      url: 'https://prosveta.gov.rs/kontakt/',
-      urlLabel: 'Kontakti Ministarstva',
+      lines: [{ label: 'Telefon i mejl', phone: item.phone, email: item.email }, ...(item.phones ?? []).map((phone, index) => ({ label: `Telefon ${index + 2}`, phone }))],
+      url: 'https://prosveta.gov.rs/o-ministarstvu/skolske-uprave/',
+      urlLabel: 'Školske uprave',
     });
   }
 

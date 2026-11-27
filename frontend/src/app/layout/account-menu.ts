@@ -26,7 +26,7 @@ import { Icon } from '../shared/icon/icon';
       <a mat-menu-item routerLink="/notifikacije"><app-icon name="bell" [size]="20" /> Notifikacije{{ inbox.unread() ? ' (' + inbox.unread() + ')' : '' }}</a>
       <button type="button" mat-menu-item (click)="openNotifications()"><app-icon name="mail" [size]="20" /> Obaveštenja mejlom</button>
       <button type="button" mat-menu-item (click)="askQuestion()"><app-icon name="help" [size]="20" /> Postavi pitanje</button>
-      <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik struke</a>
+      <a mat-menu-item routerLink="/imenik"><app-icon name="people" [size]="20" /> Imenik</a>
       @if (auth.isStaff()) {
         <a mat-menu-item routerLink="/admin"><app-icon name="clipboard" [size]="20" /> Admin</a>
       }

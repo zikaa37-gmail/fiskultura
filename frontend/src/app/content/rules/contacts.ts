@@ -3,6 +3,7 @@ import { IconName } from '../../shared/icon/icon';
 
 export interface ContactLine {
   label: string;
+  name?: string;
   phone?: string;
   email?: string;
 }
@@ -21,12 +22,14 @@ export interface InstitutionContact {
 
 export interface SchoolAdministration {
   city: string;
+  area: string;
   address: string;
   phone: string;
+  phones?: string[];
   email: string;
 }
 
-export const CONTACTS_CHECKED_AT = '2026-11-06';
+export const CONTACTS_CHECKED_AT = '2026-11-13';
 
 export const INSTITUTION_CONTACTS: InstitutionContact[] = [
   {
@@ -54,14 +57,19 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
     accent: 'rose',
     icon: 'checklist',
     name: 'Prosvetna inspekcija (Ministarstvo prosvete)',
-    when: 'Nepravilnosti u radu škole i povreda prava učenika ili zaposlenih. Prvo se obratite školskoj upravi i prosvetnom inspektoru u svojoj opštini; republička inspekcija prima pritužbe.',
+    when: 'Drugi nivo: kad škola i opštinski inspektor nisu rešili problem, kad opština nema prosvetnog inspektora i za žalbu na rešenje opštinskog inspektora. Prvo pišite školi, pa opštinskom inspektoru.',
     address: 'Nemanjina 22–26, 11000 Beograd',
     lines: [
-      { label: 'Inspekcija predškolskog, osnovnog i srednjeg obrazovanja', phone: '011/2403-358' },
-      { label: 'Pritužbe', email: 'prituzbe-prosvetnainspekcija@prosveta.gov.rs' },
+      { label: 'Sektor za inspekcijske poslove', phone: '011/2404-911' },
+      { label: 'Inspekcija predškolskog, osnovnog i srednjeg obrazovanja i zavoda', phone: '011/2403-358' },
+      { label: 'Inspekcija visokog obrazovanja i učeničkog i studentskog standarda', phone: '011/2401-838' },
+      { label: 'Provera verodostojnosti diploma i svedočanstava', phone: '011/2424-087' },
+      { label: 'Predstavke kad opština nema prosvetnog inspektora', email: 'prituzbe-prosvetnainspekcija@prosveta.gov.rs' },
+      { label: 'Predstavke Republičkoj prosvetnoj inspekciji', email: 'prituzba-prosvetnainspekcija@prosveta.gov.rs' },
+      { label: 'SOS telefon za nasilje u školi', phone: '0800 200 201' },
     ],
-    url: 'https://prosveta.gov.rs/kontakt/',
-    urlLabel: 'Sektor za inspekcijske poslove',
+    url: 'https://prosveta.gov.rs/prosvetna-inspekcija/podnosenje-predstavki-prosvetnoj-inspekciji/',
+    urlLabel: 'Kako se podnosi predstavka',
   },
   {
     id: 'zuov',
@@ -108,17 +116,6 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
     urlLabel: 'Sajt Pedagoškog zavoda',
   },
   {
-    id: 'ministarstvo-sporta',
-    accent: 'orange',
-    icon: 'trophy',
-    name: 'Ministarstvo sporta',
-    when: 'Sistem sporta i školska sportska takmičenja na nivou države; ima Odsek za inspekcijske poslove u sportu. Poruke idu preko obrasca na sajtu.',
-    address: 'Bulevar Mihajla Pupina 2 (Palata „Srbija”), Beograd',
-    lines: [],
-    url: 'https://www.mos.gov.rs/kontakt',
-    urlLabel: 'Obrazac Ministarstva sporta',
-  },
-  {
     id: 'inspekcija-rada',
     accent: 'rose',
     icon: 'heart',
@@ -149,24 +146,24 @@ export const INSTITUTION_CONTACTS: InstitutionContact[] = [
 ];
 
 export const SCHOOL_ADMINISTRATIONS: SchoolAdministration[] = [
-  { city: 'Beograd', address: 'Zahumska 14', phone: '011/3806-916', email: 'subeograd@prosveta.gov.rs' },
-  { city: 'Valjevo', address: 'Karađorđeva 31', phone: '014/226-602', email: 'suvaljevo@prosveta.gov.rs' },
-  { city: 'Zaječar', address: 'Nikole Pašića 81', phone: '019/421-663', email: 'suzajecar@prosveta.gov.rs' },
-  { city: 'Zrenjanin', address: 'Trg slobode 10', phone: '023/515-987', email: 'suzrenjanin@prosveta.gov.rs' },
-  { city: 'Jagodina', address: 'TC Stara pošta 1/11', phone: '035/222-070', email: 'sujagodina@prosveta.gov.rs' },
-  { city: 'Kosovska Mitrovica', address: 'Džona Kenedija 17', phone: '028/424-359', email: 'sukosovskamitrovica@prosveta.gov.rs' },
-  { city: 'Kragujevac', address: 'Save Kovačevića 7', phone: '034/336-023', email: 'sukragujevac@prosveta.gov.rs' },
-  { city: 'Kraljevo', address: 'Trg Jovana Sarića 3', phone: '036/308-706', email: 'sukraljevo@prosveta.gov.rs' },
-  { city: 'Kruševac', address: 'Balkanska 63', phone: '037/443-691', email: 'sukrusevac@prosveta.gov.rs' },
-  { city: 'Leskovac', address: 'Blagoja Nikolića 1', phone: '016/255-452', email: 'suleskovac@prosveta.gov.rs' },
-  { city: 'Niš', address: 'Strahinjića bana bb', phone: '018/505-107', email: 'sunis@prosveta.gov.rs' },
-  { city: 'Novi Sad', address: 'Bulevar Mihajla Pupina 6', phone: '021/529-223', email: 'sunovisad@prosveta.gov.rs' },
-  { city: 'Požarevac', address: 'Drinska 2', phone: '012/511-680', email: 'supozarevac@prosveta.gov.rs' },
-  { city: 'Sombor', address: 'Trg cara Uroša 1', phone: '025/463-635', email: 'susombor@prosveta.gov.rs' },
-  { city: 'Užice', address: 'Vidovdanska 34', phone: '031/513-092', email: 'suuzice@prosveta.gov.rs' },
-  { city: 'Čačak', address: 'Cara Dušana bb', phone: '032/311-332', email: 'sucacak@prosveta.gov.rs' },
-  { city: 'Novi Pazar (regionalna grupa)', address: 'Šabana Koče 85', phone: '020/323-657', email: 'grupanovipazar@prosveta.gov.rs' },
-  { city: 'Subotica (regionalna grupa)', address: 'Trg Lazara Nešića 1', phone: '024/555-152', email: 'grupasubotica@prosveta.gov.rs' },
+  { city: 'Beograd', area: 'Grad Beograd', address: 'Zahumska 14', phone: '011/3806-916', email: 'subeograd@prosveta.gov.rs', phones: ['011/2402-190', '011/2401-911 (lokali 220, 219)'] },
+  { city: 'Valjevo', area: 'Kolubarski i Mačvanski okrug (i Šabac)', address: 'Karađorđeva 31', phone: '014/226-602', email: 'suvaljevo@prosveta.gov.rs', phones: ['014/221-284', '014/227-651'] },
+  { city: 'Zaječar', area: 'Zaječarski i Borski okrug', address: 'Nikole Pašića 81', phone: '019/421-663', email: 'suzajecar@prosveta.gov.rs', phones: ['019/421-154'] },
+  { city: 'Zrenjanin', area: 'Severnobanatski, Srednjebanatski i Južnobanatski okrug', address: 'Trg slobode 10', phone: '023/515-987', email: 'suzrenjanin@prosveta.gov.rs', phones: ['023/510-547'] },
+  { city: 'Jagodina', area: 'Pomoravski okrug', address: 'TC Stara pošta 1/11', phone: '035/222-070', email: 'sujagodina@prosveta.gov.rs' },
+  { city: 'Kosovska Mitrovica', area: 'Pećki, Prizrenski, Kosovsko-mitrovački, Kosovski i Kosovsko-pomoravski okrug', address: 'Džona Kenedija 17', phone: '028/424-359', email: 'sukosovskamitrovica@prosveta.gov.rs' },
+  { city: 'Kragujevac', area: 'Šumadijski okrug', address: 'Save Kovačevića 7', phone: '034/336-023', email: 'sukragujevac@prosveta.gov.rs' },
+  { city: 'Kraljevo', area: 'Raški okrug', address: 'Trg Jovana Sarića 3', phone: '036/308-706', email: 'sukraljevo@prosveta.gov.rs', phones: ['036/308-707'] },
+  { city: 'Kruševac', area: 'Rasinski okrug', address: 'Balkanska 63', phone: '037/443-691', email: 'sukrusevac@prosveta.gov.rs', phones: ['037/443-692'] },
+  { city: 'Leskovac', area: 'Jablanički i Pčinjski okrug', address: 'Blagoja Nikolića 1', phone: '016/255-452', email: 'suleskovac@prosveta.gov.rs', phones: ['016/212-464'] },
+  { city: 'Niš', area: 'Nišavski, Toplički i Pirotski okrug', address: 'Strahinjića bana bb', phone: '018/505-107', email: 'sunis@prosveta.gov.rs', phones: ['018/505-150'] },
+  { city: 'Novi Sad', area: 'Južnobački i Sremski okrug', address: 'Bulevar Mihajla Pupina 6', phone: '021/529-223', email: 'sunovisad@prosveta.gov.rs', phones: ['021/529-213'] },
+  { city: 'Požarevac', area: 'Braničevski i Podunavski okrug', address: 'Drinska 2', phone: '012/511-680', email: 'supozarevac@prosveta.gov.rs' },
+  { city: 'Sombor', area: 'Severnobački i Zapadnobački okrug', address: 'Trg cara Uroša 1', phone: '025/463-635', email: 'susombor@prosveta.gov.rs', phones: ['025/463-613', '025/463-634'] },
+  { city: 'Užice', area: 'Zlatiborski okrug', address: 'Vidovdanska 34', phone: '031/513-092', email: 'suuzice@prosveta.gov.rs', phones: ['031/517-858'] },
+  { city: 'Čačak', area: 'Moravički okrug', address: 'Cara Dušana bb', phone: '032/311-332', email: 'sucacak@prosveta.gov.rs', phones: ['032/341-166'] },
+  { city: 'Novi Pazar (regionalna grupa)', area: 'Novi Pazar, Sjenica, Tutin', address: 'Šabana Koče 85', phone: '020/323-657', email: 'sunovipazar@prosveta.gov.rs' },
+  { city: 'Subotica (regionalna grupa)', area: 'Subotica, Bačka Topola, Mali Iđoš, Ada, Senta, Kanjiža', address: 'Trg Lazara Nešića 1', phone: '024/555-152', email: 'grupasubotica@prosveta.gov.rs' },
 ];
 
 export function telHref(phone: string): string {

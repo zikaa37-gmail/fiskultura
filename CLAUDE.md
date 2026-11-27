@@ -40,7 +40,11 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
 - Bez komentara u kodu. Preserve unrelated user changes in the working tree.
 - Angular: `input()`/`output()`/`model()`, `inject()`, `@if`/`@for`, `[class.x]`, bez `NgModule`-a,
   bez `standalone: true`, bez getter/setter-a, stanje u `signal()`/`computed()`, čitanje sa API-ja
-  preko `httpResource`.
+  preko `httpResource`. Spiskovi koji se ne menjaju često (ustanove, opštine, šifarnici) učitavaju se lazy jednom
+  i čuvaju u servisu (`providedIn: 'root'`) u signalu (npr. `InstitutionStore`), pa se filtriranje i paginacija
+  rade na frontendu; isti spisak se ne traži od API-ja ponovo.
+- Filteri u listama koriste `type: 'select-search'` (`shared/select-search`, kucanje sužava spisak) za duge spiskove
+  (okrug, opština, mesto). Geografski obuhvat portala: cela Srbija (sa Kosovom i Metohijom) i Republika Srpska.
 - Tema je u `src/theme/`: `styles/` (`colors.scss` tokeni i tamna tema, `buttons.scss`) i `ui/` (direktive i
   komponente koje prilagođavaju Material). Dugmad: u `imports` ide `BUTTON_IMPORTS` iz `theme/ui/button`, ne
   `MatButtonModule`; direktiva `AppButton` prima `theme="primary|secondary|tertiary|danger"` i
@@ -49,7 +53,7 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   istorija, prikaži više), da stranica ne bude previše plava; `theme="danger"` za brisanje. Boje preko tokena,
   ne `color="primary"` ni klase za boju dugmeta. Polja (input, select, textarea): `FORM_FIELD_IMPORTS` iz
   `theme/ui/form-field` umesto `MatFormFieldModule`, direktiva `AppFormField` na `mat-form-field` prima isti
-  `size` (stilovi u `form-fields.scss`); visine i zaobljenje su zajednički u `sizes.scss`, pa su dugme i polje
+  `size` (stilovi u `form-fields.scss`); prekidači (da/ne) su `mat-slide-toggle` sa `TOGGLE_IMPORTS` iz `theme/ui/toggle` (direktiva `AppToggle`, isti `size`, stilovi u `toggles.scss`), ne checkbox; visine i zaobljenje su zajednički u `sizes.scss`, pa su dugme i polje
   iste veličine uvek iste visine.
 - Kartice su male i stoje jedna do druge (na telefonu dve u redu gde stane); dugačak sadržaj ide u modal, a
   kartica ima naziv i kratak tekst. Boja kartice dolazi iz `.accent-*` (ikonica u `.tint-icon`, blaga pozadina).
@@ -76,12 +80,15 @@ sličice) — pogledaj te repoe ako nešto ovde nije eksplicitno napisano.
   ispod filtera ide u `app-scroll-area` (`[fill]="true"` zauzme ostatak ekrana, pa filteri i paginacija ostaju
   vidljivi). Paginacija je uvek `app-pagination` (`shared/pagination`, strelice i brojevi strana; na telefonu
   strelice i „Strana N / M”).
+- Čekanje na API: svaki POST/PUT/PATCH/DELETE automatski podiže globalni loader koji blokira klikove (`busyInterceptor` i `app-busy-overlay`, `core/http/busy.ts`); AI pozivi šalju `{ context: aiBusy() }`, a posebna poruka ide kroz `busyContext('...')`, dok pozadinski poziv bez loadera šalje `busyContext(false)`. Komponente ne prave svoje overlay-e za čekanje.
+- Korisnik ima niz škola (`schools`: `institution_id`, `name`, `share` = procenat angažovanja); `school` je izveden tekst. Infrastrukturu škole menja samo kolega kome je ta škola u profilu (izabrana sa spiska) ili urednik/admin.
 - Svaki modal koristi `app-dialog-shell` (`shared/dialog-shell`): zaglavlje sa naslovom i X, telo (jedino se
   skroluje) i podnožje sa dugmadima (`dialogActions`); panel klasa `app-dialog-panel`, ne `mat-dialog-content`.
 - Liste vesti otvaraju vest u modalu (`NewsDialogService`); `/vesti/:slug` ostaje stalni link (deljenje, SEO).
   „Objave“ kod udruženja vode na `/vesti?udruzenje=<slug>`, ne na stranicu udruženja.
 - Linkovi udruženja su kartice sa ikonicom (`app-org-links`); link koji `organizations:check-links` označi
   kao `broken` je onemogućen. Blokade botova (Facebook 400, 403) su `unknown` i link ostaje aktivan.
+- Dugme samo sa ikonicom: `<button app-icon-button icon="close" theme="neutral" label="Zatvori">` (`ICON_BUTTON_IMPORTS` iz `theme/ui/icon-button`, teme `neutral|primary|accent|danger|ghost`, isti `size`; stanja hover, focus, active i disabled su u `icon-buttons.scss`). Svaka adresa, telefon, mejl i sajt ide kroz `app-contact-item` (`kind="address|phone|email|web"`): link (mapa, `tel:`, `mailto:`), ikonica mape uz adresu, kopiranje i deljenje na telefonu; kad nema mesta, dodatne opcije idu u meni sa tri tačke.
 - Ikonice: `<app-icon name="...">` (`shared/icon/icon.ts`): SVG fajlovi u `frontend/public/icons/`, prikaz kroz CSS masku (boja = `currentColor`,
   radi i u SSR-u); nova ikonica = fajl + ime u `ICON_NAMES`. Isti set kao u zakazivanju (Unicons line stil iz cln-spa, gde postoji).
 - Prenete objave udruženja: sažetak svojim rečima + link na izvor, nikad kopiran tekst.

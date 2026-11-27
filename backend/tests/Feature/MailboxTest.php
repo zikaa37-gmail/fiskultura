@@ -97,6 +97,15 @@ class MailboxTest extends TestCase
         $this->artisan('mailbox:check')->expectsOutput('Pošta nije podešena na serveru (MAILBOX_HOST, MAILBOX_USERNAME, MAILBOX_PASSWORD u .env).')->assertExitCode(0);
     }
 
+    public function test_unseen_count_is_for_admins_only(): void
+    {
+        $this->withJwt($this->admin)->getJson('/api/admin/mailbox/unseen')->assertOk()->assertExactJson(['unread' => 3, 'latest' => 41]);
+        $editor = \App\Models\User::where('email', 'urednik@fiskultura.test')->first();
+        if ($editor) {
+            $this->withJwt($editor)->getJson('/api/admin/mailbox/unseen')->assertForbidden();
+        }
+    }
+
     public function test_missing_configuration_gives_clear_message(): void
     {
         $this->app->instance(Mailbox::class, new ImapMailbox(['host' => null, 'username' => null, 'password' => null]));
@@ -121,6 +130,11 @@ class FakeMailbox implements Mailbox
     public function check(): array
     {
         return $this->checkResult;
+    }
+
+    public function unseen(): array
+    {
+        return ['unread' => 3, 'latest' => 41];
     }
 
     public function folders(): array

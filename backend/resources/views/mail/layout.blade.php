@@ -22,7 +22,8 @@
           </tr>
           <tr>
             <td style="padding:16px 28px;border-top:1px solid #dfe5f0;font-size:13px;color:#55617a;">
-              Fiskultura — portal za fizičko vaspitanje i školski sport u Srbiji · <a href="{{ config('app.frontend_url') }}" style="color:#1d4ed8;">fiskultura.rs</a>
+              Fiskultura — portal za fizičko vaspitanje i školski sport u Srbiji · <a href="{{ config('app.frontend_url') }}" style="color:#1d4ed8;">fiskultura.rs</a><br>
+              Pratite nas: <a href="{{ config('social.links.instagram') }}" style="color:#1d4ed8;">Instagram</a> · <a href="{{ config('social.links.facebook') }}" style="color:#1d4ed8;">Facebook</a>
             </td>
           </tr>
         </table>

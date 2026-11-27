@@ -1,4 +1,4 @@
-import { MemberStatus, UserRole } from '../../core/auth/user.model';
+import { MemberStatus, UserRole, UserSchool } from '../../core/auth/user.model';
 import { LinkField, NewsCategory, Organization, OrganizationRef, SourceType } from '../../core/content/content.model';
 
 export type NewsStatus = 'draft' | 'published';
@@ -50,6 +50,7 @@ export interface AdminUser {
   role: UserRole;
   member_status: MemberStatus | null;
   school: string | null;
+  schools: UserSchool[];
   municipality: string | null;
   district: string | null;
   source: string | null;

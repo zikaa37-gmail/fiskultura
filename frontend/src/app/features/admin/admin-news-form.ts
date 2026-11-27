@@ -7,7 +7,7 @@ import { FORM_FIELD_IMPORTS } from '../../../theme/ui/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TOGGLE_IMPORTS } from '../../../theme/ui/toggle';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { NotificationService } from '../../core/notification.service';
@@ -16,7 +16,7 @@ import { AdminNews, AdminNewsPayload, AdminOrganization, newsState } from './adm
 
 @Component({
   selector: 'app-admin-news-form',
-  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule],
+  imports: [ReactiveFormsModule, RouterLink, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatProgressBarModule, MatSelectModule, TOGGLE_IMPORTS],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a class="inline-link small" routerLink="/admin/vesti">← Sve vesti</a>

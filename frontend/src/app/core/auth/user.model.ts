@@ -2,6 +2,12 @@ export type UserRole = 'user' | 'author' | 'editor' | 'admin';
 
 export type MemberStatus = 'nastavnik-os' | 'nastavnik-ss' | 'pripravnik' | 'student' | 'penzija' | 'drugo';
 
+export interface UserSchool {
+  institution_id: number | null;
+  name: string;
+  share: number;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -9,6 +15,7 @@ export interface User {
   role: UserRole;
   member_status: MemberStatus | null;
   school: string | null;
+  schools: UserSchool[];
   municipality: string | null;
   district: string | null;
   byline?: string | null;
@@ -30,7 +37,7 @@ export interface MessageResponse {
 export interface ProfilePayload {
   name: string;
   member_status: MemberStatus | null;
-  school: string | null;
+  schools: UserSchool[];
   municipality: string | null;
   district: string | null;
   byline?: string | null;

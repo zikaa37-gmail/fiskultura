@@ -15,7 +15,7 @@ import { SubscribeLink } from '../shared/subscribe-link/subscribe-link';
       <div class="container footer-inner">
         <div class="footer-col footer-brand">
           <strong class="footer-title">Fiskultura</strong>
-          <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji · u izradi</span>
+          <span class="muted">Portal za fizičko vaspitanje i školski sport u Srbiji</span>
           <app-portal-social label="Pratite nas" />
           <app-subscribe-link [footer]="true" />
         </div>

@@ -3,6 +3,8 @@
 @use 'theme/styles/buttons';
 @use 'theme/styles/form-fields';
 @use 'theme/styles/expansion';
+@use 'theme/styles/toggles';
+@use 'theme/styles/icon-buttons';
 @use 'theme/styles/panels';
 
 html {
@@ -303,6 +305,26 @@ p {
 
 .section {
   padding: 56px 0;
+}
+
+.section-compact {
+  padding: 16px 0 40px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+@media (min-width: 720px) {
+  .section-compact {
+    padding-top: 24px;
+  }
+
+  .page-title {
+    font-size: 34px;
+  }
 }
 
 .section-alt {
@@ -1804,21 +1826,8 @@ a.org-link:hover {
   line-height: 1.2;
 }
 
-.dialog-close {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
+.dialog-close.app-icon-button {
   border-radius: 50%;
-  background: var(--color-surface-alt);
-  color: var(--color-text);
-  cursor: pointer;
-}
-
-.dialog-close:hover {
-  background: var(--color-border);
 }
 
 .dialog-shell-body {
@@ -3080,6 +3089,43 @@ button.rule-topic-card {
 
 .qa-section {
   padding-top: 16px;
+}
+
+.share-label {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.admin-nav-count {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--color-rose);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.mail-badge-row {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.contact-person {
+  margin: 0 0 2px;
+  font-weight: 600;
 }
 
 .articles-showcase {

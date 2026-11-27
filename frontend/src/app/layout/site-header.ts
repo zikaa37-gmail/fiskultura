@@ -5,12 +5,13 @@ import { filter, map } from 'rxjs';
 import { AuthService } from '../core/auth/auth.service';
 import { InboxService } from '../core/inbox/inbox.service';
 import { Icon } from '../shared/icon/icon';
+import { MailBadge } from '../shared/mail-badge/mail-badge';
 import { AccountMenu } from './account-menu';
 import { AdminNavService } from './admin-nav.service';
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, RouterLinkActive, Icon, AccountMenu],
+  imports: [RouterLink, RouterLinkActive, Icon, AccountMenu, MailBadge],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './site-header.html',
 })

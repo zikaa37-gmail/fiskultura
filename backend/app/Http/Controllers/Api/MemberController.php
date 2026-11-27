@@ -15,11 +15,12 @@ class MemberController extends Controller
         $filters = $request->validate([
             'member_status' => ['nullable', Rule::in(User::MEMBER_STATUSES)],
             'district' => ['nullable', 'string', 'max:120'],
+            'municipality' => ['nullable', 'string', 'max:120'],
             'q' => ['nullable', 'string', 'max:100'],
             'page' => ['nullable', 'integer', 'min:1'],
         ]);
 
-        if (! $request->user()->directory_consent_at) {
+        if (! $this->canSeeDirectory($request->user())) {
             return response()->json(['message' => 'Imenik vide članovi koji su i sami u njemu. Uključite saglasnost u profilu.', 'code' => 'directory_consent_required'], 403);
         }
 
@@ -27,6 +28,7 @@ class MemberController extends Controller
             ->inDirectory()
             ->when($filters['member_status'] ?? null, fn (Builder $query, string $status) => $query->where('member_status', $status))
             ->when($filters['district'] ?? null, fn (Builder $query, string $district) => $query->where('district', $district))
+            ->when($filters['municipality'] ?? null, fn (Builder $query, string $municipality) => $query->where('municipality', $municipality))
             ->when($filters['q'] ?? null, fn (Builder $query, string $search) => $query->where(fn (Builder $inner) => $inner
                 ->where('name', 'like', "%{$search}%")
                 ->orWhere('school', 'like', "%{$search}%")
@@ -40,6 +42,7 @@ class MemberController extends Controller
                 'name' => $user->name,
                 'member_status' => $user->member_status,
                 'school' => $user->school,
+                'schools' => $user->schools ?? [],
                 'municipality' => $user->municipality,
                 'district' => $user->district,
             ])->values(),
@@ -50,6 +53,20 @@ class MemberController extends Controller
                 'last_page' => $page->lastPage(),
             ],
         ]);
+    }
+
+    public function places(Request $request)
+    {
+        abort_unless($this->canSeeDirectory($request->user()), 403);
+
+        return response()->json(User::query()->inDirectory()->whereNotNull('municipality')
+            ->select('district', 'municipality')->distinct()->orderBy('municipality')->get()
+            ->map(fn (User $user) => ['district' => $user->district, 'municipality' => $user->municipality])->values());
+    }
+
+    private function canSeeDirectory(User $user): bool
+    {
+        return (bool) $user->directory_consent_at || $user->hasRole(User::EDITOR, User::ADMIN);
     }
 
     public function stats()

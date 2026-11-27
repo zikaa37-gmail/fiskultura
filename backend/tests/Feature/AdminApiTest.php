@@ -303,7 +303,7 @@ class AdminApiTest extends TestCase
         Mail::assertSent(UserInvitationMail::class, function (UserInvitationMail $mail) use (&$url) {
             $url = $mail->url;
 
-            return $mail->hasTo('rade@example.com') && $mail->envelope()->subject === 'Rade, pozivamo vas na portal Fiskultura' && str_contains($mail->render(), 'OŠ Vuk');
+            return $mail->hasTo('rade@example.com') && $mail->envelope()->subject === 'Rade, završite registraciju na portalu Fiskultura' && str_contains($mail->render(), 'instagram.com/fiskultura_rs');
         });
         $token = substr($url, strpos($url, 'token=') + 6);
 

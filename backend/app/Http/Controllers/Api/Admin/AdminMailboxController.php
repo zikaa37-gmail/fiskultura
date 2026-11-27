@@ -6,16 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Services\Mailbox\ImapMailbox;
 use App\Services\Mailbox\Mailbox;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class AdminMailboxController extends Controller
 {
+    private const UNSEEN_CACHE = 'mailbox:unseen';
+
     public function __construct(private readonly Mailbox $mailbox) {}
 
     public function folders()
     {
         return response()->json(['address' => $this->mailbox->address(), 'folders' => $this->mailbox->folders()]);
+    }
+
+    public function unseen()
+    {
+        return response()->json(Cache::remember(self::UNSEEN_CACHE, 25, fn () => $this->mailbox->unseen()));
     }
 
     public function messages(Request $request)
@@ -33,6 +41,8 @@ class AdminMailboxController extends Controller
     {
         $folder = $request->validate(['folder' => ['nullable', 'string', 'max:200']])['folder'] ?? 'INBOX';
 
+        Cache::forget(self::UNSEEN_CACHE);
+
         return response()->json($this->mailbox->message($folder, $uid));
     }
 
@@ -40,6 +50,7 @@ class AdminMailboxController extends Controller
     {
         $data = $request->validate(['folder' => ['nullable', 'string', 'max:200'], 'seen' => ['required', 'boolean']]);
         $this->mailbox->markSeen($data['folder'] ?? 'INBOX', $uid, $data['seen']);
+        Cache::forget(self::UNSEEN_CACHE);
 
         return response()->json(['seen' => $data['seen']]);
     }
@@ -52,7 +63,10 @@ class AdminMailboxController extends Controller
             'target' => ['required_if:action,move', 'nullable', 'string', 'max:200'],
         ]);
 
-        return response()->json(['message' => $this->mailbox->act($data['folder'] ?? 'INBOX', $uid, $data['action'], $data['target'] ?? null)]);
+        $message = $this->mailbox->act($data['folder'] ?? 'INBOX', $uid, $data['action'], $data['target'] ?? null);
+        Cache::forget(self::UNSEEN_CACHE);
+
+        return response()->json(['message' => $message]);
     }
 
     public function attachment(Request $request, int $uid, int $index)

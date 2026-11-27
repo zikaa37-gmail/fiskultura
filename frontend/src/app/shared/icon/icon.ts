@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 export const ICON_NAMES = [
   'dumbbell',
   'clipboard',
+  'share',
+  'map',
   'chart',
   'globe',
   'trophy',

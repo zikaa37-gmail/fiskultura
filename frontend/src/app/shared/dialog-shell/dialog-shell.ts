@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { Icon } from '../icon/icon';
+import { ICON_BUTTON_IMPORTS } from '../../../theme/ui/icon-button';
 
 @Component({
   selector: 'app-dialog-shell',
-  imports: [MatDialogModule, Icon],
+  imports: [MatDialogModule, ICON_BUTTON_IMPORTS],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'dialog-shell' },
   template: `
@@ -14,7 +14,7 @@ import { Icon } from '../icon/icon';
         <h2 class="dialog-shell-title">{{ title() }}</h2>
       </div>
       @if (closable()) {
-        <button type="button" class="dialog-close" mat-dialog-close aria-label="Zatvori" title="Zatvori"><app-icon name="close" /></button>
+        <button type="button" app-icon-button icon="close" theme="neutral" label="Zatvori" class="dialog-close" mat-dialog-close></button>
       }
     </header>
     <div class="dialog-shell-body">

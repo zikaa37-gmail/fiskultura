@@ -79,7 +79,7 @@ const REASON_LABELS: Record<LogEntry['reason'], string> = {
                 <span class="state-chip state-warn">blokiran</span>
               }
             </span>
-            <span class="moderator-name"><strong>{{ row.name }}</strong> <span class="small muted">{{ row.email }}</span></span>
+            <span class="moderator-name"><strong>{{ row.name }}</strong> <a class="small muted" [href]="'mailto:' + row.email">{{ row.email }}</a></span>
             <div class="load" [attr.aria-label]="'Opterećenje: ' + (row.open + row.proposed) + ' aktivnih tema'">
               <span class="load-bar"><span [style.width.%]="share(row)"></span></span>
               <span class="small">

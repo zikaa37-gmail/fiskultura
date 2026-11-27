@@ -9,6 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MEMBER_STATUS_LABELS, MemberStatus, ROLE_LABELS, UserRole } from '../../core/auth/user.model';
 import { API_URL, apiErrorMessage } from '../../core/http/api';
 import { DISTRICTS } from '../../content/districts';
+import { cleanSchools, SchoolsField } from '../../shared/school-field/schools-field';
+import { UserSchool } from '../../core/auth/user.model';
+import { Institution, matchDistrict } from '../community/institution.model';
 import { DialogShell } from '../../shared/dialog-shell/dialog-shell';
 import { PhoneField } from '../../shared/phone-field/phone-field';
 import { formatPhone, isValidPhone } from '../../core/phone';
@@ -16,7 +19,7 @@ import { AdminUser } from './admin.model';
 
 @Component({
   selector: 'app-user-form-dialog',
-  imports: [FormsModule, MatDialogModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, DialogShell, PhoneField],
+  imports: [FormsModule, MatDialogModule, BUTTON_IMPORTS, FORM_FIELD_IMPORTS, MatInputModule, MatSelectModule, DialogShell, PhoneField, SchoolsField],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .user-form {
@@ -59,10 +62,7 @@ import { AdminUser } from './admin.model';
             }
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Škola</mat-label>
-          <input matInput maxlength="190" [ngModel]="school()" (ngModelChange)="school.set($event)" />
-        </mat-form-field>
+        <app-schools-field [(value)]="schools" (picked)="pickSchool($event)" />
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>Opština</mat-label>
           <input matInput maxlength="120" [ngModel]="municipality()" (ngModelChange)="municipality.set($event)" />
@@ -104,12 +104,22 @@ export class UserFormDialog {
   protected readonly statusLabels = MEMBER_STATUS_LABELS;
   protected readonly districts = DISTRICTS;
 
+  protected pickSchool(school: Institution): void {
+    if (!this.municipality() && (school.municipality || school.place)) {
+      this.municipality.set(school.municipality ?? school.place ?? '');
+    }
+    const district = matchDistrict(school.district, DISTRICTS);
+    if (!this.district() && district) {
+      this.district.set(district);
+    }
+  }
+
   protected readonly name = signal(this.user?.name ?? '');
   protected readonly email = signal(this.user?.email ?? '');
   protected readonly phone = signal(this.user?.phone ?? '');
   protected readonly role = signal<UserRole>('user');
   protected readonly memberStatus = signal<MemberStatus | ''>(this.user?.member_status ?? '');
-  protected readonly school = signal(this.user?.school ?? '');
+  protected readonly schools = signal<UserSchool[]>(this.user?.schools ?? []);
   protected readonly municipality = signal(this.user?.municipality ?? '');
   protected readonly district = signal(this.user?.district ?? '');
   protected readonly adminPassword = signal('');
@@ -128,7 +138,7 @@ export class UserFormDialog {
       email: this.email().trim(),
       phone: formatPhone(this.phone()),
       member_status: this.memberStatus() || null,
-      school: this.school().trim() || null,
+      schools: cleanSchools(this.schools()),
       municipality: this.municipality().trim() || null,
       district: this.district() || null,
     };
